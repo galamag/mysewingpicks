@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Sewing Picks — Tools & Fabrics I Sew With</title>
+  <meta name="description" content="A cozy corner of hand-picked sewing and quilting tools and fabrics, chosen by the maker behind the SEWING DIY PATCHWORK YouTube channel." />
+
+  <!-- Warm, cozy fonts (Google Fonts; layout still works offline without them). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Shared header is injected here by js/site.js -->
+  <div id="site-header"></div>
+
+  <!-- NOTE: all visible copy below is filled from data/i18n.js via the
+       data-i18n / data-i18n-html keys. Edit the wording there, not here. -->
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <span class="eyebrow" data-i18n="hero_eyebrow"></span>
+        <h1 data-i18n="hero_title"></h1>
+        <p class="hero__tagline" data-i18n="hero_tagline"></p>
+        <p class="hero__blurb" data-i18n-html="hero_blurb"></p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="tools.html" data-i18n="btn_browse_picks"></a>
+          <a class="btn btn--youtube"
+             href="https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg"
+             target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+            <span data-i18n="btn_watch_youtube"></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- WELCOME / CATEGORY PREVIEW -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow" data-i18n="home_cat_eyebrow"></span>
+          <h2 data-i18n="home_cat_title"></h2>
+          <p data-i18n="home_cat_subtitle"></p>
+        </div>
+
+        <div class="category-grid">
+          <!-- Tools preview -->
+          <a class="category-card category-card--tools" href="tools.html">
+            <div class="category-card__icon" aria-hidden="true">✂️</div>
+            <h3 data-i18n="home_cat_tools_title"></h3>
+            <p data-i18n="home_cat_tools_desc"></p>
+            <span class="category-card__more" data-i18n="home_cat_tools_more"></span>
+          </a>
+
+          <!-- Fabrics preview -->
+          <a class="category-card category-card--fabrics" href="fabrics.html">
+            <div class="category-card__icon" aria-hidden="true">🧵</div>
+            <h3 data-i18n="home_cat_fabrics_title"></h3>
+            <p data-i18n="home_cat_fabrics_desc"></p>
+            <span class="category-card__more" data-i18n="home_cat_fabrics_more"></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- YOUTUBE CALL-OUT -->
+    <section class="section section--tight">
+      <div class="container">
+        <div class="about" style="text-align:center;">
+          <span class="eyebrow" data-i18n="home_yt_eyebrow"></span>
+          <h2 data-i18n="home_yt_title"></h2>
+          <p data-i18n="home_yt_desc"></p>
+          <a class="btn btn--primary"
+             href="https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg"
+             target="_blank" rel="noopener" data-i18n="btn_visit_channel"></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Shared footer is injected here by js/site.js -->
+  <div id="site-footer"></div>
+
+  <!-- Load order matters: dictionary + data first, then the site logic
+       that reads them to render header/footer/cards and fill page text. -->
+  <script src="data/i18n.js"></script>
+  <script src="data/products.js"></script>
+  <script src="js/site.js"></script>
+</body>
+</html>

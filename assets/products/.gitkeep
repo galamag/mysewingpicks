@@ -1,0 +1,11 @@
+# Drop your real product photos in this folder.
+# Filenames must match the `image` paths in /data/products.js, e.g.:
+#   olfa-rotary-cutter.jpg
+#   olfa-cutting-mat.jpg
+#   free-motion-presser-foot.jpg
+#   quilting-rulers-set.jpg
+#   rowenta-travel-iron.jpg
+#   sewline-air-erasable-pen.jpg
+#   lace-ribbon.jpg
+#   quilting-fabric-bundles.jpg
+# Until a file exists, the card shows assets/placeholder.svg automatically.

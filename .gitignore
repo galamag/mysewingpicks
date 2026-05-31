@@ -1,0 +1,17 @@
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Dependencies (none used in this project, but ignored just in case)
+node_modules/
+
+# Local tooling / editor config (not part of the deployable site)
+.claude/
+
+# Logs
+*.log
+
+# Environment / secrets
+.env
+.env.*
+*.env

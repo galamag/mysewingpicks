@@ -1,0 +1,422 @@
+/* =====================================================================
+   My Sewing Picks — stylesheet
+   ---------------------------------------------------------------------
+   Vibe: warm, cozy, handcrafted. Soft cream/beige, dusty-rose & sage
+   accents, gentle craft-paper texture, rounded corners, soft shadows.
+
+   Sections:
+     1. Design tokens (colors, fonts, spacing) — tweak the brand here
+     2. Base / reset
+     3. Layout helpers
+     4. Header & nav
+     5. Buttons
+     6. Hero
+     7. Sections & category previews
+     8. Product cards & grid
+     9. About page
+    10. Footer
+    11. Responsive (mobile)
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. DESIGN TOKENS  — change the whole look from here
+   --------------------------------------------------------------------- */
+:root {
+  /* Warm neutral palette */
+  --cream:        #faf4ea;   /* page background */
+  --paper:        #fffdf8;   /* cards / raised surfaces */
+  --beige:        #f0e6d6;   /* soft fills */
+  --beige-deep:   #e4d6c2;   /* borders / dividers */
+
+  /* Text */
+  --ink:          #4a3f35;   /* warm dark brown — body text */
+  --ink-soft:     #7a6e60;   /* muted text */
+
+  /* Accents */
+  --rose:         #c08a87;   /* dusty rose */
+  --rose-deep:    #a86f6c;
+  --sage:         #9caf88;   /* muted sage */
+  --sage-deep:    #7f9469;
+
+  /* Amazon button (warm amber, on-brand rather than corporate orange) */
+  --amazon:       #d9a441;
+  --amazon-deep:  #c0892b;
+
+  /* Shape & depth */
+  --radius:       18px;
+  --radius-sm:    12px;
+  --shadow-soft:  0 8px 24px rgba(120, 95, 70, 0.10);
+  --shadow-hover: 0 14px 32px rgba(120, 95, 70, 0.18);
+
+  /* Type */
+  --font-head: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Rhythm */
+  --container: 1120px;
+}
+
+/* ---------------------------------------------------------------------
+   2. BASE / RESET
+   --------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  line-height: 1.65;
+  background-color: var(--cream);
+  /* Gentle craft-paper texture: a faint speckle drawn with layered
+     radial gradients (no image file needed, works fully offline). */
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(192, 138, 135, 0.05) 0 2px, transparent 2px),
+    radial-gradient(circle at 70% 60%, rgba(156, 175, 136, 0.05) 0 2px, transparent 2px),
+    radial-gradient(circle at 45% 85%, rgba(120, 95, 70, 0.04) 0 2px, transparent 2px);
+  background-size: 140px 140px, 180px 180px, 160px 160px;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: var(--rose-deep); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+h1, h2, h3 {
+  font-family: var(--font-head);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+  margin: 0 0 0.4em;
+}
+
+p { margin: 0 0 1em; }
+
+/* ---------------------------------------------------------------------
+   3. LAYOUT HELPERS
+   --------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 22px;
+}
+
+.section { padding: 64px 0; }
+.section--tight { padding: 40px 0; }
+
+.section-head { text-align: center; max-width: 640px; margin: 0 auto 40px; }
+.section-head h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); }
+.section-head p { color: var(--ink-soft); font-size: 1.05rem; }
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: var(--sage-deep);
+  margin-bottom: 0.6em;
+}
+
+/* ---------------------------------------------------------------------
+   4. HEADER & NAV
+   --------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 253, 248, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--beige-deep);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 14px;
+}
+
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+.brand:hover { text-decoration: none; }
+.brand__logo { height: 46px; width: auto; }
+.brand__wordmark {
+  font-family: var(--font-head);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.site-nav { display: flex; align-items: center; gap: 6px; }
+.site-nav a {
+  font-weight: 600;
+  color: var(--ink);
+  padding: 8px 14px;
+  border-radius: 999px;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+.site-nav a:hover { background: var(--beige); text-decoration: none; }
+.site-nav a[aria-current="page"] { background: var(--rose); color: #fff; }
+
+/* Hamburger — hidden on desktop, shown on mobile */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 8px;
+}
+.nav-toggle span {
+  width: 24px; height: 2px;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.nav-toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.is-open span:nth-child(2) { opacity: 0; }
+.nav-toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ---------------------------------------------------------------------
+   5. BUTTONS
+   --------------------------------------------------------------------- */
+.btn {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.98rem;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 0;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+.btn:hover { text-decoration: none; transform: translateY(-2px); }
+
+.btn--primary { background: var(--rose); color: #fff; box-shadow: var(--shadow-soft); }
+.btn--primary:hover { background: var(--rose-deep); box-shadow: var(--shadow-hover); }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 2px solid var(--beige-deep);
+}
+.btn--ghost:hover { border-color: var(--rose); color: var(--rose-deep); }
+
+/* The "View on Amazon" call to action */
+.btn--amazon {
+  width: 100%;
+  text-align: center;
+  background: var(--amazon);
+  color: #4a3408;
+  box-shadow: var(--shadow-soft);
+}
+.btn--amazon:hover { background: var(--amazon-deep); color: #fff; box-shadow: var(--shadow-hover); }
+
+/* YouTube button (used in hero / home) */
+.btn--youtube {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  color: var(--ink);
+  border: 2px solid var(--beige-deep);
+}
+.btn--youtube svg { width: 22px; height: 22px; fill: #c4302b; }
+.btn--youtube:hover { border-color: var(--rose); color: var(--rose-deep); }
+
+/* ---------------------------------------------------------------------
+   6. HERO
+   --------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 85% 0%, rgba(156, 175, 136, 0.22), transparent 60%),
+    radial-gradient(120% 90% at 0% 100%, rgba(192, 138, 135, 0.22), transparent 60%),
+    var(--beige);
+}
+.hero__inner { padding: 84px 0 76px; max-width: 760px; }
+.hero h1 {
+  font-size: clamp(2.2rem, 5.2vw, 3.6rem);
+  margin-bottom: 0.3em;
+}
+.hero__tagline {
+  font-family: var(--font-head);
+  font-style: italic;
+  font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+  color: var(--rose-deep);
+  margin-bottom: 0.8em;
+}
+.hero__blurb { font-size: 1.1rem; color: var(--ink-soft); max-width: 600px; }
+.hero__actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 26px; }
+
+/* ---------------------------------------------------------------------
+   7. CATEGORY PREVIEW CARDS (home page)
+   --------------------------------------------------------------------- */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+.category-card {
+  display: block;
+  background: var(--paper);
+  border: 1px solid var(--beige-deep);
+  border-radius: var(--radius);
+  padding: 34px 30px;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  color: inherit;
+}
+.category-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); text-decoration: none; }
+.category-card__icon {
+  width: 58px; height: 58px;
+  display: grid; place-items: center;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  background: var(--beige);
+  font-size: 1.7rem;
+}
+.category-card--tools .category-card__icon { background: rgba(156, 175, 136, 0.25); }
+.category-card--fabrics .category-card__icon { background: rgba(192, 138, 135, 0.25); }
+.category-card h3 { font-size: 1.4rem; }
+.category-card p { color: var(--ink-soft); margin-bottom: 0.8em; }
+.category-card__more { font-weight: 700; color: var(--rose-deep); }
+
+/* ---------------------------------------------------------------------
+   8. PRODUCT CARDS & GRID
+   --------------------------------------------------------------------- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 28px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 1px solid var(--beige-deep);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+
+.card__media {
+  aspect-ratio: 4 / 3;
+  background: var(--beige);
+  overflow: hidden;
+}
+.card__img { width: 100%; height: 100%; object-fit: cover; }
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px 20px 22px;
+}
+.card__title { font-size: 1.12rem; line-height: 1.3; margin-bottom: 0.5em; }
+.card__desc { color: var(--ink-soft); font-size: 0.96rem; margin-bottom: 18px; }
+/* Push the button to the bottom so cards line up nicely regardless of text length */
+.card__body .btn--amazon { margin-top: auto; }
+
+.empty-note { text-align: center; color: var(--ink-soft); font-style: italic; }
+
+/* ---------------------------------------------------------------------
+   9. ABOUT PAGE
+   --------------------------------------------------------------------- */
+.about {
+  background: var(--paper);
+  border: 1px solid var(--beige-deep);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  padding: clamp(28px, 5vw, 56px);
+  max-width: 760px;
+  margin-inline: auto;
+}
+.about h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 0.5em; }
+.about p { font-size: 1.08rem; }
+.about .about__signature {
+  font-family: var(--font-head);
+  font-style: italic;
+  color: var(--rose-deep);
+  font-size: 1.15rem;
+  margin-top: 1.4em;
+}
+
+/* ---------------------------------------------------------------------
+   10. FOOTER
+   --------------------------------------------------------------------- */
+.site-footer {
+  margin-top: 40px;
+  background: var(--ink);
+  color: #efe6d8;
+}
+.site-footer a { color: #efe6d8; }
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  padding-block: 34px;
+}
+.site-footer__name {
+  font-family: var(--font-head);
+  font-size: 1.25rem;
+  display: block;
+  margin-bottom: 4px;
+}
+.affiliate-disclosure { margin: 0; font-size: 0.9rem; color: #c9bdab; }
+
+.socials { display: flex; gap: 12px; }
+.social-btn {
+  width: 42px; height: 42px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transition: background-color 0.18s ease, transform 0.18s ease;
+}
+.social-btn:hover { background: var(--rose); transform: translateY(-2px); text-decoration: none; }
+.social-btn svg { width: 22px; height: 22px; fill: #efe6d8; }
+
+/* ---------------------------------------------------------------------
+   11. RESPONSIVE (mobile-first tweaks)
+   --------------------------------------------------------------------- */
+@media (max-width: 760px) {
+  .nav-toggle { display: flex; }
+
+  /* Collapse nav into a dropdown panel toggled by the hamburger */
+  .site-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    background: var(--paper);
+    border-bottom: 1px solid var(--beige-deep);
+    padding: 12px 16px 18px;
+    box-shadow: var(--shadow-soft);
+    display: none;
+  }
+  .site-nav.is-open { display: flex; }
+  .site-nav a { padding: 12px 14px; }
+
+  .category-grid { grid-template-columns: 1fr; }
+
+  .hero__inner { padding: 60px 0 54px; }
+
+  .site-footer__inner { flex-direction: column; align-items: flex-start; }
+}

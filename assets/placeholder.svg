@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Shown automatically whenever a product photo is missing.
+     Replace by adding the real image at assets/products/<id>.jpg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Image coming soon">
+  <rect width="400" height="300" fill="#f0e6d6"/>
+  <g fill="none" stroke="#c08a87" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- a little spool of thread -->
+    <rect x="160" y="120" width="80" height="70" rx="8"/>
+    <line x1="160" y1="135" x2="240" y2="135"/>
+    <line x1="160" y1="175" x2="240" y2="175"/>
+    <line x1="200" y1="120" x2="200" y2="190" stroke="#9caf88"/>
+    <!-- needle -->
+    <line x1="250" y1="110" x2="290" y2="150" stroke="#7a6e60"/>
+    <circle cx="252" cy="112" r="5" stroke="#7a6e60"/>
+  </g>
+  <text x="200" y="235" text-anchor="middle" font-family="Georgia, serif"
+        font-size="20" fill="#7a6e60" font-style="italic">Image coming soon</text>
+</svg>
