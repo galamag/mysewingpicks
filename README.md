@@ -87,4 +87,5 @@ marked with comments in `renderProductCard`).
   directly and on Bluehost in `public_html`.
 - We intentionally show NO price or rating (Amazon Associates compliance).
 - `.claude/launch.json` is only a local preview helper — harmless to upload or delete.
-```
+
+Built with AI-assisted development (Claude Code).
