@@ -235,13 +235,19 @@ function renderProductCard(product) {
   // Fallback to the US link if the chosen marketplace isn't filled yet.
   const url = (product.links && product.links[ACTIVE_MARKETPLACE]) || (product.links && product.links.us) || "#";
 
+  // Per-product image fit. Defaults to "cover" (fills the box) when absent.
+  // "contain" scales the image down inside the SAME box (see styles.css).
+  const fit = product.imageFit === "contain" ? "contain" : "cover";
+  const mediaClass = fit === "contain" ? "card__media card__media--contain" : "card__media";
+  const imgClass = fit === "contain" ? "card__img card__img--contain" : "card__img";
+
   return `
     <article class="card">
-      <div class="card__media">
+      <div class="${mediaClass}">
         <!-- Real photo goes at the product's image path.
              If it's missing, onerror swaps in the shared placeholder. -->
         <img
-          class="card__img"
+          class="${imgClass}"
           src="${escapeHtml(product.image)}"
           alt="${escapeHtml(product.name)}"
           loading="lazy"

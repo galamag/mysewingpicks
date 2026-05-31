@@ -13,6 +13,10 @@
      links            affiliate links keyed by Amazon marketplace (see below)
      image            local image path. Convention: assets/products/<id>.jpg
                       (drop the real photo there later — see README notes)
+     imageFit         OPTIONAL. "cover" (default) crops the photo to fill the
+                      card's image box. "contain" shrinks the whole photo to fit
+                      inside the SAME box, leaving soft padding — use it for wide
+                      or oddly-shaped photos so nothing gets cropped.
 
    MULTI-MARKETPLACE LINKS (future-proofing):
      `links` is an object keyed by marketplace code:
@@ -46,8 +50,11 @@ const PRODUCTS = [
     shortDescription:
       "A sharp, comfortable rotary cutter for clean, accurate cuts through several layers of fabric at once.",
     category: "tools",
-    links: { us: "https://amzn.to/3pVR29l", de: "", es: "", uk: "", fr: "", it: "", tr: "", jp: "", ca: "", ae: "" },
+    links: { us: "https://amzn.to/4veHJ3T", de: "", es: "", uk: "", fr: "", it: "", tr: "", jp: "", ca: "", ae: "" },
     image: "assets/products/olfa-rotary-cutter.jpg",
+    // This source photo is wide & short; "contain" fits it inside the card's
+    // image box (with soft padding) instead of cropping it. See `imageFit` note above.
+    imageFit: "contain",
   },
   {
     id: "olfa-cutting-mat",

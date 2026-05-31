@@ -318,6 +318,15 @@ p { margin: 0 0 1em; }
 }
 .card__img { width: 100%; height: 100%; object-fit: cover; }
 
+/* Per-product image fit (driven by product.imageFit in data/products.js).
+   Default is "cover" above (photo fills the whole box).
+   "contain" scales the WHOLE image down to fit inside the SAME box — the box
+   does not change size/shape; the image just shrinks, leaving empty vertical
+   space top & bottom (like an Amazon product photo). The cream background makes
+   that empty space read as intentional padding rather than a gap. */
+.card__media--contain { background: var(--paper); }
+.card__img--contain { object-fit: contain; }
+
 .card__body {
   display: flex;
   flex-direction: column;
