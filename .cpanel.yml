@@ -1,0 +1,12 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home1/mzadwkmy/public_html/
+    - /bin/cp index.html $DEPLOYPATH
+    - /bin/cp tools.html $DEPLOYPATH
+    - /bin/cp fabrics.html $DEPLOYPATH
+    - /bin/cp about.html $DEPLOYPATH
+    - /bin/cp -R css $DEPLOYPATH
+    - /bin/cp -R js $DEPLOYPATH
+    - /bin/cp -R data $DEPLOYPATH
+    - /bin/cp -R assets $DEPLOYPATH
