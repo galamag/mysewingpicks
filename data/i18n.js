@@ -133,6 +133,15 @@ const I18N = {
 
     /* ---- Footer ---- */
     footer_disclosure: "As an Amazon Associate I earn from qualifying purchases.",
+
+    /* ---- Affiliate disclosure (link-level + page-level) ----
+       Amazon Operating Agreement requires a clear, conspicuous disclosure next
+       to each affiliate link, in addition to the site-wide footer line above. */
+    // Marker shown beside every "View on Amazon" button (link-level disclosure).
+    card_paid_link: "(paid link)",
+    // Line shown at the top of product pages (Tools/Fabrics), before any link.
+    page_affiliate_disclosure:
+      "The links below are affiliate links. As an Amazon Associate I earn from qualifying purchases.",
   },
 
   /* ---------------------------------------------------------------------

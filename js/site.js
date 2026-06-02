@@ -257,10 +257,15 @@ function renderProductCard(product) {
       <div class="card__body">
         <h3 class="card__title">${escapeHtml(product.name)}</h3>
         <p class="card__desc">${escapeHtml(product.shortDescription)}</p>
-        <a class="btn btn--amazon" href="${escapeHtml(url)}"
-           target="_blank" rel="noopener sponsored">
-          ${escapeHtml(t("btn_view_on_amazon"))}
-        </a>
+        <div class="card__cta">
+          <a class="btn btn--amazon" href="${escapeHtml(url)}"
+             target="_blank" rel="noopener sponsored">
+            ${escapeHtml(t("btn_view_on_amazon"))}
+          </a>
+          <!-- Link-level affiliate disclosure (Amazon Operating Agreement).
+               Auto-added to EVERY card here — do NOT remove when editing this render. -->
+          <p class="card__disclosure">${escapeHtml(t("card_paid_link"))}</p>
+        </div>
       </div>
     </article>
   `;

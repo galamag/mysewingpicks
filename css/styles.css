@@ -335,8 +335,30 @@ p { margin: 0 0 1em; }
 }
 .card__title { font-size: 1.12rem; line-height: 1.3; margin-bottom: 0.5em; }
 .card__desc { color: var(--ink-soft); font-size: 0.96rem; margin-bottom: 18px; }
-/* Push the button to the bottom so cards line up nicely regardless of text length */
-.card__body .btn--amazon { margin-top: auto; }
+/* Push the CTA (button + disclosure) to the bottom so cards line up nicely
+   regardless of text length. */
+.card__body .card__cta { margin-top: auto; }
+
+/* Link-level affiliate disclosure under each "View on Amazon" button.
+   Small but readable and on-palette (clear & conspicuous, not hidden away). */
+.card__disclosure {
+  margin: 9px 0 0;
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+}
+
+/* Page-level affiliate disclosure shown above the product grid (Tools/Fabrics).
+   Tucked just under the page subtitle, muted so it reads as a friendly note. */
+.page-disclosure {
+  max-width: 620px;
+  margin: -14px auto 34px;
+  text-align: center;
+  font-size: 0.92rem;
+  font-style: italic;
+  color: var(--ink-soft);
+}
 
 .empty-note { text-align: center; color: var(--ink-soft); font-style: italic; }
 
