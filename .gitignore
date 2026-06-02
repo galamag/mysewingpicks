@@ -8,6 +8,10 @@ node_modules/
 # Local tooling / editor config (not part of the deployable site)
 .claude/
 
+# Claude Code project instructions — local only.
+# Not needed on GitHub or on the live server (Bluehost), so keep it out of the repo.
+CLAUDE.md
+
 # Logs
 *.log
 
