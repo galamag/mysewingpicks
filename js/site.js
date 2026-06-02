@@ -259,7 +259,7 @@ function renderProductCard(product) {
         <p class="card__desc">${escapeHtml(product.shortDescription)}</p>
         <div class="card__cta">
           <a class="btn btn--amazon" href="${escapeHtml(url)}"
-             target="_blank" rel="noopener sponsored">
+             target="_blank" rel="nofollow sponsored noopener">
             ${escapeHtml(t("btn_view_on_amazon"))}
           </a>
           <!-- Link-level affiliate disclosure (Amazon Operating Agreement).
