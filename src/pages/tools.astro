@@ -1,0 +1,34 @@
+---
+/* Tools page — migrated from tools.html. Product cards rendered STATICALLY
+   (in the HTML at build time), not by browser JS. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { products } from '../data/products.js';
+
+const tools = products.filter((p) => p.category === 'tools');
+---
+<BaseLayout
+  title="Tools — My Sewing Picks"
+  description="Sewing and quilting tools I use and love: rotary cutters, cutting mats, rulers, presser feet, irons and marking pens."
+  active="tools"
+>
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">My Sewing Picks</span>
+          <h2>Tools</h2>
+          <p>The trusty gear that keeps every project precise — these are the cutters, mats,
+             rulers and pressing helpers I reach for again and again.</p>
+        </div>
+
+        <!-- Page-level affiliate disclosure, shown before any affiliate link. -->
+        <p class="page-disclosure">The links below are affiliate links. As an Amazon Associate I earn from qualifying purchases.</p>
+
+        <div class="product-grid">
+          {tools.map((product) => <ProductCard product={product} />)}
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

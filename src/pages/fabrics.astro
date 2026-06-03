@@ -1,0 +1,34 @@
+---
+/* Fabrics page — migrated from fabrics.html. Product cards rendered STATICALLY
+   (in the HTML at build time), not by browser JS. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { products } from '../data/products.js';
+
+const fabrics = products.filter((p) => p.category === 'fabrics');
+---
+<BaseLayout
+  title="Fabrics & Materials — My Sewing Picks"
+  description="Fabrics and materials I love to sew with: quilting fabric bundles, lace ribbon and pretty trims for your next project."
+  active="fabrics"
+>
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">My Sewing Picks</span>
+          <h2>Fabrics &amp; Materials</h2>
+          <p>The colors and textures that bring a project to life — fabric bundles, lace and
+             trims I love to gather for patchwork and everyday makes.</p>
+        </div>
+
+        <!-- Page-level affiliate disclosure, shown before any affiliate link. -->
+        <p class="page-disclosure">The links below are affiliate links. As an Amazon Associate I earn from qualifying purchases.</p>
+
+        <div class="product-grid">
+          {fabrics.map((product) => <ProductCard product={product} />)}
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

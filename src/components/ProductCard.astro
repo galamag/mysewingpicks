@@ -1,0 +1,58 @@
+---
+/*
+  ProductCard — the ONE reusable product card, rendered STATICALLY at build.
+  Successor to the old renderProductCard() in js/site.js. Markup + classes are
+  identical so css/styles.css styles it exactly as before.
+
+  Shows ONLY: photo + name + description + "View on Amazon" + "(paid link)".
+  NO price, NO rating, NO review count (Amazon Associates compliance).
+  The "(paid link)" marker is the required link-level disclosure — do NOT remove.
+*/
+import { Image } from 'astro:assets';
+
+// Resolve every product photo once (optimized by Astro) and key by filename,
+// so a product's `image` string maps to its ImageMetadata for <Image>.
+const productImages = import.meta.glob('../assets/products/*.{jpg,jpeg,png}', { eager: true });
+const imagesByName = Object.fromEntries(
+  Object.entries(productImages).map(([path, mod]) => [path.split('/').pop(), mod.default])
+);
+
+// Which Amazon marketplace link to use (US for now; seam for OneLink later).
+const ACTIVE_MARKETPLACE = 'us';
+
+const { product } = Astro.props;
+
+const url = (product.links && (product.links[ACTIVE_MARKETPLACE] || product.links.us)) || '#';
+
+// Per-product image fit (see src/data/products.js). Default "cover".
+const fit = product.imageFit === 'contain' ? 'contain' : 'cover';
+const mediaClass = fit === 'contain' ? 'card__media card__media--contain' : 'card__media';
+const imgClass = fit === 'contain' ? 'card__img card__img--contain' : 'card__img';
+
+const imgSrc = imagesByName[product.image];
+if (!imgSrc) {
+  throw new Error(`ProductCard: image not found in src/assets/products/ for "${product.image}" (product ${product.id})`);
+}
+---
+<article class="card">
+  <div class={mediaClass}>
+    <Image
+      src={imgSrc}
+      alt={product.name}
+      class={imgClass}
+      widths={[340, 680]}
+      sizes="(max-width: 760px) 45vw, 340px"
+      format="webp"
+      loading="lazy"
+    />
+  </div>
+  <div class="card__body">
+    <h3 class="card__title">{product.name}</h3>
+    <p class="card__desc">{product.shortDescription}</p>
+    <div class="card__cta">
+      <a class="btn btn--amazon" href={url} target="_blank" rel="nofollow sponsored noopener">View on Amazon</a>
+      <!-- Link-level affiliate disclosure (Amazon Operating Agreement) — do NOT remove. -->
+      <p class="card__disclosure">(paid link)</p>
+    </div>
+  </div>
+</article>

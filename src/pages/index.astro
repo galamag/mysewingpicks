@@ -1,0 +1,79 @@
+---
+/* Home page — migrated from index.html. All copy baked static (was filled by
+   site.js from the i18n dictionary). Visually identical to the original. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const youtube = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
+---
+<BaseLayout
+  title="My Sewing Picks — Tools & Fabrics I Sew With"
+  description="A cozy corner of hand-picked sewing and quilting tools and fabrics, chosen by the maker behind the SEWING DIY PATCHWORK YouTube channel."
+  active="home"
+>
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <span class="eyebrow">Handmade with love</span>
+        <h1>My Sewing Picks</h1>
+        <p class="hero__tagline">The tools &amp; fabrics from my own sewing corner.</p>
+        <p class="hero__blurb">
+          Welcome in! I'm the maker behind <strong>SEWING DIY PATCHWORK</strong>, where I sew
+          bags, quilts, clothes, and cozy things for the home. Everything you'll find here is
+          something I genuinely reach for — gathered in one place so you can find your next
+          favorite, too.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="tools.html">Browse my picks</a>
+          <a class="btn btn--youtube" href={youtube} target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+            <span>Watch on YouTube</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- WELCOME / CATEGORY PREVIEW -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Two little collections</span>
+          <h2>Find what you need</h2>
+          <p>Everything is sorted into two simple shelves — the tools that make sewing easier,
+             and the fabrics &amp; materials I love to work with.</p>
+        </div>
+
+        <div class="category-grid">
+          <a class="category-card category-card--tools" href="tools.html">
+            <div class="category-card__icon" aria-hidden="true">✂️</div>
+            <h3>Tools</h3>
+            <p>Rotary cutters, mats, rulers, presser feet, irons and marking pens —
+               the trusty gear that keeps every project tidy and precise.</p>
+            <span class="category-card__more">Explore tools →</span>
+          </a>
+
+          <a class="category-card category-card--fabrics" href="fabrics.html">
+            <div class="category-card__icon" aria-hidden="true">🧵</div>
+            <h3>Fabrics &amp; Materials</h3>
+            <p>Quilting fabric bundles, lace ribbon and pretty trims — the colors and
+               textures that turn an idea into something you can hold.</p>
+            <span class="category-card__more">Explore fabrics →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- YOUTUBE CALL-OUT -->
+    <section class="section section--tight">
+      <div class="container">
+        <div class="about" style="text-align:center;">
+          <span class="eyebrow">New videos often</span>
+          <h2>Sew along with me</h2>
+          <p>I share step-by-step tutorials for beginners and advanced sewers alike —
+             patchwork, quilting, art quilts and everyday makes. Come say hello on the channel.</p>
+          <a class="btn btn--primary" href={youtube} target="_blank" rel="noopener">Visit SEWING DIY PATCHWORK</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
