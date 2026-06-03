@@ -1,0 +1,60 @@
+---
+/*
+  About page — migrated from the old about.html.
+  Content is the same warm, personal copy (previously filled via the i18n
+  dictionary); here it's baked in as static text so the page is fully static.
+  Header/Footer come from BaseLayout. Visually identical to the original.
+*/
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="About — My Sewing Picks"
+  description="Meet the maker behind SEWING DIY PATCHWORK — tutorials on patchwork, quilting and cozy makes, plus the tools and materials I personally use and love."
+  active="about"
+>
+  <main>
+    <section class="section">
+      <div class="container">
+        <article class="about">
+          <span class="eyebrow">Hello &amp; welcome</span>
+          <h1>About this little sewing corner</h1>
+
+          <p>
+            I'm so glad you're here! This is the home of <strong>SEWING DIY PATCHWORK</strong> —
+            my YouTube channel where I share tutorials for sewing projects of every kind, from
+            simple beginner makes to more involved builds. Think bags and cosmetic pouches,
+            organizers, blankets, clothes, thoughtful handmade gifts, and all sorts of useful
+            things for around the home.
+          </p>
+
+          <p>
+            My real passion, though, is patchwork — quilting, art quilts, collage quilts and
+            textile design. I love the slow magic of turning small scraps of fabric into
+            something whole and beautiful, and I try to make those techniques approachable
+            whether you're picking up a rotary cutter for the very first time or you've been
+            sewing for years.
+          </p>
+
+          <p>
+            I post new videos often, so there's always a fresh project to sew along with. And
+            because so many of you ask what I'm using, I gathered it all here: every tool and
+            material on this site is something I <em>personally use and genuinely love</em>.
+            Nothing on these shelves is here just to fill space — it's the real gear from my
+            own sewing table.
+          </p>
+
+          <p>
+            Pull up a chair, browse around, and I hope you find something that sparks your next
+            project. Happy sewing!
+          </p>
+
+          <p class="about__signature">— With love, from my sewing corner to yours 🧵</p>
+
+          <a class="btn btn--primary"
+             href="https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg"
+             target="_blank" rel="noopener">Visit my YouTube channel</a>
+        </article>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

@@ -2,11 +2,10 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home1/mzadwkmy/public_html/
-    - /bin/cp index.html $DEPLOYPATH
-    - /bin/cp tools.html $DEPLOYPATH
-    - /bin/cp fabrics.html $DEPLOYPATH
-    - /bin/cp about.html $DEPLOYPATH
-    - /bin/cp -R css $DEPLOYPATH
-    - /bin/cp -R js $DEPLOYPATH
-    - /bin/cp -R data $DEPLOYPATH
-    - /bin/cp -R assets $DEPLOYPATH
+    # Deploy the BUILT Astro output. We copy the CONTENTS of dist/ (note the
+    # trailing "/.") into public_html. This auto-includes every built page and
+    # asset, so new pages in later phases need no change here.
+    # Server-only files (.htaccess, robots.txt, sitemap.xml) are NOT in dist/,
+    # so they are never touched. cp does not delete, so legacy pages not yet
+    # migrated (index/tools/fabrics) remain in place on the server.
+    - /bin/cp -R dist/. $DEPLOYPATH

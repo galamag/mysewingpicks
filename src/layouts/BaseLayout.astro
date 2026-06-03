@@ -1,0 +1,33 @@
+---
+/*
+  Base page layout — the shared HTML shell (head + fonts + stylesheet),
+  with the Header and Footer wrapped around each page's content (<slot/>).
+  Future migrated pages will reuse this; pass title/description/active.
+*/
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const { title, description = '', active } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+
+  <!-- Warm, cozy fonts (Google Fonts; layout still works without them). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Existing global stylesheet (unchanged), served from public/css/. -->
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <Header active={active} />
+  <slot />
+  <Footer />
+</body>
+</html>

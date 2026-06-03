@@ -2,8 +2,16 @@
 .DS_Store
 Thumbs.db
 
-# Dependencies (none used in this project, but ignored just in case)
+# Node dependencies — never commit (huge; restored via `npm ci` from package-lock.json)
 node_modules/
+
+# Astro generated types/cache
+.astro/
+
+# NOTE: dist/ (the built static site) is intentionally NOT ignored.
+# The server can't build (no Node), so we commit the built dist/ and
+# .cpanel.yml deploys its contents to public_html. Run `npm run build`
+# before committing so source and built output stay in sync.
 
 # Local tooling / editor config (not part of the deployable site)
 .claude/
