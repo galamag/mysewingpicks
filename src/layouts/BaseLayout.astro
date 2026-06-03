@@ -6,6 +6,10 @@
 */
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+// Global stylesheet imported through Astro so it gets a CONTENT-HASHED filename
+// (/_astro/styles.[hash].css). Any CSS change → new hash → new URL → Cloudflare
+// can never serve a stale stylesheet. Astro injects the <link> into <head>.
+import '../styles/styles.css';
 
 const { title, description = '', active } = Astro.props;
 ---
@@ -22,8 +26,8 @@ const { title, description = '', active } = Astro.props;
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Existing global stylesheet (unchanged), served from public/css/. -->
-  <link rel="stylesheet" href="/css/styles.css" />
+  <!-- The hashed <link rel="stylesheet"> for our global CSS is injected here by
+       Astro (from the `import '../styles/styles.css'` above). No manual link. -->
 </head>
 <body>
   <Header active={active} />
