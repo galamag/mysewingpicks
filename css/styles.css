@@ -242,7 +242,9 @@ p { margin: 0 0 1em; }
     radial-gradient(120% 90% at 0% 100%, rgba(192, 138, 135, 0.22), transparent 60%),
     var(--beige);
 }
-.hero__inner { padding: 84px 0 76px; max-width: 760px; }
+/* padding-block (not shorthand) so the .container's horizontal padding-inline
+   survives — otherwise the hero text gets pinned to the screen edge on mobile. */
+.hero__inner { padding-block: 84px 76px; max-width: 760px; }
 .hero h1 {
   font-size: clamp(2.2rem, 5.2vw, 3.6rem);
   margin-bottom: 0.3em;
@@ -447,7 +449,21 @@ p { margin: 0 0 1em; }
 
   .category-grid { grid-template-columns: 1fr; }
 
-  .hero__inner { padding: 60px 0 54px; }
+  /* Hero: keep side padding on phones (use padding-block so .container's
+     horizontal padding-inline isn't clobbered). */
+  .hero__inner { padding-block: 60px 54px; }
+
+  /* Product cards: 2 compact columns on phones instead of 1 full-width, so a
+     screen shows ~4 products and long lists don't scroll forever.
+     Desktop grid (auto-fill minmax) is untouched. */
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .card { min-width: 0; }                         /* allow shrink, prevent overflow */
+  .card__body { padding: 14px 12px 16px; }
+  .card__title { font-size: 0.96rem; overflow-wrap: break-word; }
+  .card__desc { font-size: 0.85rem; margin-bottom: 12px; overflow-wrap: break-word; }
+  /* "View on Amazon" stays readable/clickable; the required "(paid link)"
+     disclosure keeps its normal size and stays visible — never hidden. */
+  .btn--amazon { padding: 11px 10px; font-size: 0.85rem; }
 
   .site-footer__inner { flex-direction: column; align-items: flex-start; }
 }
