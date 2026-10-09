@@ -16,8 +16,7 @@
                       per photo's proportions so cards look tidy & uniform.
 
    Amazon rules: NO price, NO rating, NO review count.
-   (During migration this mirrors the legacy data/products.js. After the
-   legacy files are removed in a later phase, this becomes the only source.)
+   This file is the ONLY source of product data.
    ===================================================================== */
 
 export const products = [

@@ -1,91 +1,67 @@
-# My Sewing Picks — static affiliate site
+# My Sewing Picks — affiliate site
 
-Pure HTML/CSS/JS. No build step, no Node, no npm. Open `index.html` in a
-browser, or upload everything to Bluehost `public_html` via File Manager.
+Static affiliate site for the **SEWING DIY PATCHWORK** YouTube channel:
+hand-picked sewing tools and fabrics with "View on Amazon" links.
+Live at [mysewingpicks.com](https://mysewingpicks.com).
+
+Built with [Astro](https://astro.build) as a **static site generator**: Astro
+turns the source in `src/` into plain HTML/CSS in `dist/`. No server runtime —
+the output is uploaded as static files to Bluehost shared hosting.
+
+## Commands
+```bash
+npm ci            # install exact dependencies from package-lock.json
+npm run dev       # local dev server with live reload (http://localhost:4321)
+npm run build     # build the static site into dist/
+npm run preview   # serve the built dist/ locally
+```
 
 ## Folder structure
 ```
 mysewingpicks/
-├── index.html              Home (hero, category previews, YouTube link)
-├── tools.html              Tools category page
-├── fabrics.html            Fabrics & Materials category page
-├── about.html              About the channel
-├── css/
-│   └── styles.css          All styling + the cozy theme (edit colors at the top)
-├── js/
-│   └── site.js             Header/footer + product-card rendering + SITE config
-├── data/
-│   ├── products.js         ⭐ ALL product data lives here — add products here
-│   └── i18n.js             ⭐ ALL user-facing UI text lives here (translations)
-└── assets/
-    ├── logo.png            ← YOU ADD THIS (header logo; text shows if missing)
-    ├── placeholder.svg     Auto-shown when a product photo is missing
-    └── products/           ← YOU ADD PHOTOS HERE (filenames below)
+├── src/
+│   ├── pages/              One .astro file = one page (index, tools, fabrics, about)
+│   ├── layouts/
+│   │   └── BaseLayout.astro    Shared <head> + header + footer around every page
+│   ├── components/
+│   │   ├── Header.astro        Logo + navigation + mobile menu
+│   │   ├── Footer.astro        Affiliate disclosure + social buttons
+│   │   └── ProductCard.astro   The one reusable product card
+│   ├── data/
+│   │   └── products.js     ⭐ ALL product data lives here — add products here
+│   ├── assets/products/    Product photos (Astro converts them to optimized WebP)
+│   └── styles/styles.css   All styling + the cozy theme (colors at the top)
+├── public/                 Copied to the site as-is (logo)
+├── dist/                   ⚠️ BUILT site — committed on purpose (see Deploy)
+├── astro.config.mjs        Static output, file-style URLs (about.html)
+└── .cpanel.yml             Bluehost deploy: copies dist/ into public_html
 ```
 
-## Files YOU need to add
-1. **`assets/logo.png`** — your channel logo for the header. Until then the
-   header shows the text "My Sewing Picks".
-2. **`assets/products/<id>.jpg`** — one photo per product. Filenames must match
-   the `image` field in `data/products.js`:
-   - `olfa-rotary-cutter.jpg`
-   - `olfa-cutting-mat.jpg`
-   - `free-motion-presser-foot.jpg`
-   - `quilting-rulers-set.jpg`
-   - `rowenta-travel-iron.jpg`
-   - `sewline-air-erasable-pen.jpg`
-   - `lace-ribbon.jpg`
-   - `quilting-fabric-bundles.jpg`
+## Add a new product
+1. Put the photo in `src/assets/products/<id>.jpg` (filename = product `id`).
+2. Open `src/data/products.js`, copy one `{ ... }` block, change the fields and
+   append it. Set `category` to `"tools"` or `"fabrics"`.
+3. `npm run build`, then commit **both** the source and `dist/`.
 
-   Cards show a placeholder until the real photo exists — no code changes needed.
+If the photo is missing, the build stops with a clear error naming the product.
 
-## Add a new product later
-Open `data/products.js`, copy one `{ ... }` block, change the fields, and append
-it to the array. Set `category` to `"tools"` or `"fabrics"`. Done — it appears
-automatically on the right page.
+## Deploy
+The server has no Node, so it cannot build. That is why `dist/` is committed:
+on push, `.cpanel.yml` copies the contents of `dist/` into `public_html`.
+**Always run `npm run build` before committing**, or the live site won't change.
 
-## Add a social button later
-Open `js/site.js`, find `SITE.socials`, and push another `{ label, url, icon }`.
+## Amazon Associates rules
+Cards show only photo + name + short description + "View on Amazon" + the
+"(paid link)" marker. No prices, no ratings, no review counts. The footer
+carries the site-wide disclosure.
 
-## Internationalization (i18n) — foundation only, NOT active yet
-All user-facing text is extracted into **`data/i18n.js`**, keyed by language code.
-The site is **English-only right now** — only the `en` dictionary is filled and
-`ACTIVE_LANG = 'en'` (in `js/site.js`).
+## Multi-marketplace links — foundation only, NOT active yet
+Each product's `links` object is keyed by marketplace (`us`, `de`, `es`, `uk`,
+`fr`, `it`, `tr`, `jp`, `ca`, `ae`); only `us` is filled. The card reads
+`ACTIVE_MARKETPLACE` in `src/components/ProductCard.astro`.
 
-Planned language codes (ISO 639-1), none active except `en`:
-
-| Code | Language | Status |
-|------|----------|--------|
-| `en` | English  | ✅ active |
-| `de` | German   | planned |
-| `fr` | French   | planned |
-| `es` | Spanish  | planned |
-| `it` | Italian  | planned |
-| `tr` | Turkish  | planned |
-| `ja` | Japanese | planned |
-| `pl` | Polish   | planned |
-| `nl` | Dutch    | planned |
-| `ar` | Arabic   | planned (right-to-left) |
-
-To add a language later: copy the `en` block in `data/i18n.js`, translate the
-values, then un-comment the language-switcher placeholder in `js/site.js`
-(`renderHeader`) and set `ACTIVE_LANG` from the user's choice. Page text is wired
-through `data-i18n` / `data-i18n-html` attributes, so no HTML copy is hardcoded.
-
-## Multi-marketplace Amazon links — foundation only, NOT active yet
-Each product in `data/products.js` now has a `links` object keyed by marketplace
-(`us`, `de`, `es`, `uk`, `fr`, `it`, `tr`, `jp`, `ca`, `ae`) instead of a single
-URL. **Only `us` is filled** today; the rest are empty placeholders.
-
-`js/site.js` has a single constant `ACTIVE_MARKETPLACE = 'us'` that the card
-renderer reads. To go multi-country later, fill the other links and change that
-constant (or replace it with geo-detection / an Amazon OneLink URL — the seam is
-marked with comments in `renderProductCard`).
-
-## Notes
-- Image paths are relative (no leading `/`), so the site works both when opened
-  directly and on Bluehost in `public_html`.
-- We intentionally show NO price or rating (Amazon Associates compliance).
-- `.claude/launch.json` is only a local preview helper — harmless to upload or delete.
+## Security note
+`.npmrc` sets `ignore-scripts=true`: npm never runs package install scripts
+automatically (supply-chain hardening). Keep it that way.
 
 Built with AI-assisted development (Claude Code).

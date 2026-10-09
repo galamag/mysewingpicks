@@ -6,6 +6,6 @@ deployment:
     # trailing "/.") into public_html. This auto-includes every built page and
     # asset, so new pages in later phases need no change here.
     # Server-only files (.htaccess, robots.txt, sitemap.xml) are NOT in dist/,
-    # so they are never touched. cp does not delete, so legacy pages not yet
-    # migrated (index/tools/fabrics) remain in place on the server.
+    # so they are never touched. cp does not delete: files removed from dist/
+    # stay on the server until deleted by hand in cPanel File Manager.
     - /bin/cp -R dist/. $DEPLOYPATH
