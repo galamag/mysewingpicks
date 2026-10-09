@@ -28,7 +28,8 @@ mysewingpicks/
 │   │   ├── Footer.astro        Affiliate disclosure + social buttons
 │   │   └── ProductCard.astro   The one reusable product card
 │   ├── data/
-│   │   └── products.js     ⭐ ALL product data lives here — add products here
+│   │   ├── products.js     ⭐ ALL product data lives here — add products here
+│   │   └── amazon.js       Marketplace + tracking ID; builds affiliate links
 │   ├── assets/products/    Product photos (Astro converts them to optimized WebP)
 │   └── styles/styles.css   All styling + the cozy theme (colors at the top)
 ├── public/                 Copied to the site as-is (logo)
@@ -40,7 +41,9 @@ mysewingpicks/
 ## Add a new product
 1. Put the photo in `src/assets/products/<id>.jpg` (filename = product `id`).
 2. Open `src/data/products.js`, copy one `{ ... }` block, change the fields and
-   append it. Set `category` to `"tools"` or `"fabrics"`.
+   append it. Set `category` to `"tools"` or `"fabrics"` and `asin` to the
+   product's Amazon code (the 10 characters after `/dp/` in its Amazon URL).
+   The affiliate link is built automatically from the ASIN + the site's tag.
 3. `npm run build`, then commit **both** the source and `dist/`.
 
 If the photo is missing, the build stops with a clear error naming the product.
@@ -55,10 +58,13 @@ Cards show only photo + name + short description + "View on Amazon" + the
 "(paid link)" marker. No prices, no ratings, no review counts. The footer
 carries the site-wide disclosure.
 
-## Multi-marketplace links — foundation only, NOT active yet
-Each product's `links` object is keyed by marketplace (`us`, `de`, `es`, `uk`,
-`fr`, `it`, `tr`, `jp`, `ca`, `ae`); only `us` is filled. The card reads
-`ACTIVE_MARKETPLACE` in `src/components/ProductCard.astro`.
+## Affiliate links and marketplaces
+Links are built in `src/data/amazon.js` as
+`https://www.amazon.com/dp/<ASIN>?tag=<site tag>`. The site uses its own
+tracking ID, separate from the YouTube channels, so its sales are reported
+separately. Only the US marketplace is configured; adding another country means
+joining that country's Associates program and adding its domain + tag to
+`MARKETPLACES`. A product can override a link per marketplace via `links`.
 
 ## Security note
 `.npmrc` sets `ignore-scripts=true`: npm never runs package install scripts
