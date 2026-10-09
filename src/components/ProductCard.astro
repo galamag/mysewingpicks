@@ -8,6 +8,7 @@
   The "(paid link)" marker is the required link-level disclosure — do NOT remove.
 */
 import { Image } from 'astro:assets';
+import { amazonUrl } from '../data/amazon.js';
 
 // Resolve every product photo once (optimized by Astro) and key by filename,
 // so a product's `image` string maps to its ImageMetadata for <Image>.
@@ -16,12 +17,10 @@ const imagesByName = Object.fromEntries(
   Object.entries(productImages).map(([path, mod]) => [path.split('/').pop(), mod.default])
 );
 
-// Which Amazon marketplace link to use (US for now; seam for OneLink later).
-const ACTIVE_MARKETPLACE = 'us';
-
 const { product } = Astro.props;
 
-const url = (product.links && (product.links[ACTIVE_MARKETPLACE] || product.links.us)) || '#';
+// Affiliate link built from the product's ASIN + the site's tag (src/data/amazon.js).
+const url = amazonUrl(product);
 
 // Per-product image fit (see src/data/products.js). Default "cover".
 const fit = product.imageFit === 'contain' ? 'contain' : 'cover';

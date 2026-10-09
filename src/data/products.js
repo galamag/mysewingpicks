@@ -9,7 +9,11 @@
      name             product title
      shortDescription one friendly line
      category         "tools" | "fabrics"  (drives which page shows it)
-     links            affiliate links keyed by Amazon marketplace (us active)
+     asin             Amazon product code (10 chars, from amazon.com/dp/<ASIN>).
+                      The affiliate link is built from it + the site's tag
+                      in src/data/amazon.js.
+     links            OPTIONAL per-marketplace URL override, e.g. { de: '...' }
+                      — only when the built link can't be used.
      image            filename in src/assets/products/ (Astro optimizes it)
      imageFit         OPTIONAL. "cover" (default, fills box) | "contain"
                       (fits whole photo inside the box, soft padding) — pick
@@ -27,7 +31,7 @@ export const products = [
     shortDescription:
       'A sharp, comfortable rotary cutter for clean, accurate cuts through several layers of fabric at once.',
     category: 'tools',
-    links: { us: 'https://amzn.to/4veHJ3T', de: '', es: '', uk: '', fr: '', it: '', tr: '', jp: '', ca: '', ae: '' },
+    asin: 'B000BNLLHW',
     image: 'olfa-rotary-cutter.jpg',
     imageFit: 'contain', // wide & short photo — fit whole knife, don't crop
   },
@@ -37,7 +41,7 @@ export const products = [
     shortDescription:
       'A self-healing mat that protects your table and keeps every rotary cut crisp and precise.',
     category: 'tools',
-    links: { us: 'https://amzn.to/3KwG2ZA', de: '', es: '', uk: '', fr: '', it: '', tr: '', jp: '', ca: '', ae: '' },
+    asin: 'B000BNLO3S',
     image: 'olfa-cutting-mat.jpg',
     // landscape (~4:3) — "cover" fills the box nicely
   },
@@ -47,7 +51,7 @@ export const products = [
     shortDescription:
       'A set of low-shank darning feet for smooth free-motion quilting and thread sketching.',
     category: 'tools',
-    links: { us: 'https://amzn.to/3R4aRY6', de: '', es: '', uk: '', fr: '', it: '', tr: '', jp: '', ca: '', ae: '' },
+    asin: 'B07CH388RL',
     image: 'free-motion-presser-foot.jpg',
     imageFit: 'contain', // square 6-photo collage — fit whole thing, don't crop any panel
   },
@@ -57,7 +61,7 @@ export const products = [
     shortDescription:
       'A full set of clear acrylic rulers for measuring, squaring up, and cutting quilt blocks accurately.',
     category: 'tools',
-    links: { us: 'https://amzn.to/3wHxIjQ', de: '', es: '', uk: '', fr: '', it: '', tr: '', jp: '', ca: '', ae: '' },
+    asin: 'B08W324ZXD',
     image: 'quilting-rulers-set.jpg',
     imageFit: 'contain', // near-square — show the full set without cropping ruler edges
   },
@@ -67,7 +71,7 @@ export const products = [
     shortDescription:
       'A lightweight, compact steam iron for crisp seams and pressing wherever you sew.',
     category: 'tools',
-    links: { us: 'https://amzn.to/3RFrKIH', de: '', es: '', uk: '', fr: '', it: '', tr: '', jp: '', ca: '', ae: '' },
+    asin: 'B001RNOQIQ',
     image: 'rowenta-travel-iron.jpg',
     imageFit: 'contain', // square product shot — keep the whole iron in frame
   },
@@ -77,7 +81,7 @@ export const products = [
     shortDescription:
       'Marks your fabric clearly, then fades away on its own — no rinsing and no residue left behind.',
     category: 'tools',
-    links: { us: 'https://amzn.to/3B1jHQN', de: '', es: '', uk: '', fr: '', it: '', tr: '', jp: '', ca: '', ae: '' },
+    asin: 'B0083JM7VU',
     image: 'sewline-air-erasable-pen.jpg',
     imageFit: 'contain', // tall/portrait photo — fit it instead of cropping a slice
   },
@@ -89,7 +93,7 @@ export const products = [
     shortDescription:
       'Delicate lace trim for finishing edges, embellishing bags, and adding a handmade touch to any project.',
     category: 'fabrics',
-    links: { us: 'https://amzn.to/3RtkO1b', de: '', es: '', uk: '', fr: '', it: '', tr: '', jp: '', ca: '', ae: '' },
+    asin: 'B08Y8G4M35',
     image: 'lace-ribbon.jpg',
     // square texture — "cover" fills the box, cropping is fine for a repeating pattern
   },
@@ -99,7 +103,7 @@ export const products = [
     shortDescription:
       'Pre-coordinated fabric bundles to jump-start your next patchwork or quilting project with ready-to-go colors.',
     category: 'fabrics',
-    links: { us: 'https://amzn.to/3cxHuye', de: '', es: '', uk: '', fr: '', it: '', tr: '', jp: '', ca: '', ae: '' },
+    asin: 'B08CZGXSWD',
     image: 'quilting-fabric-bundles.jpg',
     // square stack of fabrics — "cover" looks full and tidy
   },
