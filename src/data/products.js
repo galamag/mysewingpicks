@@ -90,15 +90,6 @@ export const products = [
     asin: 'B000BNLLHW',
   },
   {
-    id: 'olfa-ergonomic-rotary-cutter',
-    name: 'OLFA 45mm Ergonomic Rotary Cutter + Spare Blade',
-    shortDescription:
-      'An ergonomic cutter for right or left hand that slices through up to six layers of fabric, with a spare blade included.',
-    category: 'tools',
-    group: 'cutting',
-    asin: 'B00M6OCZZ6',
-  },
-  {
     id: 'olfa-cutting-mat',
     name: 'OLFA 24×18 in Self-Healing Cutting Mat',
     shortDescription:

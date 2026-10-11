@@ -16,4 +16,4 @@ deployment:
     - export APIPATH=/home1/mzadwkmy/mysewingpicks-api/
     - /bin/mkdir -p $APIPATH
     - /bin/chmod 700 $APIPATH
-    - /bin/cp server/refresh-images.php server/config.example.php $APIPATH
+    - /bin/cp server/refresh-images.php server/catalog-tool.php server/config.example.php $APIPATH
