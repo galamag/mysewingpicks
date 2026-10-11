@@ -20,15 +20,17 @@ npm run preview   # serve the built dist/ locally
 ```
 mysewingpicks/
 ├── src/
-│   ├── pages/              One .astro file = one page (index, tools, fabrics, about)
+│   ├── pages/              One .astro file = one page (index, tools, fabrics, setup, about)
 │   ├── layouts/
 │   │   └── BaseLayout.astro    Shared <head> + header + footer around every page
 │   ├── components/
 │   │   ├── Header.astro        Logo + navigation + mobile menu
 │   │   ├── Footer.astro        Affiliate disclosure + social buttons
-│   │   └── ProductCard.astro   The one reusable product card
+│   │   ├── ProductCard.astro   The one reusable product card
+│   │   └── ProductSections.astro  A category's products, split into sections
 │   ├── data/
 │   │   ├── products.js     ⭐ ALL product data lives here — add products here
+│   │   ├── categories.js   Category pages and their sections
 │   │   └── amazon.js       Marketplace + tracking ID; builds affiliate links
 │   ├── assets/products/    Product photos (Astro converts them to optimized WebP)
 │   └── styles/styles.css   All styling + the cozy theme (colors at the top)
@@ -51,8 +53,9 @@ URLs in `catalog/images.json` twice a day, and the page ignores data older than
 1. Optional: put your OWN photo in `src/assets/products/<id>.jpg` and set
    `image`. Without it the card uses the Amazon image (or a placeholder).
 2. Open `src/data/products.js`, copy one `{ ... }` block, change the fields and
-   append it. Set `category` to `"tools"` or `"fabrics"` and `asin` to the
-   product's Amazon code (the 10 characters after `/dp/` in its Amazon URL).
+   add it to the right section. Set `category` (`"tools"`, `"fabrics"` or
+   `"setup"`), `group` (a section id from `src/data/categories.js`) and `asin`
+   (the 10 characters after `/dp/` in the product's Amazon URL).
    The affiliate link is built automatically from the ASIN + the site's tag.
 3. `npm run build`, then commit **both** the source and `dist/`.
 
