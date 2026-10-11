@@ -17,6 +17,7 @@
 */
 import { Image } from 'astro:assets';
 import { amazonUrl } from '../data/amazon.js';
+import { categories } from '../data/categories.js';
 
 // Resolve every product photo once (optimized by Astro) and key by filename,
 // so a product's `image` string maps to its ImageMetadata for <Image>.
@@ -24,8 +25,6 @@ const productImages = import.meta.glob('../assets/products/*.{jpg,jpeg,png}', { 
 const imagesByName = Object.fromEntries(
   Object.entries(productImages).map(([path, mod]) => [path.split('/').pop(), mod.default])
 );
-
-const PLACEHOLDER_ICONS = { tools: '✂️', fabrics: '🧵' };
 
 const { product } = Astro.props;
 
@@ -59,7 +58,7 @@ const imgClass = fit === 'contain' ? 'card__img card__img--contain' : 'card__img
         loading="lazy"
       />
     ) : (
-      <span class="card__placeholder" aria-hidden="true">{PLACEHOLDER_ICONS[product.category] ?? '🧵'}</span>
+      <span class="card__placeholder" aria-hidden="true">{categories[product.category]?.placeholderIcon ?? '🧵'}</span>
     )}
   </a>
   <div class="card__body">

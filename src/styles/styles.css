@@ -264,7 +264,7 @@ p { margin: 0 0 1em; }
    --------------------------------------------------------------------- */
 .category-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 28px;
 }
 .category-card {
@@ -288,6 +288,7 @@ p { margin: 0 0 1em; }
 }
 .category-card--tools .category-card__icon { background: rgba(156, 175, 136, 0.25); }
 .category-card--fabrics .category-card__icon { background: rgba(192, 138, 135, 0.25); }
+.category-card--setup .category-card__icon { background: rgba(212, 160, 90, 0.18); }
 .category-card h3 { font-size: 1.4rem; }
 .category-card p { color: var(--ink-soft); margin-bottom: 0.8em; }
 .category-card__more { font-weight: 700; color: var(--rose-deep); }
@@ -377,6 +378,79 @@ p { margin: 0 0 1em; }
 }
 
 .empty-note { text-align: center; color: var(--ink-soft); font-style: italic; }
+
+.card__media--setup.card__media--placeholder { background: rgba(212, 160, 90, 0.18); }
+
+/* ---------------------------------------------------------------------
+   8b. CATALOG SECTIONS & "JUMP TO SECTION" CHIPS
+   (src/components/ProductSections.astro, sections from data/categories.js)
+   --------------------------------------------------------------------- */
+/* The chip row sticks just under the sticky site header, so on a long page
+   you can always hop to another section. --header-h matches the header. */
+:root { --header-h: 75px; --chips-h: 58px; }
+
+.section-chips {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 40;
+  margin: 0 -22px 8px;          /* full-bleed inside .container */
+  padding: 10px 22px;
+  background: rgba(250, 244, 234, 0.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--beige-deep);
+}
+.section-chips__track {
+  position: relative;            /* chip.offsetLeft is measured from here */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.section-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--beige-deep);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.section-chip:hover { border-color: var(--rose); color: var(--rose-deep); text-decoration: none; }
+.section-chip[aria-current] { background: var(--rose); border-color: var(--rose); color: #fff; }
+.section-chip__count {
+  min-width: 22px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--beige);
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  text-align: center;
+}
+.section-chip[aria-current] .section-chip__count { background: rgba(255, 255, 255, 0.25); color: #fff; }
+
+.product-section {
+  padding-top: 28px;
+  /* Anchor jumps land below the sticky header + chip row, not under them. */
+  scroll-margin-top: calc(var(--header-h) + var(--chips-h) + 8px);
+}
+.product-section__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.35rem;
+  margin-bottom: 18px;
+}
+.product-section__title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--beige-deep);
+}
 
 /* ---------------------------------------------------------------------
    9. ABOUT PAGE
@@ -479,6 +553,29 @@ p { margin: 0 0 1em; }
   /* "View on Amazon" stays readable/clickable; the required "(paid link)"
      disclosure keeps its normal size and stays visible — never hidden. */
   .btn--amazon { padding: 11px 10px; font-size: 0.85rem; }
+  /* Keep cards in a row evenly short: up to 4 lines of description. */
+  .card__desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Catalog pages: less air above the list, chips scroll sideways in one row. */
+  .section--catalog { padding-top: 36px; }
+  .section-chips { margin-inline: -22px; padding: 8px 0; }
+  .section-chips__track {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-inline: 22px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .section-chips__track::-webkit-scrollbar { display: none; }
+  .section-chip { padding: 7px 12px; font-size: 0.85rem; }
+  .product-section { padding-top: 22px; }
+  .product-section__title { font-size: 1.15rem; margin-bottom: 14px; }
 
   .site-footer__inner { flex-direction: column; align-items: flex-start; }
 }

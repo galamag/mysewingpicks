@@ -1,33 +1,28 @@
 ---
-/* Fabrics page — migrated from fabrics.html. Product cards rendered STATICALLY
-   (in the HTML at build time), not by browser JS. */
+/* Fabrics & Materials page — product cards rendered STATICALLY (in the HTML at
+   build time), split into sections by src/data/categories.js. */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProductCard from '../components/ProductCard.astro';
-import { products } from '../data/products.js';
-
-const fabrics = products.filter((p) => p.category === 'fabrics');
+import ProductSections from '../components/ProductSections.astro';
 ---
 <BaseLayout
   title="Fabrics & Materials — My Sewing Picks"
-  description="Fabrics and materials I personally recommend: quilting fabric bundles, lace ribbon and pretty trims for your next project."
+  description="Fabrics and materials I personally recommend: quilting fabrics, batting and interfacing, lace, tapes, cords, zippers, buttons and thread for your next project."
   active="fabrics"
 >
   <main>
-    <section class="section">
+    <section class="section section--catalog">
       <div class="container">
         <div class="section-head">
           <span class="eyebrow">My Sewing Picks</span>
           <h2>Fabrics &amp; Materials</h2>
-          <p>The colors and textures that bring a project to life — fabric bundles, lace and
-             trims I personally recommend for patchwork and everyday makes.</p>
+          <p>The colors and textures that bring a project to life — fabrics, batting, trims
+             and notions I personally recommend for patchwork and everyday makes.</p>
         </div>
 
         <!-- Page-level affiliate disclosure, shown before any affiliate link. -->
         <p class="page-disclosure">The links below are affiliate links. As an Amazon Associate I earn from qualifying purchases.</p>
 
-        <div class="product-grid">
-          {fabrics.map((product) => <ProductCard product={product} />)}
-        </div>
+        <ProductSections category="fabrics" />
       </div>
     </section>
   </main>

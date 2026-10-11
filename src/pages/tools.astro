@@ -1,33 +1,28 @@
 ---
-/* Tools page — migrated from tools.html. Product cards rendered STATICALLY
-   (in the HTML at build time), not by browser JS. */
+/* Tools page — product cards rendered STATICALLY (in the HTML at build time),
+   split into sections by src/data/categories.js. */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProductCard from '../components/ProductCard.astro';
-import { products } from '../data/products.js';
-
-const tools = products.filter((p) => p.category === 'tools');
+import ProductSections from '../components/ProductSections.astro';
 ---
 <BaseLayout
   title="Tools — My Sewing Picks"
-  description="Sewing and quilting tools I personally recommend: rotary cutters, cutting mats, rulers, presser feet, irons and marking pens."
+  description="Sewing and quilting tools I personally recommend: sewing machines and presser feet, rotary cutters, mats, rulers, scissors, marking pens, irons and handy helpers."
   active="tools"
 >
   <main>
-    <section class="section">
+    <section class="section section--catalog">
       <div class="container">
         <div class="section-head">
           <span class="eyebrow">My Sewing Picks</span>
           <h2>Tools</h2>
-          <p>The trusty gear that keeps every project precise — cutters, mats, rulers and
-             pressing helpers I personally recommend.</p>
+          <p>The trusty gear that keeps every project precise — machines, cutters, rulers,
+             marking and pressing helpers I personally recommend.</p>
         </div>
 
         <!-- Page-level affiliate disclosure, shown before any affiliate link. -->
         <p class="page-disclosure">The links below are affiliate links. As an Amazon Associate I earn from qualifying purchases.</p>
 
-        <div class="product-grid">
-          {tools.map((product) => <ProductCard product={product} />)}
-        </div>
+        <ProductSections category="tools" />
       </div>
     </section>
   </main>

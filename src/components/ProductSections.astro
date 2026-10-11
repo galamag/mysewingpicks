@@ -1,0 +1,81 @@
+---
+/*
+  ProductSections — all products of one category, split into its sections
+  (src/data/categories.js). With more than one section it adds a row of
+  "jump to section" chips that stays under the sticky header while scrolling,
+  so on a phone you can hop between sections instead of scrolling forever.
+  Styled by src/styles/styles.css (.section-chips, .product-section).
+*/
+import ProductCard from './ProductCard.astro';
+import { products } from '../data/products.js';
+import { categories } from '../data/categories.js';
+
+const { category } = Astro.props;
+const config = categories[category];
+if (!config) throw new Error(`ProductSections: unknown category "${category}"`);
+
+const items = products.filter((p) => p.category === category);
+const groupIds = config.groups.map((g) => g.id);
+for (const p of items) {
+  if (!groupIds.includes(p.group)) {
+    throw new Error(`ProductSections: product "${p.id}" has group "${p.group}", expected one of: ${groupIds.join(', ')}`);
+  }
+}
+
+const sections = config.groups
+  .map((g) => ({ ...g, items: items.filter((p) => p.group === g.id) }))
+  .filter((s) => s.items.length > 0);
+const showNav = sections.length > 1;
+---
+{showNav && (
+  <nav class="section-chips" aria-label="Jump to section">
+    <div class="section-chips__track">
+      {sections.map((s) => (
+        <a class="section-chip" href={`#${s.id}`}>
+          {s.title}<span class="section-chip__count">{s.items.length}</span>
+        </a>
+      ))}
+    </div>
+  </nav>
+)}
+
+{sections.map((s) => (
+  <section class="product-section" id={s.id} aria-labelledby={`${s.id}-title`}>
+    {showNav && <h3 class="product-section__title" id={`${s.id}-title`}>{s.title}</h3>}
+    <div class="product-grid">
+      {s.items.map((product) => <ProductCard product={product} />)}
+    </div>
+  </section>
+))}
+
+{showNav && (
+  <script>
+    // Highlight the chip of the section currently on screen and keep it
+    // centred in the chip row (phones show only a few chips). Only the chip
+    // row is scrolled — never the page (scrollIntoView can break iOS momentum).
+    const track = document.querySelector<HTMLElement>('.section-chips__track');
+    const chips = new Map(
+      [...document.querySelectorAll<HTMLAnchorElement>('.section-chip')]
+        .map((chip) => [chip.hash.slice(1), chip])
+    );
+    const setActive = (id: string) => {
+      chips.forEach((chip, key) => {
+        const active = key === id;
+        if (active) chip.setAttribute('aria-current', 'true');
+        else chip.removeAttribute('aria-current');
+        if (active && track) {
+          const left = chip.offsetLeft - (track.clientWidth - chip.offsetWidth) / 2;
+          track.scrollTo({ left, behavior: 'smooth' });
+        }
+      });
+    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length) setActive(visible[0].target.id);
+      },
+      { rootMargin: '-35% 0px -60% 0px' } // the band just below the sticky bars
+    );
+    document.querySelectorAll('.product-section').forEach((s) => observer.observe(s));
+  </script>
+)}

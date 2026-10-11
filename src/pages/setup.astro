@@ -1,0 +1,30 @@
+---
+/* My Setup page — filming gear (lights, tripod, camera, laptop, desk) for
+   viewers who want to film their own sewing videos. Product cards rendered
+   STATICALLY from src/data/products.js (category "setup"). */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductSections from '../components/ProductSections.astro';
+---
+<BaseLayout
+  title="My Filming Setup — My Sewing Picks"
+  description="Lights, tripod, camera, laptop and desk I personally recommend for filming your own sewing and quilting videos."
+  active="setup"
+>
+  <main>
+    <section class="section section--catalog">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">My Sewing Picks</span>
+          <h2>My Filming Setup</h2>
+          <p>Thinking about filming your own sewing videos? Here are the lights, tripod, camera,
+             laptop and desk I personally recommend for a cozy little filming corner.</p>
+        </div>
+
+        <!-- Page-level affiliate disclosure, shown before any affiliate link. -->
+        <p class="page-disclosure">The links below are affiliate links. As an Amazon Associate I earn from qualifying purchases.</p>
+
+        <ProductSections category="setup" />
+      </div>
+    </section>
+  </main>
+</BaseLayout>
