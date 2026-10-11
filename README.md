@@ -33,20 +33,30 @@ mysewingpicks/
 │   ├── assets/products/    Product photos (Astro converts them to optimized WebP)
 │   └── styles/styles.css   All styling + the cozy theme (colors at the top)
 ├── public/                 Copied to the site as-is (logo)
+├── server/                 PHP cron script for Amazon product images (runs on
+│                           Bluehost, deployed outside public_html)
 ├── dist/                   ⚠️ BUILT site — committed on purpose (see Deploy)
 ├── astro.config.mjs        Static output, file-style URLs (about.html)
 └── .cpanel.yml             Bluehost deploy: copies dist/ into public_html
 ```
 
+## Product images
+Each card shows, in order of preference: the product's own photo (`image`) →
+the Amazon image from the Creators API → a category placeholder. Amazon images
+are never downloaded: a server cron (`server/refresh-images.php`) stores their
+URLs in `catalog/images.json` twice a day, and the page ignores data older than
+24 hours, as Amazon's policies require. API credentials live only on the server.
+
 ## Add a new product
-1. Put the photo in `src/assets/products/<id>.jpg` (filename = product `id`).
+1. Optional: put your OWN photo in `src/assets/products/<id>.jpg` and set
+   `image`. Without it the card uses the Amazon image (or a placeholder).
 2. Open `src/data/products.js`, copy one `{ ... }` block, change the fields and
    append it. Set `category` to `"tools"` or `"fabrics"` and `asin` to the
    product's Amazon code (the 10 characters after `/dp/` in its Amazon URL).
    The affiliate link is built automatically from the ASIN + the site's tag.
 3. `npm run build`, then commit **both** the source and `dist/`.
 
-If the photo is missing, the build stops with a clear error naming the product.
+If `image` names a file that doesn't exist, the build stops with a clear error.
 
 ## Deploy
 The server has no Node, so it cannot build. That is why `dist/` is committed:
