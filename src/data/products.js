@@ -14,10 +14,12 @@
                       in src/data/amazon.js.
      links            OPTIONAL per-marketplace URL override, e.g. { de: '...' }
                       — only when the built link can't be used.
-     image            filename in src/assets/products/ (Astro optimizes it)
-     imageFit         OPTIONAL. "cover" (default, fills box) | "contain"
-                      (fits whole photo inside the box, soft padding) — pick
-                      per photo's proportions so cards look tidy & uniform.
+     image            OPTIONAL. OWN photo filename in src/assets/products/
+                      (Astro optimizes it). Without it the card shows the
+                      Amazon image from the Creators API, or a placeholder.
+                      NEVER use photos downloaded from Amazon.
+     imageFit         OPTIONAL, own photos only. "cover" (default, fills box) |
+                      "contain" (fits whole photo inside the box, soft padding).
 
    Amazon rules: NO price, NO rating, NO review count.
    This file is the ONLY source of product data.
@@ -32,8 +34,6 @@ export const products = [
       'A sharp, comfortable rotary cutter for clean, accurate cuts through several layers of fabric at once.',
     category: 'tools',
     asin: 'B000BNLLHW',
-    image: 'olfa-rotary-cutter.jpg',
-    imageFit: 'contain', // wide & short photo — fit whole knife, don't crop
   },
   {
     id: 'olfa-cutting-mat',
@@ -42,8 +42,6 @@ export const products = [
       'A self-healing mat that protects your table and keeps every rotary cut crisp and precise.',
     category: 'tools',
     asin: 'B000BNLO3S',
-    image: 'olfa-cutting-mat.jpg',
-    // landscape (~4:3) — "cover" fills the box nicely
   },
   {
     id: 'free-motion-presser-foot',
@@ -52,8 +50,6 @@ export const products = [
       'A set of low-shank darning feet for smooth free-motion quilting and thread sketching.',
     category: 'tools',
     asin: 'B07CH388RL',
-    image: 'free-motion-presser-foot.jpg',
-    imageFit: 'contain', // square 6-photo collage — fit whole thing, don't crop any panel
   },
   {
     id: 'quilting-rulers-set',
@@ -62,8 +58,6 @@ export const products = [
       'A full set of clear acrylic rulers for measuring, squaring up, and cutting quilt blocks accurately.',
     category: 'tools',
     asin: 'B08W324ZXD',
-    image: 'quilting-rulers-set.jpg',
-    imageFit: 'contain', // near-square — show the full set without cropping ruler edges
   },
   {
     id: 'rowenta-travel-iron',
@@ -72,8 +66,6 @@ export const products = [
       'A lightweight, compact steam iron for crisp seams and pressing wherever you sew.',
     category: 'tools',
     asin: 'B001RNOQIQ',
-    image: 'rowenta-travel-iron.jpg',
-    imageFit: 'contain', // square product shot — keep the whole iron in frame
   },
   {
     id: 'sewline-air-erasable-pen',
@@ -82,8 +74,6 @@ export const products = [
       'Marks your fabric clearly, then fades away on its own — no rinsing and no residue left behind.',
     category: 'tools',
     asin: 'B0083JM7VU',
-    image: 'sewline-air-erasable-pen.jpg',
-    imageFit: 'contain', // tall/portrait photo — fit it instead of cropping a slice
   },
 
   /* ---------------- FABRICS & MATERIALS ---------------- */
@@ -94,8 +84,6 @@ export const products = [
       'Delicate lace trim for finishing edges, embellishing bags, and adding a handmade touch to any project.',
     category: 'fabrics',
     asin: 'B08Y8G4M35',
-    image: 'lace-ribbon.jpg',
-    // square texture — "cover" fills the box, cropping is fine for a repeating pattern
   },
   {
     id: 'quilting-fabric-bundles',
@@ -104,7 +92,5 @@ export const products = [
       'Pre-coordinated fabric bundles to jump-start your next patchwork or quilting project with ready-to-go colors.',
     category: 'fabrics',
     asin: 'B08CZGXSWD',
-    image: 'quilting-fabric-bundles.jpg',
-    // square stack of fabrics — "cover" looks full and tidy
   },
 ];
