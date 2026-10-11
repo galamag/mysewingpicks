@@ -279,12 +279,13 @@ export const products = [
   },
   {
     id: 'barcelonetta-broadcloth',
-    name: 'Barcelonetta Poly-Cotton Broadcloth, 60 in (Khaki)',
+    name: 'Barcelonetta Poly-Cotton Broadcloth, 60 in (Sage)',
     shortDescription:
       'Lightweight poly-cotton broadcloth that works well for linings, pockets and simple garments.',
     category: 'fabrics',
     group: 'fabrics',
-    asin: 'B0C9GCC195',
+    // Sage, 2 yd — the khaki variant linked on YouTube (B0C9GCC195) isn't served by the API.
+    asin: 'B0CZQG89HV',
   },
   {
     id: 'purreitti-felt-sheets',
@@ -308,12 +309,13 @@ export const products = [
   },
   {
     id: 'pandoroom-polyester-batting',
-    name: 'PANDOROOM Polyester Batting, 48×59 in',
+    name: 'PANDOROOM Polyester Batting, 48 in × 3 yd',
     shortDescription:
       'Medium-thick polyester batting that adds loft and warmth to quilted bags, cushions and quilts.',
     category: 'fabrics',
     group: 'batting-interfacing',
-    asin: 'B0FFP1P57Q',
+    // 48 in × 3 yd — the 48×59 in variant linked on YouTube (B0FFP1P57Q) isn't served by the API.
+    asin: 'B0GT8Z3BXR',
   },
   {
     id: 'fairfield-poly-fil',
