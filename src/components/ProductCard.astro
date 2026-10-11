@@ -6,6 +6,14 @@
   Shows ONLY: photo + name + description + "View on Amazon" + "(paid link)".
   NO price, NO rating, NO review count (Amazon Associates compliance).
   The "(paid link)" marker is the required link-level disclosure — do NOT remove.
+
+  Image priority:
+    1. own photo (product.image, optimized by Astro at build)
+    2. Amazon image from the Creators API — swapped in by the script below from
+       /catalog/images.json, which the server cron refreshes (server/refresh-images.php)
+    3. category placeholder icon
+  Amazon rules for API images: shown only by Amazon's URL (never downloaded),
+  link no older than 24 h, the image links to the product page, no cropping.
 */
 import { Image } from 'astro:assets';
 import { amazonUrl } from '../data/amazon.js';
@@ -17,33 +25,43 @@ const imagesByName = Object.fromEntries(
   Object.entries(productImages).map(([path, mod]) => [path.split('/').pop(), mod.default])
 );
 
+const PLACEHOLDER_ICONS = { tools: '✂️', fabrics: '🧵' };
+
 const { product } = Astro.props;
 
 // Affiliate link built from the product's ASIN + the site's tag (src/data/amazon.js).
 const url = amazonUrl(product);
 
-// Per-product image fit (see src/data/products.js). Default "cover".
-const fit = product.imageFit === 'contain' ? 'contain' : 'cover';
-const mediaClass = fit === 'contain' ? 'card__media card__media--contain' : 'card__media';
-const imgClass = fit === 'contain' ? 'card__img card__img--contain' : 'card__img';
-
-const imgSrc = imagesByName[product.image];
-if (!imgSrc) {
+// Own photo is optional, but a NAMED photo that is missing is a typo — fail the build.
+const imgSrc = product.image ? imagesByName[product.image] : null;
+if (product.image && !imgSrc) {
   throw new Error(`ProductCard: image not found in src/assets/products/ for "${product.image}" (product ${product.id})`);
 }
+
+// Per-product image fit (see src/data/products.js). Default "cover".
+const fit = product.imageFit === 'contain' ? 'contain' : 'cover';
+const mediaClass = !imgSrc
+  ? `card__media card__media--placeholder card__media--${product.category}`
+  : fit === 'contain' ? 'card__media card__media--contain' : 'card__media';
+const imgClass = fit === 'contain' ? 'card__img card__img--contain' : 'card__img';
 ---
-<article class="card">
-  <div class={mediaClass}>
-    <Image
-      src={imgSrc}
-      alt={product.name}
-      class={imgClass}
-      widths={[340, 680]}
-      sizes="(max-width: 760px) 45vw, 340px"
-      format="webp"
-      loading="lazy"
-    />
-  </div>
+<article class="card" data-asin={product.asin} data-image={imgSrc ? 'own' : 'placeholder'}>
+  <a class={mediaClass} href={url} target="_blank" rel="nofollow sponsored noopener"
+     tabindex="-1" aria-label={product.name}>
+    {imgSrc ? (
+      <Image
+        src={imgSrc}
+        alt={product.name}
+        class={imgClass}
+        widths={[340, 680]}
+        sizes="(max-width: 760px) 45vw, 340px"
+        format="webp"
+        loading="lazy"
+      />
+    ) : (
+      <span class="card__placeholder" aria-hidden="true">{PLACEHOLDER_ICONS[product.category] ?? '🧵'}</span>
+    )}
+  </a>
   <div class="card__body">
     <h3 class="card__title">{product.name}</h3>
     <p class="card__desc">{product.shortDescription}</p>
@@ -54,3 +72,49 @@ if (!imgSrc) {
     </div>
   </div>
 </article>
+
+<script>
+  // Swap placeholders for Amazon product images. The server cron writes
+  // /catalog/images.json from the Creators API twice a day. Amazon allows keeping
+  // an image link for at most 24 h, so older data is ignored (placeholder stays).
+  const MAX_AGE_MS = 24 * 60 * 60 * 1000;
+  const CLOCK_SKEW_MS = 5 * 60 * 1000;
+
+  const cards = document.querySelectorAll<HTMLElement>('.card[data-image="placeholder"][data-asin]');
+  if (cards.length) {
+    const hour = Math.floor(Date.now() / 3600000); // hourly cache-buster
+    fetch(`/catalog/images.json?h=${hour}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        const age = data ? Date.now() - Date.parse(data.generatedAt) : NaN;
+        if (!data || !data.items || !(age > -CLOCK_SKEW_MS && age < MAX_AGE_MS)) return;
+
+        cards.forEach((card) => {
+          const item = data.items[card.dataset.asin ?? ''];
+          const media = card.querySelector('.card__media');
+          if (!media || !item || typeof item.url !== 'string' || !item.url.startsWith('https://')) return;
+
+          const placeholder = media.firstElementChild;
+          const img = document.createElement('img');
+          img.className = 'card__img card__img--contain';
+          img.alt = card.querySelector('.card__title')?.textContent ?? '';
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          if (item.width && item.height) {
+            img.width = item.width;
+            img.height = item.height;
+          }
+          img.onerror = () => {
+            if (placeholder) media.replaceChildren(placeholder);
+            media.classList.replace('card__media--contain', 'card__media--placeholder');
+            card.dataset.image = 'placeholder';
+          };
+          media.replaceChildren(img);
+          media.classList.replace('card__media--placeholder', 'card__media--contain');
+          card.dataset.image = 'amazon';
+          img.src = item.url;
+        });
+      })
+      .catch(() => {}); // network or parse problem → placeholders stay
+  }
+</script>

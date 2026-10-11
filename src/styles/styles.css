@@ -313,7 +313,10 @@ p { margin: 0 0 1em; }
 }
 .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
 
+/* The media box is a link to the product page (Amazon requires API images to
+   link to it), so it needs display:block for aspect-ratio to apply. */
 .card__media {
+  display: block;
   aspect-ratio: 4 / 3;
   background: var(--beige);
   overflow: hidden;
@@ -328,6 +331,17 @@ p { margin: 0 0 1em; }
    that empty space read as intentional padding rather than a gap. */
 .card__media--contain { background: var(--paper); }
 .card__img--contain { object-fit: contain; }
+
+/* Placeholder while a product has no photo yet (or the Amazon image isn't
+   available): the category icon on the same soft tints as the home page
+   category cards. Replaced by the Amazon image when /catalog/images.json is fresh. */
+.card__placeholder {
+  width: 100%; height: 100%;
+  display: grid; place-items: center;
+  font-size: 3rem;
+}
+.card__media--tools.card__media--placeholder { background: rgba(156, 175, 136, 0.25); }
+.card__media--fabrics.card__media--placeholder { background: rgba(192, 138, 135, 0.25); }
 
 .card__body {
   display: flex;
@@ -410,6 +424,7 @@ p { margin: 0 0 1em; }
   margin-bottom: 4px;
 }
 .affiliate-disclosure { margin: 0; font-size: 0.9rem; color: #c9bdab; }
+.affiliate-disclosure--amazon { margin-top: 6px; font-size: 0.78rem; }
 
 .socials { display: flex; gap: 12px; }
 .social-btn {

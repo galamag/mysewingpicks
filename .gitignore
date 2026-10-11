@@ -24,6 +24,8 @@ CLAUDE.md
 *.log
 
 # Environment / secrets
+# Amazon Creators API credentials — live ONLY on the server (~/mysewingpicks-api/).
+server/config.php
 .env
 .env.*
 *.env

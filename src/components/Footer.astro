@@ -7,6 +7,10 @@
 */
 const brand = 'My Sewing Picks';
 const disclosure = 'As an Amazon Associate I earn from qualifying purchases.';
+// Required by the Amazon Associates IP License when showing content from the
+// Amazon API (product images via the Creators API).
+const amazonContentNotice =
+  'Certain content that appears on this site comes from Amazon. This content is provided "as is" and is subject to change or removal at any time.';
 const youtubeUrl = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
 ---
 <footer class="site-footer">
@@ -14,6 +18,7 @@ const youtubeUrl = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
     <div class="site-footer__brand">
       <span class="site-footer__name">{brand}</span>
       <p class="affiliate-disclosure">{disclosure}</p>
+      <p class="affiliate-disclosure affiliate-disclosure--amazon">{amazonContentNotice}</p>
     </div>
 
     <!-- Social buttons corner. Add more here later. -->

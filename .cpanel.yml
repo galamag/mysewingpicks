@@ -9,3 +9,11 @@ deployment:
     # so they are never touched. cp does not delete: files removed from dist/
     # stay on the server until deleted by hand in cPanel File Manager.
     - /bin/cp -R dist/. $DEPLOYPATH
+    # Server script for Amazon product images (server/refresh-images.php, run by
+    # cron). It goes OUTSIDE public_html so it can never be opened from the web.
+    # config.php (with the API secret) exists only on the server, not in git,
+    # so this copy never overwrites it.
+    - export APIPATH=/home1/mzadwkmy/mysewingpicks-api/
+    - /bin/mkdir -p $APIPATH
+    - /bin/chmod 700 $APIPATH
+    - /bin/cp server/refresh-images.php server/config.example.php $APIPATH
