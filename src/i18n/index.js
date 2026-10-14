@@ -13,6 +13,7 @@
 import { assertSameShape } from './shape.js';
 import { projects } from '../data/projects.js';
 import en from './en.js';
+import ru from './ru.js';
 
 export const DEFAULT_LOCALE = 'en';
 /** Languages that are BUILT (have pages). */
@@ -23,7 +24,7 @@ export const LANGS = {
 };
 
 /** Dictionaries — every one is checked against English, even before its pages are built. */
-const DICTS = { en };
+const DICTS = { en, ru };
 for (const [lang, dict] of Object.entries(DICTS)) if (lang !== DEFAULT_LOCALE) assertSameShape(en, dict, lang);
 
 /** Page key → file under the language root. Project pages come from src/data/projects.js. */

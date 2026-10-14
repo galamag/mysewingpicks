@@ -5,11 +5,14 @@ import { products } from '../data/products.js';
 import { categories } from '../data/categories.js';
 import { projects } from '../data/projects.js';
 import { DEFAULT_LOCALE } from './index.js';
+import ruProducts from './ru/products.js';
+import ruGroups from './ru/categories.js';
+import ruProjects from './ru/projects.js';
 
 export const PROJECT_FIELDS = ['title', 'blurb', 'pageTitle', 'pageDescription', 'teaser', 'videoTitle', 'videoIntro', 'needsIntro'];
 
 /** Translation sets by language: { products, groups, projects }. */
-const SETS = {};
+const SETS = { ru: { products: ruProducts, groups: ruGroups, projects: ruProjects } };
 
 function cover(lang, kind, ids, table, fields) {
   if (!table) throw new Error(`i18n/${lang}: no ${kind} translations`);

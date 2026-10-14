@@ -4,8 +4,9 @@
 import { assertSameShape } from '../../i18n/shape.js';
 import { STEPS, LABEL_KEYS } from './tote.js';
 import en from './tote.en.js';
+import ru from './tote.ru.js';
 
-export const TOTE_TEXT = { en };
+export const TOTE_TEXT = { en, ru };
 
 if (en.steps.length !== STEPS.length) throw new Error(`tote.en: ${en.steps.length} steps, the model has ${STEPS.length}`);
 for (const key of LABEL_KEYS) if (!en.labels[key]) throw new Error(`tote.en: label "${key}" is missing`);
