@@ -5,7 +5,8 @@
   of sewing, animated, with the real sizes.
   Model + numbers: src/lib/anatomy/tote.js · engine: src/lib/anatomy/iso.js.
   Texts (every language): src/lib/anatomy/tote.<lang>.js via tote.text.js — the
-  language is the `lang` prop; the script reads it from <html lang>.
+  language is the `lang` prop; the script reads it from data-lang on the root
+  (not <html lang>, which page translators may rewrite).
   The first frame and every step's text are in the HTML at build time (works
   without JS, readable by search engines); the script only animates.
 
@@ -32,7 +33,7 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
   return { name: productText(byId[id], lang).name, url: amazonUrl(byId[id]) };
 }));
 ---
-<div class="anatomy" data-anatomy="tote">
+<div class="anatomy" data-anatomy="tote" data-lang={lang}>
   <figure class="anatomy__card">
     <div class="anatomy__head">
       <span class="anatomy__fig">{L.ui.fig}</span>
@@ -107,7 +108,7 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
 
   const root = document.querySelector('[data-anatomy="tote"]');
   if (root) {
-    const L = toteText(document.documentElement.lang);
+    const L = toteText(root.dataset.lang);
     const $ = (s) => root.querySelector(s);
     const svg = $('.anatomy__svg'), scene = $('.anatomy__scene');
     const prev = $('.anatomy__prev'), next = $('.anatomy__next');

@@ -26,6 +26,13 @@ function cover(lang, kind, ids, table, fields) {
   for (const id of Object.keys(table)) if (!ids.includes(id)) throw new Error(`i18n/${lang}/${kind}: "${id}" is not in src/data (typo or removed?)`);
 }
 
+// English projects must carry every translatable field too (the translations are checked against this list).
+for (const p of projects) {
+  for (const f of PROJECT_FIELDS) {
+    if (typeof p[f] !== 'string' || !p[f].trim()) throw new Error(`data/projects.js: project "${p.slug}" has no "${f}" text`);
+  }
+}
+
 const groupKeys = Object.entries(categories).flatMap(([c, cfg]) => cfg.groups.map((g) => `${c}/${g.id}`));
 for (const [lang, translations] of Object.entries(SETS)) {
   cover(lang, 'products', products.map((p) => p.id), translations.products, ['name', 'shortDescription']);
