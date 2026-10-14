@@ -12,7 +12,7 @@ if (en.steps.length !== STEPS.length) throw new Error(`tote.en: ${en.steps.lengt
 for (const key of LABEL_KEYS) if (!en.labels[key]) throw new Error(`tote.en: label "${key}" is missing`);
 for (const key of Object.keys(en.labels)) if (!LABEL_KEYS.includes(key)) throw new Error(`tote.en: label "${key}" is not used by the drawing`);
 STEPS.forEach((step, k) => {
-  if (step.stitch && !Object.hasOwn(en.stitches, step.stitch)) {
+  if (step.stitch && !Object.prototype.hasOwnProperty.call(en.stitches, step.stitch)) {
     throw new Error(`tote: step ${k} uses stitch "${step.stitch}", but tote.en.js has no stitches.${step.stitch}`);
   }
 });

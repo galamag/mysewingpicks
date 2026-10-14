@@ -43,7 +43,7 @@ const nav = ['home', 'tools', 'fabrics', 'projects', 'setup', 'about']
         <div class="lang-switch" role="group" aria-label={ui.language}>
           {LOCALES.map((l) => l === lang
             ? <span class="lang-switch__item" aria-current="true" lang={l}>{LANGS[l].label}</span>
-            : <a class="lang-switch__item" href={pageUrl(page, l)} hreflang={l} lang={l} title={LANGS[l].name}>{LANGS[l].label}</a>
+            : <a class="lang-switch__item" href={pageUrl(page, l)} hreflang={l} lang={l} title={LANGS[l].name} aria-label={LANGS[l].name}>{LANGS[l].label}</a>
           )}
         </div>
       )}
