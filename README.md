@@ -34,7 +34,7 @@ mysewingpicks/
 │   │   └── amazon.js       Marketplace + tracking ID; builds affiliate links
 │   ├── assets/products/    Product photos (Astro converts them to optimized WebP)
 │   └── styles/styles.css   All styling + the cozy theme (colors at the top)
-├── public/                 Copied to the site as-is (logo)
+├── public/                 Copied to the site as-is (logo, favicons, link-preview image)
 ├── server/                 PHP cron script for Amazon product images (runs on
 │                           Bluehost, deployed outside public_html)
 ├── dist/                   ⚠️ BUILT site — committed on purpose (see Deploy)

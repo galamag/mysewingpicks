@@ -18,6 +18,11 @@ const { title, description = '', active } = Astro.props;
 // (tools.html, …). Built from `site` in astro.config.mjs.
 const canonicalPath = Astro.url.pathname.replace(/(^|\/)index(\.html)?$/, '$1');
 const canonical = new URL(canonicalPath || '/', Astro.site).href;
+
+// Link preview (Open Graph) — the card messengers/social sites show for a shared
+// link. One own image for the whole site (public/assets/og-image.jpg, 1200×630);
+// never an Amazon product image. Title/description come from each page.
+const ogImage = new URL('/assets/og-image.jpg', Astro.site).href;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +32,25 @@ const canonical = new URL(canonicalPath || '/', Astro.site).href;
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonical} />
+
+  <!-- Site icon: patchwork pinwheel (browser tab, bookmarks, iPhone home screen). -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <!-- Link preview card (WhatsApp, Telegram, Facebook, Pinterest, Threads, iMessage…). -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="My Sewing Picks" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="My Sewing Picks — hand-picked sewing tools and fabrics" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <!-- Warm, cozy fonts (Google Fonts; layout still works without them). -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
