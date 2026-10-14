@@ -1,6 +1,6 @@
 ---
 /*
-  Shared site footer — brand + affiliate disclosure + social buttons.
+  Shared site footer — brand + affiliate disclosure + Privacy link + social buttons.
   Styled by src/styles/styles.css (.site-footer, .socials).
 
   To add more social buttons later, copy the <a class="social-btn"> block.
@@ -19,6 +19,8 @@ const youtubeUrl = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
       <span class="site-footer__name">{brand}</span>
       <p class="affiliate-disclosure">{disclosure}</p>
       <p class="affiliate-disclosure affiliate-disclosure--amazon">{amazonContentNotice}</p>
+      <!-- Cookie/data disclosure page — required by Amazon Program Policies §3(e). -->
+      <p class="site-footer__links"><a href="/privacy.html">Privacy &amp; Cookies</a></p>
     </div>
 
     <!-- Social buttons corner. Add more here later. -->

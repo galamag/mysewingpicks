@@ -1,0 +1,131 @@
+---
+/*
+  Privacy & Cookies page. Required by the Amazon Associates Program Policies
+  (Participation Requirements §3(e)): disclose how cookies and similar
+  technologies are used by us and by third parties (including Amazon), and how
+  visitor data is collected and used. Keep it TRUE to what the site actually
+  loads — if a new service is added (analytics, a form, another embed…),
+  update this page and the "Last updated" date.
+*/
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const updated = 'October 15, 2026';
+const links = {
+  amazonPrivacy: 'https://www.amazon.com/gp/help/customer/display.html?nodeId=GX7NJQ4ZB8MHFRNJ',
+  amazonAds: 'https://www.amazon.com/gp/help/customer/display.html?nodeId=GLVB9XDF9M8MU7UZ',
+  amazonAdPrefs: 'https://www.amazon.com/adprefs',
+  cloudflareCookies: 'https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/',
+  googlePrivacy: 'https://policies.google.com/privacy',
+  youtube: 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg',
+};
+---
+<BaseLayout
+  title="Privacy & Cookies — My Sewing Picks"
+  description="How My Sewing Picks uses cookies and what information is collected when you visit — by Amazon, Cloudflare, YouTube and Google Fonts."
+>
+  <main>
+    <section class="section">
+      <div class="container">
+        <article class="about legal">
+          <span class="eyebrow">Privacy &amp; cookies</span>
+          <h1>Privacy &amp; Cookies</h1>
+          <p class="legal__updated">Last updated: {updated}</p>
+
+          <p>
+            My Sewing Picks is a small read-only website. There are no accounts, sign-ups,
+            comments, contact forms, newsletters, analytics or advertising trackers of my own,
+            this site does not set any cookies of its own, and it does not store any
+            information about visitors itself. A few outside services help the site work, and
+            Amazon is involved because this is an affiliate site. This page explains what they do.
+          </p>
+
+          <h2>Amazon: affiliate links and product images</h2>
+          <p>
+            As an Amazon Associate I earn from qualifying purchases. The “View on Amazon” buttons
+            and product images are affiliate links to Amazon. When you click one, you go to
+            Amazon’s website, and Amazon places and reads its own cookies there — that is how
+            Amazon knows the visit came from this site.
+          </p>
+          <p>
+            Most product images are shown directly from Amazon’s servers (m.media-amazon.com)
+            through Amazon’s official API, so your browser downloads them from Amazon, and Amazon
+            can see your IP address, browser details and the page you are on.
+          </p>
+          <p>
+            <strong>Third parties, including Amazon, may provide content on this site, collect
+            information directly from visitors, and place or recognize cookies on visitors’
+            browsers.</strong>
+          </p>
+          <p>
+            Amazon only gives me summary reports — such as how many clicks the links got and
+            which items were ordered — never your name, address or anything else that says who
+            you are. How Amazon uses your information is described in the
+            <a href={links.amazonPrivacy} target="_blank" rel="noopener">Amazon.com Privacy Notice</a>
+            and its <a href={links.amazonAds} target="_blank" rel="noopener">Interest-Based Ads notice</a>;
+            on another Amazon store, that store’s privacy notice applies.
+          </p>
+
+          <h2>Cloudflare: security and fast delivery</h2>
+          <p>
+            The site is delivered through Cloudflare, which protects it from attacks and bots and
+            speeds it up. To do this, Cloudflare processes technical data such as your IP address
+            and browser details, may run a short bot-detection script, and may set security
+            cookies — for example <code>__cf_bm</code> (expires after 30 minutes of inactivity) and,
+            if you are asked to verify you are human, <code>cf_clearance</code>. Cloudflare describes
+            these cookies as strictly necessary; see
+            <a href={links.cloudflareCookies} target="_blank" rel="noopener">Cloudflare’s cookie policy</a>.
+          </p>
+
+          <h2>YouTube videos</h2>
+          <p>
+            Project pages include a video from my YouTube channel. Until you press play, only the
+            video’s preview picture is shown; it is loaded from YouTube’s image server
+            (i.ytimg.com), which sees your IP address. When you press play, the player loads
+            from YouTube in its privacy-enhanced mode (youtube-nocookie.com), and from then on
+            YouTube (Google) may use cookies and similar technologies as described in the
+            <a href={links.googlePrivacy} target="_blank" rel="noopener">Google Privacy Policy</a>.
+          </p>
+
+          <h2>Fonts</h2>
+          <p>
+            The site’s fonts come from Google Fonts. Depending on the setup, they are delivered
+            either by Cloudflare from this site’s own address or directly from Google’s servers;
+            in the second case Google receives your IP address and browser details.
+          </p>
+
+          <h2>Server logs</h2>
+          <p>
+            Like nearly every website, my web host and Cloudflare automatically record basic
+            technical information about each request — IP address, browser type, the page
+            requested, the page you came from and the time. It is used to deliver the site, keep
+            it secure and fix problems. I don’t use it to identify you or build profiles, and I
+            don’t sell or share personal information.
+          </p>
+
+          <h2>Your choices</h2>
+          <ul>
+            <li>
+              You can block or delete cookies in your browser settings. This site works without
+              them, though Cloudflare’s security check may ask you to verify you are human again.
+            </li>
+            <li>
+              To control interest-based ads from Amazon, use
+              <a href={links.amazonAdPrefs} target="_blank" rel="noopener">Amazon’s Advertising Preferences</a>.
+              For other companies’ interest-based ads, see
+              <a href="https://optout.aboutads.info/" target="_blank" rel="noopener">aboutads.info</a> (US),
+              <a href="https://youradchoices.ca/" target="_blank" rel="noopener">youradchoices.ca</a> (Canada) or
+              <a href="https://www.youronlinechoices.eu/" target="_blank" rel="noopener">youronlinechoices.eu</a> (Europe).
+            </li>
+          </ul>
+
+          <h2>Changes and questions</h2>
+          <p>
+            If the site starts using something new, I will update this page and the date above.
+            Questions? Reach me through my
+            <a href={links.youtube} target="_blank" rel="noopener">YouTube channel</a>.
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
