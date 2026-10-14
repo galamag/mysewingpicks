@@ -267,6 +267,8 @@ p { margin: 0 0 1em; }
   grid-template-columns: repeat(3, 1fr);
   gap: 28px;
 }
+/* One featured card (home "sew along" teaser), centred. */
+.category-grid--single { grid-template-columns: minmax(0, 420px); justify-content: center; }
 .category-card {
   display: block;
   background: var(--paper);

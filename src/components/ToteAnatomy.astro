@@ -1,0 +1,296 @@
+---
+/*
+  Tote bag anatomy figure — an interactive isometric drawing of the maker's
+  tote. Step 0: the finished bag (tap to take it apart). Steps 1–7: each stage
+  of sewing, animated, with the real sizes.
+  Model + numbers: src/lib/anatomy/tote.js · engine: src/lib/anatomy/iso.js.
+  The first frame and every step's text are in the HTML at build time (works
+  without JS, readable by search engines); the script only animates.
+
+  "In this step" product links are ordinary, clearly labelled affiliate links
+  with "(paid link)" next to each — never bare clickable areas in the drawing
+  (Amazon wants every affiliate link identifiable and disclosed). The page must
+  show its page-disclosure line before this component.
+*/
+import { renderStep, DEFS, STEPS, LEGEND, STITCHES } from '../lib/anatomy/tote.js';
+import { products } from '../data/products.js';
+import { amazonUrl } from '../data/amazon.js';
+
+const first = renderStep(0, 0);
+
+const byId = Object.fromEntries(products.map((p) => [p.id, p]));
+const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
+  if (!byId[id]) throw new Error(`ToteAnatomy: step ${k} uses unknown product "${id}"`);
+  return { name: byId[id].name, url: amazonUrl(byId[id]) };
+}));
+---
+<div class="anatomy" data-anatomy="tote">
+  <figure class="anatomy__card">
+    <div class="anatomy__head">
+      <span class="anatomy__fig">Fig. 1</span>
+      <span class="anatomy__title">Tote bag · anatomy</span>
+    </div>
+
+    <svg class="anatomy__svg" viewBox={first.viewBox.map((n) => n.toFixed(2)).join(' ')} role="img"
+         aria-label="An isometric drawing of the tote bag and how it is sewn, step by step.">
+      <Fragment set:html={DEFS} />
+      <g class="anatomy__scene" set:html={first.body} />
+    </svg>
+
+    <div class="anatomy__nav">
+      <button type="button" class="anatomy__btn anatomy__prev" aria-label="Previous step" disabled>←</button>
+      <div class="anatomy__dots">
+        {STEPS.map((s, i) => (
+          <button type="button" class="anatomy__dot" aria-label={i ? `Step ${i}: ${s.title}` : s.title}
+                  aria-current={i === 0 ? 'step' : undefined} data-step={i}></button>
+        ))}
+      </div>
+      <button type="button" class="anatomy__btn anatomy__next">Steps →</button>
+    </div>
+  </figure>
+
+  <div class="anatomy__caption" aria-live="polite">
+    <p class="anatomy__count">Overview</p>
+    <h3 class="anatomy__h">{STEPS[0].title}</h3>
+    <p class="anatomy__text">{STEPS[0].text}</p>
+    <p class="anatomy__stitch" hidden><span class="anatomy__stitch-icon" aria-hidden="true"></span><span class="anatomy__stitch-name"></span></p>
+    {uses.map((list, k) => list.length > 0 && (
+      <div class="anatomy__uses" data-step={k} hidden>
+        <span class="anatomy__uses-label">In this step</span>
+        <ul>
+          {list.map((item) => (
+            <li><a href={item.url} target="_blank" rel="nofollow sponsored noopener">{item.name}</a> <span class="paid-link">(paid link)</span></li>
+          ))}
+        </ul>
+      </div>
+    ))}
+    <div class="anatomy__actions">
+      <button type="button" class="anatomy__action anatomy__toggle" aria-pressed="false">Take it apart</button>
+      <button type="button" class="anatomy__action anatomy__replay" hidden>↻ Replay</button>
+    </div>
+  </div>
+
+  <ol class="anatomy__legend" aria-label="Parts">
+    {LEGEND.map((item) => (
+      <li><span class="anatomy__pin" aria-hidden="true">{item.n}</span><span><strong>{item.title}</strong> — {item.text}</span></li>
+    ))}
+  </ol>
+
+  <section class="anatomy__all" aria-labelledby="anatomy-all-title">
+    <h3 id="anatomy-all-title">Step-by-step instructions</h3>
+    <ol>
+      {STEPS.slice(1).map((s, i) => (
+        <li>
+          <h4><button type="button" class="anatomy__jump" data-step={i + 1}>{s.title}</button></h4>
+          {s.details.map((line) => <p>{line}</p>)}
+          {s.stitch && <p class="anatomy__all-stitch">Machine: {STITCHES[s.stitch].toLowerCase()}</p>}
+        </li>
+      ))}
+    </ol>
+  </section>
+</div>
+
+<script>
+  import { renderStep, STEPS, STITCHES } from '../lib/anatomy/tote.js';
+
+  const root = document.querySelector('[data-anatomy="tote"]');
+  if (root) {
+    const $ = (s) => root.querySelector(s);
+    const svg = $('.anatomy__svg'), scene = $('.anatomy__scene');
+    const prev = $('.anatomy__prev'), next = $('.anatomy__next');
+    const toggle = $('.anatomy__toggle'), replay = $('.anatomy__replay');
+    const count = $('.anatomy__count'), title = $('.anatomy__h'), text = $('.anatomy__text');
+    const dots = [...root.querySelectorAll('.anatomy__dot')];
+    const stitch = $('.anatomy__stitch'), stitchName = $('.anatomy__stitch-name');
+    const usesRows = [...root.querySelectorAll('.anatomy__uses')];
+    const last = STEPS.length - 1;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let step = 0, t = 0, target = 0, raf = 0, stamp = 0;
+
+    const draw = () => {
+      const { body, viewBox } = renderStep(step, t);
+      scene.innerHTML = body;
+      svg.setAttribute('viewBox', viewBox.map((n) => n.toFixed(2)).join(' '));
+    };
+
+    const frame = (now) => {
+      const dt = Math.min(0.05, (now - stamp) / 1000);
+      stamp = now;
+      const speed = 1 / (step === 0 ? 1.6 : STEPS[step].duration);
+      t = target > t ? Math.min(target, t + dt * speed) : Math.max(target, t - dt * speed);
+      draw();
+      raf = t === target ? 0 : requestAnimationFrame(frame);
+    };
+
+    const play = (to) => {
+      target = to;
+      if (reduce) { t = target; draw(); return; }
+      if (!raf) { stamp = performance.now(); raf = requestAnimationFrame(frame); }
+    };
+
+    const go = (k) => {
+      if (k < 0 || k > last) return;
+      cancelAnimationFrame(raf); raf = 0;
+      step = k;
+      t = 0; target = 0;
+      count.textContent = k ? `Step ${k} of ${last}` : 'Overview';
+      title.textContent = STEPS[k].title;
+      text.textContent = STEPS[k].text;
+      prev.disabled = k === 0;
+      next.disabled = k === last;
+      next.textContent = k === 0 ? 'Steps →' : 'Next →';
+      toggle.hidden = k !== 0;
+      replay.hidden = k === 0;
+      toggle.setAttribute('aria-pressed', 'false');
+      toggle.textContent = 'Take it apart';
+      dots.forEach((d, i) => (i === k ? d.setAttribute('aria-current', 'step') : d.removeAttribute('aria-current')));
+      stitch.hidden = !STEPS[k].stitch;
+      stitchName.textContent = STEPS[k].stitch ? `Machine: ${STITCHES[STEPS[k].stitch].toLowerCase()}` : '';
+      usesRows.forEach((row) => { row.hidden = +row.dataset.step !== k; });
+      scene.classList.add('is-switching');
+      requestAnimationFrame(() => {
+        draw();
+        scene.classList.remove('is-switching');
+        if (k > 0) play(1);
+      });
+    };
+
+    const restart = () => { t = 0; draw(); play(1); };
+    const flip = () => {
+      const apart = target < 0.5;
+      toggle.setAttribute('aria-pressed', String(apart));
+      toggle.textContent = apart ? 'Put it together' : 'Take it apart';
+      play(apart ? 1 : 0);
+    };
+
+    prev.addEventListener('click', () => go(step - 1));
+    next.addEventListener('click', () => go(step + 1));
+    dots.forEach((d) => d.addEventListener('click', () => go(+d.dataset.step)));
+    root.querySelectorAll('.anatomy__jump').forEach((b) => b.addEventListener('click', () => {
+      go(+b.dataset.step);
+      $('.anatomy__card').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    }));
+    toggle.addEventListener('click', flip);
+    replay.addEventListener('click', restart);
+    svg.addEventListener('click', () => (step === 0 ? flip() : restart()));
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') go(step + 1);
+      if (e.key === 'ArrowLeft') go(step - 1);
+    });
+  }
+</script>
+
+<style>
+  .anatomy { max-width: 560px; margin: 0 auto; }
+  .anatomy__card {
+    margin: 0; background: var(--paper); border-radius: var(--radius);
+    box-shadow: var(--shadow-soft); padding: 14px 16px 12px; position: relative;
+  }
+  .anatomy__card::before {
+    content: ''; position: absolute; inset: 7px; border-radius: 13px;
+    border: 1.5px dashed rgba(168, 111, 108, 0.35); pointer-events: none;
+  }
+  .anatomy__head {
+    display: flex; justify-content: space-between; gap: 12px; position: relative;
+    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft);
+  }
+  .anatomy__title { font-weight: 700; color: var(--rose-deep); }
+  .anatomy__svg { display: block; width: 100%; height: auto; cursor: pointer; touch-action: pan-y; }
+  .anatomy__scene { transition: opacity 0.18s ease; }
+  .anatomy__scene.is-switching { opacity: 0; transition: none; }
+
+  .anatomy__nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; position: relative; }
+  .anatomy__btn {
+    font: inherit; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em;
+    min-height: 44px; min-width: 44px; padding: 0 14px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+    border: 1.5px solid var(--beige-deep); background: var(--paper); color: var(--ink);
+  }
+  .anatomy__next { background: var(--sage-deep); border-color: var(--sage-deep); color: var(--paper); }
+  .anatomy__btn:disabled { opacity: 0.35; cursor: default; }
+  .anatomy__dots { display: flex; min-width: 0; }
+  .anatomy__dot {
+    width: 20px; height: 36px; border: 0; background: none; cursor: pointer; padding: 0; position: relative;
+  }
+  .anatomy__dot::after {
+    content: ''; position: absolute; left: 50%; top: 50%; width: 9px; height: 9px; border-radius: 50%;
+    transform: translate(-50%, -50%); background: var(--beige-deep); transition: background 0.2s, width 0.2s;
+  }
+  @media (max-width: 380px) {
+    .anatomy__dot { width: 17px; }
+    .anatomy__card { padding-inline: 12px; }
+  }
+  .anatomy__dot[aria-current='step']::after { background: var(--rose-deep); width: 18px; border-radius: 5px; }
+
+  .anatomy__caption { padding: 18px 4px 4px; min-height: 9.5em; }
+  .anatomy__count { margin: 0; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rose-deep); }
+  .anatomy__h { margin: 2px 0 6px; font-size: 1.35rem; }
+  .anatomy__text { margin: 0; }
+  .anatomy__actions { display: flex; gap: 10px; margin-top: 12px; }
+  .anatomy__action {
+    font: inherit; font-weight: 700; font-size: 0.85rem; min-height: 40px; padding: 0 16px;
+    border-radius: 999px; border: 1.5px solid var(--sage-deep); background: transparent; color: var(--sage-deep); cursor: pointer;
+  }
+
+  .anatomy__stitch {
+    display: flex; align-items: center; gap: 10px; margin: 10px 0 0;
+    font-size: 0.9rem; font-weight: 700; color: var(--ink-soft);
+  }
+  .anatomy__stitch-icon {
+    width: 34px; height: 4px; border-radius: 2px; flex: none;
+    background: repeating-linear-gradient(90deg, var(--ink) 0 6px, transparent 6px 10px);
+  }
+  .anatomy__uses { margin-top: 12px; font-size: 0.92rem; }
+  .anatomy__uses-label { display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+  .anatomy__uses ul { margin: 4px 0 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+  .anatomy__uses a { font-weight: 700; color: var(--rose-deep); }
+  .anatomy__uses .paid-link { font-size: 0.8rem; color: var(--ink-soft); }
+
+  .anatomy__legend { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+  .anatomy__legend li { display: flex; gap: 10px; align-items: baseline; line-height: 1.45; }
+  .anatomy__pin {
+    flex: none; width: 1.6em; height: 1.6em; border-radius: 50%; display: inline-grid; place-items: center;
+    background: var(--ink); color: var(--paper); font-weight: 700; font-size: 0.8rem; transform: translateY(-1px);
+  }
+
+  .anatomy__all { margin-top: 36px; }
+  .anatomy__all ol { padding-left: 1.4em; display: grid; gap: 18px; }
+  .anatomy__all li::marker { font-family: var(--font-head); font-weight: 600; color: var(--rose-deep); }
+  .anatomy__all h4 { margin: 0 0 4px; font-size: 1.1rem; }
+  .anatomy__all p { margin: 0 0 4px; }
+  .anatomy__all-stitch { font-size: 0.9rem; color: var(--ink-soft); }
+  .anatomy__jump { font: inherit; font-weight: 600; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+  .anatomy__jump:hover { color: var(--rose-deep); }
+
+  /* Engine output (classes from iso.js / tote.js). Strokes stay crisp at any zoom. */
+  .anatomy :global(.ln) { fill: none; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
+  .anatomy :global(.ln--edge) { stroke: #4a3f35; stroke-width: 1.1; }
+  .anatomy :global(.ln--stitch) { stroke: #4a3f35; stroke-width: 1; stroke-dasharray: 3 2.4; opacity: 0.85; }
+  .anatomy :global(.ln--seam) { stroke: #4a3f35; stroke-width: 0.9; opacity: 0.55; }
+  .anatomy :global(.ln--fold) { stroke: #4a3f35; stroke-width: 1; stroke-dasharray: 7 4; opacity: 0.5; }
+  .anatomy :global(.ln--hot) { stroke: #a86f6c; stroke-width: 2.4; }
+  .anatomy :global(.ln--hotstitch) { stroke: #a86f6c; stroke-width: 2; stroke-dasharray: 4 3; }
+  .anatomy :global(.ln--open) { stroke: #a86f6c; stroke-width: 3; stroke-dasharray: 2 3; }
+  .anatomy :global(.ln--dim) { stroke: #7a6e60; stroke-width: 1; }
+  .anatomy :global(.ln--arrow) { stroke: #7f9469; stroke-width: 2; }
+  .anatomy :global(.chip rect) { fill: #fffdf8; stroke: #e4d6c2; vector-effect: non-scaling-stroke; }
+  .anatomy :global(.chip text) { fill: #4a3f35; font-family: var(--font-body); font-weight: 700; text-anchor: middle; }
+  .anatomy :global(.chip--hot rect) { fill: #a86f6c; stroke: #a86f6c; }
+  .anatomy :global(.chip--hot text) { fill: #fffdf8; }
+  .anatomy :global(.floor) { fill: url(#floor); }
+  .anatomy :global(.pins circle) { fill: #4a3f35; stroke: #fffdf8; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+  .anatomy :global(.pins text) { fill: #fffdf8; font-family: var(--font-body); font-weight: 700; text-anchor: middle; }
+  .anatomy :global(.inset rect) { fill: #fffdf8; stroke: #e4d6c2; vector-effect: non-scaling-stroke; }
+  .anatomy :global(.inset text) { fill: #7a6e60; font-family: var(--font-body); font-weight: 700; letter-spacing: 0.1em; }
+  .anatomy :global(.inset__seg) { stroke: #c08a87; stroke-linecap: round; }
+  .anatomy :global(.machine__box) { fill: #fffdf8; stroke: #e4d6c2; vector-effect: non-scaling-stroke; }
+  .anatomy :global(.machine text) { fill: #7a6e60; font-family: var(--font-body); font-weight: 700; letter-spacing: 0.1em; }
+  .anatomy :global(.machine__bed) { fill: #e4d6c2; }
+  .anatomy :global(.machine__body) { fill: #9caf88; }
+  .anatomy :global(.machine__head) { fill: #7f9469; }
+  .anatomy :global(.machine__wheel) { fill: #4a3f35; }
+  .anatomy :global(.machine__foot) { fill: #4a3f35; }
+  .anatomy :global(.machine__bar) { stroke: #4a3f35; }
+  .anatomy :global(.machine__needle) { stroke: #9a948c; }
+  .anatomy :global(.machine__stitches) { stroke: #4a3f35; fill: none; }
+</style>

@@ -20,17 +20,22 @@ npm run preview   # serve the built dist/ locally
 ```
 mysewingpicks/
 ├── src/
-│   ├── pages/              One .astro file = one page (index, tools, fabrics, setup, about)
+│   ├── pages/              One .astro file = one page (index, tools, fabrics, setup, about,
+│   │                       projects; projects/tote-bag = a sew-along project page)
 │   ├── layouts/
 │   │   └── BaseLayout.astro    Shared <head> + header + footer around every page
 │   ├── components/
 │   │   ├── Header.astro        Logo + navigation + mobile menu
 │   │   ├── Footer.astro        Affiliate disclosure + social buttons
 │   │   ├── ProductCard.astro   The one reusable product card
-│   │   └── ProductSections.astro  A category's products, split into sections
+│   │   ├── ProductSections.astro  A category's products, split into sections
+│   │   ├── ToteAnatomy.astro   Animated step-by-step "anatomy" of the tote bag
+│   │   └── YouTubeVideo.astro  Video that loads YouTube only when tapped
+│   ├── lib/anatomy/        Own isometric drawing engine (iso.js) + the tote model (tote.js)
 │   ├── data/
 │   │   ├── products.js     ⭐ ALL product data lives here — add products here
 │   │   ├── categories.js   Category pages and their sections
+│   │   ├── projects.js     Sew-along projects: video + the products each one needs
 │   │   └── amazon.js       Marketplace + tracking ID; builds affiliate links
 │   ├── assets/products/    Product photos (Astro converts them to optimized WebP)
 │   └── styles/styles.css   All styling + the cozy theme (colors at the top)
