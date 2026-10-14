@@ -12,6 +12,12 @@ import Footer from '../components/Footer.astro';
 import '../styles/styles.css';
 
 const { title, description = '', active } = Astro.props;
+
+// Canonical URL — the ONE address Google should index for this page. The home
+// page is "/" (never "/index.html"); other pages keep their file URLs
+// (tools.html, …). Built from `site` in astro.config.mjs.
+const canonicalPath = Astro.url.pathname.replace(/(^|\/)index(\.html)?$/, '$1');
+const canonical = new URL(canonicalPath || '/', Astro.site).href;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +26,7 @@ const { title, description = '', active } = Astro.props;
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
 
   <!-- Warm, cozy fonts (Google Fonts; layout still works without them). -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />

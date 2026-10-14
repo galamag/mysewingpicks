@@ -10,7 +10,7 @@ const { active } = Astro.props;
 
 const brand = 'My Sewing Picks';
 const nav = [
-  { key: 'home', label: 'Home', href: 'index.html' },
+  { key: 'home', label: 'Home', href: '/' },
   { key: 'tools', label: 'Tools', href: 'tools.html' },
   { key: 'fabrics', label: 'Fabrics', href: 'fabrics.html' },
   { key: 'setup', label: 'My Setup', href: 'setup.html' },
@@ -19,7 +19,7 @@ const nav = [
 ---
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="brand" href="index.html" aria-label={`${brand} — home`}>
+    <a class="brand" href="/" aria-label={`${brand} — home`}>
       <!-- Logo image. If /assets/logo.png is missing, onerror swaps in a text wordmark. -->
       <img
         class="brand__logo"
