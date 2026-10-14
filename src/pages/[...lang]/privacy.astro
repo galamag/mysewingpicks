@@ -24,7 +24,17 @@ const links = {
   cloudflareCookies: 'https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/',
   googlePrivacy: 'https://policies.google.com/privacy',
   youtube: 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg',
+  aboutAds: 'https://optout.aboutads.info/',
+  yourAdChoicesCa: 'https://youradchoices.ca/',
+  yourOnlineChoicesEu: 'https://www.youronlinechoices.eu/',
 };
+
+// Build-time guard: every language's body must use every URL above and no placeholder may be left empty.
+const body = text.bodyHtml(links);
+if (body.includes('undefined')) throw new Error(`privacy (${lang}): bodyHtml contains the text "undefined" (a links.<name> that does not exist?)`);
+for (const url of Object.values(links)) {
+  if (!body.includes(url)) throw new Error(`privacy (${lang}): bodyHtml does not contain ${url}`);
+}
 ---
 <BaseLayout lang={lang} page="privacy" title={text.title} description={text.description}>
   <main>
@@ -35,7 +45,7 @@ const links = {
           <h1>{text.heading}</h1>
           <p class="legal__updated">{text.updated}</p>
 
-          <Fragment set:html={text.bodyHtml(links)} />
+          <Fragment set:html={body} />
         </article>
       </div>
     </section>

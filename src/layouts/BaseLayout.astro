@@ -13,8 +13,9 @@ import Footer from '../components/Footer.astro';
 import '../styles/styles.css';
 import { LOCALES, DEFAULT_LOCALE, LANGS, pageUrl, t } from '../i18n/index.js';
 
-const { title, description = '', active, page, lang = DEFAULT_LOCALE } = Astro.props;
+const { title, description = '', active, page, lang } = Astro.props;
 if (!page) throw new Error('BaseLayout: pass `page` (a key of PAGES in src/i18n/index.js)');
+if (!lang) throw new Error('BaseLayout: pass `lang` (the language of the page, e.g. "en")');
 const { ui } = t(lang);
 const abs = (path) => new URL(path, Astro.site).href;
 

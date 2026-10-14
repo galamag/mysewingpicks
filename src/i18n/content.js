@@ -24,10 +24,10 @@ function cover(lang, kind, ids, table, fields) {
 }
 
 const groupKeys = Object.entries(categories).flatMap(([c, cfg]) => cfg.groups.map((g) => `${c}/${g.id}`));
-for (const [lang, set] of Object.entries(SETS)) {
-  cover(lang, 'products', products.map((p) => p.id), set.products, ['name', 'shortDescription']);
-  cover(lang, 'categories', groupKeys, set.groups, ['title']);
-  cover(lang, 'projects', projects.map((p) => p.slug), set.projects, PROJECT_FIELDS);
+for (const [lang, translations] of Object.entries(SETS)) {
+  cover(lang, 'products', products.map((p) => p.id), translations.products, ['name', 'shortDescription']);
+  cover(lang, 'categories', groupKeys, translations.groups, ['title']);
+  cover(lang, 'projects', projects.map((p) => p.slug), translations.projects, PROJECT_FIELDS);
 }
 
 function set(lang) {

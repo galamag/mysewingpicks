@@ -12,8 +12,6 @@ const { brand, ui, pages: { home: text } } = t(lang);
 const tote = projectText(projectBySlug('tote-bag'), lang);
 
 const youtube = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
-// One space inside the <p>, as the hand-written markup had (browsers ignore it; keeps the HTML byte-identical).
-const padded = (html) => ` ${html} `;
 ---
 <BaseLayout lang={lang} page="home" active="home" title={text.title} description={text.description}>
   <main>
@@ -23,7 +21,9 @@ const padded = (html) => ` ${html} `;
         <span class="eyebrow">{text.eyebrow}</span>
         <h1>{brand}</h1>
         <p class="hero__tagline">{text.tagline}</p>
-        <p class="hero__blurb" set:html={padded(text.blurbHtml)} />
+        <p class="hero__blurb">
+          <Fragment set:html={text.blurbHtml} />
+        </p>
         <div class="hero__actions">
           <a class="btn btn--primary" href={pageUrl('tools', lang)}>{text.browse}</a>
           <a class="btn btn--youtube" href={youtube} target="_blank" rel="noopener">

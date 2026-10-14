@@ -1,6 +1,7 @@
 /* English texts of the site — interface + pages. Every other language has the
    same keys (src/i18n/<lang>.js); a missing or extra key fails the build.
-   Values are plain text (Astro escapes them) unless the key ends in "Html". */
+   Values are plain text (Astro escapes them) unless the key ends in "Html".
+   Function values keep their parameters in every language ((title) =>, (links) =>). */
 export default {
   brand: 'My Sewing Picks',
   ui: {
@@ -195,9 +196,9 @@ export default {
               To control interest-based ads from Amazon, use
               <a href="${links.amazonAdPrefs}" target="_blank" rel="noopener">Amazon’s Advertising Preferences</a>.
               For other companies’ interest-based ads, see
-              <a href="https://optout.aboutads.info/" target="_blank" rel="noopener">aboutads.info</a> (US),
-              <a href="https://youradchoices.ca/" target="_blank" rel="noopener">youradchoices.ca</a> (Canada) or
-              <a href="https://www.youronlinechoices.eu/" target="_blank" rel="noopener">youronlinechoices.eu</a> (Europe).
+              <a href="${links.aboutAds}" target="_blank" rel="noopener">aboutads.info</a> (US),
+              <a href="${links.yourAdChoicesCa}" target="_blank" rel="noopener">youradchoices.ca</a> (Canada) or
+              <a href="${links.yourOnlineChoicesEu}" target="_blank" rel="noopener">youronlinechoices.eu</a> (Europe).
             </li>
           </ul>
 

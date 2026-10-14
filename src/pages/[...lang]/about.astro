@@ -11,8 +11,6 @@ import { localePaths, langOf, t } from '../../i18n/index.js';
 export const getStaticPaths = localePaths;
 const lang = langOf(Astro.params);
 const { pages: { about: text } } = t(lang);
-// One space inside each <p>, as the hand-written markup had (browsers ignore it; keeps the HTML byte-identical).
-const padded = (html) => ` ${html} `;
 ---
 <BaseLayout lang={lang} page="about" active="about" title={text.title} description={text.description}>
   <main>
@@ -22,7 +20,11 @@ const padded = (html) => ` ${html} `;
           <span class="eyebrow">{text.eyebrow}</span>
           <h1>{text.heading}</h1>
 
-          {text.paragraphsHtml.map((html) => <p set:html={padded(html)} />)}
+          {text.paragraphsHtml.map((html) => (
+            <p>
+              <Fragment set:html={html} />
+            </p>
+          ))}
 
           <p class="about__signature">{text.signature}</p>
 
