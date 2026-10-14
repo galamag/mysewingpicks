@@ -1,0 +1,147 @@
+/* Tote bag figure — English texts. Every language has the same shape
+   (tote.text.js checks it). `steps` are index-aligned with STEPS in tote.js:
+   step 0 = the finished bag (title + text), steps 1–9 also have `details`.
+   `labels` — the chips in the drawing, by the keys tote.js uses. */
+export default {
+  ui: {
+    fig: 'Fig. 1',
+    title: 'Tote bag · anatomy',
+    svgLabel: 'An isometric drawing of the tote bag and how it is sewn, step by step.',
+    prev: 'Previous step',
+    dot: (i, title) => (i ? `Step ${i}: ${title}` : title),
+    start: 'Steps →',
+    next: 'Next →',
+    overview: 'Overview',
+    stepOf: (k, n) => `Step ${k} of ${n}`,
+    machine: (stitch) => `Machine: ${stitch.toLowerCase()}`,
+    inThisStep: 'In this step',
+    takeApart: 'Take it apart',
+    putTogether: 'Put it together',
+    replay: '↻ Replay',
+    parts: 'Parts',
+    allSteps: 'Step-by-step instructions',
+    endView: 'END VIEW',
+  },
+  stitches: { straight: 'Straight stitch' },
+  labels: {
+    cm4: '4 cm', cm6: '6 cm', cm8: '8 cm', cm16: '16 cm', cm45: '45 cm', cm86: '86 cm', cm100: '100 cm',
+    fold: 'fold',
+    outerDuck: 'outer · duck',
+    liningSatin: 'lining · satin',
+    strapsDuck: '2 straps · duck',
+    topstitchEdges: 'topstitch both edges',
+    centreCrease: 'centre crease',
+    stitchFold: 'stitch close to the fold',
+    bottom12: '12 cm bottom',
+    liftEnds: 'lift both ends at the stitched folds',
+    foldsIn: 'the bottom folds in',
+    centreInside: 'centre 6 cm inside',
+    rightSides: 'right sides together',
+    seam05: '0.5 cm seam',
+    layers4: '4 layers here',
+    turnOut: 'turn it right side out',
+    openUp: 'open it up',
+    base12: '12 cm base',
+    cornersForm: 'corners form by themselves',
+    opening8: '8 cm opening',
+    endsLevel: 'ends level with the top edge',
+    turnThrough: 'turn through the opening',
+    stitchClosed: 'stitch it closed',
+    pushLining: 'push the lining in',
+    topstitch1: '1 cm topstitch',
+  },
+  steps: [
+    { title: 'The finished bag', text: 'A lined tote in three parts: a cotton duck outer, a satin lining and two long straps. Tap the bag to take it apart.' },
+    {
+      title: 'Cut the pieces',
+      text: 'Outer: cotton duck, 86 × 45 cm (33⅞ × 17¾ in). Lining: satin, the same size. Straps: two strips of duck, 100 × 16 cm (39⅜ × 6¼ in).',
+      details: [
+        'Cut one 86 × 45 cm (33⅞ × 17¾ in) rectangle of cotton duck for the outer and one of satin, the same size, for the lining.',
+        'For the straps, cut two strips of duck, 100 × 16 cm (39⅜ × 6¼ in).',
+        'On the outer and the lining, mark the fold line across the middle, 43 cm (16⅞ in) from either short end — it becomes the bottom of the bag.',
+        'Every seam allowance in this bag is 0.5 cm (³⁄₁₆ in).',
+      ],
+    },
+    {
+      title: 'Make the straps',
+      text: 'Fold in half and press, open, fold both edges to the crease, fold again: a 4 cm (1⅝ in) strap, four layers thick. Topstitch both edges.',
+      details: [
+        'Fold a strip in half lengthwise, wrong sides together, and press a crease.',
+        'Open it out. Fold both long edges in so they meet at the crease, and press again.',
+        'Fold in half along the first crease. The strap is now 4 cm (1⅝ in) wide and four layers thick, with every raw edge tucked inside.',
+        'Topstitch close to both long edges with a straight stitch. Make two straps.',
+      ],
+    },
+    {
+      title: 'Shape the bottom',
+      text: 'Crease the centre and open it out. Measure 6 cm (2⅜ in) to each side, fold on each line and stitch close to the fold: two stitched folds, a 12 cm (4¾ in) bottom.',
+      details: [
+        'Fold the outer in half across the middle and press a crease. Open it out again.',
+        'Measure 6 cm (2⅜ in) from the crease towards each end and mark a line across the whole width of the piece.',
+        'Fold along the first line, right sides together, and stitch close to the fold. Open it out, then fold and stitch along the second line the same way.',
+        'The two stitched folds, 12 cm (4¾ in) apart, are the edges of the bottom; the centre crease is its middle.',
+      ],
+    },
+    {
+      title: 'Tuck the bottom in',
+      text: 'Lift both ends at the stitched folds and bring them together: the bottom folds in and the centre crease goes 6 cm (2⅜ in) inside. Lay it flat.',
+      details: [
+        'Lay the piece right side up and lift both ends, so it bends at the two stitched folds.',
+        'Bring the ends together. The 12 cm (4¾ in) bottom folds in on itself and the centre crease goes inside, 6 cm (2⅜ in) up between the layers — like the bottom of a paper bag.',
+        'Lay it flat, right sides together. The stitched folds are now the bottom edge, and the folded piece is 6 cm shorter than a plain fold in half.',
+      ],
+    },
+    {
+      title: 'Sew the sides',
+      text: 'Keep the bottom tucked in and sew both sides with a 0.5 cm (³⁄₁₆ in) seam — through all the layers, four at the bottom.',
+      details: [
+        'Clip the sides so the tucked-in bottom stays in place.',
+        'Sew both side seams, 0.5 cm (³⁄₁₆ in) from the edge, all the way down. At the bottom the seam goes through four layers — the front, the two halves of the tucked bottom and the back. Leave the top open.',
+      ],
+    },
+    {
+      title: 'Turn it out',
+      text: 'Turn the outer right side out and open it up: the bottom unfolds into a 12 cm (4¾ in) base, and the corners form by themselves.',
+      details: [
+        'Turn the outer right side out through the top.',
+        'Open it up and push the bottom out. The tucked bottom unfolds into a flat 12 cm (4¾ in) base, and where the side seams caught it, neat corners form by themselves — no extra corner seams needed.',
+      ],
+    },
+    {
+      title: 'Sew the lining',
+      text: 'Make the satin lining the same way — but leave an 8 cm (3⅛ in) opening in one side seam. You will turn the bag through it.',
+      details: [
+        'Make the lining exactly like the outer: crease the centre, stitch the two folds 6 cm (2⅜ in) from it, tuck the bottom in.',
+        'Sew both side seams, 0.5 cm (³⁄₁₆ in) from the edge — but on one side leave an 8 cm (3⅛ in) gap, low down just above the tucked bottom. You will turn the bag through it.',
+        'Keep the lining inside out.',
+      ],
+    },
+    {
+      title: 'Join outer and lining',
+      text: 'Pin the straps to the outer, 6 cm (2⅜ in) from the centre. Slip the outer into the inside-out lining and sew around the top.',
+      details: [
+        'Turn the outer right side out.',
+        'Pin a strap to the front top edge: ends level with the raw edge, 6 cm (2⅜ in) from the centre, the loop hanging down over the bag. Do the same on the back.',
+        'Slip the outer, straps and all, into the inside-out lining, so the right sides face each other. Line up the side seams and the top edges.',
+        'Sew all the way around the top, 0.5 cm (³⁄₁₆ in) from the edge.',
+      ],
+    },
+    {
+      title: 'Turn and topstitch',
+      text: 'Turn the bag through the opening and stitch it closed. Push the lining in and topstitch around the top, 1 cm (⅜ in) from the edge.',
+      details: [
+        'Pull the whole bag right side out through the opening in the lining.',
+        'Tuck in the raw edges of the opening and stitch it closed, close to the edge.',
+        'Push the lining down inside the bag and press the top edge flat.',
+        'Topstitch all around the top, 1 cm (⅜ in) from the edge. Your tote is done!',
+      ],
+    },
+  ],
+  legend: [
+    { title: 'Outer', text: 'cotton duck · cut 86 × 45 cm (33⅞ × 17¾ in), folded at the bottom' },
+    { title: 'Lining', text: 'satin · cut 86 × 45 cm, the same as the outer' },
+    { title: 'Straps ×2', text: 'cut 100 × 16 cm (39⅜ × 6¼ in) · folded in four to 4 cm (1⅝ in)' },
+    { title: 'Bottom', text: 'two folds stitched 6 cm (2⅜ in) each side of the centre crease, tucked in before the side seams → a 12 cm (4¾ in) base, the corners form by themselves' },
+    { title: 'Topstitch', text: '1 cm (⅜ in) from the top edge · all seams 0.5 cm (³⁄₁₆ in)' },
+  ],
+};

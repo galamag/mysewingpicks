@@ -4,6 +4,8 @@
   tote. Step 0: the finished bag (tap to take it apart). Steps 1–9: each stage
   of sewing, animated, with the real sizes.
   Model + numbers: src/lib/anatomy/tote.js · engine: src/lib/anatomy/iso.js.
+  Texts (every language): src/lib/anatomy/tote.<lang>.js via tote.text.js — the
+  language is the `lang` prop; the script reads it from <html lang>.
   The first frame and every step's text are in the HTML at build time (works
   without JS, readable by search engines); the script only animates.
 
@@ -12,89 +14,100 @@
   (Amazon wants every affiliate link identifiable and disclosed). The page must
   show its page-disclosure line before this component.
 */
-import { renderStep, DEFS, STEPS, LEGEND, STITCHES } from '../lib/anatomy/tote.js';
+import { renderStep, DEFS, STEPS } from '../lib/anatomy/tote.js';
+import { toteText } from '../lib/anatomy/tote.text.js';
 import { products } from '../data/products.js';
 import { amazonUrl } from '../data/amazon.js';
+import { t } from '../i18n/index.js';
+import { productText } from '../i18n/content.js';
 
-const first = renderStep(0, 0);
+const { lang } = Astro.props;
+const L = toteText(lang);
+const { ui } = t(lang);
+const first = renderStep(0, 0, L);
 
 const byId = Object.fromEntries(products.map((p) => [p.id, p]));
 const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
   if (!byId[id]) throw new Error(`ToteAnatomy: step ${k} uses unknown product "${id}"`);
-  return { name: byId[id].name, url: amazonUrl(byId[id]) };
+  return { name: productText(byId[id], lang).name, url: amazonUrl(byId[id]) };
 }));
 ---
 <div class="anatomy" data-anatomy="tote">
   <figure class="anatomy__card">
     <div class="anatomy__head">
-      <span class="anatomy__fig">Fig. 1</span>
-      <span class="anatomy__title">Tote bag · anatomy</span>
+      <span class="anatomy__fig">{L.ui.fig}</span>
+      <span class="anatomy__title">{L.ui.title}</span>
     </div>
 
     <svg class="anatomy__svg" viewBox={first.viewBox.map((n) => n.toFixed(2)).join(' ')} role="img"
-         aria-label="An isometric drawing of the tote bag and how it is sewn, step by step.">
+         aria-label={L.ui.svgLabel}>
       <Fragment set:html={DEFS} />
       <g class="anatomy__scene" set:html={first.body} />
     </svg>
 
     <div class="anatomy__nav">
-      <button type="button" class="anatomy__btn anatomy__prev" aria-label="Previous step" disabled>←</button>
+      <button type="button" class="anatomy__btn anatomy__prev" aria-label={L.ui.prev} disabled>←</button>
       <div class="anatomy__dots">
-        {STEPS.map((s, i) => (
-          <button type="button" class="anatomy__dot" aria-label={i ? `Step ${i}: ${s.title}` : s.title}
+        {STEPS.map((_, i) => (
+          <button type="button" class="anatomy__dot" aria-label={L.ui.dot(i, L.steps[i].title)}
                   aria-current={i === 0 ? 'step' : undefined} data-step={i}></button>
         ))}
       </div>
-      <button type="button" class="anatomy__btn anatomy__next">Steps →</button>
+      <button type="button" class="anatomy__btn anatomy__next">{L.ui.start}</button>
     </div>
   </figure>
 
   <div class="anatomy__caption" aria-live="polite">
-    <p class="anatomy__count">Overview</p>
-    <h3 class="anatomy__h">{STEPS[0].title}</h3>
-    <p class="anatomy__text">{STEPS[0].text}</p>
+    <p class="anatomy__count">{L.ui.overview}</p>
+    <h3 class="anatomy__h">{L.steps[0].title}</h3>
+    <p class="anatomy__text">{L.steps[0].text}</p>
     <p class="anatomy__stitch" hidden><span class="anatomy__stitch-icon" aria-hidden="true"></span><span class="anatomy__stitch-name"></span></p>
     {uses.map((list, k) => list.length > 0 && (
       <div class="anatomy__uses" data-step={k} hidden>
-        <span class="anatomy__uses-label">In this step</span>
+        <span class="anatomy__uses-label">{L.ui.inThisStep}</span>
         <ul>
           {list.map((item) => (
-            <li><a href={item.url} target="_blank" rel="nofollow sponsored noopener">{item.name}</a> <span class="paid-link">(paid link)</span></li>
+            <li><a href={item.url} target="_blank" rel="nofollow sponsored noopener">{item.name}</a> <span class="paid-link">{ui.paidLink}</span></li>
           ))}
         </ul>
       </div>
     ))}
     <div class="anatomy__actions">
-      <button type="button" class="anatomy__action anatomy__toggle" aria-pressed="false">Take it apart</button>
-      <button type="button" class="anatomy__action anatomy__replay" hidden>↻ Replay</button>
+      <button type="button" class="anatomy__action anatomy__toggle" aria-pressed="false">{L.ui.takeApart}</button>
+      <button type="button" class="anatomy__action anatomy__replay" hidden>{L.ui.replay}</button>
     </div>
   </div>
 
-  <ol class="anatomy__legend" aria-label="Parts">
-    {LEGEND.map((item) => (
-      <li><span class="anatomy__pin" aria-hidden="true">{item.n}</span><span><strong>{item.title}</strong> — {item.text}</span></li>
+  <ol class="anatomy__legend" aria-label={L.ui.parts}>
+    {L.legend.map((item, i) => (
+      <li><span class="anatomy__pin" aria-hidden="true">{i + 1}</span><span><strong>{item.title}</strong> — {item.text}</span></li>
     ))}
   </ol>
 
   <section class="anatomy__all" aria-labelledby="anatomy-all-title">
-    <h3 id="anatomy-all-title">Step-by-step instructions</h3>
+    <h3 id="anatomy-all-title">{L.ui.allSteps}</h3>
     <ol>
-      {STEPS.slice(1).map((s, i) => (
-        <li>
-          <h4><button type="button" class="anatomy__jump" data-step={i + 1}>{s.title}</button></h4>
-          {s.details.map((line) => <p>{line}</p>)}
-          {s.stitch && <p class="anatomy__all-stitch">Machine: {STITCHES[s.stitch].toLowerCase()}</p>}
-        </li>
-      ))}
+      {STEPS.slice(1).map((s, i) => {
+        const st = L.steps[i + 1];
+        return (
+          <li>
+            <h4><button type="button" class="anatomy__jump" data-step={i + 1}>{st.title}</button></h4>
+            {st.details.map((line) => <p>{line}</p>)}
+            {s.stitch && <p class="anatomy__all-stitch">{L.ui.machine(L.stitches[s.stitch])}</p>}
+          </li>
+        );
+      })}
     </ol>
   </section>
 </div>
 
 <script>
-  import { renderStep, STEPS, STITCHES } from '../lib/anatomy/tote.js';
+  import { renderStep, STEPS } from '../lib/anatomy/tote.js';
+  import { toteText } from '../lib/anatomy/tote.text.js';
 
   const root = document.querySelector('[data-anatomy="tote"]');
   if (root) {
+    const L = toteText(document.documentElement.lang);
     const $ = (s) => root.querySelector(s);
     const svg = $('.anatomy__svg'), scene = $('.anatomy__scene');
     const prev = $('.anatomy__prev'), next = $('.anatomy__next');
@@ -109,7 +122,7 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
     let step = 0, t = 0, target = 0, raf = 0, stamp = 0;
 
     const draw = () => {
-      const { body, viewBox } = renderStep(step, t);
+      const { body, viewBox } = renderStep(step, t, L);
       scene.innerHTML = body;
       svg.setAttribute('viewBox', viewBox.map((n) => n.toFixed(2)).join(' '));
     };
@@ -134,19 +147,19 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
       cancelAnimationFrame(raf); raf = 0;
       step = k;
       t = 0; target = 0;
-      count.textContent = k ? `Step ${k} of ${last}` : 'Overview';
-      title.textContent = STEPS[k].title;
-      text.textContent = STEPS[k].text;
+      count.textContent = k ? L.ui.stepOf(k, last) : L.ui.overview;
+      title.textContent = L.steps[k].title;
+      text.textContent = L.steps[k].text;
       prev.disabled = k === 0;
       next.disabled = k === last;
-      next.textContent = k === 0 ? 'Steps →' : 'Next →';
+      next.textContent = k === 0 ? L.ui.start : L.ui.next;
       toggle.hidden = k !== 0;
       replay.hidden = k === 0;
       toggle.setAttribute('aria-pressed', 'false');
-      toggle.textContent = 'Take it apart';
+      toggle.textContent = L.ui.takeApart;
       dots.forEach((d, i) => (i === k ? d.setAttribute('aria-current', 'step') : d.removeAttribute('aria-current')));
       stitch.hidden = !STEPS[k].stitch;
-      stitchName.textContent = STEPS[k].stitch ? `Machine: ${STITCHES[STEPS[k].stitch].toLowerCase()}` : '';
+      stitchName.textContent = STEPS[k].stitch ? L.ui.machine(L.stitches[STEPS[k].stitch]) : '';
       usesRows.forEach((row) => { row.hidden = +row.dataset.step !== k; });
       scene.classList.add('is-switching');
       requestAnimationFrame(() => {
@@ -160,7 +173,7 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
     const flip = () => {
       const apart = target < 0.5;
       toggle.setAttribute('aria-pressed', String(apart));
-      toggle.textContent = apart ? 'Put it together' : 'Take it apart';
+      toggle.textContent = apart ? L.ui.putTogether : L.ui.takeApart;
       play(apart ? 1 : 0);
     };
 

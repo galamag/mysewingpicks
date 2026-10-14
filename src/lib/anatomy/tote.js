@@ -2,6 +2,8 @@
   Tote bag ("shopper") — the anatomy figure's model and its sewing steps.
   Every number comes from the maker's own pattern (Vault: «Анатомия изделий —
   пилот «Шопер»»; video https://youtu.be/Fs1QfrJIfwE). Change numbers HERE only.
+  Words (titles, captions, instructions, chips, legend) are NOT here: tote.<lang>.js,
+  picked through tote.text.js.
 
   Step 0 is the finished bag (tap to take it apart); steps 1–9 each animate one
   stage of sewing over t = 0…1. Each returns painter-ordered pieces + overlays.
@@ -179,15 +181,15 @@ function stepCut(t) {
   return {
     pieces,
     over: [
-      { type: 'dim', a: [0, 0, -5], b: [45, 0, -5], text: '45 cm', o },
-      { type: 'dim', a: [-5, 0, 0], b: [-5, 0, 86], text: '86 cm', o },
-      { type: 'label', p: [22.5, 0, HALF], text: 'fold', o },
-      { type: 'label', p: [72.5, 0, HALF], text: 'fold', o },
-      { type: 'label', p: [22.5, 0, 93], text: 'outer · duck', o },
-      { type: 'label', p: [72.5, 0, 93], text: 'lining · satin', o },
-      { type: 'label', p: [118.5, 0, 93], text: '2 straps · duck', o },
-      { type: 'dim', a: [100, 0, -19], b: [116, 0, -19], text: '16 cm', o },
-      { type: 'dim', a: [142, 0, -14], b: [142, 0, 86], text: '100 cm', o },
+      { type: 'dim', a: [0, 0, -5], b: [45, 0, -5], label: 'cm45', o },
+      { type: 'dim', a: [-5, 0, 0], b: [-5, 0, 86], label: 'cm86', o },
+      { type: 'label', p: [22.5, 0, HALF], label: 'fold', o },
+      { type: 'label', p: [72.5, 0, HALF], label: 'fold', o },
+      { type: 'label', p: [22.5, 0, 93], label: 'outerDuck', o },
+      { type: 'label', p: [72.5, 0, 93], label: 'liningSatin', o },
+      { type: 'label', p: [118.5, 0, 93], label: 'strapsDuck', o },
+      { type: 'dim', a: [100, 0, -19], b: [116, 0, -19], label: 'cm16', o },
+      { type: 'dim', a: [142, 0, -14], b: [142, 0, 86], label: 'cm100', o },
     ],
   };
 }
@@ -238,10 +240,10 @@ function stepStrap(t) {
   return {
     pieces,
     over: [
-      { type: 'dim', a: [L + 4, -8, 0], b: [L + 4, 8, 0], text: '16 cm', o: o16 },
-      { type: 'dim', a: [L + 4, -4, 0], b: [L + 4, 4, 0], text: '8 cm', o: o8 },
-      { type: 'dim', a: [L + 4, -4, 3 * T], b: [L + 4, 0, 3 * T], text: '4 cm', o: o4, hot: true },
-      { type: 'label', p: [L / 2, -2, 3 * T], text: 'topstitch both edges', o: span(t, 0.84, 0.9), dy: -6 },
+      { type: 'dim', a: [L + 4, -8, 0], b: [L + 4, 8, 0], label: 'cm16', o: o16 },
+      { type: 'dim', a: [L + 4, -4, 0], b: [L + 4, 4, 0], label: 'cm8', o: o8 },
+      { type: 'dim', a: [L + 4, -4, 3 * T], b: [L + 4, 0, 3 * T], label: 'cm4', o: o4, hot: true },
+      { type: 'label', p: [L / 2, -2, 3 * T], label: 'topstitchEdges', o: span(t, 0.84, 0.9), dy: -6 },
     ],
     inset: { segs: strapSection(t, 0.9), range: [-8, 8] },
   };
@@ -302,14 +304,14 @@ function stepBottom(t) {
   return {
     pieces,
     over: [
-      { type: 'label', p: [22.5, HALF, 0], text: 'centre crease', o: span(t, 0.22, 0.28) * (1 - span(t, 0.36, 0.4)), dy: -4 },
-      { type: 'dim', a: [-2, Y1, 0], b: [-2, HALF, 0], text: '6 cm', o: p.mark * (1 - span(t, 0.36, 0.4)), hot: true },
-      { type: 'dim', a: [47, HALF, 0], b: [47, Y2, 0], text: '6 cm', o: p.mark * (1 - span(t, 0.36, 0.4)), hot: true },
+      { type: 'label', p: [22.5, HALF, 0], label: 'centreCrease', o: span(t, 0.22, 0.28) * (1 - span(t, 0.36, 0.4)), dy: -4 },
+      { type: 'dim', a: [-2, Y1, 0], b: [-2, HALF, 0], label: 'cm6', o: p.mark * (1 - span(t, 0.36, 0.4)), hot: true },
+      { type: 'dim', a: [47, HALF, 0], b: [47, Y2, 0], label: 'cm6', o: p.mark * (1 - span(t, 0.36, 0.4)), hot: true },
       { type: 'line', pts: [[0.4, Y1 + 0.3, z], [44.6, Y1 + 0.3, z]], t: p.s1, kind: 'hot', o: sewing1 },
       { type: 'line', pts: [[0.4, Y2 - 0.3, z], [44.6, Y2 - 0.3, z]], t: p.s2, kind: 'hot', o: sewing2 },
-      { type: 'label', p: [22.5, Y1, z], text: 'stitch close to the fold', o: sewing1, dy: -6, hot: true },
-      { type: 'label', p: [22.5, Y2, z], text: 'stitch close to the fold', o: sewing2, dy: -6, hot: true },
-      { type: 'dim', a: [47, Y1, 0], b: [47, Y2, 0], text: '12 cm bottom', o: end, hot: true },
+      { type: 'label', p: [22.5, Y1, z], label: 'stitchFold', o: sewing1, dy: -6, hot: true },
+      { type: 'label', p: [22.5, Y2, z], label: 'stitchFold', o: sewing2, dy: -6, hot: true },
+      { type: 'dim', a: [47, Y1, 0], b: [47, Y2, 0], label: 'bottom12', o: end, hot: true },
     ],
     inset: { segs: bottomSection(t, 2.5), range: [0, 86] },
     focus: {
@@ -366,10 +368,10 @@ function stepTuck(t) {
   return {
     pieces: tuckPieces(t, DUCK, ghost),
     over: [
-      { type: 'label', p: [22.5, Y1, 0], text: 'lift both ends at the stitched folds', o: span(t, 0.04, 0.1) * (1 - span(t, 0.3, 0.34)), dy: 7 },
-      { type: 'label', p: [22.5, HALF, 3], text: 'the bottom folds in', o: span(t, 0.4, 0.46) * (1 - span(t, 0.74, 0.78)), dy: -4, hot: true },
-      { type: 'dim', a: [47, Y1, 0], b: [47, Y1 - BOT, 0], text: 'centre 6 cm inside', o: end, hot: true },
-      { type: 'label', p: [22.5, Y1 / 2, GAP], text: 'right sides together', o: end },
+      { type: 'label', p: [22.5, Y1, 0], label: 'liftEnds', o: span(t, 0.04, 0.1) * (1 - span(t, 0.3, 0.34)), dy: 7 },
+      { type: 'label', p: [22.5, HALF, 3], label: 'foldsIn', o: span(t, 0.4, 0.46) * (1 - span(t, 0.74, 0.78)), dy: -4, hot: true },
+      { type: 'dim', a: [47, Y1, 0], b: [47, Y1 - BOT, 0], label: 'centreInside', o: end, hot: true },
+      { type: 'label', p: [22.5, Y1 / 2, GAP], label: 'rightSides', o: end },
     ],
     inset: { segs: tuckSection(t, 3), range: [0, 86] },
   };
@@ -385,8 +387,8 @@ function stepSides(t) {
     over: [
       { type: 'line', pts: [[SPEC.seam, 0, z], [SPEC.seam, Y1, z]], t: sew, kind: 'hot' },
       { type: 'line', pts: [[45 - SPEC.seam, 0, z], [45 - SPEC.seam, Y1, z]], t: sew, kind: 'hot' },
-      { type: 'label', p: [45, Y1 / 2, z], text: '0.5 cm seam', o: span(t, 0.2, 0.28), dx: 10, hot: true },
-      { type: 'label', p: [45, Y1 - BOT / 2, z], text: '4 layers here', o: span(t, 0.86, 0.92), dx: 10 },
+      { type: 'label', p: [45, Y1 / 2, z], label: 'seam05', o: span(t, 0.2, 0.28), dx: 10, hot: true },
+      { type: 'label', p: [45, Y1 - BOT / 2, z], label: 'layers4', o: span(t, 0.86, 0.92), dx: 10 },
     ],
     inset: { segs: tuckSection(1, 2), range: [Y1 - 13, Y1 + 3] },
   };
@@ -415,10 +417,10 @@ function stepTurnOut(t) {
       ...fadeAll(openBox({ key: 'outer', d, stand, look: DUCK, veeHot: t > 0.88 }), flip),
     ],
     over: [
-      { type: 'label', p: [22.5, Y1 / 2, GAP], text: 'turn it right side out', o: span(t, 0.02, 0.08) * (1 - span(t, 0.26, 0.3)) },
-      { type: 'label', p: [22.5, Y1, Y1 + 4], text: 'open it up', o: span(t, 0.52, 0.58) * (1 - span(t, 0.84, 0.88)) },
-      { type: 'dim', a: [xb, Y1 - d / 2, 0], b: [xb, Y1 + d / 2, 0], text: '12 cm base', o, hot: true },
-      { type: 'label', p: [xb, Y1, d / 2], text: 'corners form by themselves', o, dx: -14, dy: -14, hot: true },
+      { type: 'label', p: [22.5, Y1 / 2, GAP], label: 'turnOut', o: span(t, 0.02, 0.08) * (1 - span(t, 0.26, 0.3)) },
+      { type: 'label', p: [22.5, Y1, Y1 + 4], label: 'openUp', o: span(t, 0.52, 0.58) * (1 - span(t, 0.84, 0.88)) },
+      { type: 'dim', a: [xb, Y1 - d / 2, 0], b: [xb, Y1 + d / 2, 0], label: 'base12', o, hot: true },
+      { type: 'label', p: [xb, Y1, d / 2], label: 'cornersForm', o, dx: -14, dy: -14, hot: true },
     ],
     focus: { pts: [[xb - 22, Y1 + d / 2, 0], [xb, Y1 - d / 2, 0], [xb + 3, Y1, 0], [xb, Y1, 30]], k: 0.4 * o },
   };
@@ -442,9 +444,9 @@ function stepLining(t) {
       { type: 'line', pts: [[R, 0, z], [R, g0, z]], t: sew1, kind: 'hot', o: 1 - swap },
       { type: 'line', pts: [[R, g1, z], [R, Y1, z]], t: sew2, kind: 'hot', o: 1 - swap },
       { type: 'line', pts: [[R + 0.3, g0, z], [R + 0.3, g1, z]], kind: 'open', o: span(t, 0.31, 0.35) * (1 - swap) },
-      { type: 'label', p: [R, (g0 + g1) / 2, z], text: '8 cm opening', o: span(t, 0.31, 0.35) * (1 - swap), dx: 12, hot: true },
+      { type: 'label', p: [R, (g0 + g1) / 2, z], label: 'opening8', o: span(t, 0.31, 0.35) * (1 - swap), dx: 12, hot: true },
       { type: 'line', pts: [[xb + 0.1, Y1, OPEN[0]], [xb + 0.1, Y1, OPEN[1]]], kind: 'open', o },
-      { type: 'label', p: [xb, Y1, (OPEN[0] + OPEN[1]) / 2], text: '8 cm opening', o, dx: 13, hot: true },
+      { type: 'label', p: [xb, Y1, (OPEN[0] + OPEN[1]) / 2], label: 'opening8', o, dx: 13, hot: true },
     ],
     focus: { pts: [[xb - 22, Y1 + d / 2, 0], [xb, Y1 - d / 2, 0], [xb, Y1, 30], [xb + 3, Y1, 0]], k: 0.4 * o },
   };
@@ -470,9 +472,9 @@ function stepJoin(t) {
   return {
     pieces: fadeAll(joinState(t), span(t, 0, 0.08)),
     over: [
-      { type: 'dim', a: [W / 2, D, HB + 2], b: [W / 2 + SPEC.strap.fromCenter, D, HB + 2], text: '6 cm', o: o6, hot: true },
-      { type: 'label', p: [W / 2, D, HB + 30], text: 'ends level with the top edge', o: o6 },
-      { type: 'label', p: [W, D / 2, HB - 0.5], text: '0.5 cm seam', o: span(t, 0.8, 0.88), dx: 12, hot: true },
+      { type: 'dim', a: [W / 2, D, HB + 2], b: [W / 2 + SPEC.strap.fromCenter, D, HB + 2], label: 'cm6', o: o6, hot: true },
+      { type: 'label', p: [W / 2, D, HB + 30], label: 'endsLevel', o: o6 },
+      { type: 'label', p: [W, D / 2, HB - 0.5], label: 'seam05', o: span(t, 0.8, 0.88), dx: 12, hot: true },
     ],
     focus: { pts: [[0, D, HB - 6], [W, D, HB - 6], [W / 2, D, HB + 32]], k: span(t, 0.04, 0.1) * (1 - span(t, 0.2, 0.27)) },
   };
@@ -516,12 +518,12 @@ function stepFinish(t) {
     over: [
       { type: 'line', pts: [[W + LINE + 0.1, D / 2, OPEN[0]], [W + LINE + 0.1, D / 2, OPEN[1]]], kind: 'open', o: 1 - turned },
       { type: 'arrow', pts: turnArc, t: span(t, 0.04, 0.18), o: 1 - turned },
-      { type: 'label', p: [W + 13, D / 2 + 5, 16], text: 'turn through the opening', o: span(t, 0.06, 0.12) * (1 - turned), dy: -4 },
+      { type: 'label', p: [W + 13, D / 2 + 5, 16], label: 'turnThrough', o: span(t, 0.06, 0.12) * (1 - turned), dy: -4 },
       { type: 'line', pts: [[W - LINE + 0.1, D / 2, gapLow], [W - LINE + 0.1, D / 2, gapTop]], t: close, kind: 'hot', o: turned * (1 - push) },
-      { type: 'label', p: [W - LINE, D / 2, (gapLow + gapTop) / 2], text: 'stitch it closed', o: span(t, 0.38, 0.44) * (1 - span(t, 0.54, 0.58)), dx: 12, hot: true },
+      { type: 'label', p: [W - LINE, D / 2, (gapLow + gapTop) / 2], label: 'stitchClosed', o: span(t, 0.38, 0.44) * (1 - span(t, 0.54, 0.58)), dx: 12, hot: true },
       { type: 'arrow', pts: [[W / 2, D / 2, H + 40], [W / 2, D / 2, H + 26]], o: span(t, 0.54, 0.6) * (1 - span(t, 0.72, 0.78)) },
-      { type: 'label', p: [W / 2, D / 2, H + 44], text: 'push the lining in', o: span(t, 0.54, 0.6) * (1 - span(t, 0.72, 0.78)) },
-      { type: 'label', p: [W, D / 2, H - SPEC.topstitch], text: '1 cm topstitch', o: span(t, 0.82, 0.9), dx: 12, hot: true },
+      { type: 'label', p: [W / 2, D / 2, H + 44], label: 'pushLining', o: span(t, 0.54, 0.6) * (1 - span(t, 0.72, 0.78)) },
+      { type: 'label', p: [W, D / 2, H - SPEC.topstitch], label: 'topstitch1', o: span(t, 0.82, 0.9), dx: 12, hot: true },
     ],
     focus: t < 0.3
       ? { pts: [[W, 0, 0], [W, D, 0], [W, D / 2, 18], [W + 13, D / 2 + 5, 16]], k: span(t, 0.02, 0.1) * (1 - span(t, 0.2, 0.28)) }
@@ -532,118 +534,63 @@ function stepFinish(t) {
 /* ---------- Steps, camera, rendering ---------- */
 
 /*
-  Steps. `text` is the short caption under the figure; `details` is the full
-  written instruction (the list under the figure). `uses` — catalog products
-  handy in that step (ids from src/data/products.js, shown as labelled
-  affiliate links under the caption). `stitch` — the machine stitch.
+  Steps — how each one is built, without words. Every text (title, caption,
+  written instruction, the chips drawn in the scenes, the legend) lives in
+  tote.<lang>.js, index-aligned with this array; tote.text.js checks that.
+  `scene` draws the step over t = 0…1, `duration` is its animation in seconds,
+  `stitch` — the machine stitch (a key of `stitches` in the texts), `sew` — when
+  and on which fabric the seam is sewn. `uses` — catalog products handy in that
+  step (ids from src/data/products.js, shown as labelled affiliate links under
+  the caption).
 */
 export const STEPS = [
+  {}, // 0: the finished bag (texts: tote.<lang>.js)
   {
-    title: 'The finished bag',
-    text: 'A lined tote in three parts: a cotton duck outer, a satin lining and two long straps. Tap the bag to take it apart.',
-  },
-  {
-    title: 'Cut the pieces', scene: stepCut, duration: 2.6,
+    scene: stepCut, duration: 2.6,
     uses: ['cotton-duck-cloth', 'olfa-rotary-cutter', 'olfa-cutting-mat', 'quilting-rulers-set', 'sewline-air-erasable-pen'],
-    text: 'Outer: cotton duck, 86 × 45 cm (33⅞ × 17¾ in). Lining: satin, the same size. Straps: two strips of duck, 100 × 16 cm (39⅜ × 6¼ in).',
-    details: [
-      'Cut one 86 × 45 cm (33⅞ × 17¾ in) rectangle of cotton duck for the outer and one of satin, the same size, for the lining.',
-      'For the straps, cut two strips of duck, 100 × 16 cm (39⅜ × 6¼ in).',
-      'On the outer and the lining, mark the fold line across the middle, 43 cm (16⅞ in) from either short end — it becomes the bottom of the bag.',
-      'Every seam allowance in this bag is 0.5 cm (³⁄₁₆ in).',
-    ],
   },
   {
-    title: 'Make the straps', scene: stepStrap, duration: 7, stitch: 'straight', sew: [[0.82, 1, 'duck']], pad: 0.22,
+    scene: stepStrap, duration: 7, stitch: 'straight', sew: [[0.82, 1, 'duck']], pad: 0.22,
     uses: ['rowenta-travel-iron', 'janome-hd2200', 'hagbou-thread-set'],
-    text: 'Fold in half and press, open, fold both edges to the crease, fold again: a 4 cm (1⅝ in) strap, four layers thick. Topstitch both edges.',
-    details: [
-      'Fold a strip in half lengthwise, wrong sides together, and press a crease.',
-      'Open it out. Fold both long edges in so they meet at the crease, and press again.',
-      'Fold in half along the first crease. The strap is now 4 cm (1⅝ in) wide and four layers thick, with every raw edge tucked inside.',
-      'Topstitch close to both long edges with a straight stitch. Make two straps.',
-    ],
   },
   {
-    title: 'Shape the bottom', scene: stepBottom, duration: 9.5, stitch: 'straight', pad: 0.22,
+    scene: stepBottom, duration: 9.5, stitch: 'straight', pad: 0.22,
     sew: [[0.47, 0.57, 'duck'], [0.79, 0.89, 'duck']],
     uses: ['rowenta-travel-iron', 'quilting-rulers-set', 'sewline-air-erasable-pen', 'janome-hd2200'],
-    text: 'Crease the centre and open it out. Measure 6 cm (2⅜ in) to each side, fold on each line and stitch close to the fold: two stitched folds, a 12 cm (4¾ in) bottom.',
-    details: [
-      'Fold the outer in half across the middle and press a crease. Open it out again.',
-      'Measure 6 cm (2⅜ in) from the crease towards each end and mark a line across the whole width of the piece.',
-      'Fold along the first line, right sides together, and stitch close to the fold. Open it out, then fold and stitch along the second line the same way.',
-      'The two stitched folds, 12 cm (4¾ in) apart, are the edges of the bottom; the centre crease is its middle.',
-    ],
   },
   {
-    title: 'Tuck the bottom in', scene: stepTuck, duration: 8, pad: 0.22,
+    scene: stepTuck, duration: 8, pad: 0.22,
     uses: ['soraco-sewing-clips'],
-    text: 'Lift both ends at the stitched folds and bring them together: the bottom folds in and the centre crease goes 6 cm (2⅜ in) inside. Lay it flat.',
-    details: [
-      'Lay the piece right side up and lift both ends, so it bends at the two stitched folds.',
-      'Bring the ends together. The 12 cm (4¾ in) bottom folds in on itself and the centre crease goes inside, 6 cm (2⅜ in) up between the layers — like the bottom of a paper bag.',
-      'Lay it flat, right sides together. The stitched folds are now the bottom edge, and the folded piece is 6 cm shorter than a plain fold in half.',
-    ],
   },
   {
-    title: 'Sew the sides', scene: stepSides, duration: 4.5, stitch: 'straight', pad: 0.22, sew: [[0.15, 0.85, 'duck']],
+    scene: stepSides, duration: 4.5, stitch: 'straight', pad: 0.22, sew: [[0.15, 0.85, 'duck']],
     uses: ['soraco-sewing-clips', 'janome-hd2200'],
-    text: 'Keep the bottom tucked in and sew both sides with a 0.5 cm (³⁄₁₆ in) seam — through all the layers, four at the bottom.',
-    details: [
-      'Clip the sides so the tucked-in bottom stays in place.',
-      'Sew both side seams, 0.5 cm (³⁄₁₆ in) from the edge, all the way down. At the bottom the seam goes through four layers — the front, the two halves of the tucked bottom and the back. Leave the top open.',
-    ],
   },
   {
-    title: 'Turn it out', scene: stepTurnOut, duration: 6,
-    text: 'Turn the outer right side out and open it up: the bottom unfolds into a 12 cm (4¾ in) base, and the corners form by themselves.',
-    details: [
-      'Turn the outer right side out through the top.',
-      'Open it up and push the bottom out. The tucked bottom unfolds into a flat 12 cm (4¾ in) base, and where the side seams caught it, neat corners form by themselves — no extra corner seams needed.',
-    ],
+    scene: stepTurnOut, duration: 6,
   },
   {
-    title: 'Sew the lining', scene: stepLining, duration: 6.5, stitch: 'straight', sew: [[0.14, 0.5, 'satin']],
+    scene: stepLining, duration: 6.5, stitch: 'straight', sew: [[0.14, 0.5, 'satin']],
     uses: ['soraco-sewing-clips', 'janome-hd2200'],
-    text: 'Make the satin lining the same way — but leave an 8 cm (3⅛ in) opening in one side seam. You will turn the bag through it.',
-    details: [
-      'Make the lining exactly like the outer: crease the centre, stitch the two folds 6 cm (2⅜ in) from it, tuck the bottom in.',
-      'Sew both side seams, 0.5 cm (³⁄₁₆ in) from the edge — but on one side leave an 8 cm (3⅛ in) gap, low down just above the tucked bottom. You will turn the bag through it.',
-      'Keep the lining inside out.',
-    ],
   },
   {
-    title: 'Join outer and lining', scene: stepJoin, duration: 6, stitch: 'straight', sew: [[0.76, 1, 'satin']],
+    scene: stepJoin, duration: 6, stitch: 'straight', sew: [[0.76, 1, 'satin']],
     uses: ['soraco-sewing-clips', 'janome-hd2200'],
-    text: 'Pin the straps to the outer, 6 cm (2⅜ in) from the centre. Slip the outer into the inside-out lining and sew around the top.',
-    details: [
-      'Turn the outer right side out.',
-      'Pin a strap to the front top edge: ends level with the raw edge, 6 cm (2⅜ in) from the centre, the loop hanging down over the bag. Do the same on the back.',
-      'Slip the outer, straps and all, into the inside-out lining, so the right sides face each other. Line up the side seams and the top edges.',
-      'Sew all the way around the top, 0.5 cm (³⁄₁₆ in) from the edge.',
-    ],
   },
   {
-    title: 'Turn and topstitch', scene: stepFinish, duration: 7, stitch: 'straight', sew: [[0.4, 0.52, 'satin'], [0.8, 1, 'duck']],
+    scene: stepFinish, duration: 7, stitch: 'straight', sew: [[0.4, 0.52, 'satin'], [0.8, 1, 'duck']],
     uses: ['rowenta-travel-iron', 'janome-hd2200'],
-    text: 'Turn the bag through the opening and stitch it closed. Push the lining in and topstitch around the top, 1 cm (⅜ in) from the edge.',
-    details: [
-      'Pull the whole bag right side out through the opening in the lining.',
-      'Tuck in the raw edges of the opening and stitch it closed, close to the edge.',
-      'Push the lining down inside the bag and press the top edge flat.',
-      'Topstitch all around the top, 1 cm (⅜ in) from the edge. Your tote is done!',
-    ],
   },
 ];
 
-export const LEGEND = [
-  { n: 1, title: 'Outer', text: 'cotton duck · cut 86 × 45 cm (33⅞ × 17¾ in), folded at the bottom' },
-  { n: 2, title: 'Lining', text: 'satin · cut 86 × 45 cm, the same as the outer' },
-  { n: 3, title: 'Straps ×2', text: 'cut 100 × 16 cm (39⅜ × 6¼ in) · folded in four to 4 cm (1⅝ in)' },
-  { n: 4, title: 'Bottom', text: 'two folds stitched 6 cm (2⅜ in) each side of the centre crease, tucked in before the side seams → a 12 cm (4¾ in) base, the corners form by themselves' },
-  { n: 5, title: 'Topstitch', text: '1 cm (⅜ in) from the top edge · all seams 0.5 cm (³⁄₁₆ in)' },
-];
+/** Every chip key the drawing uses — each language must have them all (tote.text.js). */
+export const LABEL_KEYS = [...new Set(STEPS.slice(1).flatMap((s) => s.scene(0).over.map((o) => o.label).filter(Boolean)))];
+
+const labelOf = (L, key) => {
+  const text = L.labels[key];
+  if (!text) throw new Error(`tote: no label "${key}"`);
+  return text;
+};
 
 const union = (a, b) => {
   const x0 = Math.min(a[0], b[0]), y0 = Math.min(a[1], b[1]);
@@ -687,7 +634,7 @@ function camera(k) {
 }
 
 /** The cross-section ("end view") of the strap, drawn flat in a corner box. */
-function insetSvg({ segs, range }, cam) {
+function insetSvg({ segs, range }, cam, title) {
   const u = cam[2] / 100;
   const bw = 46 * u, bh = 24 * u;
   const x0 = cam[0] + 4 * u, y0 = cam[1] + cam[3] - bh - 4 * u;
@@ -698,12 +645,10 @@ function insetSvg({ segs, range }, cam) {
   const box = `x="${x0.toFixed(2)}" y="${y0.toFixed(2)}" width="${bw.toFixed(2)}" height="${bh.toFixed(2)}" rx="${(2 * u).toFixed(2)}"`;
   return (
     `<g class="inset"><clipPath id="inset-clip"><rect ${box}/></clipPath><rect ${box}/>` +
-    `<text x="${(x0 + 2.4 * u).toFixed(2)}" y="${(y0 + 4.2 * u).toFixed(2)}" font-size="${(2.6 * u).toFixed(2)}">END VIEW</text>` +
+    `<text x="${(x0 + 2.4 * u).toFixed(2)}" y="${(y0 + 4.2 * u).toFixed(2)}" font-size="${(2.6 * u).toFixed(2)}">${title}</text>` +
     `<g clip-path="url(#inset-clip)">${lines}</g></g>`
   );
 }
-
-export const STITCHES = { straight: 'Straight stitch' };
 
 /** Which sewing window (if any) is running at t → { s: progress, o: opacity, fabric }. */
 function sewingAt(step, t) {
@@ -719,7 +664,7 @@ function sewingAt(step, t) {
   the needle goes up and down, the fabric feeds left and the stitches follow.
   Generic shape — no brand.
 */
-function machineSvg(m, cam, stitch) {
+function machineSvg(m, cam, stitchName) {
   const u = cam[2] / 100;
   const w = 38 * u, h = 25 * u;
   const x0 = cam[0] + cam[2] - w - 4 * u, y0 = cam[1] + 4 * u;
@@ -732,7 +677,7 @@ function machineSvg(m, cam, stitch) {
   return (
     `<g class="machine" opacity="${m.o.toFixed(3)}">` +
     `<rect class="machine__box" x="${X(0)}" y="${Y(0)}" width="${L(38)}" height="${L(25)}" rx="${L(2)}"/>` +
-    `<text x="${X(2.4)}" y="${Y(4.2)}" font-size="${L(2.6)}">${(STITCHES[stitch] ?? '').toUpperCase()}</text>` +
+    `<text x="${X(2.4)}" y="${Y(4.2)}" font-size="${L(2.6)}">${stitchName.toUpperCase()}</text>` +
     `<rect class="machine__bed" x="${X(3)}" y="${Y(19)}" width="${L(32)}" height="${L(2.6)}" rx="${L(1)}"/>` +
     `<rect class="machine__body" x="${X(27)}" y="${Y(8)}" width="${L(5)}" height="${L(11.5)}"/>` +
     `<rect class="machine__body" x="${X(10.5)}" y="${Y(6)}" width="${L(23)}" height="${L(4.6)}" rx="${L(2)}"/>` +
@@ -753,7 +698,8 @@ const shadowSvg = (cam, at3) => {
 };
 
 /** Step k at time t (for step 0, t is how far apart it is). Returns SVG body + viewBox. */
-export function renderStep(k, t) {
+export function renderStep(k, t, L) {
+  if (!L) throw new Error('renderStep: pass the figure texts (tote.text.js)');
   if (k === 0) {
     const [b0, b1] = camera(0);
     const tt = ease(t);
@@ -780,8 +726,8 @@ export function renderStep(k, t) {
   const floor = floorAt ? shadowSvg(cam, floorAt) : '';
   const sewing = sewingAt(STEPS[k], t);
   return {
-    body: floor + s.pieces.map(pieceSvg).join('') + s.over.map((o) => overlaySvg(o, cam)).join('') +
-      (s.inset ? insetSvg(s.inset, cam) : '') + (sewing ? machineSvg(sewing, cam, STEPS[k].stitch) : ''),
+    body: floor + s.pieces.map(pieceSvg).join('') + s.over.map((o) => overlaySvg(o.label ? { ...o, text: labelOf(L, o.label) } : o, cam)).join('') +
+      (s.inset ? insetSvg(s.inset, cam, L.ui.endView) : '') + (sewing ? machineSvg(sewing, cam, L.stitches[STEPS[k].stitch] ?? '') : ''),
     viewBox: cam,
   };
 }

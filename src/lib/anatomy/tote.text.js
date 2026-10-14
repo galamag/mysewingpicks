@@ -1,0 +1,19 @@
+/* Tote figure texts by language. Every language has the same shape as English,
+   and English labels cover exactly the chip keys the drawing uses — or the
+   build fails. Used at build (ToteAnatomy) and in the browser (its script). */
+import { assertSameShape } from '../../i18n/shape.js';
+import { STEPS, LABEL_KEYS } from './tote.js';
+import en from './tote.en.js';
+
+export const TOTE_TEXT = { en };
+
+if (en.steps.length !== STEPS.length) throw new Error(`tote.en: ${en.steps.length} steps, the model has ${STEPS.length}`);
+for (const key of LABEL_KEYS) if (!en.labels[key]) throw new Error(`tote.en: label "${key}" is missing`);
+for (const key of Object.keys(en.labels)) if (!LABEL_KEYS.includes(key)) throw new Error(`tote.en: label "${key}" is not used by the drawing`);
+for (const [lang, text] of Object.entries(TOTE_TEXT)) if (lang !== 'en') assertSameShape(en, text, `tote.${lang}`);
+
+export function toteText(lang) {
+  const text = TOTE_TEXT[lang];
+  if (!text) throw new Error(`tote: no texts for "${lang}"`);
+  return text;
+}
