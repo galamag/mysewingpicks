@@ -3,8 +3,12 @@
   Every number comes from the maker's own pattern (Vault: «Анатомия изделий —
   пилот «Шопер»»; video https://youtu.be/Fs1QfrJIfwE). Change numbers HERE only.
 
-  Step 0 is the finished bag (tap to take it apart); steps 1–7 each animate one
+  Step 0 is the finished bag (tap to take it apart); steps 1–9 each animate one
   stage of sewing over t = 0…1. Each returns painter-ordered pieces + overlays.
+
+  The bottom is the maker's own trick: two folds stitched 6 cm each side of the
+  centre crease, then the bottom is tucked in (centre crease inside, like a
+  paper bag) before the side seams — so the corners form by themselves.
 */
 import {
   at, band, bounds, lerp, offset, overlayPoints, overlaySvg, pieceSvg,
@@ -16,9 +20,8 @@ export const SPEC = {
   lining: { cut: [86, 45], fabric: 'satin' },
   strap: { cut: [100, 16], done: 4, count: 2, fromCenter: 6 },
   seam: 0.5,
-  boxCorner: 6, // measured from the corner tip → a 12 cm seam = a 12 cm base
-  boxBase: 12,
-  opening: 8, // left open low in a lining side seam
+  boxBase: 12, // two stitched folds 6 cm each side of the centre crease → a 12 cm base
+  opening: 8, // left open low in a lining side seam, just above the tucked bottom
   topstitch: 1,
 };
 
@@ -27,11 +30,11 @@ const HALF = SPEC.outer.cut[0] / 2; // 43
 const FLAT = SPEC.outer.cut[1] - 2 * SPEC.seam; // 44: width once the sides are sewn
 const D = SPEC.boxBase; // 12
 const W = FLAT - D; // 32: front width when boxed
-const HB = HALF - SPEC.boxCorner; // 37: boxed height before the top seam
+const HB = HALF - SPEC.boxBase / 2; // 37: height once the bottom is tucked in, before the top seam
 const H = HB - SPEC.seam; // 36.5: finished height (drawing only — not published)
 const LINE = 0.35; // gap between outer and lining
 const ASPECT = 0.8; // figure width / height, the same for every step
-const OPEN = [2, 2 + SPEC.opening]; // opening, cm above the bottom of the lining
+const OPEN = [8, 8 + SPEC.opening]; // opening, cm above the bottom of the lining (above the 6 cm tuck)
 
 const FILL = { duck: 'url(#duck)', duckBack: 'url(#duckBack)', satin: 'url(#satin)', satinBack: 'url(#satinBack)' };
 
@@ -47,11 +50,13 @@ const fadeAll = (ps, o) => (o >= 0.999 ? ps : o <= 0.001 ? [] : ps.map((p) => ({
   An open box of fabric (outer or lining): walls on [xa,xb]×[ya,yb], height h
   from z0. `fill` is the side facing out, `inner` the side facing in — so an
   inside-out bag simply swaps them. Options:
-    flaps   boxed-corner triangles at the bottom ({ hot } marks the 12 cm seam)
+    vee     side seams split into a V where they caught the tucked bottom
+            ('bottom'; 'top' for the lining pulled out bottom-up)
     opening gap in the right side seam ([from, to] cm above z0)
     top     a stitch line round the walls { at: cm below the top, t, kind }
+    lid     close the top (the lining pulled out, its bottom up)
 */
-function shell({ key, xa, xb, ya, yb, z0 = 0, h, fill, inner, flaps, opening, top, seams = true, lid, ridges }) {
+function shell({ key, xa, xb, ya, yb, z0 = 0, h, fill, inner, opening, top, seams = true, lid, vee, veeHot }) {
   const w = xb - xa, d = yb - ya;
   const look = { fill, inner };
   const ring = (i, len, rev) => {
@@ -62,37 +67,29 @@ function shell({ key, xa, xb, ya, yb, z0 = 0, h, fill, inner, flaps, opening, to
     const a = [0.3, v], b = [len - 0.3, v];
     return [{ pts: rev ? [b, a] : [a, b], t, kind: top.kind ?? 'stitch', side: 'out' }];
   };
+  const seam = (pts, hot) => ({ pts, kind: hot ? 'hot' : 'seam', side: 'out' });
   const side = (gap) => {
     if (!seams || d < 0.3) return [];
-    const u = d / 2;
-    if (!gap) return [{ pts: [[u, 0], [u, h]], kind: 'seam', side: 'out' }];
-    return [
-      { pts: [[u, 0], [u, gap[0]]], kind: 'seam', side: 'out' },
-      { pts: [[u, gap[1]], [u, h]], kind: 'seam', side: 'out' },
-    ];
+    const u = d / 2, k = Math.min(d / 2, h);
+    let v0 = 0, v1 = h;
+    const lines = [];
+    if (vee === 'bottom') { v0 = k; lines.push(seam([[0, 0], [u, k]], veeHot), seam([[d, 0], [u, k]], veeHot)); }
+    if (vee === 'top') { v1 = h - k; lines.push(seam([[0, h], [u, v1]]), seam([[d, h], [u, v1]])); }
+    if (gap) lines.push(seam([[u, v0], [u, gap[0]]]), seam([[u, gap[1]], [u, v1]]));
+    else lines.push(seam([[u, v0], [u, v1]]));
+    return lines;
   };
-  const edge = () => (ridges ? [{ pts: [[0.3, 0.3], [w - 0.3, 0.3]], kind: 'stitch', side: 'out' }] : []);
   const wall = (id, O, U, out, len, lines) =>
     ({ id: `${key}-${id}`, pts: rect(len, h), O, U, V: [0, 0, 1], out, lines, ...look });
   const walls = [
     { id: `${key}-bottom`, pts: rect(w, d), O: [xa, ya, z0], U: [1, 0, 0], V: [0, 1, 0], out: [0, 0, -1], ...look },
-    wall('back', [xa, ya, z0], [1, 0, 0], [0, -1, 0], w, [...ring(2, w, true), ...edge()]),
+    wall('back', [xa, ya, z0], [1, 0, 0], [0, -1, 0], w, ring(2, w, true)),
     wall('left', [xa, ya, z0], [0, 1, 0], [-1, 0, 0], d, [...side(null), ...ring(3, d, false)]),
     wall('right', [xb, ya, z0], [0, 1, 0], [1, 0, 0], d, [...side(opening), ...ring(1, d, true)]),
-    wall('front', [xa, yb, z0], [1, 0, 0], [0, 1, 0], w, [...ring(0, w, false), ...edge()]),
+    wall('front', [xa, yb, z0], [1, 0, 0], [0, 1, 0], w, ring(0, w, false)),
   ];
   if (lid) walls.push({ id: `${key}-lid`, pts: rect(w, d), O: [xa, ya, z0 + h], U: [1, 0, 0], V: [0, 1, 0], out: [0, 0, 1], ...look });
-  const tips = [];
-  if (flaps && d > 0.3) {
-    const tri = [[0, 0], [d, 0], [d / 2, d / 2]];
-    const lines = [
-      { pts: [[d / 2, 0], [d / 2, d / 2]], kind: 'seam' },
-      { pts: [[0, 0], [d, 0]], kind: flaps.hot ? 'hot' : 'seam' },
-    ];
-    tips.push({ id: `${key}-flap-l`, pts: tri, O: [xa, ya, z0], U: [0, 1, 0], V: [-1, 0, 0], out: [0, 0, 1], lines, ...look });
-    tips.push({ id: `${key}-flap-r`, pts: tri, O: [xb, ya, z0], U: [0, 1, 0], V: [1, 0, 0], out: [0, 0, 1], lines, ...look });
-  }
-  return { walls, flapL: tips.slice(0, 1), flapR: tips.slice(1) };
+  return { walls };
 }
 
 /** One strap: a 4 cm band rising from the rim in the plane y = y0 (fold 1 = hanging down). */
@@ -131,7 +128,7 @@ function strap({ id, xMid, y0, zRim, front, fold = 0, squash = 1 }) {
 function anatomy(e = 0) {
   const lift = span(e, 0, 0.7), aside = span(e, 0.35, 1), sp = span(e, 0.2, 0.9);
   const outer = shell({
-    key: 'outer', xa: 0, xb: W, ya: 0, yb: D, h: H, ridges: true,
+    key: 'outer', xa: 0, xb: W, ya: 0, yb: D, h: H, vee: 'bottom',
     fill: FILL.duck, inner: FILL.duckBack, top: { at: SPEC.topstitch, t: 1 },
   }).walls;
   const shift = [lerp(0, -W - 6, aside), 0, lerp(0, H + 4, lift) - lerp(0, 18, aside)];
@@ -289,8 +286,8 @@ function stepBottom(t) {
     if (i === 1 && t > 0.24) lines.push(across(BOT, 'fold'));
     if (p.mark > 0 && i === 1) lines.push(across(0, 'mark'));
     if (p.mark > 0 && i === 2) lines.push(across(BOT, 'mark'));
-    if (i === 1 && t > 0.6) lines.push(across(0.3, 'stitch', 'out'));
-    if (i === 2 && t > 0.92) lines.push(across(BOT - 0.3, 'stitch', 'out'));
+    if (i === 1 && t > 0.6) lines.push(across(0.3, 'seam', 'out'));
+    if (i === 2 && t > 0.92) lines.push(across(BOT - 0.3, 'seam', 'out'));
     return {
       id: `bottom-${i}`, pts: rect(45, len), O: [0, s.a[0], s.a[1]], U: [1, 0, 0],
       V: [0, (s.b[0] - s.a[0]) / len, (s.b[1] - s.a[1]) / len], out: [0, s.out[0], s.out[1]],
@@ -323,89 +320,133 @@ function stepBottom(t) {
   };
 }
 
-/* ---------- Step 4: fold the outer at the centre crease, sew the sides ---------- */
+/* ---------- Step 4: tuck the bottom in — the centre crease goes inside ---------- */
 
-function foldedFlat(t, look, key) {
-  const fold = span(t, 0.04, 0.5);
-  const ridge = (v) => [{ pts: [[0.4, v], [44.6, v]], kind: 'stitch', side: 'out' }];
-  const A = { id: `${key}-a`, pts: rect(45, HALF), O: [0, 0, 0], U: [1, 0, 0], V: [0, 1, 0], out: [0, 0, 1], ...look, lines: ridge(Y1 + 0.3) };
-  let B = { id: `${key}-b`, pts: rect(45, HALF), O: [0, HALF, 0], U: [1, 0, 0], V: [0, 1, 0], out: [0, 0, 1], ...look, lines: ridge(BOT - 0.3) };
-  B = turn(B, [0, HALF, T / 2], [1, 0, 0], Math.PI * fold);
-  return { pieces: [A, B], fold };
+const GAP = 4 * T; // how close the walls come once the piece is folded flat
+
+/*
+  Cross-section (y, z) of the piece folded with its bottom tucked in: both ends
+  lift at the stitched folds (a U), the 12 cm bottom folds in on itself so the
+  centre crease goes 6 cm up inside (like a paper bag), then the whole thing is
+  laid down flat — 6 cm shorter than a plain fold in half, right sides together.
+*/
+function tuckSection(t, gap = GAP) {
+  const up = span(t, 0.04, 0.3), fold = span(t, 0.36, 0.72), lay = span(t, 0.78, 0.96);
+  const psi = Math.acos(gap / (2 * BOT)) * fold;
+  const c1 = [Y1, 0];
+  const tip = [Y1 + BOT * Math.cos(psi), BOT * Math.sin(psi)];
+  const c2 = [Y1 + 2 * BOT * Math.cos(psi), 0];
+  const a0 = Math.PI - (Math.PI / 2) * up, a3 = (Math.PI / 2) * up;
+  const end0 = [c1[0] + Y1 * Math.cos(a0), Y1 * Math.sin(a0)];
+  const end3 = [c2[0] + (86 - Y2) * Math.cos(a3), (86 - Y2) * Math.sin(a3)];
+  return [[end0, c1], [c1, tip], [tip, c2], [c2, end3]].map(([a, b]) => {
+    if (lay) { a = rot2(a, c1, (Math.PI / 2) * lay); b = rot2(b, c1, (Math.PI / 2) * lay); }
+    const l = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+    return { a, b, out: [-(b[1] - a[1]) / l, (b[0] - a[0]) / l] }; // right side = left of travel
+  });
 }
 
-function stepOuter(t) {
-  const { pieces, fold } = foldedFlat(t, { fill: FILL.duck, inner: FILL.duckBack }, 'outer');
-  const sew = span(t, 0.58, 0.95);
-  const arc = [];
-  for (let i = 0; i <= 16; i++) {
-    const a = (Math.PI * i) / 16;
-    arc.push([22.5, HALF + Math.cos(a) * (HALF + 4), T / 2 + Math.sin(a) * (HALF + 4) * 0.55]);
-  }
-  const z = T + 0.02;
+/** The four bands of the piece in 3D (far wall, bottom half, bottom half, near wall). */
+function tuckPieces(t, look, ghost = 1) {
+  const lens = [Y1, BOT, BOT, 86 - Y2];
+  const across = (v, kind) => ({ pts: [[0.4, v], [44.6, v]], kind, side: 'out' });
+  const lines = [[], [across(0.3, 'seam'), across(BOT, 'fold')], [across(BOT - 0.3, 'seam')], []];
+  return tuckSection(t).map((s, i) => ({
+    id: `tuck-${i}`, pts: rect(45, lens[i]), O: [0, s.a[0], s.a[1]], U: [1, 0, 0],
+    V: [0, (s.b[0] - s.a[0]) / lens[i], (s.b[1] - s.a[1]) / lens[i]], out: [0, s.out[0], s.out[1]],
+    ...look, lines: lines[i], opacity: i === 3 ? ghost : 1,
+  }));
+}
+
+const DUCK = { fill: FILL.duck, inner: FILL.duckBack };
+
+function stepTuck(t) {
+  const ghost = 1 - 0.55 * span(t, 0.34, 0.4) * (1 - span(t, 0.76, 0.82));
+  const end = span(t, 0.95, 1);
   return {
-    pieces,
+    pieces: tuckPieces(t, DUCK, ghost),
     over: [
-      { type: 'arrow', pts: arc, t: span(t, 0, 0.45), o: 1 - span(t, 0.48, 0.56) },
-      { type: 'label', p: [22.5, HALF, 0], text: 'centre crease', o: span(t, 0.5, 0.58), dy: 4 },
-      { type: 'line', pts: [[SPEC.seam, 0, z], [SPEC.seam, HALF, z]], t: sew, kind: 'hot' },
-      { type: 'line', pts: [[45 - SPEC.seam, 0, z], [45 - SPEC.seam, HALF, z]], t: sew, kind: 'hot' },
-      { type: 'label', p: [45, HALF / 2, z], text: '0.5 cm seam', o: span(t, 0.62, 0.7), dx: 9, hot: true },
-      { type: 'label', p: [22.5, HALF / 2, z], text: 'right sides together', o: span(t, 0.5, 0.58) },
+      { type: 'label', p: [22.5, Y1, 0], text: 'lift both ends at the stitched folds', o: span(t, 0.04, 0.1) * (1 - span(t, 0.3, 0.34)), dy: 7 },
+      { type: 'label', p: [22.5, HALF, 3], text: 'the bottom folds in', o: span(t, 0.4, 0.46) * (1 - span(t, 0.74, 0.78)), dy: -4, hot: true },
+      { type: 'dim', a: [47, Y1, 0], b: [47, Y1 - BOT, 0], text: 'centre 6 cm inside', o: end, hot: true },
+      { type: 'label', p: [22.5, Y1 / 2, GAP], text: 'right sides together', o: end },
     ],
-    focus: { pts: [[0, 0, 0], [45, 0, 0], [45, HALF, 0], [0, HALF, 0]], k: span(t, 0.5, 0.6) },
+    inset: { segs: tuckSection(t, 3), range: [0, 86] },
   };
 }
 
-/* ---------- Steps 4–5: stand the bag up and box the corners ---------- */
+/* ---------- Step 5: sew the sides through all the layers ---------- */
 
-function boxed(t, { key, look, standUp, d, hot, opening }) {
-  const sh = shell({
-    key, xa: SPEC.seam + d / 2, xb: 45 - SPEC.seam - d / 2, ya: HALF - d / 2, yb: HALF + d / 2,
-    h: HALF - d / 2, ...look, flaps: { hot }, opening,
-  });
-  const lay = (Math.PI / 2) * (1 - standUp);
-  const tilt = (ps) => (lay ? ps.map((p) => turn(p, [0, HALF, 0], [1, 0, 0], lay)) : ps);
-  const walls = tilt(sh.walls), fl = tilt(sh.flapL), fr = tilt(sh.flapR);
-  return { pieces: [...fl, ...inside(walls), ...outside(walls), ...fr], sh };
+function stepSides(t) {
+  const sew = span(t, 0.15, 0.85);
+  const z = GAP + 0.04;
+  return {
+    pieces: tuckPieces(1, DUCK, 1 - 0.5 * span(t, 0.86, 0.92)),
+    over: [
+      { type: 'line', pts: [[SPEC.seam, 0, z], [SPEC.seam, Y1, z]], t: sew, kind: 'hot' },
+      { type: 'line', pts: [[45 - SPEC.seam, 0, z], [45 - SPEC.seam, Y1, z]], t: sew, kind: 'hot' },
+      { type: 'label', p: [45, Y1 / 2, z], text: '0.5 cm seam', o: span(t, 0.2, 0.28), dx: 10, hot: true },
+      { type: 'label', p: [45, Y1 - BOT / 2, z], text: '4 layers here', o: span(t, 0.86, 0.92), dx: 10 },
+    ],
+    inset: { segs: tuckSection(1, 2), range: [Y1 - 13, Y1 + 3] },
+  };
 }
 
-function stepCorners(t) {
-  const d = D * span(t, 0.3, 0.82);
-  const hot = t > 0.84;
-  const { pieces } = boxed(t, {
-    key: 'outer', look: { fill: FILL.duckBack, inner: FILL.duck }, standUp: span(t, 0, 0.28), d, hot,
-  });
+/* ---------- Step 6: turn it out — the corners form by themselves ---------- */
+
+/** The sewn bag standing (stand 1) or lying flat (0), opened to depth d. */
+function openBox({ key, d, stand, look, opening, veeHot }) {
+  const walls = shell({
+    key, xa: SPEC.seam + d / 2, xb: 45 - SPEC.seam - d / 2, ya: Y1 - d / 2, yb: Y1 + d / 2,
+    h: Y1, ...look, opening, vee: 'bottom', veeHot,
+  }).walls;
+  const lay = (Math.PI / 2) * (1 - stand);
+  const ps = lay ? walls.map((p) => turn(p, [0, Y1, 0], [1, 0, 0], lay)) : walls;
+  return [...inside(ps), ...outside(ps)];
+}
+
+function stepTurnOut(t) {
+  const flip = span(t, 0.08, 0.26), stand = span(t, 0.3, 0.5), d = D * span(t, 0.52, 0.86);
   const xb = 45 - SPEC.seam - d / 2;
-  const o = span(t, 0.84, 0.92);
+  const o = span(t, 0.88, 0.94);
   return {
-    pieces,
-    over: [
-      { type: 'label', p: [xb, HALF + d / 4, 0], text: '12 cm seam', o, hot: true, dx: -9, dy: 6 },
-      { type: 'dim', a: [xb + 0.3, HALF, 0.1], b: [45 - SPEC.seam, HALF, 0.1], text: '6 cm', o },
-      { type: 'label', p: [xb, HALF, 16], text: 'side seam', o, dx: 10 },
+    pieces: [
+      ...fadeAll(tuckPieces(1, DUCK), 1 - flip),
+      ...fadeAll(openBox({ key: 'outer', d, stand, look: DUCK, veeHot: t > 0.88 }), flip),
     ],
-    focus: {
-      pts: [[xb - 14, HALF + d / 2, 0], [xb, HALF - d / 2, 0], [45 - SPEC.seam + 4, HALF, 0], [xb, HALF, 22]],
-      k: 0.75 * span(t, 0.82, 0.95),
-    },
+    over: [
+      { type: 'label', p: [22.5, Y1 / 2, GAP], text: 'turn it right side out', o: span(t, 0.02, 0.08) * (1 - span(t, 0.26, 0.3)) },
+      { type: 'label', p: [22.5, Y1, Y1 + 4], text: 'open it up', o: span(t, 0.52, 0.58) * (1 - span(t, 0.84, 0.88)) },
+      { type: 'dim', a: [xb, Y1 - d / 2, 0], b: [xb, Y1 + d / 2, 0], text: '12 cm base', o, hot: true },
+      { type: 'label', p: [xb, Y1, d / 2], text: 'corners form by themselves', o, dx: 13, dy: -5, hot: true },
+    ],
+    focus: { pts: [[xb - 22, Y1 + d / 2, 0], [xb, Y1 - d / 2, 0], [xb + 3, Y1, 0], [xb, Y1, 30]], k: 0.4 * o },
   };
 }
+
+/* ---------- Step 7: the lining — the same, with an opening in one side ---------- */
 
 function stepLining(t) {
-  const d = D * span(t, 0.05, 0.5);
-  const { pieces } = boxed(t, {
-    key: 'lining', look: { fill: FILL.satinBack, inner: FILL.satin }, standUp: 1, d, opening: OPEN,
-  });
+  const sew1 = span(t, 0.14, 0.31), sew2 = span(t, 0.35, 0.5);
+  const swap = span(t, 0.52, 0.58), stand = span(t, 0.58, 0.72), d = D * span(t, 0.72, 0.92);
+  const flat = fadeAll(tuckPieces(1, { fill: FILL.satin, inner: FILL.satinBack }), span(t, 0, 0.1) * (1 - swap));
+  const box = fadeAll(openBox({ key: 'lining', d, stand, look: { fill: FILL.satinBack, inner: FILL.satin }, opening: OPEN }), swap);
+  const z = GAP + 0.04, R = 45 - SPEC.seam;
+  const g0 = Y1 - OPEN[1], g1 = Y1 - OPEN[0]; // the gap while flat (y runs from the top edge)
   const xb = 45 - SPEC.seam - d / 2;
-  const o = span(t, 0.55, 0.65);
+  const o = span(t, 0.92, 0.97);
   return {
-    pieces,
+    pieces: [...flat, ...box],
     over: [
-      { type: 'line', pts: [[xb + 0.1, HALF, OPEN[0]], [xb + 0.1, HALF, OPEN[1]]], kind: 'open', o },
-      { type: 'label', p: [xb, HALF, (OPEN[0] + OPEN[1]) / 2], text: '8 cm opening', o, dx: 13, hot: true },
+      { type: 'line', pts: [[SPEC.seam, 0, z], [SPEC.seam, Y1, z]], t: span(t, 0.14, 0.5), kind: 'hot', o: 1 - swap },
+      { type: 'line', pts: [[R, 0, z], [R, g0, z]], t: sew1, kind: 'hot', o: 1 - swap },
+      { type: 'line', pts: [[R, g1, z], [R, Y1, z]], t: sew2, kind: 'hot', o: 1 - swap },
+      { type: 'line', pts: [[R + 0.3, g0, z], [R + 0.3, g1, z]], kind: 'open', o: span(t, 0.31, 0.35) * (1 - swap) },
+      { type: 'label', p: [R, (g0 + g1) / 2, z], text: '8 cm opening', o: span(t, 0.31, 0.35) * (1 - swap), dx: 12, hot: true },
+      { type: 'line', pts: [[xb + 0.1, Y1, OPEN[0]], [xb + 0.1, Y1, OPEN[1]]], kind: 'open', o },
+      { type: 'label', p: [xb, Y1, (OPEN[0] + OPEN[1]) / 2], text: '8 cm opening', o, dx: 13, hot: true },
     ],
-    focus: { pts: [[xb, HALF - d / 2, 0], [xb, HALF + d / 2, 0], [xb, HALF, 18], [45, HALF, 0]], k: span(t, 0.5, 0.62) },
+    focus: { pts: [[xb - 22, Y1 + d / 2, 0], [xb, Y1 - d / 2, 0], [xb, Y1, 30], [xb + 3, Y1, 0]], k: 0.4 * o },
   };
 }
 
@@ -413,13 +454,13 @@ function stepLining(t) {
 
 function joinState(t) {
   const strapFold = span(t, 0.22, 0.42);
-  const outer = shell({ key: 'outer', xa: 0, xb: W, ya: 0, yb: D, h: HB, fill: FILL.duck, inner: FILL.duckBack, ridges: true }).walls;
+  const outer = shell({ key: 'outer', xa: 0, xb: W, ya: 0, yb: D, h: HB, fill: FILL.duck, inner: FILL.duckBack, vee: 'bottom' }).walls;
   const sq = lerp(1, 0.7, strapFold);
   const back = strap({ id: 'strap-back', xMid: W / 2, y0: -0.05, zRim: HB, front: false, fold: strapFold, squash: sq });
   const front = strap({ id: 'strap-front', xMid: W / 2, y0: D + 0.05, zRim: HB, front: true, fold: strapFold, squash: sq });
   const lining = fadeAll(shell({
     key: 'lining', xa: -LINE, xb: W + LINE, ya: -LINE, yb: D + LINE, z0: lerp(46, 0, span(t, 0.45, 0.72)), h: HB,
-    fill: FILL.satinBack, inner: FILL.satin, opening: OPEN, top: { at: SPEC.seam, t: span(t, 0.76, 1), kind: 'hot' },
+    fill: FILL.satinBack, inner: FILL.satin, opening: OPEN, vee: 'bottom', top: { at: SPEC.seam, t: span(t, 0.76, 1), kind: 'hot' },
   }).walls, span(t, 0.4, 0.48));
   return [...inside(lining), back, ...inside(outer), ...outside(outer), front, ...outside(lining)];
 }
@@ -448,13 +489,13 @@ function stepFinish(t) {
   const before = fadeAll(joinState(1), 1 - turned);
 
   const outer = shell({
-    key: 'outer', xa: 0, xb: W, ya: 0, yb: D, h: H, fill: FILL.duck, inner: FILL.duckBack, ridges: true,
+    key: 'outer', xa: 0, xb: W, ya: 0, yb: D, h: H, fill: FILL.duck, inner: FILL.duckBack, vee: 'bottom',
     top: stitch > 0 ? { at: SPEC.topstitch, t: stitch, kind: 'hotstitch' } : null,
   }).walls;
   const ext = (H - LINE) * (1 - push);
   const tube = fadeAll(shell({
     key: 'tube', xa: LINE, xb: W - LINE, ya: LINE, yb: D - LINE, z0: H, h: Math.max(ext, 0.01),
-    fill: FILL.satin, inner: FILL.satinBack, lid: true,
+    fill: FILL.satin, inner: FILL.satinBack, lid: true, vee: 'top',
     opening: close < 1 ? [ext - OPEN[1], ext - OPEN[0]] : null,
   }).walls, 1 - span(t, 0.66, 0.78));
   const lining = fadeAll(shell({
@@ -531,37 +572,45 @@ export const STEPS = [
     details: [
       'Fold the outer in half across the middle and press a crease. Open it out again.',
       'Measure 6 cm (2⅜ in) from the crease towards each end and mark a line across the whole width of the piece.',
-      'Fold along the first line and stitch close to the fold. Open it out, then fold and stitch along the second line the same way.',
-      'The two stitched folds, 12 cm (4¾ in) apart, become the crisp edges of the bottom of the bag.',
+      'Fold along the first line, right sides together, and stitch close to the fold. Open it out, then fold and stitch along the second line the same way.',
+      'The two stitched folds, 12 cm (4¾ in) apart, are the edges of the bottom; the centre crease is its middle.',
     ],
   },
   {
-    title: 'Sew the sides', scene: stepOuter, duration: 4, stitch: 'straight', sew: [[0.58, 0.95, 'duck']],
+    title: 'Tuck the bottom in', scene: stepTuck, duration: 8, pad: 0.22,
+    uses: ['soraco-sewing-clips'],
+    text: 'Lift both ends at the stitched folds and bring them together: the bottom folds in and the centre crease goes 6 cm (2⅜ in) inside. Lay it flat.',
+    details: [
+      'Lay the piece right side up and lift both ends, so it bends at the two stitched folds.',
+      'Bring the ends together. The 12 cm (4¾ in) bottom folds in on itself and the centre crease goes inside, 6 cm (2⅜ in) up between the layers — like the bottom of a paper bag.',
+      'Lay it flat, right sides together. The stitched folds are now the bottom edge, and the folded piece is 6 cm shorter than a plain fold in half.',
+    ],
+  },
+  {
+    title: 'Sew the sides', scene: stepSides, duration: 4.5, stitch: 'straight', pad: 0.22, sew: [[0.15, 0.85, 'duck']],
     uses: ['soraco-sewing-clips', 'janome-hd2200'],
-    text: 'Fold the outer in half on the centre crease, right sides together. Sew both sides with a 0.5 cm (³⁄₁₆ in) seam.',
+    text: 'Keep the bottom tucked in and sew both sides with a 0.5 cm (³⁄₁₆ in) seam — through all the layers, four at the bottom.',
     details: [
-      'Fold the outer in half on the centre crease, right sides together, so the stitched folds lie on top of each other.',
-      'Clip or pin the sides and sew both side seams, 0.5 cm (³⁄₁₆ in) from the edge. Leave the top open.',
+      'Clip the sides so the tucked-in bottom stays in place.',
+      'Sew both side seams, 0.5 cm (³⁄₁₆ in) from the edge, all the way down. At the bottom the seam goes through four layers — the front, the two halves of the tucked bottom and the back. Leave the top open.',
     ],
   },
   {
-    title: 'Box the corners', scene: stepCorners, duration: 4.5, stitch: 'straight', sew: [[0.84, 1, 'duck']],
-    uses: ['quilting-rulers-set', 'sewline-air-erasable-pen', 'janome-hd2200'],
-    text: 'Flatten a bottom corner into a triangle, side seam on the fold. Sew across 6 cm (2⅜ in) from the tip — a 12 cm (4¾ in) seam. Repeat.',
+    title: 'Turn it out', scene: stepTurnOut, duration: 6,
+    text: 'Turn the outer right side out and open it up: the bottom unfolds into a 12 cm (4¾ in) base, and the corners form by themselves.',
     details: [
-      'With the outer still inside out, open one bottom corner and flatten it into a triangle, so the side seam lies right on top of the bottom fold.',
-      'Measure 6 cm (2⅜ in) from the tip and draw a line straight across. It is 12 cm (4¾ in) long, and its ends meet the two stitched folds.',
-      'Sew along the line. Repeat on the other corner — the bag now stands on a 12 cm (4¾ in) base.',
+      'Turn the outer right side out through the top.',
+      'Open it up and push the bottom out. The tucked bottom unfolds into a flat 12 cm (4¾ in) base, and where the side seams caught it, neat corners form by themselves — no extra corner seams needed.',
     ],
   },
   {
-    title: 'Sew the lining', scene: stepLining, duration: 3.5, stitch: 'straight', sew: [[0.05, 0.5, 'satin']],
+    title: 'Sew the lining', scene: stepLining, duration: 6.5, stitch: 'straight', sew: [[0.14, 0.5, 'satin']],
     uses: ['soraco-sewing-clips', 'janome-hd2200'],
-    text: 'Sew the satin lining the same way — but leave an 8 cm (3⅛ in) opening low in one side seam. You will turn the bag through it.',
+    text: 'Make the satin lining the same way — but leave an 8 cm (3⅛ in) opening in one side seam. You will turn the bag through it.',
     details: [
-      'Fold the satin lining at the fold line, right sides together, and sew both side seams, 0.5 cm (³⁄₁₆ in) from the edge.',
-      'On one side, leave an 8 cm (3⅛ in) gap in the seam, low down near the bottom — you will turn the bag through it.',
-      'Box both corners exactly like the outer: 6 cm (2⅜ in) from the tip, a 12 cm (4¾ in) seam. Keep the lining inside out.',
+      'Make the lining exactly like the outer: crease the centre, stitch the two folds 6 cm (2⅜ in) from it, tuck the bottom in.',
+      'Sew both side seams, 0.5 cm (³⁄₁₆ in) from the edge — but on one side leave an 8 cm (3⅛ in) gap, low down just above the tucked bottom. You will turn the bag through it.',
+      'Keep the lining inside out.',
     ],
   },
   {
@@ -592,7 +641,7 @@ export const LEGEND = [
   { n: 1, title: 'Outer', text: 'cotton duck · cut 86 × 45 cm (33⅞ × 17¾ in), folded at the bottom' },
   { n: 2, title: 'Lining', text: 'satin · cut 86 × 45 cm, the same as the outer' },
   { n: 3, title: 'Straps ×2', text: 'cut 100 × 16 cm (39⅜ × 6¼ in) · folded in four to 4 cm (1⅝ in)' },
-  { n: 4, title: 'Bottom', text: 'two folds stitched 6 cm (2⅜ in) each side of the centre → a 12 cm (4¾ in) base; corners boxed 6 cm from the tip' },
+  { n: 4, title: 'Bottom', text: 'two folds stitched 6 cm (2⅜ in) each side of the centre crease, tucked in before the side seams → a 12 cm (4¾ in) base, the corners form by themselves' },
   { n: 5, title: 'Topstitch', text: '1 cm (⅜ in) from the top edge · all seams 0.5 cm (³⁄₁₆ in)' },
 ];
 
@@ -646,10 +695,11 @@ function insetSvg({ segs, range }, cam) {
   const cy = y0 + bh * 0.8;
   const P = ([y, z]) => `${(x0 + 5 * u + (y - range[0]) * k).toFixed(2)} ${(cy - z * k).toFixed(2)}`;
   const lines = segs.map((s) => `<path class="inset__seg" d="M${P(s.a)}L${P(s.b)}" stroke-width="${(1.1 * u).toFixed(2)}"/>`).join('');
+  const box = `x="${x0.toFixed(2)}" y="${y0.toFixed(2)}" width="${bw.toFixed(2)}" height="${bh.toFixed(2)}" rx="${(2 * u).toFixed(2)}"`;
   return (
-    `<g class="inset"><rect x="${x0.toFixed(2)}" y="${y0.toFixed(2)}" width="${bw.toFixed(2)}" height="${bh.toFixed(2)}" rx="${(2 * u).toFixed(2)}"/>` +
+    `<g class="inset"><clipPath id="inset-clip"><rect ${box}/></clipPath><rect ${box}/>` +
     `<text x="${(x0 + 2.4 * u).toFixed(2)}" y="${(y0 + 4.2 * u).toFixed(2)}" font-size="${(2.6 * u).toFixed(2)}">END VIEW</text>` +
-    lines + `</g>`
+    `<g clip-path="url(#inset-clip)">${lines}</g></g>`
   );
 }
 
@@ -726,7 +776,8 @@ export function renderStep(k, t) {
     const f = fit(pointBounds(s.focus.pts), 0.3);
     cam = cam.map((v, i) => lerp(v, f[i], s.focus.k));
   }
-  const floor = k >= 4 ? shadowSvg(cam, k >= 6 ? [W / 2, D / 2, 0] : [22.5, HALF, 0]) : '';
+  const floorAt = k >= 8 ? [W / 2, D / 2, 0] : k >= 6 ? [22.5, Y1, 0] : k === 5 ? [22.5, Y1 / 2, 0] : null;
+  const floor = floorAt ? shadowSvg(cam, floorAt) : '';
   const sewing = sewingAt(STEPS[k], t);
   return {
     body: floor + s.pieces.map(pieceSvg).join('') + s.over.map((o) => overlaySvg(o, cam)).join('') +
