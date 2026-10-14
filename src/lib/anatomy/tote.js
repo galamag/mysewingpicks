@@ -418,7 +418,7 @@ function stepTurnOut(t) {
       { type: 'label', p: [22.5, Y1 / 2, GAP], text: 'turn it right side out', o: span(t, 0.02, 0.08) * (1 - span(t, 0.26, 0.3)) },
       { type: 'label', p: [22.5, Y1, Y1 + 4], text: 'open it up', o: span(t, 0.52, 0.58) * (1 - span(t, 0.84, 0.88)) },
       { type: 'dim', a: [xb, Y1 - d / 2, 0], b: [xb, Y1 + d / 2, 0], text: '12 cm base', o, hot: true },
-      { type: 'label', p: [xb, Y1, d / 2], text: 'corners form by themselves', o, dx: 13, dy: -5, hot: true },
+      { type: 'label', p: [xb, Y1, d / 2], text: 'corners form by themselves', o, dx: -14, dy: -14, hot: true },
     ],
     focus: { pts: [[xb - 22, Y1 + d / 2, 0], [xb, Y1 - d / 2, 0], [xb + 3, Y1, 0], [xb, Y1, 30]], k: 0.4 * o },
   };
