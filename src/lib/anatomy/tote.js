@@ -13,7 +13,7 @@
   paper bag) before the side seams — so the corners form by themselves.
 */
 import {
-  at, band, bounds, lerp, offset, overlayPoints, overlaySvg, pieceSvg,
+  at, band, bounds, esc, lerp, offset, overlayPoints, overlaySvg, pieceSvg,
   pointBounds, project, turn,
 } from './iso.js';
 
@@ -583,7 +583,11 @@ export const STEPS = [
   },
 ];
 
-/** Every chip key the drawing uses — each language must have them all (tote.text.js). */
+/**
+  Every chip key the drawing uses — each language must have them all (tote.text.js).
+  The keys are sampled at t = 0, so every scene's `over` must be a literal list:
+  never add a labelled overlay only for some t, or its key would be missed here.
+*/
 export const LABEL_KEYS = [...new Set(STEPS.slice(1).flatMap((s) => s.scene(0).over.map((o) => o.label).filter(Boolean)))];
 
 const labelOf = (L, key) => {
@@ -645,7 +649,7 @@ function insetSvg({ segs, range }, cam, title) {
   const box = `x="${x0.toFixed(2)}" y="${y0.toFixed(2)}" width="${bw.toFixed(2)}" height="${bh.toFixed(2)}" rx="${(2 * u).toFixed(2)}"`;
   return (
     `<g class="inset"><clipPath id="inset-clip"><rect ${box}/></clipPath><rect ${box}/>` +
-    `<text x="${(x0 + 2.4 * u).toFixed(2)}" y="${(y0 + 4.2 * u).toFixed(2)}" font-size="${(2.6 * u).toFixed(2)}">${title}</text>` +
+    `<text x="${(x0 + 2.4 * u).toFixed(2)}" y="${(y0 + 4.2 * u).toFixed(2)}" font-size="${(2.6 * u).toFixed(2)}">${esc(title)}</text>` +
     `<g clip-path="url(#inset-clip)">${lines}</g></g>`
   );
 }
@@ -677,7 +681,7 @@ function machineSvg(m, cam, stitchName) {
   return (
     `<g class="machine" opacity="${m.o.toFixed(3)}">` +
     `<rect class="machine__box" x="${X(0)}" y="${Y(0)}" width="${L(38)}" height="${L(25)}" rx="${L(2)}"/>` +
-    `<text x="${X(2.4)}" y="${Y(4.2)}" font-size="${L(2.6)}">${stitchName.toUpperCase()}</text>` +
+    `<text x="${X(2.4)}" y="${Y(4.2)}" font-size="${L(2.6)}">${esc(stitchName.toUpperCase())}</text>` +
     `<rect class="machine__bed" x="${X(3)}" y="${Y(19)}" width="${L(32)}" height="${L(2.6)}" rx="${L(1)}"/>` +
     `<rect class="machine__body" x="${X(27)}" y="${Y(8)}" width="${L(5)}" height="${L(11.5)}"/>` +
     `<rect class="machine__body" x="${X(10.5)}" y="${Y(6)}" width="${L(23)}" height="${L(4.6)}" rx="${L(2)}"/>` +

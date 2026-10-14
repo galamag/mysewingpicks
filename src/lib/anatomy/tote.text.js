@@ -11,6 +11,11 @@ export const TOTE_TEXT = { en, ru };
 if (en.steps.length !== STEPS.length) throw new Error(`tote.en: ${en.steps.length} steps, the model has ${STEPS.length}`);
 for (const key of LABEL_KEYS) if (!en.labels[key]) throw new Error(`tote.en: label "${key}" is missing`);
 for (const key of Object.keys(en.labels)) if (!LABEL_KEYS.includes(key)) throw new Error(`tote.en: label "${key}" is not used by the drawing`);
+STEPS.forEach((step, k) => {
+  if (step.stitch && !Object.hasOwn(en.stitches, step.stitch)) {
+    throw new Error(`tote: step ${k} uses stitch "${step.stitch}", but tote.en.js has no stitches.${step.stitch}`);
+  }
+});
 for (const [lang, text] of Object.entries(TOTE_TEXT)) if (lang !== 'en') assertSameShape(en, text, `tote.${lang}`);
 
 export function toteText(lang) {

@@ -146,7 +146,7 @@ export function pieceSvg(p) {
     { type: 'arrow', pts: [world…], t }             motion hint
   Every overlay takes an optional `o` (opacity).
 */
-const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
 function chip(x, y, text, u, hot) {
   const fs = 3.5 * u;

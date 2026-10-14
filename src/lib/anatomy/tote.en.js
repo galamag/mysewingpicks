@@ -1,7 +1,10 @@
 /* Tote bag figure — English texts. Every language has the same shape
    (tote.text.js checks it). `steps` are index-aligned with STEPS in tote.js:
    step 0 = the finished bag (title + text), steps 1–9 also have `details`.
-   `labels` — the chips in the drawing, by the keys tote.js uses. */
+   `labels` — the chips in the drawing, by the keys tote.js uses.
+   Function values (ui.dot, ui.stepOf, ui.machine) keep their parameters in every
+   language: (i, title), (k, n), (stitch). A language may order them freely or
+   leave one out of the sentence, but the signature stays the same. */
 export default {
   ui: {
     fig: 'Fig. 1',
