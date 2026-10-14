@@ -17,7 +17,7 @@ import ru from './ru.js';
 
 export const DEFAULT_LOCALE = 'en';
 /** Languages that are BUILT (have pages). */
-export const LOCALES = ['en'];
+export const LOCALES = ['en', 'ru'];
 export const LANGS = {
   en: { label: 'EN', name: 'English', ogLocale: 'en_US' },
   ru: { label: 'RU', name: 'Русский', ogLocale: 'ru_RU' },

@@ -32,6 +32,12 @@ const alternates = LOCALES.length > 1
 // link. One own image for the whole site (public/assets/og-image.jpg, 1200×630);
 // never an Amazon product image. Title/description come from each page.
 const ogImage = new URL('/assets/og-image.jpg', Astro.site).href;
+
+// Google Fonts per language. Fraunces has no Cyrillic → Russian headings use Lora (styles.css :root:lang(ru)).
+const FONTS = {
+  en: 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Nunito+Sans:wght@400;600;700&display=swap',
+  ru: 'https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,500&family=Nunito+Sans:wght@400;600;700&display=swap',
+};
 ---
 <!DOCTYPE html>
 <html lang={lang}>
@@ -65,7 +71,7 @@ const ogImage = new URL('/assets/og-image.jpg', Astro.site).href;
   <!-- Warm, cozy fonts (Google Fonts; layout still works without them). -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href={FONTS[lang] ?? FONTS.en} rel="stylesheet" />
 
   <!-- The hashed <link rel="stylesheet"> for our global CSS is injected here by
        Astro (from the `import '../styles/styles.css'` above). No manual link. -->
