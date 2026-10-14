@@ -1,0 +1,43 @@
+---
+/*
+  Privacy & Cookies page. Required by the Amazon Associates Program Policies
+  (Participation Requirements §3(e)): disclose how cookies and similar
+  technologies are used by us and by third parties (including Amazon), and how
+  visitor data is collected and used. Keep it TRUE to what the site actually
+  loads — if a new service is added (analytics, a form, another embed…),
+  update this page and the "Last updated" date.
+  One template for every language: the texts (incl. the "Last updated" line)
+  live in each language's dictionary (src/i18n/<lang>.js, pages.privacy); the
+  URLs below are shared by all of them and passed to bodyHtml().
+*/
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { localePaths, langOf, t } from '../../i18n/index.js';
+
+export const getStaticPaths = localePaths;
+const lang = langOf(Astro.params);
+const { pages: { privacy: text } } = t(lang);
+
+const links = {
+  amazonPrivacy: 'https://www.amazon.com/gp/help/customer/display.html?nodeId=GX7NJQ4ZB8MHFRNJ',
+  amazonAds: 'https://www.amazon.com/gp/help/customer/display.html?nodeId=GLVB9XDF9M8MU7UZ',
+  amazonAdPrefs: 'https://www.amazon.com/adprefs',
+  cloudflareCookies: 'https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/',
+  googlePrivacy: 'https://policies.google.com/privacy',
+  youtube: 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg',
+};
+---
+<BaseLayout lang={lang} page="privacy" title={text.title} description={text.description}>
+  <main>
+    <section class="section">
+      <div class="container">
+        <article class="about legal">
+          <span class="eyebrow">{text.eyebrow}</span>
+          <h1>{text.heading}</h1>
+          <p class="legal__updated">{text.updated}</p>
+
+          <Fragment set:html={text.bodyHtml(links)} />
+        </article>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

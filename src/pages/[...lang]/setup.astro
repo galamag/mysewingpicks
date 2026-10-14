@@ -1,0 +1,31 @@
+---
+/* My Setup page — filming gear (lights, tripod, camera, laptop, desk) for
+   viewers who want to film their own sewing videos. One template for every
+   language (src/i18n). Product cards are rendered STATICALLY at build from
+   src/data/products.js (category "setup"). */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductSections from '../../components/ProductSections.astro';
+import { localePaths, langOf, t } from '../../i18n/index.js';
+
+export const getStaticPaths = localePaths;
+const lang = langOf(Astro.params);
+const { brand, ui, pages: { setup: text } } = t(lang);
+---
+<BaseLayout lang={lang} page="setup" active="setup" title={text.title} description={text.description}>
+  <main>
+    <section class="section section--catalog">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">{brand}</span>
+          <h2>{text.heading}</h2>
+          <p>{text.intro}</p>
+        </div>
+
+        <!-- Page-level affiliate disclosure, shown before any affiliate link. -->
+        <p class="page-disclosure">{ui.pageDisclosure}</p>
+
+        <ProductSections category="setup" lang={lang} />
+      </div>
+    </section>
+  </main>
+</BaseLayout>

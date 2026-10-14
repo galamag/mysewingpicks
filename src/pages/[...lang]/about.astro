@@ -1,0 +1,36 @@
+---
+/*
+  About page — one template for every language (src/i18n, pages.about).
+  Content is the same warm, personal copy as the old about.html, kept in the
+  dictionary and baked into the page as static text at build.
+  Header/Footer come from BaseLayout. Visually identical to the original.
+*/
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { localePaths, langOf, t } from '../../i18n/index.js';
+
+export const getStaticPaths = localePaths;
+const lang = langOf(Astro.params);
+const { pages: { about: text } } = t(lang);
+// One space inside each <p>, as the hand-written markup had (browsers ignore it; keeps the HTML byte-identical).
+const padded = (html) => ` ${html} `;
+---
+<BaseLayout lang={lang} page="about" active="about" title={text.title} description={text.description}>
+  <main>
+    <section class="section">
+      <div class="container">
+        <article class="about">
+          <span class="eyebrow">{text.eyebrow}</span>
+          <h1>{text.heading}</h1>
+
+          {text.paragraphsHtml.map((html) => <p set:html={padded(html)} />)}
+
+          <p class="about__signature">{text.signature}</p>
+
+          <a class="btn btn--primary"
+             href="https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg"
+             target="_blank" rel="noopener">{text.button}</a>
+        </article>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

@@ -9,8 +9,10 @@
 import ProductCard from './ProductCard.astro';
 import { products } from '../data/products.js';
 import { categories } from '../data/categories.js';
+import { t } from '../i18n/index.js';
+import { groupTitle } from '../i18n/content.js';
 
-const { category } = Astro.props;
+const { category, lang } = Astro.props;
 const config = categories[category];
 if (!config) throw new Error(`ProductSections: unknown category "${category}"`);
 
@@ -23,12 +25,12 @@ for (const p of items) {
 }
 
 const sections = config.groups
-  .map((g) => ({ ...g, items: items.filter((p) => p.group === g.id) }))
+  .map((g) => ({ ...g, title: groupTitle(category, g.id, lang), items: items.filter((p) => p.group === g.id) }))
   .filter((s) => s.items.length > 0);
 const showNav = sections.length > 1;
 ---
 {showNav && (
-  <nav class="section-chips" aria-label="Jump to section">
+  <nav class="section-chips" aria-label={t(lang).ui.jumpToSection}>
     <div class="section-chips__track">
       {sections.map((s) => (
         <a class="section-chip" href={`#${s.id}`}>
@@ -43,7 +45,7 @@ const showNav = sections.length > 1;
   <section class="product-section" id={s.id} aria-labelledby={`${s.id}-title`}>
     {showNav && <h3 class="product-section__title" id={`${s.id}-title`}>{s.title}</h3>}
     <div class="product-grid">
-      {s.items.map((product) => <ProductCard product={product} />)}
+      {s.items.map((product) => <ProductCard product={product} lang={lang} />)}
     </div>
   </section>
 ))}

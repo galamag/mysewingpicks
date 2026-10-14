@@ -1,0 +1,102 @@
+---
+/* Home page — one template for every language (src/i18n). All copy comes from
+   the dictionary (pages.home) and is baked static at build. */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { localePaths, langOf, pageUrl, t } from '../../i18n/index.js';
+import { projectBySlug } from '../../data/projects.js';
+import { projectText } from '../../i18n/content.js';
+
+export const getStaticPaths = localePaths;
+const lang = langOf(Astro.params);
+const { brand, ui, pages: { home: text } } = t(lang);
+const tote = projectText(projectBySlug('tote-bag'), lang);
+
+const youtube = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
+// One space inside the <p>, as the hand-written markup had (browsers ignore it; keeps the HTML byte-identical).
+const padded = (html) => ` ${html} `;
+---
+<BaseLayout lang={lang} page="home" active="home" title={text.title} description={text.description}>
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <span class="eyebrow">{text.eyebrow}</span>
+        <h1>{brand}</h1>
+        <p class="hero__tagline">{text.tagline}</p>
+        <p class="hero__blurb" set:html={padded(text.blurbHtml)} />
+        <div class="hero__actions">
+          <a class="btn btn--primary" href={pageUrl('tools', lang)}>{text.browse}</a>
+          <a class="btn btn--youtube" href={youtube} target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+            <span>{ui.watchOnYouTube}</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- WELCOME / CATEGORY PREVIEW -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">{text.shelves.eyebrow}</span>
+          <h2>{text.shelves.heading}</h2>
+          <p>{text.shelves.intro}</p>
+        </div>
+
+        <div class="category-grid">
+          <a class="category-card category-card--tools" href={pageUrl('tools', lang)}>
+            <div class="category-card__icon" aria-hidden="true">✂️</div>
+            <h3>{text.cards.tools.heading}</h3>
+            <p>{text.cards.tools.text}</p>
+            <span class="category-card__more">{text.cards.tools.more}</span>
+          </a>
+
+          <a class="category-card category-card--fabrics" href={pageUrl('fabrics', lang)}>
+            <div class="category-card__icon" aria-hidden="true">🧵</div>
+            <h3>{text.cards.fabrics.heading}</h3>
+            <p>{text.cards.fabrics.text}</p>
+            <span class="category-card__more">{text.cards.fabrics.more}</span>
+          </a>
+
+          <a class="category-card category-card--setup" href={pageUrl('setup', lang)}>
+            <div class="category-card__icon" aria-hidden="true">📷</div>
+            <h3>{text.cards.setup.heading}</h3>
+            <p>{text.cards.setup.text}</p>
+            <span class="category-card__more">{text.cards.setup.more}</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEW-ALONG PROJECTS -->
+    <section class="section section--tight">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">{text.sewAlong.eyebrow}</span>
+          <h2>{text.sewAlong.heading}</h2>
+          <p>{text.sewAlong.intro}</p>
+        </div>
+        <div class="category-grid category-grid--single">
+          <a class="category-card category-card--fabrics" href={pageUrl('project/tote-bag', lang)}>
+            <div class="category-card__icon" aria-hidden="true">{tote.icon}</div>
+            <h3>{tote.title}</h3>
+            <p>{tote.teaser}</p>
+            <span class="category-card__more">{text.sewAlong.more}</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- YOUTUBE CALL-OUT -->
+    <section class="section section--tight">
+      <div class="container">
+        <div class="about" style="text-align:center;">
+          <span class="eyebrow">{text.channel.eyebrow}</span>
+          <h2>{text.channel.heading}</h2>
+          <p>{text.channel.text}</p>
+          <a class="btn btn--primary" href={youtube} target="_blank" rel="noopener">{text.channel.button}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

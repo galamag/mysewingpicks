@@ -5,18 +5,21 @@
   YouTube runs (no player, no cookies). The player is the privacy-enhanced
   youtube-nocookie.com embed. Without JS the button is a plain link to YouTube.
 */
-const { id, title } = Astro.props;
+import { t } from '../i18n/index.js';
+
+const { id, title, lang } = Astro.props;
+const { ui } = t(lang);
 const watch = `https://www.youtube.com/watch?v=${id}`;
 ---
 <div class="yt" data-yt={id} data-title={title}>
-  <a class="yt__poster" href={watch} target="_blank" rel="noopener" aria-label={`Play video: ${title}`}>
+  <a class="yt__poster" href={watch} target="_blank" rel="noopener" aria-label={ui.playVideo(title)}>
     <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" width="480" height="360" loading="lazy" decoding="async" />
     <span class="yt__play" aria-hidden="true">
       <svg viewBox="0 0 68 48"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.2.3 34 .3 34 .3s-21.2 0-26.5 1.4a8.5 8.5 0 0 0-6 6C.1 13 .1 24 .1 24s0 11 1.4 16.3a8.5 8.5 0 0 0 6 6C12.8 47.7 34 47.7 34 47.7s21.2 0 26.5-1.4a8.5 8.5 0 0 0 6-6C67.9 35 67.9 24 67.9 24s0-11-1.4-16.3Z" fill="#c4302b"/><path d="M45 24 27 14v20z" fill="#fff"/></svg>
     </span>
   </a>
 </div>
-<p class="yt__note"><a href={watch} target="_blank" rel="noopener">Watch on YouTube</a></p>
+<p class="yt__note"><a href={watch} target="_blank" rel="noopener">{ui.watchOnYouTube}</a></p>
 
 <script>
   document.querySelectorAll<HTMLElement>('[data-yt]').forEach((box) => {

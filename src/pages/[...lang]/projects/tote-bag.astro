@@ -1,0 +1,74 @@
+---
+/*
+  Project page: the tote bag. Animated anatomy + steps (ToteAnatomy), the
+  maker's video (YouTube loads only when tapped) and "What you'll need"
+  (catalog cards). Data: src/data/projects.js · model: src/lib/anatomy/tote.js.
+  One template for every language (texts: src/i18n).
+*/
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ToteAnatomy from '../../../components/ToteAnatomy.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import YouTubeVideo from '../../../components/YouTubeVideo.astro';
+import { projectBySlug } from '../../../data/projects.js';
+import { products } from '../../../data/products.js';
+import { localePaths, langOf, pageUrl, t } from '../../../i18n/index.js';
+import { projectText } from '../../../i18n/content.js';
+
+export const getStaticPaths = localePaths;
+const lang = langOf(Astro.params);
+const project = projectText(projectBySlug('tote-bag'), lang);
+const { ui, pages: { project: text } } = t(lang);
+const needs = project.needs.map((id) => {
+  const p = products.find((x) => x.id === id);
+  if (!p) throw new Error(`tote-bag: unknown product "${id}" in projects.js`);
+  return p;
+});
+---
+<BaseLayout lang={lang} page="project/tote-bag" active="projects" title={project.pageTitle} description={project.pageDescription}>
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">{text.eyebrow}</span>
+          <h2>{project.title}</h2>
+          <p>{project.blurb}</p>
+        </div>
+
+        <!-- Page-level affiliate disclosure, shown before any affiliate link. -->
+        <p class="page-disclosure">{ui.pageDisclosureSome}</p>
+
+        <ToteAnatomy />
+      </div>
+    </section>
+
+    <section class="section section--tight">
+      <div class="container project-video">
+        <div class="section-head">
+          <span class="eyebrow">{text.videoEyebrow}</span>
+          <h2>{text.videoHeading}</h2>
+          <p>{project.videoIntro}</p>
+        </div>
+        <YouTubeVideo id={project.video} title={project.videoTitle} lang={lang} />
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">{text.needsEyebrow}</span>
+          <h2>{text.needsHeading}</h2>
+          <p>{project.needsIntro}</p>
+        </div>
+        <div class="product-grid">
+          {needs.map((product) => <ProductCard product={product} lang={lang} />)}
+        </div>
+        <p class="project-more"><a href={pageUrl('projects', lang)}>{text.more}</a></p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .project-video { max-width: 760px; }
+  .project-more { text-align: center; margin-top: 32px; font-weight: 700; }
+</style>

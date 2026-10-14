@@ -6,6 +6,7 @@
   Shows ONLY: photo + name + description + "View on Amazon" + "(paid link)".
   NO price, NO rating, NO review count (Amazon Associates compliance).
   The "(paid link)" marker is the required link-level disclosure — do NOT remove.
+  Texts come from src/i18n (per language); the marker is ui.paidLink — every language MUST have it.
 
   Image priority:
     1. own photo (product.image, optimized by Astro at build)
@@ -18,6 +19,8 @@
 import { Image } from 'astro:assets';
 import { amazonUrl } from '../data/amazon.js';
 import { categories } from '../data/categories.js';
+import { t } from '../i18n/index.js';
+import { productText } from '../i18n/content.js';
 
 // Resolve every product photo once (optimized by Astro) and key by filename,
 // so a product's `image` string maps to its ImageMetadata for <Image>.
@@ -26,7 +29,9 @@ const imagesByName = Object.fromEntries(
   Object.entries(productImages).map(([path, mod]) => [path.split('/').pop(), mod.default])
 );
 
-const { product } = Astro.props;
+const { product, lang } = Astro.props;
+const { ui } = t(lang);
+const text = productText(product, lang);
 
 // Affiliate link built from the product's ASIN + the site's tag (src/data/amazon.js).
 const url = amazonUrl(product);
@@ -46,11 +51,11 @@ const imgClass = fit === 'contain' ? 'card__img card__img--contain' : 'card__img
 ---
 <article class="card" data-asin={product.asin} data-image={imgSrc ? 'own' : 'placeholder'}>
   <a class={mediaClass} href={url} target="_blank" rel="nofollow sponsored noopener"
-     tabindex="-1" aria-label={product.name}>
+     tabindex="-1" aria-label={text.name}>
     {imgSrc ? (
       <Image
         src={imgSrc}
-        alt={product.name}
+        alt={text.name}
         class={imgClass}
         widths={[340, 680]}
         sizes="(max-width: 760px) 45vw, 340px"
@@ -62,12 +67,12 @@ const imgClass = fit === 'contain' ? 'card__img card__img--contain' : 'card__img
     )}
   </a>
   <div class="card__body">
-    <h3 class="card__title">{product.name}</h3>
-    <p class="card__desc">{product.shortDescription}</p>
+    <h3 class="card__title">{text.name}</h3>
+    <p class="card__desc">{text.shortDescription}</p>
     <div class="card__cta">
-      <a class="btn btn--amazon" href={url} target="_blank" rel="nofollow sponsored noopener">View on Amazon</a>
+      <a class="btn btn--amazon" href={url} target="_blank" rel="nofollow sponsored noopener">{ui.viewOnAmazon}</a>
       <!-- Link-level affiliate disclosure (Amazon Operating Agreement) — do NOT remove. -->
-      <p class="card__disclosure">(paid link)</p>
+      <p class="card__disclosure">{ui.paidLink}</p>
     </div>
   </div>
 </article>

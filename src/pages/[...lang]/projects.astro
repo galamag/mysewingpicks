@@ -1,0 +1,37 @@
+---
+/* Projects — the list of sew-along projects (src/data/projects.js), one template
+   for every language (src/i18n). */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { projects } from '../../data/projects.js';
+import { localePaths, langOf, pageUrl, t } from '../../i18n/index.js';
+import { projectText } from '../../i18n/content.js';
+
+export const getStaticPaths = localePaths;
+const lang = langOf(Astro.params);
+const { pages: { projects: text } } = t(lang);
+const items = projects.map((p) => projectText(p, lang));
+---
+<BaseLayout lang={lang} page="projects" active="projects" title={text.title} description={text.description}>
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">{text.eyebrow}</span>
+          <h2>{text.heading}</h2>
+          <p>{text.intro}</p>
+        </div>
+
+        <div class={`category-grid${items.length === 1 ? ' category-grid--single' : ''}`}>
+          {items.map((p) => (
+            <a class="category-card category-card--fabrics" href={pageUrl(`project/${p.slug}`, lang)}>
+              <div class="category-card__icon" aria-hidden="true">{p.icon}</div>
+              <h3>{p.title}</h3>
+              <p>{p.blurb}</p>
+              <span class="category-card__more">{text.more}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

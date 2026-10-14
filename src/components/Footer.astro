@@ -5,26 +5,31 @@
 
   To add more social buttons later, copy the <a class="social-btn"> block.
 */
-const brand = 'My Sewing Picks';
-const disclosure = 'As an Amazon Associate I earn from qualifying purchases.';
-// Required by the Amazon Associates IP License when showing content from the
-// Amazon API (product images via the Creators API).
-const amazonContentNotice =
-  'Certain content that appears on this site comes from Amazon. This content is provided "as is" and is subject to change or removal at any time.';
+import { DEFAULT_LOCALE, pageUrl, t } from '../i18n/index.js';
+
+const { lang } = Astro.props;
+const { brand, ui } = t(lang);
+// Translated pages also show the English original of both Amazon notices.
+const original = lang === DEFAULT_LOCALE ? null : t(DEFAULT_LOCALE).ui;
 const youtubeUrl = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
 ---
 <footer class="site-footer">
   <div class="container site-footer__inner">
     <div class="site-footer__brand">
       <span class="site-footer__name">{brand}</span>
-      <p class="affiliate-disclosure">{disclosure}</p>
-      <p class="affiliate-disclosure affiliate-disclosure--amazon">{amazonContentNotice}</p>
+      <p class="affiliate-disclosure">{ui.disclosure}</p>
+      {/* ui.amazonContentNotice is required by the Amazon Associates IP License when showing
+          content from the Amazon API (product images via the Creators API). */}
+      <p class="affiliate-disclosure affiliate-disclosure--amazon">{ui.amazonContentNotice}</p>
+      {original && (
+        <p class="affiliate-disclosure affiliate-disclosure--original" lang="en">{original.disclosure} {original.amazonContentNotice}</p>
+      )}
       <!-- Cookie/data disclosure page — required by Amazon Program Policies §3(e). -->
-      <p class="site-footer__links"><a href="/privacy.html">Privacy &amp; Cookies</a></p>
+      <p class="site-footer__links"><a href={pageUrl('privacy', lang)}>{ui.privacy}</a></p>
     </div>
 
     <!-- Social buttons corner. Add more here later. -->
-    <div class="socials" aria-label="Social links">
+    <div class="socials" aria-label={ui.socialLinks}>
       <a class="social-btn" href={youtubeUrl} target="_blank" rel="noopener"
          aria-label="YouTube" title="YouTube">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>

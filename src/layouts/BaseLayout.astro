@@ -2,7 +2,8 @@
 /*
   Base page layout — the shared HTML shell (head + fonts + stylesheet),
   with the Header and Footer wrapped around each page's content (<slot/>).
-  Future migrated pages will reuse this; pass title/description/active.
+  Pass title/description/active, plus `page` (a key of PAGES in src/i18n/index.js)
+  and `lang` (the page's language; canonical, hreflang and og:locale follow it).
 */
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -10,14 +11,21 @@ import Footer from '../components/Footer.astro';
 // (/_astro/styles.[hash].css). Any CSS change → new hash → new URL → Cloudflare
 // can never serve a stale stylesheet. Astro injects the <link> into <head>.
 import '../styles/styles.css';
+import { LOCALES, DEFAULT_LOCALE, LANGS, pageUrl, t } from '../i18n/index.js';
 
-const { title, description = '', active } = Astro.props;
+const { title, description = '', active, page, lang = DEFAULT_LOCALE } = Astro.props;
+if (!page) throw new Error('BaseLayout: pass `page` (a key of PAGES in src/i18n/index.js)');
+const { ui } = t(lang);
+const abs = (path) => new URL(path, Astro.site).href;
 
 // Canonical URL — the ONE address Google should index for this page. The home
 // page is "/" (never "/index.html"); other pages keep their file URLs
-// (tools.html, …). Built from `site` in astro.config.mjs.
-const canonicalPath = Astro.url.pathname.replace(/(^|\/)index(\.html)?$/, '$1');
-const canonical = new URL(canonicalPath || '/', Astro.site).href;
+// (tools.html, …). Built from `site` in astro.config.mjs and pageUrl().
+const canonical = abs(pageUrl(page, lang));
+// The same page in every built language (+ x-default → English). Only once there are 2+ languages.
+const alternates = LOCALES.length > 1
+  ? [...LOCALES.map((l) => ({ hreflang: l, href: abs(pageUrl(page, l)) })), { hreflang: 'x-default', href: abs(pageUrl(page, DEFAULT_LOCALE)) }]
+  : [];
 
 // Link preview (Open Graph) — the card messengers/social sites show for a shared
 // link. One own image for the whole site (public/assets/og-image.jpg, 1200×630);
@@ -25,13 +33,14 @@ const canonical = new URL(canonicalPath || '/', Astro.site).href;
 const ogImage = new URL('/assets/og-image.jpg', Astro.site).href;
 ---
 <!DOCTYPE html>
-<html lang="en">
+<html lang={lang}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonical} />
+  {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
 
   <!-- Site icon: patchwork pinwheel (browser tab, bookmarks, iPhone home screen). -->
   <link rel="icon" href="/favicon.ico" sizes="32x32" />
@@ -48,8 +57,8 @@ const ogImage = new URL('/assets/og-image.jpg', Astro.site).href;
   <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="My Sewing Picks — hand-picked sewing tools and fabrics" />
-  <meta property="og:locale" content="en_US" />
+  <meta property="og:image:alt" content={ui.ogImageAlt} />
+  <meta property="og:locale" content={LANGS[lang].ogLocale} />
   <meta name="twitter:card" content="summary_large_image" />
 
   <!-- Warm, cozy fonts (Google Fonts; layout still works without them). -->
@@ -61,8 +70,8 @@ const ogImage = new URL('/assets/og-image.jpg', Astro.site).href;
        Astro (from the `import '../styles/styles.css'` above). No manual link. -->
 </head>
 <body>
-  <Header active={active} />
+  <Header active={active} page={page} lang={lang} />
   <slot />
-  <Footer />
+  <Footer lang={lang} />
 </body>
 </html>

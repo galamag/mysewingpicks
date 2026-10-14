@@ -1,0 +1,29 @@
+---
+/* Tools page — one template for every language (src/i18n). Product cards are
+   rendered STATICALLY at build, split into sections by src/data/categories.js. */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductSections from '../../components/ProductSections.astro';
+import { localePaths, langOf, t } from '../../i18n/index.js';
+
+export const getStaticPaths = localePaths;
+const lang = langOf(Astro.params);
+const { brand, ui, pages: { tools: text } } = t(lang);
+---
+<BaseLayout lang={lang} page="tools" active="tools" title={text.title} description={text.description}>
+  <main>
+    <section class="section section--catalog">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">{brand}</span>
+          <h2>{text.heading}</h2>
+          <p>{text.intro}</p>
+        </div>
+
+        <!-- Page-level affiliate disclosure, shown before any affiliate link. -->
+        <p class="page-disclosure">{ui.pageDisclosure}</p>
+
+        <ProductSections category="tools" lang={lang} />
+      </div>
+    </section>
+  </main>
+</BaseLayout>

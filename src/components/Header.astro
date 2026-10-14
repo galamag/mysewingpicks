@@ -2,42 +2,39 @@
 /*
   Shared site header — logo + primary nav + mobile hamburger.
   Reused on every page. Pass `active` (e.g. "about") to highlight the
-  current page's nav link.
+  current page's nav link, `lang` (the page's language) and `page` (its key
+  in src/i18n/index.js; for the language switcher later).
 
   Styled by src/styles/styles.css (.site-header, .site-nav, .nav-toggle).
 */
-const { active } = Astro.props;
+import { pageUrl, t } from '../i18n/index.js';
 
-const brand = 'My Sewing Picks';
-const nav = [
-  { key: 'home', label: 'Home', href: '/' },
-  { key: 'tools', label: 'Tools', href: '/tools.html' },
-  { key: 'fabrics', label: 'Fabrics', href: '/fabrics.html' },
-  { key: 'projects', label: 'Projects', href: '/projects.html' },
-  { key: 'setup', label: 'My Setup', href: '/setup.html' },
-  { key: 'about', label: 'About', href: '/about.html' },
-];
-// Absolute links (/tools.html): pages in sub-folders (/projects/…) use the same nav.
+const { active, page, lang } = Astro.props;
+const { brand, ui } = t(lang);
+const nav = ['home', 'tools', 'fabrics', 'projects', 'setup', 'about']
+  .map((key) => ({ key, label: ui.nav[key], href: pageUrl(key, lang) }));
+// Links come from pageUrl(): absolute (pages in sub-folders use the same nav),
+// and in the page's own language.
 ---
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="brand" href="/" aria-label={`${brand} — home`}>
+    <a class="brand" href={pageUrl('home', lang)} aria-label={`${brand} — ${ui.homeLabel}`}>
       <!-- Logo image. If /assets/logo.png is missing, onerror swaps in a text wordmark. -->
       <img
         class="brand__logo"
         src="/assets/logo.png"
-        alt={`${brand} logo`}
+        alt={`${brand} ${ui.logo}`}
         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"
       />
       <span class="brand__wordmark" style="display:none;">{brand}</span>
     </a>
 
     <!-- Hamburger toggle (shown on small screens via CSS) -->
-    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+    <button class="nav-toggle" aria-label={ui.toggleMenu} aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
 
-    <nav class="site-nav" aria-label="Primary">
+    <nav class="site-nav" aria-label={ui.primaryNav}>
       {nav.map((item) => (
         <a href={item.href} aria-current={active === item.key ? 'page' : undefined}>{item.label}</a>
       ))}
