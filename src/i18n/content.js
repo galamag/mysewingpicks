@@ -11,6 +11,9 @@ import ruProjects from './ru/projects.js';
 import deProducts from './de/products.js';
 import deGroups from './de/categories.js';
 import deProjects from './de/projects.js';
+import frProducts from './fr/products.js';
+import frGroups from './fr/categories.js';
+import frProjects from './fr/projects.js';
 import itProducts from './it/products.js';
 import itGroups from './it/categories.js';
 import itProjects from './it/projects.js';
@@ -21,6 +24,7 @@ export const PROJECT_FIELDS = ['title', 'blurb', 'pageTitle', 'pageDescription',
 const SETS = {
   ru: { products: ruProducts, groups: ruGroups, projects: ruProjects },
   de: { products: deProducts, groups: deGroups, projects: deProjects },
+  fr: { products: frProducts, groups: frGroups, projects: frProjects },
   it: { products: itProducts, groups: itGroups, projects: itProjects },
 };
 
