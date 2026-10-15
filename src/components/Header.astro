@@ -3,8 +3,9 @@
   Shared site header — logo + primary nav + mobile hamburger.
   Reused on every page. Pass `active` (e.g. "about") to highlight the
   current page's nav link, `lang` (the page's language) and `page` (its key
-  in src/i18n/index.js). The language switcher (EN · RU) leads to the SAME page
-  (`page`) in the other language — the current language is a plain span.
+  in src/i18n/index.js). The language switcher is a `<details>` list (works without
+  JS): every language by its own name, each link leads to the SAME page (`page`) in
+  that language; the current language is a plain span.
 
   Styled by src/styles/styles.css (.site-header, .site-nav, .nav-toggle).
 */
@@ -40,12 +41,22 @@ const nav = ['home', 'tools', 'fabrics', 'projects', 'setup', 'about']
         <a href={item.href} aria-current={active === item.key ? 'page' : undefined}>{item.label}</a>
       ))}
       {LOCALES.length > 1 && (
-        <div class="lang-switch" role="group" aria-label={ui.language}>
-          {LOCALES.map((l) => l === lang
-            ? <span class="lang-switch__item" aria-current="true" lang={l}>{LANGS[l].label}</span>
-            : <a class="lang-switch__item" href={pageUrl(page, l)} hreflang={l} lang={l} title={LANGS[l].name} aria-label={`${LANGS[l].label} — ${LANGS[l].name}`}>{LANGS[l].label}</a>
-          )}
-        </div>
+        <details class="lang-switch">
+          <summary class="lang-switch__current" aria-label={`${ui.language}: ${LANGS[lang].name}`}>
+            <svg class="lang-switch__globe" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.25" /><path d="M2.75 12h18.5M12 2.75c2.5 2.6 3.9 5.9 3.9 9.25s-1.4 6.65-3.9 9.25c-2.5-2.6-3.9-5.9-3.9-9.25S9.5 5.35 12 2.75Z" /></svg>
+            <span lang={lang}>{LANGS[lang].name}</span>
+            <span class="lang-switch__caret" aria-hidden="true">▾</span>
+          </summary>
+          <ul class="lang-switch__list">
+            {LOCALES.map((l) => (
+              <li>
+                {l === lang
+                  ? <span class="lang-switch__item" aria-current="true" lang={l}>{LANGS[l].name}</span>
+                  : <a class="lang-switch__item" href={pageUrl(page, l)} hreflang={l} lang={l}>{LANGS[l].name}</a>}
+              </li>
+            ))}
+          </ul>
+        </details>
       )}
     </nav>
   </div>
@@ -61,6 +72,20 @@ const nav = ['home', 'tools', 'fabrics', 'projects', 'setup', 'about']
       const open = nav.classList.toggle('is-open');
       toggle.classList.toggle('is-open', open);
       toggle.setAttribute('aria-expanded', String(open));
+    });
+  }
+
+  // Language list: close it on a click elsewhere or on Esc. Without JS it closes on a second tap.
+  const langs = header?.querySelector<HTMLDetailsElement>('.lang-switch');
+  if (langs) {
+    document.addEventListener('click', (e) => {
+      if (langs.open && !langs.contains(e.target as Node)) langs.open = false;
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && langs.open) {
+        langs.open = false;
+        langs.querySelector('summary')?.focus();
+      }
     });
   }
 </script>

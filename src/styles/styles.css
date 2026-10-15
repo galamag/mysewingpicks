@@ -58,6 +58,9 @@
 
 /* Russian pages: Fraunces has no Cyrillic */
 :root:lang(ru) { --font-head: "Lora", Georgia, "Times New Roman", serif; }
+/* Long words on translated pages (German compounds, «Конфиденциальность»): headings and card
+   titles hyphenate by <html lang> instead of overflowing on phones. */
+html:not([lang="en"]) h1, html:not([lang="en"]) h2, html:not([lang="en"]) h3, html:not([lang="en"]) .card__title { -webkit-hyphens: auto; hyphens: auto; }
 
 /* ---------------------------------------------------------------------
    2. BASE / RESET
@@ -166,10 +169,25 @@ p { margin: 0 0 1em; }
 .site-nav a:hover { background: var(--beige); text-decoration: none; }
 .site-nav a[aria-current="page"] { background: var(--rose); color: #fff; }
 
-/* Language switcher — the same page in another language (EN · RU) */
-.lang-switch { display: flex; align-items: center; gap: 2px; margin-left: 6px; padding-left: 8px; border-left: 1px solid var(--beige-deep); }
-.site-nav .lang-switch__item { padding: 6px 10px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em; color: var(--ink-soft); }
-.lang-switch__item[aria-current="true"] { color: var(--rose-deep); }
+/* Language switcher — a <details> list (works without JS): every language by its own
+   name; a link leads to the SAME page in that language. On phones it sits in the menu. */
+.lang-switch { position: relative; margin-left: 6px; padding-left: 8px; border-left: 1px solid var(--beige-deep); }
+.lang-switch__current {
+  display: flex; align-items: center; gap: 6px; padding: 8px 10px; border-radius: 999px; cursor: pointer;
+  list-style: none; white-space: nowrap; font-size: 0.9rem; font-weight: 700; color: var(--ink-soft);
+}
+.lang-switch__current::-webkit-details-marker { display: none; }
+.lang-switch__current:hover, .lang-switch[open] .lang-switch__current { background: var(--beige); }
+.lang-switch__globe { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.lang-switch__caret { font-size: 0.75em; transition: transform 0.18s ease; }
+.lang-switch[open] .lang-switch__caret { transform: rotate(180deg); }
+.lang-switch__list {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 60; min-width: 170px;
+  margin: 0; padding: 6px; list-style: none; background: var(--paper);
+  border: 1px solid var(--beige-deep); border-radius: 14px; box-shadow: var(--shadow-soft);
+}
+.site-nav .lang-switch__item { display: block; padding: 9px 14px; border-radius: 10px; font-size: 0.95rem; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.lang-switch__item[aria-current="true"] { color: var(--rose-deep); font-weight: 700; }
 
 /* Hamburger — hidden on desktop, shown on mobile */
 .nav-toggle {
@@ -535,13 +553,13 @@ p { margin: 0 0 1em; }
 /* ---------------------------------------------------------------------
    11. RESPONSIVE (mobile-first tweaks)
    --------------------------------------------------------------------- */
-/* Russian nav labels are longer: on tablets (just above the phone menu) keep the
-   header on ONE line — it must stay as tall as --header-h says (sticky chips). */
+/* Long nav labels (ru, de…) on tablets: keep the header on ONE line — it must stay as
+   tall as --header-h says (sticky chips). */
 @media (min-width: 761px) and (max-width: 880px) {
-  :root:lang(ru) .site-nav { gap: 2px; }
-  :root:lang(ru) .site-nav a { padding-inline: 8px; white-space: nowrap; }
-  :root:lang(ru) .lang-switch { margin-left: 2px; padding-left: 4px; }
-  :root:lang(ru) .site-nav .lang-switch__item { padding-inline: 7px; }
+  .site-nav { gap: 2px; }
+  .site-nav > a { padding-inline: 8px; white-space: nowrap; }
+  .lang-switch { margin-left: 2px; padding-left: 4px; }
+  .lang-switch__current { padding-inline: 7px; }
 }
 
 @media (max-width: 760px) {
@@ -568,6 +586,8 @@ p { margin: 0 0 1em; }
   .site-nav.is-open { display: flex; }
   .site-nav a { padding: 12px 14px; }
   .lang-switch { margin: 6px 0 0; padding: 10px 0 0; border-left: 0; border-top: 1px solid var(--beige-deep); }
+  .lang-switch__current { padding: 12px 14px; }
+  .lang-switch__list { position: static; min-width: 0; margin: 2px 0 0; padding: 0 0 0 28px; border: 0; box-shadow: none; background: none; }
 
   .category-grid { grid-template-columns: 1fr; }
 
