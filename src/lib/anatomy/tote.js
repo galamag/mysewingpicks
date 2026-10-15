@@ -584,6 +584,12 @@ export const STEPS = [
 ];
 
 /**
+  The static cutting diagram (src/lib/anatomy/cut-diagram.js; an <img> on the project page):
+  the end of this step + these lines of `legend` from the texts (outer, lining, straps, seams).
+*/
+export const CUT = { step: 1, legend: [0, 1, 2, 4] };
+
+/**
   Every chip key the drawing uses — each language must have them all (tote.text.js).
   The keys are sampled at t = 0, so every scene's `over` must be a literal list:
   never add a labelled overlay only for some t, or its key would be missed here.

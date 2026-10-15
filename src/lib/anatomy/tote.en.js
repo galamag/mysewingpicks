@@ -24,6 +24,10 @@ export default {
     parts: 'Parts',
     allSteps: 'Step-by-step instructions',
     endView: 'END VIEW',
+    // The static cutting diagram (an <img> on the page; drawn by cut-diagram.mjs): its heading, alt, caption.
+    cutTitle: 'Lined tote bag · cutting sizes',
+    cutAlt: 'Cutting diagram for a lined tote bag: the outer in cotton duck and the lining in satin, each 86 × 45 cm with a fold line across the middle, and two duck straps 100 × 16 cm.',
+    cutCaption: 'The pieces to cut, with their sizes — the same as in step 1.',
   },
   stitches: { straight: 'Straight stitch' },
   labels: {

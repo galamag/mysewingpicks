@@ -91,6 +91,8 @@ export default {
       videoHeading: 'Das Video',
       needsEyebrow: 'Für dieses Projekt',
       needsHeading: 'Das brauchst du',
+      faqEyebrow: 'Gut zu wissen',
+      faqHeading: 'Fragen und Antworten',
       more: '← Weitere Projekte zum Mitnähen',
     },
     about: {

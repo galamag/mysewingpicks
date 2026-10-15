@@ -92,6 +92,8 @@ export default {
       videoHeading: 'Il video',
       needsEyebrow: 'Per questo progetto',
       needsHeading: 'Cosa ti serve',
+      faqEyebrow: 'Buono a sapersi',
+      faqHeading: 'Domande e risposte',
       more: '← Altri progetti da cucire insieme',
     },
     about: {

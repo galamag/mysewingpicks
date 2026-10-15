@@ -1,10 +1,13 @@
 ---
 /*
   Project page: the tote bag. Animated anatomy + steps (ToteAnatomy), the
-  maker's video (YouTube loads only when tapped) and "What you'll need"
-  (catalog cards). Data: src/data/projects.js · model: src/lib/anatomy/tote.js.
+  maker's video (YouTube loads only when tapped), "What you'll need"
+  (catalog cards) and the questions people search with (faq), the first one
+  with the static cutting diagram (an <img>, for image search).
+  Data: src/data/projects.js · model: src/lib/anatomy/tote.js.
   One template for every language (texts: src/i18n).
 */
+import { Image } from 'astro:assets';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ToteAnatomy from '../../../components/ToteAnatomy.astro';
 import ProductCard from '../../../components/ProductCard.astro';
@@ -13,16 +16,31 @@ import { projectBySlug } from '../../../data/projects.js';
 import { products } from '../../../data/products.js';
 import { localePaths, langOf, pageUrl, t } from '../../../i18n/index.js';
 import { projectText } from '../../../i18n/content.js';
+import * as tote from '../../../lib/anatomy/tote.js';
+import { toteText } from '../../../lib/anatomy/tote.text.js';
+import { cutDiagram, cutDiagramStamp } from '../../../lib/anatomy/cut-diagram.js';
+import cutStamps from '../../../assets/projects/tote-bag-cutting-diagram.json';
 
 export const getStaticPaths = localePaths;
 const lang = langOf(Astro.params);
 const project = projectText(projectBySlug('tote-bag'), lang);
 const { ui, pages: { project: text } } = t(lang);
+const L = toteText(lang);
 const needs = project.needs.map((id) => {
   const p = products.find((x) => x.id === id);
   if (!p) throw new Error(`tote-bag: unknown product "${id}" in projects.js`);
   return p;
 });
+
+// The cutting diagram: a PNG per language, drawn from the figure by cut-diagram.mjs (see
+// src/lib/anatomy/cut-diagram.js). It must exist and show what the figure shows now.
+const cutImages = import.meta.glob<{ default: ImageMetadata }>('../../../assets/projects/tote-bag-cutting-diagram.*.png', { eager: true });
+const cutImage = cutImages[`../../../assets/projects/tote-bag-cutting-diagram.${lang}.png`]?.default;
+const redraw = 'node .claude/skills/building-sewing-anatomy/cut-diagram.mjs src/lib/anatomy/tote.js src/assets/projects/tote-bag-cutting-diagram';
+if (!cutImage) throw new Error(`tote-bag: no cutting diagram for "${lang}" — run: ${redraw}`);
+if (cutStamps[lang] !== cutDiagramStamp(cutDiagram(tote, L))) {
+  throw new Error(`tote-bag: the cutting diagram for "${lang}" is out of date (a size, label or legend line changed) — run: ${redraw}`);
+}
 ---
 <BaseLayout lang={lang} page="project/tote-bag" active="projects" title={project.pageTitle} description={project.pageDescription}>
   <main>
@@ -30,7 +48,7 @@ const needs = project.needs.map((id) => {
       <div class="container">
         <div class="section-head">
           <span class="eyebrow">{text.eyebrow}</span>
-          <h1>{project.title}</h1>
+          <h1>{project.heading}</h1>
           <p>{project.blurb}</p>
         </div>
 
@@ -62,6 +80,28 @@ const needs = project.needs.map((id) => {
         <div class="product-grid">
           {needs.map((product) => <ProductCard product={product} lang={lang} />)}
         </div>
+      </div>
+    </section>
+
+    <!-- Questions people search with, answered only with the maker's numbers shown above. -->
+    <section class="section section--tight">
+      <div class="container project-faq">
+        <div class="section-head">
+          <span class="eyebrow">{text.faqEyebrow}</span>
+          <h2>{text.faqHeading}</h2>
+        </div>
+        {project.faq.map((item, i) => (
+          <div class="project-faq__item">
+            <h3>{item.q}</h3>
+            <p>{item.a}</p>
+            {i === 0 && (
+              <figure class="project-cut">
+                <Image src={cutImage} alt={L.ui.cutAlt} widths={[560, 1000]} sizes="(max-width: 600px) 100vw, 560px" format="webp" loading="lazy" decoding="async" />
+                <figcaption>{L.ui.cutCaption}</figcaption>
+              </figure>
+            )}
+          </div>
+        ))}
         <p class="project-more"><a href={pageUrl('projects', lang)}>{text.more}</a></p>
       </div>
     </section>
@@ -70,5 +110,15 @@ const needs = project.needs.map((id) => {
 
 <style>
   .project-video { max-width: 760px; }
-  .project-more { text-align: center; margin-top: 32px; font-weight: 700; }
+  .project-faq { max-width: 760px; }
+  .project-faq__item { margin-top: 26px; }
+  .project-faq__item h3 { margin: 0 0 6px; font-size: 1.2rem; }
+  .project-faq__item p { margin: 0; }
+  .project-cut { margin: 18px auto 0; max-width: 560px; }
+  .project-cut img {
+    display: block; width: 100%; height: auto;
+    border-radius: var(--radius); box-shadow: var(--shadow-soft);
+  }
+  .project-cut figcaption { margin-top: 8px; font-size: 0.9rem; color: var(--ink-soft); text-align: center; }
+  .project-more { text-align: center; margin-top: 40px; font-weight: 700; }
 </style>

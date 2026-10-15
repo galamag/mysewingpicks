@@ -22,6 +22,10 @@ export default {
     parts: 'Teile',
     allSteps: 'Schritt-für-Schritt-Anleitung',
     endView: 'QUERSCHNITT',
+    // The static cutting diagram (an <img> on the page; drawn by cut-diagram.mjs): its heading, alt, caption.
+    cutTitle: 'Tasche mit Futter · Zuschnittmaße',
+    cutAlt: 'Zuschnittplan für eine Tasche mit Futter: Außenteil aus Baumwoll-Canvas und Futter aus Satin, je 86 × 45 cm mit Faltlinie in der Mitte, dazu zwei Henkel aus Canvas, 100 × 16 cm.',
+    cutCaption: 'Alle Zuschnitte mit ihren Maßen – wie in Schritt 1.',
   },
   stitches: { straight: 'Geradstich' },
   labels: {

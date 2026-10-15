@@ -21,7 +21,10 @@ import esProducts from './es/products.js';
 import esGroups from './es/categories.js';
 import esProjects from './es/projects.js';
 
-export const PROJECT_FIELDS = ['title', 'blurb', 'pageTitle', 'pageDescription', 'teaser', 'videoTitle', 'videoIntro', 'needsIntro'];
+export const PROJECT_FIELDS = ['title', 'blurb', 'pageTitle', 'pageDescription', 'heading', 'teaser', 'videoTitle', 'videoIntro', 'needsIntro'];
+/** Translatable LISTS of a project: field → the text keys of each item. A translation has as many
+    items as English, each key a non-empty string (faq: the questions and answers of the page). */
+export const PROJECT_LISTS = { faq: ['q', 'a'] };
 
 /** Translation sets by language: { products, groups, projects }. */
 const SETS = {
@@ -32,16 +35,40 @@ const SETS = {
   es: { products: esProducts, groups: esGroups, projects: esProjects },
 };
 
-function cover(lang, kind, ids, table, fields) {
+function cover(lang, kind, ids, table, fields, lists = {}) {
   if (!table) throw new Error(`i18n/${lang}: no ${kind} translations`);
   for (const id of ids) {
     if (!table[id]) throw new Error(`i18n/${lang}/${kind}: "${id}" has no translation`);
     for (const f of fields) {
       if (typeof table[id][f] !== 'string' || !table[id][f].trim()) throw new Error(`i18n/${lang}/${kind}: "${id}".${f} is missing`);
     }
-    for (const f of Object.keys(table[id])) if (!fields.includes(f)) throw new Error(`i18n/${lang}/${kind}: "${id}".${f} is not a translatable field`);
+    for (const f of Object.keys(table[id])) if (!fields.includes(f) && !lists[f]) throw new Error(`i18n/${lang}/${kind}: "${id}".${f} is not a translatable field`);
   }
   for (const id of Object.keys(table)) if (!ids.includes(id)) throw new Error(`i18n/${lang}/${kind}: "${id}" is not in src/data (typo or removed?)`);
+}
+
+/** A project's list (e.g. faq) in one language: an array of items, each key a non-empty string. */
+function checkList(where, list, keys) {
+  if (!Array.isArray(list) || !list.length) throw new Error(`${where} must be a non-empty list`);
+  list.forEach((item, i) => {
+    for (const k of keys) if (typeof item?.[k] !== 'string' || !item[k].trim()) throw new Error(`${where}[${i}].${k} is missing`);
+    for (const k of Object.keys(item)) if (!keys.includes(k)) throw new Error(`${where}[${i}].${k} is not a translatable key`);
+  });
+}
+
+/** A translation's lists match English: the same lists, the same number of items. Lists are optional per project. */
+function coverLists(lang, table) {
+  for (const p of projects) {
+    for (const [f, keys] of Object.entries(PROJECT_LISTS)) {
+      const where = `i18n/${lang}/projects: "${p.slug}".${f}`;
+      if (p[f] === undefined) {
+        if (table[p.slug][f] !== undefined) throw new Error(`${where} exists, but the English project has no ${f}`);
+        continue;
+      }
+      checkList(where, table[p.slug][f], keys);
+      if (table[p.slug][f].length !== p[f].length) throw new Error(`${where} has ${table[p.slug][f].length} items, English has ${p[f].length}`);
+    }
+  }
 }
 
 // English projects must carry every translatable field too (the translations are checked against this list).
@@ -49,13 +76,15 @@ for (const p of projects) {
   for (const f of PROJECT_FIELDS) {
     if (typeof p[f] !== 'string' || !p[f].trim()) throw new Error(`data/projects.js: project "${p.slug}" has no "${f}" text`);
   }
+  for (const [f, keys] of Object.entries(PROJECT_LISTS)) if (p[f] !== undefined) checkList(`data/projects.js: "${p.slug}".${f}`, p[f], keys);
 }
 
 const groupKeys = Object.entries(categories).flatMap(([c, cfg]) => cfg.groups.map((g) => `${c}/${g.id}`));
 for (const [lang, translations] of Object.entries(SETS)) {
   cover(lang, 'products', products.map((p) => p.id), translations.products, ['name', 'shortDescription']);
   cover(lang, 'categories', groupKeys, translations.groups, ['title']);
-  cover(lang, 'projects', projects.map((p) => p.slug), translations.projects, PROJECT_FIELDS);
+  cover(lang, 'projects', projects.map((p) => p.slug), translations.projects, PROJECT_FIELDS, PROJECT_LISTS);
+  coverLists(lang, translations.projects);
 }
 
 function set(lang) {

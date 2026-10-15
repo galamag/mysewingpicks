@@ -94,6 +94,8 @@ export default {
       videoHeading: 'La vidéo',
       needsEyebrow: 'Pour ce projet',
       needsHeading: "Ce qu'il vous faut",
+      faqEyebrow: 'Bon à savoir',
+      faqHeading: 'Questions et réponses',
       more: '← Autres projets à coudre',
     },
     about: {

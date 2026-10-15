@@ -93,6 +93,8 @@ export default {
       videoHeading: 'El video',
       needsEyebrow: 'Para este proyecto',
       needsHeading: 'Lo que necesitarás',
+      faqEyebrow: 'Conviene saber',
+      faqHeading: 'Preguntas y respuestas',
       more: '← Más proyectos para coser conmigo',
     },
     about: {

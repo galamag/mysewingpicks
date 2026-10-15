@@ -23,6 +23,10 @@ export default {
     parts: 'Piezas',
     allSteps: 'Instrucciones paso a paso',
     endView: 'CORTE',
+    // The static cutting diagram (an <img> on the page; drawn by cut-diagram.mjs): its heading, alt, caption.
+    cutTitle: 'Bolsa tote con forro · medidas de corte',
+    cutAlt: 'Esquema de corte de una bolsa tote con forro: exterior de lona de algodón y forro de satén, cada uno de 86 × 45 cm con una línea de doblez en el centro, y dos asas de lona de 100 × 16 cm.',
+    cutCaption: 'Las piezas que hay que cortar, con sus medidas, como en el paso 1.',
   },
   stitches: { straight: 'Puntada recta' },
   labels: {

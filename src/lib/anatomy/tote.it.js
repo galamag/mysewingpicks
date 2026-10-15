@@ -24,6 +24,10 @@ export default {
     parts: 'Parti',
     allSteps: 'Istruzioni passo passo',
     endView: 'SEZIONE',
+    // The static cutting diagram (an <img> on the page; drawn by cut-diagram.mjs): its heading, alt, caption.
+    cutTitle: 'Borsa shopper foderata · misure di taglio',
+    cutAlt: 'Schema di taglio di una borsa shopper foderata: esterno in tela canvas e fodera di raso, ciascuno di 86 × 45 cm con una linea di piega al centro, e due manici in tela canvas di 100 × 16 cm.',
+    cutCaption: 'I pezzi da tagliare, con le loro misure, come nel passaggio 1.',
   },
   stitches: { straight: 'Punto dritto' },
   labels: {

@@ -22,6 +22,10 @@ export default {
     parts: 'Pièces',
     allSteps: 'Instructions étape par étape',
     endView: 'VUE EN COUPE',
+    // The static cutting diagram (an <img> on the page; drawn by cut-diagram.mjs): its heading, alt, caption.
+    cutTitle: 'Sac en tissu doublé · dimensions de coupe',
+    cutAlt: "Plan de coupe d'un sac en tissu doublé : l'extérieur en toile canvas et la doublure en satin, chacun de 86 × 45 cm avec une ligne de pliure au milieu, et deux anses en toile canvas de 100 × 16 cm.",
+    cutCaption: "Les pièces à couper, avec leurs dimensions — comme à l'étape 1.",
   },
   stitches: { straight: 'Point droit' },
   labels: {

@@ -89,6 +89,8 @@ export default {
       videoHeading: 'The video',
       needsEyebrow: 'For this project',
       needsHeading: "What you'll need",
+      faqEyebrow: 'Good to know',
+      faqHeading: 'Questions and answers',
       more: '← More sew-along projects',
     },
     about: {
