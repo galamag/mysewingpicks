@@ -11,7 +11,7 @@ import Footer from '../components/Footer.astro';
 // (/_astro/styles.[hash].css). Any CSS change → new hash → new URL → Cloudflare
 // can never serve a stale stylesheet. Astro injects the <link> into <head>.
 import '../styles/styles.css';
-import { LOCALES, DEFAULT_LOCALE, LANGS, pageUrl, t } from '../i18n/index.js';
+import { LOCALES, DEFAULT_LOCALE, LANGS, PAGES, pageUrl, t } from '../i18n/index.js';
 
 const { title, description = '', active, page, lang } = Astro.props;
 if (!page) throw new Error('BaseLayout: pass `page` (a key of PAGES in src/i18n/index.js)');
@@ -24,7 +24,9 @@ const abs = (path) => new URL(path, Astro.site).href;
 // (tools.html, …). Built from `site` in astro.config.mjs and pageUrl().
 const canonical = abs(pageUrl(page, lang));
 // The same page in every built language (+ x-default → English). Only once there are 2+ languages.
-const alternates = LOCALES.length > 1
+// Pages for search (PAGES) get hreflang; a LIMITED_PAGES page (Legal notice) is noindex instead.
+const indexed = page in PAGES;
+const alternates = indexed && LOCALES.length > 1
   ? [...LOCALES.map((l) => ({ hreflang: l, href: abs(pageUrl(page, l)) })), { hreflang: 'x-default', href: abs(pageUrl(page, DEFAULT_LOCALE)) }]
   : [];
 
@@ -51,6 +53,7 @@ if (!fontsHref) throw new Error(`BaseLayout: no Google Fonts entry (FONTS) for l
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonical} />
+  {!indexed && <meta name="robots" content="noindex" />}
   {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
 
   <!-- Site icon: patchwork pinwheel (browser tab, bookmarks, iPhone home screen). -->

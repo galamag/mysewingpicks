@@ -17,3 +17,8 @@ deployment:
     - /bin/mkdir -p $APIPATH
     - /bin/chmod 700 $APIPATH
     - /bin/cp server/refresh-images.php server/catalog-tool.php server/config.example.php $APIPATH
+    # Legal notice (de/es/fr): the owner's name/address/e-mail live ONLY on the server in
+    # $APIPATH/legal.php (never in git). dist/ ships the pages with placeholders, so every deploy
+    # fills them in again; the script self-tests first and leaves the pages alone if anything is off.
+    - /bin/cp server/legal.example.php $APIPATH
+    - /usr/local/bin/php server/fill-legal.php $DEPLOYPATH $APIPATH/legal.php

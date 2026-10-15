@@ -5,7 +5,8 @@
 
   To add more social buttons later, copy the <a class="social-btn"> block.
 */
-import { DEFAULT_LOCALE, pageUrl, t } from '../i18n/index.js';
+import { DEFAULT_LOCALE, hasPage, pageUrl, t } from '../i18n/index.js';
+import { LEGAL } from '../i18n/legal.js';
 
 const { lang } = Astro.props;
 const { brand, ui } = t(lang);
@@ -25,7 +26,11 @@ const youtubeUrl = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
         <p class="affiliate-disclosure affiliate-disclosure--original" lang="en">{original.disclosure} {original.amazonContentNotice}</p>
       )}
       <!-- Cookie/data disclosure page — required by Amazon Program Policies §3(e). -->
-      <p class="site-footer__links"><a href={pageUrl('privacy', lang)}>{ui.privacy}</a></p>
+      {/* The Legal notice link — only where the law asks for it (de, es, fr; spec wave 1, 5.3). */}
+      <p class="site-footer__links">
+        <a href={pageUrl('privacy', lang)}>{ui.privacy}</a>
+        {hasPage('legal', lang) && <> · <a href={pageUrl('legal', lang)}>{LEGAL[lang].link}</a></>}
+      </p>
     </div>
 
     <!-- Social buttons corner. Add more here later. -->

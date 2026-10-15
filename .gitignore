@@ -26,6 +26,8 @@ CLAUDE.md
 # Environment / secrets
 # Amazon Creators API credentials — live ONLY on the server (~/mysewingpicks-api/).
 server/config.php
+# Legal notice owner data (name, address, e-mail) — ONLY on the server (~/mysewingpicks-api/legal.php).
+server/legal.php
 .env
 .env.*
 *.env

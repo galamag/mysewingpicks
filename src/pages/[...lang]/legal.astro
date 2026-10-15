@@ -1,0 +1,40 @@
+---
+/*
+  Legal notice (Impressum / Aviso legal / Mentions légales) — only in the languages of
+  LIMITED_PAGES.legal. noindex, not in sitemap.xml, no hreflang (BaseLayout does that for every
+  page outside PAGES). The owner's data are placeholders here: server/fill-legal.php replaces them
+  on the server at every deploy — they are never in git.
+*/
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { limitedPaths, langOf } from '../../i18n/index.js';
+import { LEGAL } from '../../i18n/legal.js';
+
+// (a function declaration: the Astro compiler mis-hoists an arrow function here and breaks the build)
+export function getStaticPaths() {
+  return limitedPaths('legal');
+}
+const lang = langOf(Astro.params);
+const text = LEGAL[lang];
+---
+<BaseLayout lang={lang} page="legal" title={text.title} description={text.description}>
+  <main>
+    <section class="section">
+      <div class="container">
+        <article class="about legal">
+          <h1>{text.heading}</h1>
+          <h2>{text.owner}</h2>
+          <p>%%LEGAL_NAME%%<br />%%LEGAL_ADDRESS%%</p>
+          <h2>{text.contact}</h2>
+          <p>{text.email}: <a href="mailto:%%LEGAL_EMAIL%%">%%LEGAL_EMAIL%%</a></p>
+          <p data-legal="phone">{text.phone}: %%LEGAL_PHONE%%</p>
+          {text.host && (
+            <>
+              <h2>{text.host.heading}</h2>
+              <p>{text.host.name}<br />{text.host.address}<br />{text.host.phone}</p>
+            </>
+          )}
+        </article>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
