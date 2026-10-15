@@ -15,18 +15,20 @@ import { projects } from '../data/projects.js';
 import en from './en.js';
 import ru from './ru.js';
 import de from './de.js';
+import it from './it.js';
 
 export const DEFAULT_LOCALE = 'en';
 /** Languages that are BUILT (have pages). */
-export const LOCALES = ['en', 'ru', 'de'];
+export const LOCALES = ['en', 'ru', 'de', 'it'];
 export const LANGS = {
   en: { name: 'English', ogLocale: 'en_US' },
   ru: { name: 'Русский', ogLocale: 'ru_RU' },
   de: { name: 'Deutsch', ogLocale: 'de_DE' },
+  it: { name: 'Italiano', ogLocale: 'it_IT' },
 };
 
 /** Dictionaries — every one is checked against English, even before its pages are built. */
-const DICTS = { en, ru, de };
+const DICTS = { en, ru, de, it };
 for (const [lang, dict] of Object.entries(DICTS)) if (lang !== DEFAULT_LOCALE) assertSameShape(en, dict, lang);
 
 /** Page key → file under the language root. Project pages come from src/data/projects.js. */
