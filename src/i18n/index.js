@@ -14,17 +14,19 @@ import { assertSameShape } from './shape.js';
 import { projects } from '../data/projects.js';
 import en from './en.js';
 import ru from './ru.js';
+import de from './de.js';
 
 export const DEFAULT_LOCALE = 'en';
 /** Languages that are BUILT (have pages). */
-export const LOCALES = ['en', 'ru'];
+export const LOCALES = ['en', 'ru', 'de'];
 export const LANGS = {
   en: { name: 'English', ogLocale: 'en_US' },
   ru: { name: 'Русский', ogLocale: 'ru_RU' },
+  de: { name: 'Deutsch', ogLocale: 'de_DE' },
 };
 
 /** Dictionaries — every one is checked against English, even before its pages are built. */
-const DICTS = { en, ru };
+const DICTS = { en, ru, de };
 for (const [lang, dict] of Object.entries(DICTS)) if (lang !== DEFAULT_LOCALE) assertSameShape(en, dict, lang);
 
 /** Page key → file under the language root. Project pages come from src/data/projects.js. */

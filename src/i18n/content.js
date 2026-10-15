@@ -8,11 +8,17 @@ import { DEFAULT_LOCALE } from './index.js';
 import ruProducts from './ru/products.js';
 import ruGroups from './ru/categories.js';
 import ruProjects from './ru/projects.js';
+import deProducts from './de/products.js';
+import deGroups from './de/categories.js';
+import deProjects from './de/projects.js';
 
 export const PROJECT_FIELDS = ['title', 'blurb', 'pageTitle', 'pageDescription', 'teaser', 'videoTitle', 'videoIntro', 'needsIntro'];
 
 /** Translation sets by language: { products, groups, projects }. */
-const SETS = { ru: { products: ruProducts, groups: ruGroups, projects: ruProjects } };
+const SETS = {
+  ru: { products: ruProducts, groups: ruGroups, projects: ruProjects },
+  de: { products: deProducts, groups: deGroups, projects: deProjects },
+};
 
 function cover(lang, kind, ids, table, fields) {
   if (!table) throw new Error(`i18n/${lang}: no ${kind} translations`);
