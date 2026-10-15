@@ -59,8 +59,9 @@
 /* Russian pages: Fraunces has no Cyrillic */
 :root:lang(ru) { --font-head: "Lora", Georgia, "Times New Roman", serif; }
 /* Long words on translated pages (German compounds, «Конфиденциальность»): headings and card
-   titles hyphenate by <html lang> instead of overflowing on phones. */
-html:not([lang="en"]) h1, html:not([lang="en"]) h2, html:not([lang="en"]) h3, html:not([lang="en"]) .card__title { -webkit-hyphens: auto; hyphens: auto; }
+   titles hyphenate by <html lang> instead of overflowing on phones; where the browser has no
+   hyphenation dictionary they break at any letter (overflow-wrap) rather than stick out. */
+html:not([lang="en"]) h1, html:not([lang="en"]) h2, html:not([lang="en"]) h3, html:not([lang="en"]) .card__title { -webkit-hyphens: auto; hyphens: auto; overflow-wrap: anywhere; }
 
 /* ---------------------------------------------------------------------
    2. BASE / RESET
@@ -554,17 +555,24 @@ p { margin: 0 0 1em; }
    11. RESPONSIVE (mobile-first tweaks)
    --------------------------------------------------------------------- */
 /* Long nav labels (ru, de…) on tablets: keep the header on ONE line — it must stay as
-   tall as --header-h says (sticky chips). */
-@media (min-width: 761px) and (max-width: 880px) {
+   tall as --header-h says (sticky chips). The Russian nav wraps to two lines at 881–892 px
+   with the normal spacing, so the compact spacing runs up to 1024 px (checked ru, de, fr, it, es). */
+@media (min-width: 761px) and (max-width: 1024px) {
   .site-nav { gap: 2px; }
   .site-nav > a { padding-inline: 8px; white-space: nowrap; }
   .lang-switch { margin-left: 2px; padding-left: 4px; }
   .lang-switch__current { padding-inline: 7px; }
 }
+/* The narrowest tablets (iPad mini portrait, 768): the Russian nav is 652 px wide even when
+   compact and would squeeze the logo, so the links get a little closer still. */
+@media (min-width: 761px) and (max-width: 800px) {
+  .site-nav > a { padding-inline: 5px; }
+}
 
 @media (max-width: 760px) {
-  /* Russian privacy title: «Конфиденциальность» is one 18-letter word — a smaller h1 so it fits a phone. */
-  :root:lang(ru) .legal h1 { font-size: min(1.9rem, 6vw); overflow-wrap: anywhere; }
+  /* Long legal titles on translated pages («Конфиденциальность» is one 18-letter word, «Datenschutz …»,
+     «Confidentialité et cookies»): a smaller h1 so it fits a phone. */
+  html:not([lang="en"]) .legal h1 { font-size: min(1.9rem, 6vw); overflow-wrap: anywhere; }
 
   .nav-toggle { display: flex; }
 

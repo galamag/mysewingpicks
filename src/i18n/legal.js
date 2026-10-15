@@ -32,7 +32,7 @@ export const LEGAL = {
   fr: {
     link: 'Mentions légales',
     title: 'Mentions légales — My Sewing Picks',
-    description: 'Mentions légales de My Sewing Picks : éditeur et hébergeur du site.',
+    description: 'Mentions légales de My Sewing Picks\u00A0: éditeur et hébergeur du site.',
     heading: 'Mentions légales',
     owner: 'Éditeur du site et directeur de la publication',
     contact: 'Contact',

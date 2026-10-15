@@ -47,7 +47,7 @@ export default {
     cornersForm: 'las esquinas se forman solas',
     opening8: 'abertura de 8 cm',
     endsLevel: 'extremos al ras del borde superior',
-    turnThrough: 'dar la vuelta por la abertura',
+    turnThrough: 'voltear por la abertura',
     stitchClosed: 'cerrar la abertura',
     pushLining: 'meter el forro dentro',
     topstitch1: 'pespunte a 1 cm',
