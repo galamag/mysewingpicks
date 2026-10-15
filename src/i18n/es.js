@@ -77,14 +77,14 @@ export default {
       title: 'Mi estudio de grabación — My Sewing Picks',
       description: 'Luces, trípode, cámara, laptop y escritorio que recomiendo personalmente para grabar tus propios videos de costura y patchwork.',
       heading: 'Mi estudio de grabación',
-      intro: '¿Estás pensando en grabar tus propios videos de costura? Aquí tienes luces, trípode, cámara, laptop y escritorio que recomiendo personalmente para montar un pequeño rincón de grabación acogedor.',
+      intro: '¿Estás pensando en grabar tus propios videos de costura? Aquí tienes las luces, el trípode, la cámara, la laptop y el escritorio que recomiendo personalmente para montar un pequeño rincón de grabación acogedor.',
     },
     projects: {
-      title: 'Proyectos: cose conmigo — My Sewing Picks',
+      title: 'Proyectos para coser conmigo — My Sewing Picks',
       description: 'Proyectos de costura paso a paso con guías animadas, medidas de corte reales y el video del canal SEWING DIY PATCHWORK.',
       eyebrow: 'Cose conmigo',
       heading: 'Proyectos',
-      intro: 'Elige un proyecto y mira cómo toma forma, paso a paso: cada pieza con su medida real, cada costura animada, además del video y todo lo que necesitarás.',
+      intro: 'Elige un proyecto y mira cómo toma forma, paso a paso: cada pieza con sus medidas reales, cada costura animada, además del video y todo lo que necesitarás.',
       more: 'Míralo paso a paso →',
     },
     project: {

@@ -22,7 +22,7 @@ export default {
     replay: '↻ Repetir',
     parts: 'Piezas',
     allSteps: 'Instrucciones paso a paso',
-    endView: 'VISTA LATERAL',
+    endView: 'CORTE',
   },
   stitches: { straight: 'Puntada recta' },
   labels: {
@@ -47,7 +47,7 @@ export default {
     cornersForm: 'las esquinas se forman solas',
     opening8: 'abertura de 8 cm',
     endsLevel: 'extremos al ras del borde superior',
-    turnThrough: 'voltear por la abertura',
+    turnThrough: 'vuelta por la abertura',
     stitchClosed: 'cerrar la abertura',
     pushLining: 'meter el forro dentro',
     topstitch1: 'pespunte a 1 cm',
@@ -81,7 +81,7 @@ export default {
         'Dobla el exterior por la mitad a lo ancho y plancha para marcar el doblez. Vuelve a abrirlo.',
         'Mide 6 cm desde el doblez hacia cada extremo y traza una línea a lo ancho de toda la pieza.',
         'Dobla por la primera línea, derecho con derecho, y cose al ras del doblez. Abre la pieza y luego dobla y cose de la misma manera por la segunda línea.',
-        'Los dos dobleces pespunteados, a 12 cm uno del otro, son los bordes del fondo; el doblez central es su centro.',
+        'Los dos dobleces pespunteados, a 12 cm uno del otro, son los bordes del fondo; el doblez central marca su mitad.',
       ],
     },
     {

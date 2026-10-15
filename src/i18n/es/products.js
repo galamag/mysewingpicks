@@ -26,7 +26,7 @@ export default {
     shortDescription: 'Once prensatelas de presión, entre ellos los de cremallera, rodillo, acolchado y botones, para máquinas Brother, Singer, Janome y similares de caña baja.',
   },
   'madam-sew-walking-foot': {
-    name: 'Prensatelas doble arrastre abierto Madam Sew (caña baja)',
+    name: 'Prensatelas de doble arrastre abierto Madam Sew (caña baja)',
     shortDescription: 'Arrastra por igual las capas de arriba y de abajo, para que las líneas de acolchado y las costuras gruesas queden lisas y sin fruncidos.',
   },
 
@@ -40,7 +40,7 @@ export default {
     shortDescription: 'Base autocicatrizante que protege tu mesa y hace que cada corte con el cortador rotativo quede nítido y preciso.',
   },
   'quilting-rulers-set': {
-    name: 'Reglas para patchwork: cuadrados, 6 × 12 y triángulo',
+    name: 'Reglas para patchwork: cuadrados, 6 × 12 pulgadas y triángulo',
     shortDescription: 'Juego completo de reglas de acrílico transparente para medir, escuadrar y cortar con precisión bloques de quilt.',
   },
   'linxiao-square-rulers': {
@@ -71,7 +71,7 @@ export default {
   },
   'rowenta-travel-iron': {
     name: 'Plancha de vapor de viaje Rowenta DA1560',
-    shortDescription: 'Plancha de vapor ligera y compacta para marcar bien las costuras y planchar dondequiera que cosas.',
+    shortDescription: 'Plancha de vapor ligera y compacta para marcar bien las costuras y planchar dondequiera que estés cosiendo.',
   },
   'rowenta-steam-station': {
     name: 'Centro de planchado Rowenta DG8624 Perfect Pro',
@@ -116,7 +116,7 @@ export default {
     shortDescription: 'Cincuenta cuadrados de 30 cm de 100 % algodón en cincuenta colores lisos distintos, listos para bloques y patchwork.',
   },
   'ojyudd-printed-squares': {
-    name: 'Cuadrados de algodón estampado OJYUDD, 10 cm, 150 piezas',
+    name: 'Cuadrados de algodón estampado OJYUDD 10 × 10 cm, 150 piezas',
     shortDescription: 'Un gran montón de cuadrados de algodón estampado de 10 cm con diseños variados, ideales para patchwork de retazos y charm quilts.',
   },
   'cotton-duck-cloth': {
@@ -184,7 +184,7 @@ export default {
     shortDescription: 'Treinta y seis rollos de cinta resistente para asas de bolsas, correas y cinturones, en casi cualquier color que necesites.',
   },
   'knit-elastic-set': {
-    name: 'Juego de elástico de punto, 4 anchos (blanco)',
+    name: 'Juego de elásticos de punto, 4 anchos (blanco)',
     shortDescription: 'Cuatro rollos de elástico de punto blanco, de 1,5 a 5 cm de ancho, con clips para pasarlo, para cinturillas y puños.',
   },
   'xkdous-knit-elastic': {
