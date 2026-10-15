@@ -112,7 +112,7 @@ export default {
     // sentence by sentence, no claim added or dropped). `links` — see en.js.
     privacy: {
       title: 'Privacy e cookie — My Sewing Picks',
-      description: 'Come My Sewing Picks usa i cookie e quali informazioni vengono raccolte quando visiti il sito — da Amazon, Cloudflare, YouTube e Google Fonts.',
+      description: 'Come My Sewing Picks usa i cookie e quali informazioni vengono raccolte quando visiti il sito — da Amazon, Cloudflare e YouTube.',
       eyebrow: 'Privacy e cookie',
       heading: 'Privacy e cookie',
       updated: 'Ultimo aggiornamento: 15 ottobre 2026',
@@ -176,9 +176,8 @@ export default {
 
           <h2>Font</h2>
           <p>
-            I font del sito provengono da Google Fonts. A seconda della configurazione, vengono
-            forniti da Cloudflare dall'indirizzo stesso di questo sito oppure direttamente dai server
-            di Google; nel secondo caso Google riceve il tuo indirizzo IP e i dati del tuo browser.
+            I font del sito vengono caricati da questo stesso sito. Per ottenerli il tuo browser non
+            contatta né Google né altri servizi di font.
           </p>
 
           <h2>Log del server</h2>

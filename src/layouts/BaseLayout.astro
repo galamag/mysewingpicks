@@ -7,9 +7,13 @@
 */
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 // Global stylesheet imported through Astro so it gets a CONTENT-HASHED filename
 // (/_astro/styles.[hash].css). Any CSS change → new hash → new URL → Cloudflare
 // can never serve a stale stylesheet. Astro injects the <link> into <head>.
+// fonts.css = @font-face for our own font files in public/fonts/ (no Google).
+import '../styles/fonts.css';
 import '../styles/styles.css';
 import { LOCALES, DEFAULT_LOCALE, LANGS, PAGES, pageUrl, t } from '../i18n/index.js';
 
@@ -35,21 +39,26 @@ const alternates = indexed && LOCALES.length > 1
 // never an Amazon product image. Title/description come from each page.
 const ogImage = new URL('/assets/og-image.jpg', Astro.site).href;
 
-// Google Fonts per language. Latin languages (en, de, fr, it, es) share Fraunces + Nunito Sans (both have
-// latin-ext: ä ö ü ß é è ç œ ñ ¿ ¡); Fraunces has no Cyrillic → Russian headings use Lora (styles.css :root:lang(ru)).
-// A language without an entry fails the build (no silent fallback to the English fonts).
-const LATIN = 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Nunito+Sans:wght@400;600;700&display=swap';
+// Fonts per language: the files in public/fonts/ every page of the language needs at once (logo, headings,
+// text), preloaded so the text doesn't jump when they arrive. All @font-face rules live in src/styles/fonts.css.
+// Latin languages (en, de, fr, it, es) share Fraunces + Nunito Sans (latin subset; ä ö ü ß é è ç œ ñ ¿ ¡ are in
+// it, rarer letters come from latin-ext on demand); Fraunces has no Cyrillic → Russian headings use Lora
+// (styles.css :root:lang(ru)). A new language needs fonts with its script: files + fonts.css + an entry here.
+// A language without an entry fails the build (no silent fallback to the English fonts), and so does a missing file.
+const LATIN = ['fraunces-v38-latin.woff2', 'nunito-sans-v19-latin.woff2'];
 const FONTS = {
   en: LATIN,
-  ru: 'https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,500&family=Nunito+Sans:wght@400;600;700&display=swap',
+  ru: ['lora-3.021-wght.woff2', 'nunito-sans-v19-latin.woff2', 'nunito-sans-v19-cyrillic.woff2'],
   de: LATIN,
   fr: LATIN,
   it: LATIN,
   es: LATIN,
 };
-// The <link> is written with set:html below: as an attribute expression Astro would turn the "&" of the URL into "&amp;".
-const fontsHref = FONTS[lang];
-if (!fontsHref) throw new Error(`BaseLayout: no Google Fonts entry (FONTS) for language "${lang}"`);
+const preloadFonts = FONTS[lang];
+if (!preloadFonts) throw new Error(`BaseLayout: no FONTS entry for language "${lang}"`);
+for (const file of preloadFonts) {
+  if (!existsSync(join(process.cwd(), 'public', 'fonts', file))) throw new Error(`BaseLayout: FONTS (${lang}) — public/fonts/${file} does not exist`);
+}
 ---
 <!DOCTYPE html>
 <html lang={lang}>
@@ -81,10 +90,8 @@ if (!fontsHref) throw new Error(`BaseLayout: no Google Fonts entry (FONTS) for l
   <meta property="og:locale" content={LANGS[lang].ogLocale} />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Warm, cozy fonts (Google Fonts; layout still works without them). -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <Fragment set:html={`<link href="${fontsHref}" rel="stylesheet">`} />
+  <!-- Warm, cozy fonts — our own files (public/fonts/), never Google; layout still works without them. -->
+  {preloadFonts.map((file) => <link rel="preload" href={`/fonts/${file}`} as="font" type="font/woff2" crossorigin />)}
 
   <!-- The hashed <link rel="stylesheet"> for our global CSS is injected here by
        Astro (from the `import '../styles/styles.css'` above). No manual link. -->

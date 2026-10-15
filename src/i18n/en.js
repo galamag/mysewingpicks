@@ -110,7 +110,7 @@ export default {
     // addresses live in ONE place for every language.
     privacy: {
       title: 'Privacy & Cookies — My Sewing Picks',
-      description: 'How My Sewing Picks uses cookies and what information is collected when you visit — by Amazon, Cloudflare, YouTube and Google Fonts.',
+      description: 'How My Sewing Picks uses cookies and what information is collected when you visit — by Amazon, Cloudflare and YouTube.',
       eyebrow: 'Privacy & cookies',
       heading: 'Privacy & Cookies',
       updated: 'Last updated: October 15, 2026',
@@ -172,9 +172,8 @@ export default {
 
           <h2>Fonts</h2>
           <p>
-            The site’s fonts come from Google Fonts. Depending on the setup, they are delivered
-            either by Cloudflare from this site’s own address or directly from Google’s servers;
-            in the second case Google receives your IP address and browser details.
+            The site’s fonts are loaded from this site itself. Your browser does not contact
+            Google or any other font service for them.
           </p>
 
           <h2>Server logs</h2>

@@ -111,7 +111,7 @@ export default {
     // sentence by sentence, no claim added or dropped). `links` — see en.js.
     privacy: {
       title: 'Datenschutz & Cookies — My Sewing Picks',
-      description: 'Wie My Sewing Picks Cookies verwendet und welche Informationen bei deinem Besuch erhoben werden – von Amazon, Cloudflare, YouTube und Google Fonts.',
+      description: 'Wie My Sewing Picks Cookies verwendet und welche Informationen bei deinem Besuch erhoben werden – von Amazon, Cloudflare und YouTube.',
       eyebrow: 'Datenschutz & Cookies',
       heading: 'Datenschutz & Cookies',
       updated: 'Zuletzt aktualisiert: 15. Oktober 2026',
@@ -178,10 +178,8 @@ export default {
 
           <h2>Schriften</h2>
           <p>
-            Die Schriften der Website stammen von Google Fonts. Je nach Einrichtung werden sie
-            entweder von Cloudflare über die eigene Adresse dieser Website ausgeliefert oder direkt
-            von den Servern von Google; im zweiten Fall erhält Google deine IP-Adresse und Angaben
-            zu deinem Browser.
+            Die Schriften der Website werden von dieser Website selbst geladen. Dein Browser stellt
+            dafür keine Verbindung zu Google oder einem anderen Webfont-Dienst her.
           </p>
 
           <h2>Server-Logfiles</h2>

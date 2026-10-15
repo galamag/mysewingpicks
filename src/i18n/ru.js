@@ -110,7 +110,7 @@ export default {
     // sentence by sentence, no claim added or dropped). `links` — see en.js.
     privacy: {
       title: 'Конфиденциальность и cookies — My Sewing Picks',
-      description: 'Как My Sewing Picks использует cookies и какие сведения собирают Amazon, Cloudflare, YouTube и Google Fonts, когда вы заходите на сайт.',
+      description: 'Как My Sewing Picks использует cookies и какие сведения собирают Amazon, Cloudflare и YouTube, когда вы заходите на сайт.',
       eyebrow: 'Конфиденциальность и cookies',
       heading: 'Конфиденциальность и cookies',
       updated: 'Обновлено: 15 октября 2026',
@@ -177,9 +177,8 @@ export default {
 
           <h2>Шрифты</h2>
           <p>
-            Шрифты сайта — из Google Fonts. В зависимости от настроек их отдаёт либо Cloudflare
-            с адреса самого сайта, либо напрямую серверы Google; во втором случае Google
-            получает ваш IP-адрес и сведения о браузере.
+            Шрифты сайта загружаются с этого же сайта. За ними ваш браузер не обращается ни к
+            Google, ни к другим сервисам шрифтов.
           </p>
 
           <h2>Журналы сервера</h2>
