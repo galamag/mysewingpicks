@@ -17,6 +17,9 @@ import frProjects from './fr/projects.js';
 import itProducts from './it/products.js';
 import itGroups from './it/categories.js';
 import itProjects from './it/projects.js';
+import esProducts from './es/products.js';
+import esGroups from './es/categories.js';
+import esProjects from './es/projects.js';
 
 export const PROJECT_FIELDS = ['title', 'blurb', 'pageTitle', 'pageDescription', 'teaser', 'videoTitle', 'videoIntro', 'needsIntro'];
 
@@ -26,6 +29,7 @@ const SETS = {
   de: { products: deProducts, groups: deGroups, projects: deProjects },
   fr: { products: frProducts, groups: frGroups, projects: frProjects },
   it: { products: itProducts, groups: itGroups, projects: itProjects },
+  es: { products: esProducts, groups: esGroups, projects: esProjects },
 };
 
 function cover(lang, kind, ids, table, fields) {

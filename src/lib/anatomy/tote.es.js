@@ -1,0 +1,149 @@
+/* Tote bag figure — Spanish texts (neutral Spanish, «tú»). Same shape as tote.en.js
+   (tote.text.js checks it): `steps` index-aligned with STEPS in tote.js, each step
+   with the same number of `details` lines as English. Centimetres only, decimal comma;
+   the inches in brackets from English are dropped. The maker's numbers
+   (86 × 45, 100 × 16, 43, 6, 12, 0,5, 8, 1 cm; 4 cm strap) — unchanged.
+   Labels (chips in the drawing) — the shortest glossary words. */
+export default {
+  ui: {
+    fig: 'Fig. 1',
+    title: 'Tote bag · anatomía',
+    svgLabel: 'Dibujo isométrico de la tote bag y de cómo se cose, paso a paso.',
+    prev: 'Paso anterior',
+    dot: (i, title) => (i ? `Paso ${i}: ${title}` : title),
+    start: 'Pasos →',
+    next: 'Siguiente →',
+    overview: 'Vista general',
+    stepOf: (k, n) => `Paso ${k} de ${n}`,
+    machine: (stitch) => `Máquina: ${stitch.toLowerCase()}`,
+    inThisStep: 'En este paso',
+    takeApart: 'Desarmar',
+    putTogether: 'Armar',
+    replay: '↻ Repetir',
+    parts: 'Piezas',
+    allSteps: 'Instrucciones paso a paso',
+    endView: 'VISTA LATERAL',
+  },
+  stitches: { straight: 'Puntada recta' },
+  labels: {
+    cm4: '4 cm', cm6: '6 cm', cm8: '8 cm', cm16: '16 cm', cm45: '45 cm', cm86: '86 cm', cm100: '100 cm',
+    fold: 'doblez',
+    outerDuck: 'exterior · lona',
+    liningSatin: 'forro · satén',
+    strapsDuck: '2 asas · lona',
+    topstitchEdges: 'pespuntear ambos bordes',
+    centreCrease: 'doblez central',
+    stitchFold: 'coser al ras del doblez',
+    bottom12: 'fondo de 12 cm',
+    liftEnds: 'levantar los extremos por los dobleces',
+    foldsIn: 'el fondo se mete dentro',
+    centreInside: 'centro: 6 cm dentro',
+    rightSides: 'derecho con derecho',
+    seam05: 'costura 0,5 cm',
+    layers4: '4 capas aquí',
+    turnOut: 'dar la vuelta al derecho',
+    openUp: 'desplegar',
+    base12: 'base de 12 cm',
+    cornersForm: 'las esquinas se forman solas',
+    opening8: 'abertura de 8 cm',
+    endsLevel: 'extremos al ras del borde superior',
+    turnThrough: 'dar la vuelta por la abertura',
+    stitchClosed: 'cerrar la abertura',
+    pushLining: 'meter el forro dentro',
+    topstitch1: 'pespunte a 1 cm',
+  },
+  steps: [
+    { title: 'La bolsa terminada', text: 'Una tote bag forrada en tres partes: exterior de lona de algodón, forro de satén y dos asas largas. Toca la bolsa para desarmarla.' },
+    {
+      title: 'Corta las piezas',
+      text: 'Exterior: lona de algodón, 86 × 45 cm. Forro: satén, del mismo tamaño. Asas: dos tiras de lona, 100 × 16 cm.',
+      details: [
+        'Corta un rectángulo de lona de algodón de 86 × 45 cm para el exterior y otro de satén, del mismo tamaño, para el forro.',
+        'Para las asas, corta dos tiras de lona de 100 × 16 cm.',
+        'En el exterior y en el forro, marca la línea de doblez a lo ancho, en el centro, a 43 cm de cada lado corto: será el fondo de la bolsa.',
+        'Todos los márgenes de costura de esta bolsa son de 0,5 cm.',
+      ],
+    },
+    {
+      title: 'Haz las asas',
+      text: 'Dobla por la mitad y plancha, abre, lleva ambos bordes hasta el doblez y vuelve a doblar: un asa de 4 cm con cuatro capas de grosor. Pespuntea ambos bordes.',
+      details: [
+        'Dobla una tira por la mitad a lo largo, revés con revés, y plancha para marcar el doblez.',
+        'Ábrela. Dobla los dos bordes largos hacia dentro para que se junten en el doblez y vuelve a planchar.',
+        'Dobla por la mitad siguiendo el primer doblez. Ahora el asa mide 4 cm de ancho y tiene cuatro capas de grosor, con todos los bordes sin acabar metidos dentro.',
+        'Pespuntea al ras de los dos bordes largos con puntada recta. Haz dos asas.',
+      ],
+    },
+    {
+      title: 'Da forma al fondo',
+      text: 'Plancha un doblez en el centro y vuelve a abrir. Mide 6 cm hacia cada lado, dobla por cada línea y cose al ras del doblez: dos dobleces pespunteados, un fondo de 12 cm.',
+      details: [
+        'Dobla el exterior por la mitad a lo ancho y plancha para marcar el doblez. Vuelve a abrirlo.',
+        'Mide 6 cm desde el doblez hacia cada extremo y traza una línea a lo ancho de toda la pieza.',
+        'Dobla por la primera línea, derecho con derecho, y cose al ras del doblez. Abre la pieza y luego dobla y cose de la misma manera por la segunda línea.',
+        'Los dos dobleces pespunteados, a 12 cm uno del otro, son los bordes del fondo; el doblez central es su centro.',
+      ],
+    },
+    {
+      title: 'Mete el fondo hacia dentro',
+      text: 'Levanta los dos extremos por los dobleces pespunteados y júntalos: el fondo se dobla hacia dentro y el doblez central entra 6 cm. Coloca la pieza plana.',
+      details: [
+        'Coloca la pieza con el derecho hacia arriba y levanta los dos extremos para que se doble por los dos dobleces pespunteados.',
+        'Junta los extremos. El fondo de 12 cm se dobla sobre sí mismo hacia dentro y el doblez central queda dentro, 6 cm hacia arriba entre las capas, como el fondo de una bolsa de papel.',
+        'Colócala plana, derecho con derecho. Ahora los dobleces pespunteados forman el borde inferior, y la pieza doblada es 6 cm más corta que si simplemente la doblaras por la mitad.',
+      ],
+    },
+    {
+      title: 'Cose los laterales',
+      text: 'Mantén el fondo metido hacia dentro y cose los dos laterales con una costura de 0,5 cm, a través de todas las capas: cuatro en el fondo.',
+      details: [
+        'Sujeta los laterales con clips de costura para que el fondo metido no se mueva.',
+        'Cose las dos costuras laterales a 0,5 cm del borde, hasta abajo del todo. En el fondo, la costura atraviesa cuatro capas: la parte delantera, las dos mitades del fondo metido y la trasera. Deja abierta la parte de arriba.',
+      ],
+    },
+    {
+      title: 'Dale la vuelta',
+      text: 'Da la vuelta al exterior al derecho y ábrelo: el fondo se despliega en una base de 12 cm y las esquinas se forman solas.',
+      details: [
+        'Da la vuelta al exterior al derecho por la parte de arriba.',
+        'Ábrelo y empuja el fondo hacia fuera. El fondo metido se despliega en una base plana de 12 cm y, donde lo sujetaron las costuras laterales, se forman solas unas esquinas limpias, sin necesidad de coser las esquinas aparte.',
+      ],
+    },
+    {
+      title: 'Cose el forro',
+      text: 'Haz el forro de satén de la misma manera, pero deja una abertura de 8 cm en una costura lateral. Por ella le darás la vuelta a la bolsa.',
+      details: [
+        'Haz el forro exactamente igual que el exterior: marca el doblez central, cose los dos dobleces a 6 cm de él y mete el fondo hacia dentro.',
+        'Cose las dos costuras laterales a 0,5 cm del borde, pero en un lado deja una abertura de 8 cm, abajo, justo por encima del fondo metido. Por ella le darás la vuelta a la bolsa.',
+        'Deja el forro del revés.',
+      ],
+    },
+    {
+      title: 'Une el exterior y el forro',
+      text: 'Sujeta las asas al exterior con alfileres, a 6 cm del centro. Mete el exterior dentro del forro, que está del revés, y cose todo el contorno de arriba.',
+      details: [
+        'Da la vuelta al exterior al derecho.',
+        'Sujeta con alfileres un asa al borde superior delantero: los extremos al ras del borde sin acabar, a 6 cm del centro, y el asa colgando hacia abajo sobre la bolsa. Haz lo mismo en la parte trasera.',
+        'Mete el exterior, con las asas, dentro del forro del revés, de modo que los derechos queden enfrentados. Alinea las costuras laterales y los bordes superiores.',
+        'Cose todo el contorno de arriba a 0,5 cm del borde.',
+      ],
+    },
+    {
+      title: 'Da la vuelta y pespuntea',
+      text: 'Da la vuelta a la bolsa por la abertura y ciérrala con una costura. Mete el forro hacia dentro y pespuntea todo el contorno de arriba a 1 cm del borde.',
+      details: [
+        'Da la vuelta a toda la bolsa al derecho por la abertura del forro.',
+        'Mete hacia dentro los bordes sin acabar de la abertura y ciérrala cosiendo al ras del borde.',
+        'Empuja el forro hacia dentro de la bolsa y plancha el borde superior para que quede plano.',
+        'Pespuntea todo el contorno de arriba a 1 cm del borde. ¡Tu tote bag está lista!',
+      ],
+    },
+  ],
+  legend: [
+    { title: 'Exterior', text: 'lona de algodón · corte de 86 × 45 cm, doblado en el fondo' },
+    { title: 'Forro', text: 'satén · corte de 86 × 45 cm, igual que el exterior' },
+    { title: 'Asas ×2', text: 'corte de 100 × 16 cm · dobladas en cuatro hasta 4 cm' },
+    { title: 'Fondo', text: 'dos dobleces cosidos a 6 cm a cada lado del doblez central; el fondo se mete hacia dentro antes de las costuras laterales → una base de 12 cm; las esquinas se forman solas' },
+    { title: 'Pespunte', text: 'a 1 cm del borde superior · todas las costuras de 0,5 cm' },
+  ],
+};
