@@ -8,5 +8,5 @@ export default {
   'fabrics/batting-interfacing': { title: 'Vlies, Füllwatte & Einlagen' },
   'fabrics/trims': { title: 'Borten, Bänder & Kordeln' },
   'fabrics/notions': { title: 'Reißverschlüsse, Knöpfe & Garn' },
-  'setup/setup': { title: 'Mein Filmstudio' },
+  'setup/setup': { title: 'Mein Video-Setup' },
 };

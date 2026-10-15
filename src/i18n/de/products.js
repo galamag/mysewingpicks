@@ -17,29 +17,29 @@ export default {
     shortDescription: 'Eine benutzerfreundliche mechanische Maschine mit 22 Stichen, 1-Stufen-Knopfloch, LED-Licht und sechs Nähfüßen im Lieferumfang.',
   },
   'free-motion-presser-foot': {
-    name: 'Freihandquiltfüße, 3 Stück (Niederschaft)',
-    shortDescription: 'Ein Set Stopffüße für Maschinen mit Niederschaft – für gleichmäßiges Freihandquilten und Zeichnen mit der Nähmaschine.',
+    name: 'Freihandquiltfüße, 3 Stück (Niedrigschaft)',
+    shortDescription: 'Ein Set Stopffüße für Maschinen mit Niedrigschaft – für gleichmäßiges Freihandquilten und Zeichnen mit der Nähmaschine.',
   },
   'windman-presser-feet-set': {
-    name: 'Windman Snap-on-Nähfüße, 11 Stück (Niederschaft)',
-    shortDescription: 'Elf Nähfüße zum Aufklipsen, darunter Reißverschluss-, Roll-, Quilt- und Knopfannähfuß, für Brother, Singer, Janome und ähnliche Maschinen mit Niederschaft.',
+    name: 'Windman Snap-on-Nähfüße, 11 Stück (Niedrigschaft)',
+    shortDescription: 'Elf Nähfüße zum Aufklipsen, darunter Reißverschluss-, Roll-, Quilt- und Knopfannähfuß, für Brother, Singer, Janome und ähnliche Maschinen mit Niedrigschaft.',
   },
   'madam-sew-walking-foot': {
-    name: 'Madam Sew offener Obertransportfuß (Niederschaft)',
+    name: 'Madam Sew offener Obertransportfuß (Niedrigschaft)',
     shortDescription: 'Transportiert obere und untere Lage gleichmäßig, sodass Quiltlinien und dicke Nähte glatt und ohne Kräuseln bleiben.',
   },
 
   /* ---- Zuschneiden & Messen ---- */
   'olfa-rotary-cutter': {
-    name: 'OLFA Deluxe Rollschneider, 45 mm',
+    name: 'OLFA Deluxe Rollschneider, 45 mm',
     shortDescription: 'Ein scharfer, angenehm zu haltender Rollschneider für saubere, genaue Schnitte durch mehrere Stofflagen auf einmal.',
   },
   'olfa-cutting-mat': {
-    name: 'OLFA Schneidematte, selbstheilend, 61 × 46 cm',
+    name: 'OLFA Schneidematte, selbstheilend, 61 × 46 cm',
     shortDescription: 'Eine selbstheilende Matte, die deinen Tisch schützt und jeden Schnitt mit dem Rollschneider sauber und präzise macht.',
   },
   'quilting-rulers-set': {
-    name: 'Patchworklineale: Quadrate, 6 × 12 Zoll und Dreieck',
+    name: 'Patchworklineal-Set: Quadrate, 6 × 12 Zoll und Dreieck',
     shortDescription: 'Ein komplettes Set transparenter Acryllineale, um Quiltblöcke genau abzumessen, zu begradigen und zuzuschneiden.',
   },
   'linxiao-square-rulers': {
@@ -47,15 +47,15 @@ export default {
     shortDescription: 'Vier transparente Acrylquadrate von 3,5 bis 10,5 Zoll mit 1/8-Zoll- und 45°-Markierungen zum Begradigen von Blöcken.',
   },
   'tailor-scissors': {
-    name: 'Schneiderschere 23 cm + Maßband',
-    shortDescription: 'Robuste Stoffschere mit abgewinkeltem Griff und Klinge aus kohlenstoffreichem Stahl, dazu ein Maßband mit 150 cm.',
+    name: 'Schneiderschere 23 cm + Maßband',
+    shortDescription: 'Robuste Stoffschere mit abgewinkeltem Griff und Klinge aus kohlenstoffreichem Stahl, dazu ein 150-cm-Maßband.',
   },
   'beaditive-thread-snips': {
     name: 'Beaditive Fadenknipser, 3 Stück',
     shortDescription: 'Kleine Fadenknipser mit Feder schneiden Fäden direkt an der Naht ab: Leg einen neben die Maschine und einen in dein Nähset.',
   },
   'ibayam-tape-measures': {
-    name: 'iBayam Maßbänder, 2 Stück (150 cm)',
+    name: 'iBayam Maßbänder, 2 Stück (150 cm)',
     shortDescription: 'Ein weiches Maßband und ein Rollmaßband, beide doppelseitig mit Zoll und Zentimetern, für Körpermaße und Stoff.',
   },
 
@@ -65,19 +65,19 @@ export default {
     shortDescription: 'Markiert deinen Stoff deutlich und verblasst dann von selbst – ohne Auswaschen und ohne Rückstände.',
   },
   'lange-konig-heat-erasable-pens': {
-    name: 'Lange & König Thermo-Markierstifte, 4 St. + Minen',
+    name: 'Lange & König Thermo-Markierstifte, 4 Stück + Minen',
     shortDescription: 'Feine Markierstifte in vier Farben, deren Linien unter der Hitze des Bügeleisens verschwinden; acht Ersatzminen inklusive.',
   },
   'rowenta-travel-iron': {
     name: 'Rowenta DA1560 Reise-Dampfbügeleisen',
-    shortDescription: 'Ein leichtes, kompaktes Dampfbügeleisen für exakt gebügelte Nähte und sauberes Bügeln, wo immer du nähst.',
+    shortDescription: 'Ein leichtes, kompaktes Dampfbügeleisen für scharf gebügelte Nähte – wo immer du nähst.',
   },
   'rowenta-steam-station': {
     name: 'Rowenta DG8624 Perfect Pro Dampfbügelstation',
     shortDescription: 'Eine Dampfbügelstation mit separatem 1,1-l-Wassertank für kräftigen, gleichmäßigen Dampf beim Bügeln von Nähten und fertigen Projekten.',
   },
   'vevor-water-distiller': {
-    name: 'VEVOR Tisch-Wasserdestilliergerät, 4 l',
+    name: 'VEVOR Tisch-Wasserdestilliergerät, 4 l',
     shortDescription: 'Stellt zu Hause destilliertes Wasser her, etwa einen Liter pro Stunde – praktisch zum Befüllen deines Dampfbügeleisens.',
   },
 
@@ -88,7 +88,7 @@ export default {
   },
   'soraco-sewing-clips': {
     name: 'Soraco Stoffklammern, 100 Stück',
-    shortDescription: 'Bunte Klammern halten Einfassungen, dicke Lagen und Kunstleder dort, wo Stecknadeln Löcher hinterlassen würden; sie kommen in einer praktischen Dose.',
+    shortDescription: 'Bunte Klammern halten Einfassungen, dicke Lagen und Kunstleder dort, wo Stecknadeln Löcher hinterlassen würden; geliefert in einer praktischen Dose.',
   },
   'xihircd-drawstring-threaders': {
     name: 'XIHIRCD Einziehnadeln, 4 Stück',
@@ -111,53 +111,53 @@ export default {
     shortDescription: 'Farblich abgestimmte Stoffpakete, mit denen du dein nächstes Patchwork- oder Quiltprojekt sofort mit fertiger Farbpalette beginnen kannst.',
   },
   'solid-cotton-squares': {
-    name: 'Uni-Baumwollquadrate 30 × 30 cm, 50 Stück',
-    shortDescription: 'Fünfzig Quadrate mit 30 cm Seitenlänge aus 100 % Baumwolle in fünfzig verschiedenen Unifarben, bereit für Blöcke und Patchwork.',
+    name: 'Uni-Baumwollquadrate 30 × 30 cm, 50 Stück',
+    shortDescription: 'Fünfzig Quadrate mit 30 cm Seitenlänge aus 100 % Baumwolle in fünfzig verschiedenen Unifarben, bereit für Blöcke und Patchwork.',
   },
   'ojyudd-printed-squares': {
-    name: 'OJYUDD bedruckte Baumwollquadrate 10 × 10 cm, 150 Stück',
-    shortDescription: 'Ein großer Stapel bedruckter Baumwollquadrate (10 × 10 cm) mit gemischten Mustern – ideal für Reste-Patchwork und Charm Quilts.',
+    name: 'OJYUDD bedruckte Baumwollquadrate 10 × 10 cm, 150 Stück',
+    shortDescription: 'Ein großer Stapel bedruckter Baumwollquadrate (10 × 10 cm) mit gemischten Mustern – ideal für Reste-Patchwork und Charm Quilts.',
   },
   'cotton-duck-cloth': {
-    name: 'Bedruckter Baumwoll-Canvas, Meterware, 137 cm breit',
+    name: 'Bedruckter Baumwoll-Canvas, Meterware, 137 cm breit',
     shortDescription: 'Robuster Canvas aus 100 % Baumwolle mit Druckmuster – eine gute Stoffstärke für Tote Bags, Kissen und Wohndeko.',
   },
   'barcelonetta-broadcloth': {
-    name: 'Barcelonetta Popeline (Polycotton), 152 cm, Salbei',
+    name: 'Barcelonetta Popeline (Polycotton), 152 cm, Salbei',
     shortDescription: 'Leichte Popeline aus Polyester und Baumwolle, gut geeignet für Futter, Innentaschen und einfache Kleidungsstücke.',
   },
   'purreitti-felt-sheets': {
-    name: 'PURREITTI fester Bastelfilz, 30 × 30 cm, 80 Stück',
+    name: 'PURREITTI fester Bastelfilz, 30 × 30 cm, 80 Stück',
     shortDescription: 'Dicker 2-mm-Filz mit Wollanteil in 40 Farben, der seine Form hält – für Taschenböden, Dekoanhänger und Bastelprojekte.',
   },
 
   /* ---- Vlies, Füllwatte & Einlagen ---- */
   'plantional-cotton-batting': {
-    name: 'PLANTIONAL Baumwollvlies, natur, 119 × 150 cm',
+    name: 'PLANTIONAL Baumwollvlies, natur, 119 × 150 cm',
     shortDescription: 'Atmungsaktives Vlies aus 100 % Baumwolle, das Quilts, Tischsets und Topflappen einen weichen, natürlichen Griff gibt.',
   },
   'pandoroom-polyester-batting': {
-    name: 'PANDOROOM Polyester-Volumenvlies, 122 cm × 2,7 m',
+    name: 'PANDOROOM Polyester-Volumenvlies, 122 cm × 2,7 m',
     shortDescription: 'Mittelstarkes Volumenvlies aus Polyester, das gequilteten Taschen, Kissen und Quilts Volumen und Wärme gibt.',
   },
   'fairfield-poly-fil': {
-    name: 'Fairfield Poly-Fil Füllwatte, 907 g',
+    name: 'Fairfield Poly-Fil Füllwatte, 907 g',
     shortDescription: 'Weiche, waschbare Füllwatte aus Polyester, um Kissen, Spielzeug und gepolsterte Teile gleichmäßig zu füllen.',
   },
   'jupean-medium-interfacing': {
-    name: 'JUPEAN Bügeleinlage, mittelschwer, 27 m',
+    name: 'JUPEAN Bügeleinlage, mittelschwer, 27 m',
     shortDescription: 'Aufbügelbare Einlage, die Taschen, Kragen und Täschchen Stand gibt, damit sie ihre Form behalten.',
   },
   'plantional-lightweight-interfacing': {
-    name: 'PLANTIONAL Bügeleinlage, leicht, 27 m',
+    name: 'PLANTIONAL Bügeleinlage, leicht, 27 m',
     shortDescription: 'Leichte Vlieseinlage zum Aufbügeln: Sie gibt sanften Halt, ohne Projekte aus Baumwolle steif zu machen.',
   },
   'hbi-wash-away-stabilizer': {
-    name: 'HBI wasserlösliches Stickvlies, 30 cm × 23 m',
+    name: 'HBI wasserlösliches Stickvlies, 30 cm × 23 m',
     shortDescription: 'Ein wasserlösliches Stickvlies, das Stickereien und freistehende Spitze stützt und sich danach vollständig auswaschen lässt.',
   },
   'brothread-wash-away-stabilizer': {
-    name: 'New brothread wasserlösliches Stickvlies, 25 cm × 2,7 m',
+    name: 'New brothread wasserlösliches Stickvlies, 25 cm × 2,7 m',
     shortDescription: 'Eine kleine Rolle wasserlösliches Stickvlies für Maschinenstickerei, das sich in kaltem oder warmem Wasser auflöst.',
   },
 
@@ -167,27 +167,27 @@ export default {
     shortDescription: 'Zarte Spitzenborte als Kantenabschluss, zum Verzieren von Taschen und für eine handgemachte Note an jedem Projekt.',
   },
   'sari-silk-ribbon': {
-    name: 'Seidenband aus recycelten Saris, 41 m',
+    name: 'Seidenband aus recycelten Saris, 41 m',
     shortDescription: 'Seidenstreifen mit ausgefransten Kanten, geschnitten aus recycelten Saris; jedes Bündel ist eine einzigartige Farbmischung für Borten und Textilkunst.',
   },
   'mandala-crafts-bias-tape': {
-    name: 'Mandala Crafts Schrägband 13 mm, doppelt gefalzt (Creme)',
+    name: 'Mandala Crafts Schrägband 13 mm, doppelt gefalzt (Creme)',
     shortDescription: 'Eine lange Rolle vorgefalztes Schrägband, um Kanten, Säume und Rundungen sauber einzufassen.',
   },
   'willbond-twill-tape': {
-    name: 'Willbond Köperband aus Baumwolle, Fischgrat, 10 mm',
+    name: 'Willbond Köperband aus Baumwolle, Fischgrat, 10 mm',
     shortDescription: 'Köperband aus Naturbaumwolle für Zugbänder, Bindebänder, Aufhängeschlaufen und zum Verstärken von Nähten an Taschen und Schürzen.',
   },
   'windyun-webbing': {
-    name: 'Windyun Gurtband, Polycotton, 38 mm, 36 Farben',
+    name: 'Windyun Gurtband, Polycotton, 38 mm, 36 Farben',
     shortDescription: 'Sechsunddreißig Rollen robustes Gurtband für Taschenhenkel, Riemen und Gürtel – in fast jeder Farbe, die du brauchst.',
   },
   'knit-elastic-set': {
     name: 'Strickgummi-Set, 4 Breiten (weiß)',
-    shortDescription: 'Vier Rollen weißes Strickgummi von 1,5 bis 5 cm Breite, mit Klammern zum Einziehen, für Bunde und Bündchen.',
+    shortDescription: 'Vier Rollen weißes Strickgummi von 1,5 bis 5 cm Breite, mit Klammern zum Einziehen, für Bunde und Bündchen.',
   },
   'xkdous-knit-elastic': {
-    name: 'XKDOUS Strickgummi, 6 mm × 37 m',
+    name: 'XKDOUS Strickgummi, 6 mm × 37 m',
     shortDescription: 'Eine lange Rolle schmales weißes Gummiband für Bunde, Ärmel und Scrunchies.',
   },
   'cridoz-satin-cord': {
@@ -195,17 +195,17 @@ export default {
     shortDescription: 'Seidig glänzende Satinkordel aus Nylon in verschiedenen Farben für Zugbänder, Geschenkbeutel, Flechtarbeiten und dekorative Bindebänder.',
   },
   'kinglake-jute-twine': {
-    name: 'KINGLAKE Jutekordel, natur, 2 mm × 200 m',
+    name: 'KINGLAKE Jutekordel, natur, 2 mm × 200 m',
     shortDescription: 'Kordel aus Naturjute für rustikale Anhänger, Zugbänder, Geschenkverpackungen und dekorative Akzente.',
   },
 
   /* ---- Reißverschlüsse, Knöpfe & Garn ---- */
   'mandala-crafts-zippers': {
-    name: 'Mandala Crafts Nylon-Reißverschlüsse 36 cm, 80 Stück',
+    name: 'Mandala Crafts Nylon-Reißverschlüsse 36 cm, 80 Stück',
     shortDescription: 'Achtzig nicht teilbare Nylon-Reißverschlüsse in 20 Farben für Täschchen, Kissen und Kleidung.',
   },
   'mebuzip-zipper-by-the-yard': {
-    name: 'MebuZip Endlosreißverschluss Nr. 5, 9 m + 25 Zipper',
+    name: 'MebuZip Endlosreißverschluss Nr. 5, 9 m + 25 Zipper',
     shortDescription: 'Endlos-Reißverschlussband in Altmessing mit separaten Zippern – so schneidest du für Taschen Reißverschlüsse in jeder Länge zu.',
   },
   'swpeet-covered-buttons': {
@@ -217,33 +217,33 @@ export default {
     shortDescription: 'Sechsunddreißig Garnrollen aus Polyester, jede mit passender Spule, damit du immer die richtige Farbe zur Hand hast.',
   },
   'dritz-invisible-thread': {
-    name: 'Dritz unsichtbares Garn, transparent, 137 m',
+    name: 'Dritz unsichtbares Garn, transparent, 137 m',
     shortDescription: 'Transparentes Garn, das mit jedem Stoff verschmilzt – praktisch zum Quilten, für Applikationen und unauffällige Abschlussstiche.',
   },
 
   /* ================= MEIN FILMSTUDIO ================= */
   'sensyne-ring-light': {
-    name: 'SENSYNE Ringlicht 25 cm mit Stativ 127 cm',
+    name: 'SENSYNE Ringlicht 25 cm mit Stativ 127 cm',
     shortDescription: 'Ein Ringlicht mit USB-Stromversorgung auf ausziehbarem Handyständer, mit drei Farbmodi und Fernbedienung für gleichmäßiges Licht.',
   },
   'skytex-softbox-kit': {
     name: 'Skytex Softbox-Set, 2 Leuchten',
-    shortDescription: 'Zwei Softboxen (51 × 71 cm) mit dimmbaren LED-Lampen und Stativen, die beim Filmen oder Fotografieren Schatten weicher machen.',
+    shortDescription: 'Zwei Softboxen (51 × 71 cm) mit dimmbaren LED-Lampen und Stativen, die beim Filmen oder Fotografieren Schatten weicher machen.',
   },
   'liphisy-tripod': {
-    name: 'Liphisy Stativ für Handy und Kamera, 163 cm',
+    name: 'Liphisy Stativ für Handy und Kamera, 163 cm',
     shortDescription: 'Ein hohes Aluminiumstativ mit Handyhalterung, Kugelkopf und Fernbedienung für ruhige Aufnahmen aus jedem Winkel.',
   },
   'iphone-15-pro-max-renewed': {
-    name: 'Apple iPhone 15 Pro Max, 512 GB (Generalüberholt)',
+    name: 'Apple iPhone 15 Pro Max, 512 GB (Generalüberholt)',
     shortDescription: 'Ein generalüberholtes iPhone 15 Pro Max mit 6,7-Zoll-Display und einer Kamera, die feine Nähdetails aus der Nähe einfängt.',
   },
   'macbook-pro-m5': {
-    name: 'Apple MacBook Pro 14 Zoll, M5, 16 GB / 1 TB',
+    name: 'Apple MacBook Pro 14 Zoll, M5, 16 GB / 1 TB',
     shortDescription: 'Ein 14-Zoll-Laptop mit M5-Chip, um Videos zu schneiden, Fotos zu ordnen und ein kleines kreatives Unternehmen zu führen.',
   },
   'ergear-standing-desk': {
-    name: 'ErGear elektrischer Stehschreibtisch, 122 × 61 cm',
+    name: 'ErGear elektrischer Stehschreibtisch, 122 × 61 cm',
     shortDescription: 'Ein elektrischer Sitz-Steh-Schreibtisch mit vier Höhenspeichern, damit du in bequemer Höhe zuschneiden, nähen oder Videos bearbeiten kannst.',
   },
 };

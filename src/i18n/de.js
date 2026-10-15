@@ -10,7 +10,7 @@ export default {
     nav: { home: 'Start', tools: 'Werkzeuge', fabrics: 'Stoffe', projects: 'Projekte', setup: 'Mein Studio', about: 'Über mich' },
     homeLabel: 'Startseite',
     logo: 'Logo',
-    toggleMenu: 'Menü öffnen',
+    toggleMenu: 'Menü öffnen/schließen',
     primaryNav: 'Hauptmenü',
     language: 'Sprache',
     viewOnAmazon: 'Bei Amazon ansehen',
@@ -44,7 +44,7 @@ export default {
       cards: {
         tools: { heading: 'Werkzeuge', text: 'Nähmaschinen, Nähfüße, Rollschneider, Lineale, Scheren, Bügeleisen und Markierstifte – die treuen Helfer, mit denen jedes Projekt sauber und präzise gelingt.', more: 'Werkzeuge entdecken →' },
         fabrics: { heading: 'Stoffe & Materialien', text: 'Patchworkstoffe, Volumenvlies, Bügeleinlage, Spitze, Bänder, Reißverschlüsse und Garn – die Farben und Strukturen, die aus einer Idee etwas machen, das du in den Händen halten kannst.', more: 'Stoffe entdecken →' },
-        setup: { heading: 'Mein Filmstudio', text: 'Ringlicht, Softboxen, Stativ, Kamera, Laptop und Schreibtisch – alles für eine gemütliche kleine Ecke, in der du deine eigenen Nähvideos filmen kannst.', more: 'Mein Studio entdecken →' },
+        setup: { heading: 'Mein Video-Setup', text: 'Ringlicht, Softboxen, Stativ, Kamera, Laptop und Schreibtisch – alles für eine gemütliche kleine Ecke, in der du deine eigenen Nähvideos filmen kannst.', more: 'Mein Studio entdecken →' },
       },
       sewAlong: {
         eyebrow: 'Neu · zum Mitnähen',
@@ -63,7 +63,7 @@ export default {
       title: 'Werkzeuge — My Sewing Picks',
       description: 'Werkzeuge zum Nähen und Quilten, die ich persönlich empfehle: Nähmaschinen und Nähfüße, Rollschneider, Schneidematten, Lineale, Scheren, Markierstifte, Bügeleisen und praktische Helfer.',
       heading: 'Werkzeuge',
-      intro: 'Die treuen Helfer, mit denen jedes Projekt präzise gelingt – Maschinen, Rollschneider, Lineale sowie Helfer zum Markieren und Bügeln, die ich persönlich empfehle.',
+      intro: 'Die treuen Helfer, mit denen jedes Projekt präzise gelingt – Maschinen, Rollschneider, Lineale sowie Hilfsmittel zum Markieren und Bügeln, die ich persönlich empfehle.',
     },
     fabrics: {
       title: 'Stoffe & Materialien — My Sewing Picks',
@@ -72,9 +72,9 @@ export default {
       intro: 'Die Farben und Strukturen, die ein Projekt zum Leben erwecken – Stoffe, Vlies, Borten und Kurzwaren, die ich persönlich für Patchwork und Genähtes für den Alltag empfehle.',
     },
     setup: {
-      title: 'Mein Filmstudio — My Sewing Picks',
+      title: 'Mein Video-Setup — My Sewing Picks',
       description: 'Licht, Stativ, Kamera, Laptop und Schreibtisch, die ich persönlich empfehle, um deine eigenen Näh- und Quiltvideos zu filmen.',
-      heading: 'Mein Filmstudio',
+      heading: 'Mein Video-Setup',
       intro: 'Du überlegst, deine eigenen Nähvideos zu filmen? Hier sind Licht, Stativ, Kamera, Laptop und Schreibtisch, die ich persönlich für eine gemütliche kleine Filmecke empfehle.',
     },
     projects: {
@@ -82,7 +82,7 @@ export default {
       description: 'Schritt-für-Schritt-Nähprojekte mit animierten Anleitungen, echten Zuschnittmaßen und dem Video vom Kanal SEWING DIY PATCHWORK.',
       eyebrow: 'Zum Mitnähen',
       heading: 'Projekte',
-      intro: 'Such dir ein Projekt aus und sieh zu, wie es Schritt für Schritt entsteht – jedes Teil in seiner echten Größe, jede Naht animiert, dazu das Video und alles, was du brauchst.',
+      intro: 'Such dir ein Projekt aus und sieh zu, wie es Schritt für Schritt entsteht – jedes Teil mit seinen echten Maßen, jede Naht animiert, dazu das Video und alles, was du brauchst.',
       more: 'Schritt für Schritt ansehen →',
     },
     project: {
