@@ -10,9 +10,9 @@ export const LEGAL = {
   de: {
     link: 'Impressum',
     title: 'Impressum — My Sewing Picks',
-    description: 'Impressum von My Sewing Picks: Anbieterkennzeichnung gemäß § 5 DDG.',
+    description: 'Impressum von My Sewing Picks: Anbieterkennzeichnung gemäß § 5 DDG.',
     heading: 'Impressum',
-    owner: 'Angaben gemäß § 5 DDG',
+    owner: 'Angaben gemäß § 5 DDG',
     contact: 'Kontakt',
     email: 'E-Mail:',
     phone: 'Telefon:',

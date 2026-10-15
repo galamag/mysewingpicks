@@ -88,7 +88,7 @@ export default {
   },
   'soraco-sewing-clips': {
     name: 'Soraco Stoffklammern, 100 Stück',
-    shortDescription: 'Bunte Klammern halten Einfassungen, dicke Lagen und Kunstleder dort, wo Stecknadeln Löcher hinterlassen würden; geliefert in einer praktischen Dose.',
+    shortDescription: 'Bunte Klammern halten Einfassungen, dicke Lagen und Kunstleder dort, wo Stecknadeln Löcher hinterlassen würden; sie werden in einer praktischen Dose geliefert.',
   },
   'xihircd-drawstring-threaders': {
     name: 'XIHIRCD Einziehnadeln, 4 Stück',

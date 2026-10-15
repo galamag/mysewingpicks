@@ -41,7 +41,7 @@ export default {
     shortDescription: 'Un tapis autocicatrisant qui protège votre table et rend chaque coupe au cutter rotatif nette et précise.',
   },
   'quilting-rulers-set': {
-    name: 'Règles de patchwork : carrés, 6 × 12 pouces et triangle',
+    name: 'Règles de patchwork : carrés, 6 × 12 pouces et triangle',
     shortDescription: 'Un jeu complet de règles en acrylique transparent pour mesurer, rectifier et couper les blocs de quilt avec précision.',
   },
   'linxiao-square-rulers': {

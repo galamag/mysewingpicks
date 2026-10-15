@@ -10,7 +10,7 @@ export default {
     nav: { home: 'Start', tools: 'Werkzeuge', fabrics: 'Stoffe', projects: 'Projekte', setup: 'Mein Studio', about: 'Über mich' },
     homeLabel: 'Startseite',
     logo: 'Logo',
-    toggleMenu: 'Menü öffnen/schließen',
+    toggleMenu: 'Menü öffnen oder schließen',
     primaryNav: 'Hauptmenü',
     language: 'Sprache',
     viewOnAmazon: 'Bei Amazon ansehen',
@@ -44,7 +44,7 @@ export default {
       cards: {
         tools: { heading: 'Werkzeuge', text: 'Nähmaschinen, Nähfüße, Rollschneider, Lineale, Scheren, Bügeleisen und Markierstifte – die treuen Helfer, mit denen jedes Projekt sauber und präzise gelingt.', more: 'Werkzeuge entdecken →' },
         fabrics: { heading: 'Stoffe & Materialien', text: 'Patchworkstoffe, Volumenvlies, Bügeleinlage, Spitze, Bänder, Reißverschlüsse und Garn – die Farben und Strukturen, die aus einer Idee etwas machen, das du in den Händen halten kannst.', more: 'Stoffe entdecken →' },
-        setup: { heading: 'Mein Video-Setup', text: 'Ringlicht, Softboxen, Stativ, Kamera, Laptop und Schreibtisch – alles für eine gemütliche kleine Ecke, in der du deine eigenen Nähvideos filmen kannst.', more: 'Mein Studio entdecken →' },
+        setup: { heading: 'Mein Video-Setup', text: 'Ringlicht, Softboxen, Stativ, Kamera, Laptop und Schreibtisch – alles für eine gemütliche kleine Ecke, in der du deine eigenen Nähvideos filmen kannst.', more: 'Mein Video-Setup entdecken →' },
       },
       sewAlong: {
         eyebrow: 'Neu · zum Mitnähen',

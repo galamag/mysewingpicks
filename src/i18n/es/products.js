@@ -40,7 +40,7 @@ export default {
     shortDescription: 'Base autocicatrizante que protege tu mesa y hace que cada corte con el cortador rotativo quede nítido y preciso.',
   },
   'quilting-rulers-set': {
-    name: 'Reglas para patchwork: cuadrados, 6 × 12 pulgadas y triángulo',
+    name: 'Reglas para patchwork: cuadrados, 6 × 12 pulgadas y triángulo',
     shortDescription: 'Juego completo de reglas de acrílico transparente para medir, escuadrar y cortar con precisión bloques de quilt.',
   },
   'linxiao-square-rulers': {
