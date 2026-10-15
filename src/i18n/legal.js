@@ -14,8 +14,8 @@ export const LEGAL = {
     heading: 'Impressum',
     owner: 'Angaben gemäß § 5 DDG',
     contact: 'Kontakt',
-    email: 'E-Mail',
-    phone: 'Telefon',
+    email: 'E-Mail:',
+    phone: 'Telefon:',
     host: null,
   },
   es: {
@@ -25,8 +25,8 @@ export const LEGAL = {
     heading: 'Aviso legal',
     owner: 'Titular del sitio web (art. 10 de la Ley 34/2002, LSSI)',
     contact: 'Contacto',
-    email: 'Correo electrónico',
-    phone: 'Teléfono',
+    email: 'Correo electrónico:',
+    phone: 'Teléfono:',
     host: null,
   },
   fr: {
@@ -36,8 +36,8 @@ export const LEGAL = {
     heading: 'Mentions légales',
     owner: 'Éditeur du site et directeur de la publication',
     contact: 'Contact',
-    email: 'E-mail',
-    phone: 'Téléphone',
+    email: 'E-mail\u00A0:',     // the colon is part of the label: French sets a no-break space before it
+    phone: 'Téléphone\u00A0:',
     // Hosting provider — French law asks for its name, address and phone. Data from Bluehost's own site,
     // checked 2026-10-15: company name = Terms of Service (https://www.bluehost.com/terms: "an agreement
     // between you and Bluehost Inc."; notice address "Bluehost Inc., Attn: Legal Department, 5335 Gate Pkwy,

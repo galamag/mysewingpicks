@@ -19,6 +19,8 @@ deployment:
     - /bin/cp server/refresh-images.php server/catalog-tool.php server/config.example.php $APIPATH
     # Legal notice (de/es/fr): the owner's name/address/e-mail live ONLY on the server in
     # $APIPATH/legal.php (never in git). dist/ ships the pages with placeholders, so every deploy
-    # fills them in again; the script self-tests first and leaves the pages alone if anything is off.
-    - /bin/cp server/legal.example.php $APIPATH
-    - /usr/local/bin/php server/fill-legal.php $DEPLOYPATH $APIPATH/legal.php
+    # fills them in again. The script sits next to the data (like the other server scripts), runs a
+    # self-test first and leaves the pages alone if anything is off. Manual re-fill, one line:
+    #   /usr/local/bin/php /home1/mzadwkmy/mysewingpicks-api/fill-legal.php /home1/mzadwkmy/public_html/ /home1/mzadwkmy/mysewingpicks-api/legal.php
+    - /bin/cp server/legal.example.php server/fill-legal.php $APIPATH
+    - /usr/local/bin/php $APIPATH/fill-legal.php $DEPLOYPATH $APIPATH/legal.php

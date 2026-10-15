@@ -54,7 +54,7 @@ export const PAGES = {
 export const LIMITED_PAGES = { legal: { file: 'legal.html', langs: ['de', 'es', 'fr'] } };
 
 /** Does `page` exist in `lang`? Every PAGES page does; a LIMITED_PAGES page only in its languages. */
-export const hasPage = (page, lang) => page in PAGES || (LIMITED_PAGES[page]?.langs.includes(lang) ?? false);
+export const hasPage = (page, lang) => Object.prototype.hasOwnProperty.call(PAGES, page) || (LIMITED_PAGES[page]?.langs.includes(lang) ?? false);
 
 /** Site-absolute URL of a page in a language: pageUrl('tools', 'ru') → '/ru/tools.html'. */
 export function pageUrl(page, lang) {

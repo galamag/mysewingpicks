@@ -4,6 +4,8 @@
   LIMITED_PAGES.legal. noindex, not in sitemap.xml, no hreflang (BaseLayout does that for every
   page outside PAGES). The owner's data are placeholders here: server/fill-legal.php replaces them
   on the server at every deploy — they are never in git.
+  server/fill-legal.php matches the %%LEGAL_…%% placeholders and the `<p data-legal="phone">…</p>`
+  element below (it drops that paragraph when there is no phone) — keep their markup exactly.
 */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { limitedPaths, langOf } from '../../i18n/index.js';
@@ -25,8 +27,8 @@ const text = LEGAL[lang];
           <h2>{text.owner}</h2>
           <p>%%LEGAL_NAME%%<br />%%LEGAL_ADDRESS%%</p>
           <h2>{text.contact}</h2>
-          <p>{text.email}: <a href="mailto:%%LEGAL_EMAIL%%">%%LEGAL_EMAIL%%</a></p>
-          <p data-legal="phone">{text.phone}: %%LEGAL_PHONE%%</p>
+          <p>{text.email} <a href="mailto:%%LEGAL_EMAIL%%">%%LEGAL_EMAIL%%</a></p>
+          <p data-legal="phone">{text.phone} %%LEGAL_PHONE%%</p>
           {text.host && (
             <>
               <h2>{text.host.heading}</h2>

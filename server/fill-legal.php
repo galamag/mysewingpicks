@@ -3,7 +3,8 @@
   fill-legal.php — puts the site owner's name, address, e-mail (and phone, if given) into the Legal
   notice pages (public_html/<lang>/legal.html: de, es, fr) at deploy. Run by .cpanel.yml right after
   dist/ is copied: every deploy copies the pages WITH placeholders again, so this must run every time.
-  The data live ONLY on the server — ~/mysewingpicks-api/legal.php (see legal.example.php) — never in git.
+  The data live ONLY on the server — ~/mysewingpicks-api/legal.php (see legal.example.php) — never in git,
+  and never in the deploy log: no message below prints a value from legal.php (key names and line numbers only).
     php fill-legal.php <public_html> <legal.php>    self-test, then fill (exit 1: data or pages missing, test failed)
     php fill-legal.php --self-test                 only the self-test
   PHP 7.0+.
@@ -34,6 +35,12 @@ function legal_data_error($data) {
   foreach (array('name', 'address', 'email') as $k) {
     if (!isset($data[$k]) || !is_string($data[$k]) || trim($data[$k]) === '') return "legal.php has no '$k'";
   }
+  // Invalid UTF-8 would silently become an empty string (htmlspecialchars) or false (preg_split //u) — refuse it.
+  foreach (array('name', 'address', 'email', 'phone') as $k) {
+    if (isset($data[$k]) && is_string($data[$k]) && $data[$k] !== '' && !preg_match('//u', $data[$k])) {
+      return "legal.php: '$k' is not UTF-8 — save the file as UTF-8";
+    }
+  }
   if (!filter_var(trim($data['email']), FILTER_VALIDATE_EMAIL)) return 'legal.php: email is not an e-mail address';
   return null;
 }
@@ -44,8 +51,8 @@ function legal_self_test() {
   $cases = array(
     'no phone' => array(legal_fill($page, $data),
       '<p>Ä &amp; &lt;b&gt;&quot;O&apos;Neil&quot;&lt;/b&gt;<br />Straße 1/2<br>12345 Stadt</p><p>E: <a href="mailto:a.b@example.com">a.b@example.com</a></p>'),
-    'phone' => array(legal_fill($page, $data + array('phone' => '+7 700 000 00 00')),
-      '<p>Ä &amp; &lt;b&gt;&quot;O&apos;Neil&quot;&lt;/b&gt;<br />Straße 1/2<br>12345 Stadt</p><p>E: <a href="mailto:a.b@example.com">a.b@example.com</a></p><p data-legal="phone">T: +7 700 000 00 00</p>'),
+    'phone' => array(legal_fill($page, $data + array('phone' => '+00 000 000 0000')),
+      '<p>Ä &amp; &lt;b&gt;&quot;O&apos;Neil&quot;&lt;/b&gt;<br />Straße 1/2<br>12345 Stadt</p><p>E: <a href="mailto:a.b@example.com">a.b@example.com</a></p><p data-legal="phone">T: +00 000 000 0000</p>'),
   );
   $ok = true;
   foreach ($cases as $name => $c) {
@@ -53,6 +60,9 @@ function legal_self_test() {
   }
   if (legal_data_error(array('name' => 'X', 'address' => 'Y')) === null) { fwrite(STDERR, "fill-legal self-test: missing e-mail not caught\n"); $ok = false; }
   if (legal_data_error($data) !== null) { fwrite(STDERR, "fill-legal self-test: good data rejected\n"); $ok = false; }
+  foreach (array('name', 'address', 'email', 'phone') as $k) {   // "\xC4" alone is not valid UTF-8 (e.g. a file saved as Latin-1)
+    if (legal_data_error(array($k => "\xC4") + $data) === null) { fwrite(STDERR, "fill-legal self-test: non-UTF-8 '$k' not caught\n"); $ok = false; }
+  }
   if ($ok) echo "fill-legal: self-test ok\n";
   return $ok;
 }
@@ -64,16 +74,28 @@ $file = isset($argv[2]) ? $argv[2] : '';
 if ($root === '' || !is_dir($root) || $file === '') { fwrite(STDERR, "usage: php fill-legal.php <public_html> <legal.php> | --self-test\n"); exit(2); }
 if (!legal_self_test()) { fwrite(STDERR, "fill-legal: self-test failed — pages left untouched\n"); exit(1); }
 if (!is_file($file)) { fwrite(STDERR, "fill-legal: $file is missing — the Legal notice pages still show placeholders. Create it from legal.example.php.\n"); exit(1); }
-$data = require $file;
+// A PHP error in legal.php (syntax, an unquoted word taken for a constant) must not put a piece of the
+// owner's data into the deploy log: PHP's own error text quotes the offending token. So PHP's messages are
+// switched off for the include, and a thrown error is reported by LINE NUMBER only — never getMessage().
+ini_set('display_errors', '0');
+ini_set('log_errors', '0');
+try {
+  $data = require $file;
+} catch (Throwable $e) {
+  fwrite(STDERR, "fill-legal: legal.php has a PHP error on line " . $e->getLine() . " (message hidden: it may contain your data) — pages left untouched\n");
+  exit(1);
+}
 $err = legal_data_error($data);
 if ($err !== null) { fwrite(STDERR, "fill-legal: $err — pages left untouched\n"); exit(1); }
 $pages = glob($root . '/*/legal.html');
 if (!$pages) { fwrite(STDERR, "fill-legal: no <lang>/legal.html under $root\n"); exit(1); }
 $bad = 0;
 foreach ($pages as $page) {
-  $out = legal_fill(file_get_contents($page), $data);
+  $src = file_get_contents($page);
+  if ($src === false) { fwrite(STDERR, "fill-legal: could not read $page — not written\n"); $bad++; continue; }
+  $out = legal_fill($src, $data);
   if (strpos($out, '%%LEGAL_') !== false) { fwrite(STDERR, "fill-legal: a placeholder is left in $page — not written\n"); $bad++; continue; }
-  file_put_contents($page, $out);
+  if (file_put_contents($page, $out) === false) { fwrite(STDERR, "fill-legal: could not write $page\n"); $bad++; continue; }
   echo "fill-legal: filled $page\n";
 }
 exit($bad ? 1 : 0);

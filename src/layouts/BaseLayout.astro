@@ -2,7 +2,7 @@
 /*
   Base page layout — the shared HTML shell (head + fonts + stylesheet),
   with the Header and Footer wrapped around each page's content (<slot/>).
-  Pass title/description/active, plus `page` (a key of PAGES in src/i18n/index.js)
+  Pass title/description/active, plus `page` (a key of PAGES or LIMITED_PAGES in src/i18n/index.js)
   and `lang` (the page's language; canonical, hreflang and og:locale follow it).
 */
 import Header from '../components/Header.astro';
@@ -14,7 +14,7 @@ import '../styles/styles.css';
 import { LOCALES, DEFAULT_LOCALE, LANGS, PAGES, pageUrl, t } from '../i18n/index.js';
 
 const { title, description = '', active, page, lang } = Astro.props;
-if (!page) throw new Error('BaseLayout: pass `page` (a key of PAGES in src/i18n/index.js)');
+if (!page) throw new Error('BaseLayout: pass `page` (a key of PAGES or LIMITED_PAGES in src/i18n/index.js)');
 if (!lang) throw new Error('BaseLayout: pass `lang` (the language of the page, e.g. "en")');
 const { ui } = t(lang);
 const abs = (path) => new URL(path, Astro.site).href;
@@ -25,7 +25,7 @@ const abs = (path) => new URL(path, Astro.site).href;
 const canonical = abs(pageUrl(page, lang));
 // The same page in every built language (+ x-default → English). Only once there are 2+ languages.
 // Pages for search (PAGES) get hreflang; a LIMITED_PAGES page (Legal notice) is noindex instead.
-const indexed = page in PAGES;
+const indexed = Object.prototype.hasOwnProperty.call(PAGES, page);
 const alternates = indexed && LOCALES.length > 1
   ? [...LOCALES.map((l) => ({ hreflang: l, href: abs(pageUrl(page, l)) })), { hreflang: 'x-default', href: abs(pageUrl(page, DEFAULT_LOCALE)) }]
   : [];

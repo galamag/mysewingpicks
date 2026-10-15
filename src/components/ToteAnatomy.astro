@@ -4,9 +4,11 @@
   tote. Step 0: the finished bag (tap to take it apart). Steps 1–9: each stage
   of sewing, animated, with the real sizes.
   Model + numbers: src/lib/anatomy/tote.js · engine: src/lib/anatomy/iso.js.
-  Texts (every language): src/lib/anatomy/tote.<lang>.js via tote.text.js — the
-  language is the `lang` prop; the script reads it from data-lang on the root
-  (not <html lang>, which page translators may rewrite).
+  Texts: one file per language, src/lib/anatomy/tote.<lang>.js. At build, tote.text.js checks all
+  of them (same shape as English, no unregistered file); this frontmatter renders the first frame
+  and the step texts in the page's language. In the browser the script below loads ONLY the
+  tote.<lang>.js of that language. The language is the `lang` prop; the script reads it from
+  data-lang on the root (not <html lang>, which page translators may rewrite).
   The first frame and every step's text are in the HTML at build time (works
   without JS, readable by search engines); the script only animates.
 
