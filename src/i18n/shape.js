@@ -1,5 +1,5 @@
 /* Same keys (deeply), same list lengths, same value types — or the build fails.
-   No imports: the tote figure's browser script uses it too. */
+   No imports — keep it dependency-free. */
 export function assertSameShape(a, b, where) {
   if (Array.isArray(a) || Array.isArray(b)) {
     if (!Array.isArray(a) || !Array.isArray(b)) throw new Error(`i18n: ${where}: expected a list`);

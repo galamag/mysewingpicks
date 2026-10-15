@@ -1,6 +1,6 @@
 /* Tote figure texts by language. Every language has the same shape as English,
    and English labels cover exactly the chip keys the drawing uses — or the
-   build fails. Used at build (ToteAnatomy) and in the browser (its script). */
+   build fails. Used at build only (ToteAnatomy frontmatter); the browser script loads just tote.<lang>.js. */
 import { assertSameShape } from '../../i18n/shape.js';
 import { STEPS, LABEL_KEYS } from './tote.js';
 import en from './tote.en.js';

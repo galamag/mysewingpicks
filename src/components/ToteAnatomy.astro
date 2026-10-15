@@ -104,11 +104,18 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
 
 <script>
   import { renderStep, STEPS } from '../lib/anatomy/tote.js';
-  import { toteText } from '../lib/anatomy/tote.text.js';
 
-  const root = document.querySelector('[data-anatomy="tote"]');
-  if (root) {
-    const L = toteText(root.dataset.lang);
+  // Texts: ONLY the page's language is downloaded — one small file per language
+  // (tote.en.js, tote.ru.js, …; Vite splits them by itself). Every language is still
+  // checked at build time in the frontmatter above (tote.text.js).
+  // No top-level await and no Object.hasOwn: older iPhones.
+  const TEXTS = import.meta.glob('../lib/anatomy/tote.??.js');
+  const root = document.querySelector<HTMLElement>('[data-anatomy="tote"]');
+  const load = root ? TEXTS[`../lib/anatomy/tote.${root.dataset.lang}.js`] : undefined;
+  // No texts (unknown language, network error): the figure keeps its first frame from the HTML.
+  if (root && load) load().then((mod: any) => start(root, mod.default), (e) => console.warn('tote: texts not loaded', e));
+
+  function start(root: HTMLElement, L: any) {
     const $ = (s) => root.querySelector(s);
     const svg = $('.anatomy__svg'), scene = $('.anatomy__scene');
     const prev = $('.anatomy__prev'), next = $('.anatomy__next');
