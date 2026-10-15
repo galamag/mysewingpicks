@@ -21,7 +21,7 @@ export default {
     replay: '↻ Revoir',
     parts: 'Pièces',
     allSteps: 'Instructions étape par étape',
-    endView: 'VUE DE CÔTÉ',
+    endView: 'VUE EN COUPE',
   },
   stitches: { straight: 'Point droit' },
   labels: {

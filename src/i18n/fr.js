@@ -78,7 +78,7 @@ export default {
       title: 'Mon studio vidéo — My Sewing Picks',
       description: "L'éclairage, le trépied, l'appareil photo, l'ordinateur portable et le bureau que je recommande personnellement pour filmer vos propres vidéos de couture et de patchwork.",
       heading: 'Mon studio vidéo',
-      intro: "Vous pensez à filmer vos propres vidéos de couture ? Voici l'éclairage, le trépied, l'appareil photo, l'ordinateur portable et le bureau que je recommande personnellement pour un petit coin tournage douillet.",
+      intro: "Vous pensez à filmer vos propres vidéos de couture ? Voici l'éclairage, le trépied, l'appareil photo, l'ordinateur portable et le bureau que je recommande personnellement pour un petit coin douillet où filmer.",
     },
     projects: {
       title: 'Projets à coudre avec moi — My Sewing Picks',
@@ -103,7 +103,7 @@ export default {
       heading: 'À propos de ce petit coin couture',
       paragraphsHtml: [
         "Je suis ravie que vous soyez là ! Vous êtes chez <strong>SEWING DIY PATCHWORK</strong> — ma chaîne YouTube où je partage des tutos pour des projets de couture de toutes sortes, des créations simples pour débuter aux réalisations plus élaborées. Au programme : sacs et trousses à maquillage, rangements, plaids, vêtements, cadeaux faits main pleins d'attention et toutes sortes de choses utiles pour la maison.",
-        "Ma vraie passion, pourtant, c'est le patchwork — le quilting, les art quilts, les quilts collage et le design textile. J'adore cette lente magie qui transforme de petites chutes de tissu en un bel ouvrage complet, et j'essaie de rendre ces techniques accessibles, que vous preniez un cutter rotatif en main pour la toute première fois ou que vous cousiez depuis des années.",
+        "Mais ma vraie passion, c'est le patchwork — le quilting, les art quilts, les quilts collage et le design textile. J'adore cette lente magie qui transforme de petites chutes de tissu en un bel ouvrage complet, et j'essaie de rendre ces techniques accessibles, que vous preniez un cutter rotatif en main pour la toute première fois ou que vous cousiez depuis des années.",
         "Je publie souvent de nouvelles vidéos, il y a donc toujours un nouveau projet à coudre avec moi. Et comme vous êtes nombreuses à me demander ce que je recommande, j'ai réuni ma sélection ici : chaque outil et chaque matériau de ce site, je le <em>recommande personnellement</em>. Rien sur ces étagères n'est là pour faire du remplissage — chaque choix est fait avec soin pour les couturières comme vous.",
         "Installez-vous confortablement, faites un tour, et j'espère que vous trouverez ici de quoi inspirer votre prochain projet. Bonne couture !",
       ],

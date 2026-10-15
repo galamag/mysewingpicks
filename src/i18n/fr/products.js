@@ -24,10 +24,10 @@ export default {
   },
   'windman-presser-feet-set': {
     name: 'Pieds Windman à clipser, lot de 11 (tige basse)',
-    shortDescription: 'Onze pieds à clipser, dont un pied fermeture éclair, un pied à roulettes, un pied quilting et un pied pose-boutons, pour les machines à tige basse Brother, Singer, Janome et similaires.',
+    shortDescription: 'Onze pieds à clipser, dont un pied fermeture éclair, un pied à roulettes, un pied quilting et un pied pour boutons, pour les machines à tige basse Brother, Singer, Janome et similaires.',
   },
   'madam-sew-walking-foot': {
-    name: 'Pied double entraînement ouvert Madam Sew (tige basse)',
+    name: 'Pied à double entraînement ouvert Madam Sew (tige basse)',
     shortDescription: 'Entraîne uniformément les épaisseurs du dessus et du dessous : les lignes de quilting et les coutures épaisses restent bien à plat, sans gondoler.',
   },
 
@@ -41,7 +41,7 @@ export default {
     shortDescription: 'Un tapis autocicatrisant qui protège votre table et rend chaque coupe au cutter rotatif nette et précise.',
   },
   'quilting-rulers-set': {
-    name: 'Règles de patchwork : carrés, 6 × 12 et triangle',
+    name: 'Règles de patchwork : carrés, 6 × 12 pouces et triangle',
     shortDescription: 'Un jeu complet de règles en acrylique transparent pour mesurer, rectifier et couper les blocs de quilt avec précision.',
   },
   'linxiao-square-rulers': {
