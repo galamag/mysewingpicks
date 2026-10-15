@@ -77,12 +77,24 @@ if (!is_file($file)) { fwrite(STDERR, "fill-legal: $file is missing — the Lega
 // A PHP error in legal.php (syntax, an unquoted word taken for a constant) must not put a piece of the
 // owner's data into the deploy log: PHP's own error text quotes the offending token. So PHP's messages are
 // switched off for the include, and a thrown error is reported by LINE NUMBER only — never getMessage().
+// Text outside the PHP tags in legal.php would be echoed by `require` straight into the log, so the include
+// runs inside an output buffer that is never printed (a fatal error that no catch can see is covered by
+// the shutdown function: PHP runs it BEFORE it flushes the buffers still open).
+// (Never write the closing tag in a // comment: it ends PHP mode there and the rest of the line is printed.)
 ini_set('display_errors', '0');
 ini_set('log_errors', '0');
+register_shutdown_function(function () { while (ob_get_level() > 0) ob_end_clean(); });
+ob_start();
 try {
   $data = require $file;
 } catch (Throwable $e) {
+  ob_end_clean();
   fwrite(STDERR, "fill-legal: legal.php has a PHP error on line " . $e->getLine() . " (message hidden: it may contain your data) — pages left untouched\n");
+  exit(1);
+}
+$stray = ob_get_clean();
+if (trim(str_replace("\xEF\xBB\xBF", '', (string) $stray)) !== '') {   // a UTF-8 BOM before the opening tag is harmless, not "text"
+  fwrite(STDERR, "fill-legal: legal.php prints text outside <?php ?> (hidden: it may contain your data) — pages left untouched\n");
   exit(1);
 }
 $err = legal_data_error($data);
