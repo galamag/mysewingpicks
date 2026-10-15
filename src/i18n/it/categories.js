@@ -2,7 +2,7 @@
 export default {
   'tools/machines': { title: 'Macchine e piedini' },
   'tools/cutting': { title: 'Taglio e misurazione' },
-  'tools/marking-pressing': { title: 'Segnare e stirare' },
+  'tools/marking-pressing': { title: 'Marcatura e stiratura' },
   'tools/helpers': { title: 'Accessori utili' },
   'fabrics/fabrics': { title: 'Tessuti' },
   'fabrics/batting-interfacing': { title: 'Imbottiture e telette' },

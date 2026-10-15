@@ -35,7 +35,7 @@ export default {
       eyebrow: 'Fatto a mano con amore',
       tagline: 'Strumenti e tessuti scelti con cura per il tuo angolo del cucito.',
       blurbHtml:
-        "Ti do il benvenuto! Sono la creatrice del canale <strong>SEWING DIY PATCHWORK</strong>, dove cucio borse, quilt, vestiti e oggetti che rendono la casa accogliente. Tutto quello che trovi qui è qualcosa che consiglio personalmente — l'ho raccolto in un unico posto, così anche tu potrai trovare il tuo nuovo preferito.",
+        "Ti do il benvenuto! Sono la creatrice del canale <strong>SEWING DIY PATCHWORK</strong>, dove cucio borse, quilt, vestiti e oggetti che rendono la casa accogliente. Tutto quello che trovi qui è qualcosa che consiglio personalmente — l'ho raccolto in un unico posto, così anche tu potrai trovare il tuo prossimo colpo di fulmine.",
       browse: 'Scopri la mia selezione',
       shelves: {
         eyebrow: 'Tre piccole collezioni',
@@ -83,7 +83,7 @@ export default {
       description: 'Progetti di cucito passo passo con guide animate, le vere misure di taglio e il video del canale SEWING DIY PATCHWORK.',
       eyebrow: 'Cuci con me',
       heading: 'Progetti',
-      intro: 'Scegli un progetto e guardalo prendere forma, passo dopo passo — ogni pezzo con la sua misura reale, ogni cucitura animata, e in più il video e tutto quello che ti serve.',
+      intro: 'Scegli un progetto e guardalo prendere forma, passo dopo passo — ogni pezzo con le sue misure reali, ogni cucitura animata, e in più il video e tutto quello che ti serve.',
       more: 'Guarda passo passo →',
     },
     project: {
