@@ -582,6 +582,11 @@ p { margin: 0 0 1em; }
     padding: 12px 16px 18px;
     box-shadow: var(--shadow-soft);
     display: none;
+    /* The header is sticky: a tall panel (open language list) must scroll inside itself. */
+    max-height: calc(100vh - var(--header-h));
+    max-height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
   .site-nav.is-open { display: flex; }
   .site-nav a { padding: 12px 14px; }
