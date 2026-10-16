@@ -1,14 +1,15 @@
 ---
 /*
-  Tote bag anatomy figure — an interactive isometric drawing of the maker's
-  tote. Step 0: the finished bag (tap to take it apart). Steps 1–9: each stage
-  of sewing, animated, with the real sizes.
-  Model + numbers: src/lib/anatomy/tote.js · engine: src/lib/anatomy/iso.js.
-  Texts: one file per language, src/lib/anatomy/tote.<lang>.js. At build, tote.text.js checks all
-  of them (same shape as English, no unregistered file); this frontmatter renders the first frame
-  and the step texts in the page's language. In the browser the script below loads ONLY the
-  tote.<lang>.js of that language. The language is the `lang` prop; the script reads it from
-  data-lang on the root (not <html lang>, which page translators may rewrite).
+  An anatomy figure — an interactive isometric drawing of a sewn item (the tote, the basket, …).
+  Step 0: the finished item (tap to take it apart). Steps 1…N: each stage of sewing, animated,
+  with the maker's real sizes. Props: `model` — the figure's slug ('tote-bag'), `lang`.
+  Model + numbers: src/lib/anatomy/<item>.js · shared kit: kit.js · engine: iso.js.
+  Texts: one file per language, src/lib/anatomy/<item>.<lang>.js. At build, <item>.text.js checks
+  all of them (same shape as English, no unregistered file); this frontmatter renders the first
+  frame and the step texts in the page's language (figures.js — build only). In the browser the
+  script below loads only this figure's model and ONLY its <item>.<lang>.js (models.js). The
+  language is the `lang` prop; the script reads it from data-lang on the root (not <html lang>,
+  which page translators may rewrite).
   The first frame and every step's text are in the HTML at build time (works
   without JS, readable by search engines); the script only animates.
 
@@ -17,25 +18,27 @@
   (Amazon wants every affiliate link identifiable and disclosed). The page must
   show its page-disclosure line before this component.
 */
-import { renderStep, DEFS, STEPS } from '../lib/anatomy/tote.js';
-import { toteText } from '../lib/anatomy/tote.text.js';
+import { figure } from '../lib/anatomy/figures.js';
 import { products } from '../data/products.js';
 import { amazonUrl } from '../data/amazon.js';
 import { t } from '../i18n/index.js';
 import { productText } from '../i18n/content.js';
 
-const { lang } = Astro.props;
-const L = toteText(lang);
+const { model: slug, lang } = Astro.props;
+const { model, text } = figure(slug);
+const { renderStep, DEFS, STEPS } = model;
+const L = text(lang);
 const { ui } = t(lang);
 const first = renderStep(0, 0, L);
 
 const byId = Object.fromEntries(products.map((p) => [p.id, p]));
 const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
-  if (!byId[id]) throw new Error(`ToteAnatomy: step ${k} uses unknown product "${id}"`);
+  if (!byId[id]) throw new Error(`AnatomyFigure (${slug}): step ${k} uses unknown product "${id}"`);
   return { name: productText(byId[id], lang).name, url: amazonUrl(byId[id]) };
 }));
+const allTitleId = `${slug}-all-title`;
 ---
-<div class="anatomy" data-anatomy="tote" data-lang={lang}>
+<div class="anatomy" data-anatomy={slug} data-lang={lang}>
   <figure class="anatomy__card">
     <div class="anatomy__head">
       <span class="anatomy__fig">{L.ui.fig}</span>
@@ -87,8 +90,8 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
     ))}
   </ol>
 
-  <section class="anatomy__all" aria-labelledby="anatomy-all-title">
-    <h3 id="anatomy-all-title">{L.ui.allSteps}</h3>
+  <section class="anatomy__all" aria-labelledby={allTitleId}>
+    <h3 id={allTitleId}>{L.ui.allSteps}</h3>
     <ol>
       {STEPS.slice(1).map((s, i) => {
         const st = L.steps[i + 1];
@@ -105,19 +108,25 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
 </div>
 
 <script>
-  import { renderStep, STEPS } from '../lib/anatomy/tote.js';
+  import { MODELS } from '../lib/anatomy/models.js';
 
-  // Texts: ONLY the page's language is downloaded — one small file per language
-  // (tote.en.js, tote.ru.js, …; Vite splits them by itself). Every language is still
-  // checked at build time in the frontmatter above (tote.text.js).
+  // Each figure loads its own model and ONLY the page's language — one small file per language
+  // (tote.en.js, tote.ru.js, …; Vite splits them by itself). Every language is still checked at
+  // build time in the frontmatter above (<item>.text.js).
   // No top-level await and no Object.hasOwn: older iPhones.
-  const TEXTS = import.meta.glob('../lib/anatomy/tote.??.js');
-  const root = document.querySelector<HTMLElement>('[data-anatomy="tote"]');
-  const load = root ? TEXTS[`../lib/anatomy/tote.${root.dataset.lang}.js`] : undefined;
-  // No texts (unknown language, network error): the figure keeps its first frame from the HTML.
-  if (root && load) load().then((mod: any) => start(root, mod.default), (e) => console.warn('tote: texts not loaded', e));
+  document.querySelectorAll<HTMLElement>('[data-anatomy]').forEach((root) => {
+    const entry = MODELS[root.dataset.anatomy];
+    const key = entry && Object.keys(entry.texts).find((k) => k.endsWith(`.${root.dataset.lang}.js`));
+    // No model or texts (unknown figure or language, network error): the figure keeps its first frame from the HTML.
+    if (!entry || !key) return;
+    Promise.all([entry.model(), entry.texts[key]()]).then(
+      ([model, mod]: any[]) => start(root, model, mod.default),
+      (e) => console.warn(`anatomy ${root.dataset.anatomy}: not loaded`, e),
+    );
+  });
 
-  function start(root: HTMLElement, L: any) {
+  function start(root: HTMLElement, model: any, L: any) {
+    const { renderStep, STEPS } = model;
     const $ = (s) => root.querySelector(s);
     const svg = $('.anatomy__svg'), scene = $('.anatomy__scene');
     const prev = $('.anatomy__prev'), next = $('.anatomy__next');
@@ -289,7 +298,9 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
   .anatomy__jump { font: inherit; font-weight: 600; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
   .anatomy__jump:hover { color: var(--rose-deep); }
 
-  /* Engine output (classes from iso.js / tote.js). Strokes stay crisp at any zoom. */
+  /* Engine output (classes from iso.js / kit.js / <item>.js). Strokes stay crisp at any zoom.
+     Fills that point into DEFS (fabrics, the floor shadow) are SVG attributes with the figure's id
+     prefix, not CSS rules here. Mirrored in .claude/skills/building-sewing-anatomy/figure-css.mjs. */
   .anatomy :global(.ln) { fill: none; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
   .anatomy :global(.ln--edge) { stroke: #4a3f35; stroke-width: 1.1; }
   .anatomy :global(.ln--stitch) { stroke: #4a3f35; stroke-width: 1; stroke-dasharray: 3 2.4; opacity: 0.85; }
@@ -305,7 +316,6 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
   .anatomy :global(.chip text) { fill: #4a3f35; font-family: var(--font-body); font-weight: 700; text-anchor: middle; }
   .anatomy :global(.chip--hot rect) { fill: #a86f6c; stroke: #a86f6c; }
   .anatomy :global(.chip--hot text) { fill: #fffdf8; }
-  .anatomy :global(.floor) { fill: url(#floor); }
   .anatomy :global(.pins circle) { fill: #4a3f35; stroke: #fffdf8; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
   .anatomy :global(.pins text) { fill: #fffdf8; font-family: var(--font-body); font-weight: 700; text-anchor: middle; }
   .anatomy :global(.inset rect) { fill: #fffdf8; stroke: #e4d6c2; vector-effect: non-scaling-stroke; }

@@ -11,11 +11,14 @@
   The bottom is the maker's own trick: two folds stitched 6 cm each side of the
   centre crease, then the bottom is tucked in (centre crease inside, like a
   paper bag) before the side seams — so the corners form by themselves.
+
+  Shared parts (shell, camera, inset, machine, renderer) live in kit.js. SVG ids carry the
+  figure's prefix ('tote-bag-…'), so two figures can never collide.
 */
-import {
-  at, band, bounds, esc, lerp, offset, overlayPoints, overlaySvg, pieceSvg,
-  pointBounds, project, turn,
-} from './iso.js';
+import { at, band, lerp, offset, turn } from './iso.js';
+import { fadeAll, inside, labelKeys, makeRenderer, outside, rect, rot2, shell, span } from './kit.js';
+
+const ID = 'tote-bag'; // prefix of every SVG id of this figure (fills, clip, floor)
 
 export const SPEC = {
   outer: { cut: [86, 45], fabric: 'cotton duck' }, // folded at the bottom: each half 45 wide × 43 tall
@@ -35,64 +38,12 @@ const W = FLAT - D; // 32: front width when boxed
 const HB = HALF - SPEC.boxBase / 2; // 37: height once the bottom is tucked in, before the top seam
 const H = HB - SPEC.seam; // 36.5: finished height (drawing only — not published)
 const LINE = 0.35; // gap between outer and lining
-const ASPECT = 0.8; // figure width / height, the same for every step
 const OPEN = [8, 8 + SPEC.opening]; // opening, cm above the bottom of the lining (above the 6 cm tuck)
 
-const FILL = { duck: 'url(#duck)', duckBack: 'url(#duckBack)', satin: 'url(#satin)', satinBack: 'url(#satinBack)' };
-
-const ease = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
-const span = (t, a, b) => ease((t - a) / (b - a));
-const rect = (w, h) => [[0, 0], [w, 0], [w, h], [0, h]];
-const facing = (p) => p.out[0] + p.out[1] + p.out[2] >= 0;
-const inside = (ps) => ps.filter((p) => !facing(p));
-const outside = (ps) => ps.filter(facing);
-const fadeAll = (ps, o) => (o >= 0.999 ? ps : o <= 0.001 ? [] : ps.map((p) => ({ ...p, opacity: (p.opacity ?? 1) * o })));
-
-/*
-  An open box of fabric (outer or lining): walls on [xa,xb]×[ya,yb], height h
-  from z0. `fill` is the side facing out, `inner` the side facing in — so an
-  inside-out bag simply swaps them. Options:
-    vee     side seams split into a V where they caught the tucked bottom
-            ('bottom'; 'top' for the lining pulled out bottom-up)
-    opening gap in the right side seam ([from, to] cm above z0)
-    top     a stitch line round the walls { at: cm below the top, t, kind }
-    lid     close the top (the lining pulled out, its bottom up)
-*/
-function shell({ key, xa, xb, ya, yb, z0 = 0, h, fill, inner, opening, top, seams = true, lid, vee, veeHot }) {
-  const w = xb - xa, d = yb - ya;
-  const look = { fill, inner };
-  const ring = (i, len, rev) => {
-    if (!top) return [];
-    const t = Math.max(0, Math.min(1, top.t * 4 - i));
-    if (t <= 0) return [];
-    const v = h - top.at;
-    const a = [0.3, v], b = [len - 0.3, v];
-    return [{ pts: rev ? [b, a] : [a, b], t, kind: top.kind ?? 'stitch', side: 'out' }];
-  };
-  const seam = (pts, hot) => ({ pts, kind: hot ? 'hot' : 'seam', side: 'out' });
-  const side = (gap) => {
-    if (!seams || d < 0.3) return [];
-    const u = d / 2, k = Math.min(d / 2, h);
-    let v0 = 0, v1 = h;
-    const lines = [];
-    if (vee === 'bottom') { v0 = k; lines.push(seam([[0, 0], [u, k]], veeHot), seam([[d, 0], [u, k]], veeHot)); }
-    if (vee === 'top') { v1 = h - k; lines.push(seam([[0, h], [u, v1]]), seam([[d, h], [u, v1]])); }
-    if (gap) lines.push(seam([[u, v0], [u, gap[0]]]), seam([[u, gap[1]], [u, v1]]));
-    else lines.push(seam([[u, v0], [u, v1]]));
-    return lines;
-  };
-  const wall = (id, O, U, out, len, lines) =>
-    ({ id: `${key}-${id}`, pts: rect(len, h), O, U, V: [0, 0, 1], out, lines, ...look });
-  const walls = [
-    { id: `${key}-bottom`, pts: rect(w, d), O: [xa, ya, z0], U: [1, 0, 0], V: [0, 1, 0], out: [0, 0, -1], ...look },
-    wall('back', [xa, ya, z0], [1, 0, 0], [0, -1, 0], w, ring(2, w, true)),
-    wall('left', [xa, ya, z0], [0, 1, 0], [-1, 0, 0], d, [...side(null), ...ring(3, d, false)]),
-    wall('right', [xb, ya, z0], [0, 1, 0], [1, 0, 0], d, [...side(opening), ...ring(1, d, true)]),
-    wall('front', [xa, yb, z0], [1, 0, 0], [0, 1, 0], w, ring(0, w, false)),
-  ];
-  if (lid) walls.push({ id: `${key}-lid`, pts: rect(w, d), O: [xa, ya, z0 + h], U: [1, 0, 0], V: [0, 1, 0], out: [0, 0, 1], ...look });
-  return { walls };
-}
+const FILL = {
+  duck: `url(#${ID}-duck)`, duckBack: `url(#${ID}-duckBack)`,
+  satin: `url(#${ID}-satin)`, satinBack: `url(#${ID}-satinBack)`,
+};
 
 /** One strap: a 4 cm band rising from the rim in the plane y = y0 (fold 1 = hanging down). */
 function strap({ id, xMid, y0, zRim, front, fold = 0, squash = 1 }) {
@@ -195,11 +146,6 @@ function stepCut(t) {
 }
 
 /* ---------- Step 2: fold a strap (16 cm → 4 cm, four layers) ---------- */
-
-const rot2 = ([y, z], [cy, cz], a) => {
-  const dy = y - cy, dz = z - cz, c = Math.cos(a), s = Math.sin(a);
-  return [cy + dy * c - dz * s, cz + dy * s + dz * c];
-};
 
 /** Cross-section of the strip: four 4 cm segments [a, b, out] in (y, z). */
 function strapSection(t, th = T) {
@@ -589,163 +535,25 @@ export const STEPS = [
 */
 export const CUT = { step: 1, legend: [0, 1, 2, 4] };
 
-/**
-  Every chip key the drawing uses — each language must have them all (tote.text.js).
-  The keys are sampled at t = 0, so every scene's `over` must be a literal list:
-  never add a labelled overlay only for some t, or its key would be missed here.
-*/
-export const LABEL_KEYS = [...new Set(STEPS.slice(1).flatMap((s) => s.scene(0).over.map((o) => o.label).filter(Boolean)))];
+/** Every chip key the drawing uses — each language must have them all (tote.text.js; see labelKeys in kit.js). */
+export const LABEL_KEYS = labelKeys(STEPS);
 
-const labelOf = (L, key) => {
-  const text = L.labels[key];
-  if (!text) throw new Error(`tote: no label "${key}"`);
-  return text;
-};
-
-const union = (a, b) => {
-  const x0 = Math.min(a[0], b[0]), y0 = Math.min(a[1], b[1]);
-  return [x0, y0, Math.max(a[0] + a[2], b[0] + b[2]) - x0, Math.max(a[1] + a[3], b[1] + b[3]) - y0];
-};
-
-/** Grow a box to the figure's aspect ratio, centred, with padding. */
-function fit(b, padK = 0.06) {
-  const pad = Math.max(b[2], b[3]) * padK;
-  let w = b[2] + 2 * pad, h = b[3] + 2 * pad;
-  if (w / h < ASPECT) w = h * ASPECT; else h = w / ASPECT;
-  const cx = b[0] + b[2] / 2, cy = b[1] + b[3] / 2;
-  return [cx - w / 2, cy - h / 2, w, h];
-}
-
-function sceneBounds(s) {
-  const pts = s.over.filter((o) => (o.o ?? 1) > 0.01).flatMap(overlayPoints);
-  const live = s.pieces.filter((p) => (p.opacity ?? 1) > 0.01);
-  let b = live.length ? bounds(live) : null;
-  if (pts.length) b = b ? union(b, pointBounds(pts)) : pointBounds(pts);
-  return b;
-}
-
-const cams = [];
-function camera(k) {
-  if (cams[k]) return cams[k];
-  if (k === 0) {
-    const b1 = fit(union(sceneBounds(anatomy(0)), sceneBounds(anatomy(1))), 0.05);
-    const b0 = fit(sceneBounds(anatomy(0)), 0.07);
-    cams[0] = [b0, b1];
-  } else {
-    let b = null;
-    for (let i = 0; i <= 20; i++) {
-      const s = STEPS[k].scene(i / 20);
-      const sb = sceneBounds(s);
-      if (sb) b = b ? union(b, sb) : sb;
-    }
-    cams[k] = fit(b, STEPS[k].pad ?? 0.08);
-  }
-  return cams[k];
-}
-
-/** The cross-section ("end view") of the strap, drawn flat in a corner box. */
-function insetSvg({ segs, range }, cam, title) {
-  const u = cam[2] / 100;
-  const bw = 46 * u, bh = 24 * u;
-  const x0 = cam[0] + 4 * u, y0 = cam[1] + cam[3] - bh - 4 * u;
-  const k = (bw - 10 * u) / (range[1] - range[0]); // the whole width across (layers drawn thicker than life)
-  const cy = y0 + bh * 0.8;
-  const P = ([y, z]) => `${(x0 + 5 * u + (y - range[0]) * k).toFixed(2)} ${(cy - z * k).toFixed(2)}`;
-  const lines = segs.map((s) => `<path class="inset__seg" d="M${P(s.a)}L${P(s.b)}" stroke-width="${(1.1 * u).toFixed(2)}"/>`).join('');
-  const box = `x="${x0.toFixed(2)}" y="${y0.toFixed(2)}" width="${bw.toFixed(2)}" height="${bh.toFixed(2)}" rx="${(2 * u).toFixed(2)}"`;
-  return (
-    `<g class="inset"><clipPath id="inset-clip"><rect ${box}/></clipPath><rect ${box}/>` +
-    `<text x="${(x0 + 2.4 * u).toFixed(2)}" y="${(y0 + 4.2 * u).toFixed(2)}" font-size="${(2.6 * u).toFixed(2)}">${esc(title)}</text>` +
-    `<g clip-path="url(#inset-clip)">${lines}</g></g>`
-  );
-}
-
-/** Which sewing window (if any) is running at t → { s: progress, o: opacity, fabric }. */
-function sewingAt(step, t) {
-  for (const [a, b, fabric] of step.sew ?? []) {
-    const o = span(t, a - 0.04, a) * (b >= 1 ? 1 : 1 - span(t, b, b + 0.04));
-    if (o > 0.01) return { s: Math.max(0, Math.min(1, (t - a) / (b - a))), o, fabric };
-  }
-  return null;
-}
-
-/*
-  A tiny sewing machine in the top-right corner while a seam is being sewn:
-  the needle goes up and down, the fabric feeds left and the stitches follow.
-  Generic shape — no brand.
-*/
-function machineSvg(m, cam, stitchName) {
-  const u = cam[2] / 100;
-  const w = 38 * u, h = 25 * u;
-  const x0 = cam[0] + cam[2] - w - 4 * u, y0 = cam[1] + 4 * u;
-  const X = (a) => (x0 + a * u).toFixed(2), Y = (b) => (y0 + b * u).toFixed(2), L = (a) => (a * u).toFixed(2);
-  const turns = 16;
-  const dip = (1.7 * (1 - Math.cos(m.s * Math.PI * 2 * turns))) / 2;
-  const feed = (m.s * turns * 2) % 2;
-  const nx = 13;
-  const fabric = m.fabric === 'satin' ? '#e6d0ae' : '#c08a87';
-  return (
-    `<g class="machine" opacity="${m.o.toFixed(3)}">` +
-    `<rect class="machine__box" x="${X(0)}" y="${Y(0)}" width="${L(38)}" height="${L(25)}" rx="${L(2)}"/>` +
-    `<text x="${X(2.4)}" y="${Y(4.2)}" font-size="${L(2.6)}">${esc(stitchName.toUpperCase())}</text>` +
-    `<rect class="machine__bed" x="${X(3)}" y="${Y(19)}" width="${L(32)}" height="${L(2.6)}" rx="${L(1)}"/>` +
-    `<rect class="machine__body" x="${X(27)}" y="${Y(8)}" width="${L(5)}" height="${L(11.5)}"/>` +
-    `<rect class="machine__body" x="${X(10.5)}" y="${Y(6)}" width="${L(23)}" height="${L(4.6)}" rx="${L(2)}"/>` +
-    `<rect class="machine__head" x="${X(9.5)}" y="${Y(6)}" width="${L(6.5)}" height="${L(9)}" rx="${L(1.4)}"/>` +
-    `<circle class="machine__wheel" cx="${X(33.5)}" cy="${Y(9)}" r="${L(2.4)}"/>` +
-    `<rect class="machine__fabric" x="${X(3)}" y="${Y(18.2)}" width="${L(32)}" height="${L(1)}" fill="${fabric}"/>` +
-    `<path class="machine__stitches" d="M${X(3)} ${Y(18.7)}H${X(nx)}" stroke-width="${L(0.45)}" stroke-dasharray="${L(1.2)} ${L(0.8)}" stroke-dashoffset="${L(feed)}"/>` +
-    `<path class="machine__bar" d="M${X(nx)} ${Y(15)}V${Y(16.2 + dip)}" stroke-width="${L(0.8)}"/>` +
-    `<path class="machine__needle" d="M${X(nx)} ${Y(16.2 + dip)}V${Y(18.5 + dip)}" stroke-width="${L(0.35)}"/>` +
-    `<rect class="machine__foot" x="${X(nx - 1.8)}" y="${Y(17.5)}" width="${L(3.6)}" height="${L(0.7)}" rx="${L(0.3)}"/>` +
-    `</g>`
-  );
-}
-
-const shadowSvg = (cam, at3) => {
-  const [x, y] = project(at3);
-  return `<ellipse class="floor" cx="${x.toFixed(2)}" cy="${(y + 1).toFixed(2)}" rx="${(W * 0.62).toFixed(2)}" ry="${(D * 0.9).toFixed(2)}"/>`;
-};
-
-/** Step k at time t (for step 0, t is how far apart it is). Returns SVG body + viewBox. */
-export function renderStep(k, t, L) {
-  if (!L) throw new Error('renderStep: pass the figure texts (tote.text.js)');
-  if (k === 0) {
-    const [b0, b1] = camera(0);
-    const tt = ease(t);
-    const cam = b0.map((v, i) => lerp(v, b1[i], tt));
-    const s = anatomy(t);
-    const show = span(t, 0.75, 1);
-    const u = cam[2] / 100;
-    const pinSvg = show
-      ? `<g class="pins" opacity="${show.toFixed(3)}">` +
-        pins(t).map(({ n, p }) => {
-          const [x, y] = project(p);
-          return `<g transform="translate(${x.toFixed(2)} ${y.toFixed(2)})"><circle r="${(3.2 * u).toFixed(2)}"/><text y="${(1.15 * u).toFixed(2)}" font-size="${(3.4 * u).toFixed(2)}">${n}</text></g>`;
-        }).join('') + `</g>`
-      : '';
-    return { body: shadowSvg(cam, [W / 2, D / 2, 0]) + s.pieces.map(pieceSvg).join('') + pinSvg, viewBox: cam };
-  }
-  const s = STEPS[k].scene(t);
-  let cam = camera(k);
-  if (s.focus && s.focus.k > 0.001) {
-    const f = fit(pointBounds(s.focus.pts), 0.3);
-    cam = cam.map((v, i) => lerp(v, f[i], s.focus.k));
-  }
-  const floorAt = k >= 8 ? [W / 2, D / 2, 0] : k >= 6 ? [22.5, Y1, 0] : k === 5 ? [22.5, Y1 / 2, 0] : null;
-  const floor = floorAt ? shadowSvg(cam, floorAt) : '';
-  const sewing = sewingAt(STEPS[k], t);
-  return {
-    body: floor + s.pieces.map(pieceSvg).join('') + s.over.map((o) => overlaySvg(o.label ? { ...o, text: labelOf(L, o.label) } : o, cam)).join('') +
-      (s.inset ? insetSvg(s.inset, cam, L.ui.endView) : '') + (sewing ? machineSvg(sewing, cam, L.stitches[STEPS[k].stitch] ?? '') : ''),
-    viewBox: cam,
-  };
-}
+/** Step k at time t (for step 0, t is how far apart it is) → { body, viewBox }. L = the texts (tote.text.js). */
+export const renderStep = makeRenderer({
+  id: ID,
+  steps: STEPS,
+  anatomy,
+  pins,
+  // the shadow under the bag: standing (0, 8, 9), lying flat after the tuck (5), turned out (6, 7)
+  floorAt: (k) => (k === 0 || k >= 8 ? [W / 2, D / 2, 0] : k >= 6 ? [22.5, Y1, 0] : k === 5 ? [22.5, Y1 / 2, 0] : null),
+  shadow: [W * 0.62, D * 0.9],
+  fabrics: { duck: '#c08a87', satin: '#e6d0ae' },
+});
 
 /** Fabric patterns, in each piece's own cm coordinates. */
 export const DEFS = `
 <defs>
-  <pattern id="duck" width="10" height="10" patternUnits="userSpaceOnUse">
+  <pattern id="${ID}-duck" width="10" height="10" patternUnits="userSpaceOnUse">
     <rect width="5" height="5" fill="#c08a87"/>
     <circle cx="1.25" cy="1.25" r="0.45" fill="#fffdf8" opacity=".75"/><circle cx="3.75" cy="3.75" r="0.45" fill="#fffdf8" opacity=".75"/>
     <rect x="5" width="5" height="5" fill="#fffdf8"/>
@@ -755,18 +563,18 @@ export const DEFS = `
     <rect x="5" y="5" width="5" height="5" fill="#e8c27a"/>
     <circle cx="7.5" cy="7.5" r="1.3" fill="none" stroke="#fffdf8" stroke-width=".35" opacity=".8"/>
   </pattern>
-  <pattern id="duckBack" width="10" height="10" patternUnits="userSpaceOnUse">
+  <pattern id="${ID}-duckBack" width="10" height="10" patternUnits="userSpaceOnUse">
     <rect width="10" height="10" fill="#f3e9da"/>
-    <rect width="10" height="10" fill="url(#duck)" opacity=".28"/>
+    <rect width="10" height="10" fill="url(#${ID}-duck)" opacity=".28"/>
   </pattern>
-  <linearGradient id="satin" x1="0" y1="0" x2="1" y2="0.35">
+  <linearGradient id="${ID}-satin" x1="0" y1="0" x2="1" y2="0.35">
     <stop offset="0" stop-color="#e2cba8"/><stop offset=".38" stop-color="#f6e9d4"/>
     <stop offset=".55" stop-color="#e6d0ae"/><stop offset=".8" stop-color="#f2e2c7"/><stop offset="1" stop-color="#dcc29c"/>
   </linearGradient>
-  <linearGradient id="satinBack" x1="0" y1="0" x2="1" y2="0">
+  <linearGradient id="${ID}-satinBack" x1="0" y1="0" x2="1" y2="0">
     <stop offset="0" stop-color="#ddc8a8"/><stop offset="1" stop-color="#e6d5ba"/>
   </linearGradient>
-  <radialGradient id="floor">
+  <radialGradient id="${ID}-floor">
     <stop offset="0" stop-color="#785f46" stop-opacity=".28"/><stop offset="1" stop-color="#785f46" stop-opacity="0"/>
   </radialGradient>
 </defs>`;

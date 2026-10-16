@@ -1,6 +1,6 @@
 ---
 /*
-  Project page: the tote bag. Animated anatomy + steps (ToteAnatomy), the
+  Project page: the tote bag. Animated anatomy + steps (AnatomyFigure), the
   maker's video (YouTube loads only when tapped), "What you'll need"
   (catalog cards) and the questions people search with (faq), the first one
   with the static cutting diagram (an <img>, for image search).
@@ -9,15 +9,14 @@
 */
 import { Image } from 'astro:assets';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import ToteAnatomy from '../../../components/ToteAnatomy.astro';
+import AnatomyFigure from '../../../components/AnatomyFigure.astro';
 import ProductCard from '../../../components/ProductCard.astro';
 import YouTubeVideo from '../../../components/YouTubeVideo.astro';
 import { projectBySlug } from '../../../data/projects.js';
 import { products } from '../../../data/products.js';
 import { localePaths, langOf, pageUrl, t } from '../../../i18n/index.js';
 import { projectText } from '../../../i18n/content.js';
-import * as tote from '../../../lib/anatomy/tote.js';
-import { toteText } from '../../../lib/anatomy/tote.text.js';
+import { figure } from '../../../lib/anatomy/figures.js';
 import { cutDiagram, cutDiagramStamp } from '../../../lib/anatomy/cut-diagram.js';
 import cutStamps from '../../../assets/projects/tote-bag-cutting-diagram.json';
 
@@ -25,6 +24,7 @@ export const getStaticPaths = localePaths;
 const lang = langOf(Astro.params);
 const project = projectText(projectBySlug('tote-bag'), lang);
 const { ui, pages: { project: text } } = t(lang);
+const { model: tote, text: toteText } = figure('tote-bag');
 const L = toteText(lang);
 const needs = project.needs.map((id) => {
   const p = products.find((x) => x.id === id);
@@ -55,7 +55,7 @@ if (cutStamps[lang] !== cutDiagramStamp(cutDiagram(tote, L))) {
         <!-- Page-level affiliate disclosure, shown before any affiliate link. -->
         <p class="page-disclosure">{ui.pageDisclosureSome}</p>
 
-        <ToteAnatomy lang={lang} />
+        <AnatomyFigure model="tote-bag" lang={lang} />
       </div>
     </section>
 

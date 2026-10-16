@@ -29,9 +29,10 @@ mysewingpicks/
 │   │   ├── Footer.astro        Affiliate disclosure + social buttons
 │   │   ├── ProductCard.astro   The one reusable product card
 │   │   ├── ProductSections.astro  A category's products, split into sections
-│   │   ├── ToteAnatomy.astro   Animated step-by-step "anatomy" of the tote bag
+│   │   ├── AnatomyFigure.astro Animated step-by-step "anatomy" of a sewn item (one for every project)
 │   │   └── YouTubeVideo.astro  Video that loads YouTube only when tapped
-│   ├── lib/anatomy/        Own isometric drawing engine (iso.js) + the tote model (tote.js)
+│   ├── lib/anatomy/        Own isometric drawing engine (iso.js), the shared figure kit (kit.js)
+│   │                       and one model per item (tote.js) with its texts per language
 │   ├── data/
 │   │   ├── products.js     ⭐ ALL product data lives here — add products here
 │   │   ├── categories.js   Category pages and their sections

@@ -1,0 +1,20 @@
+/*
+  Build-time registry of the anatomy figures: slug → the model and its texts.
+  Used by AnatomyFigure's frontmatter and the project pages (cutting diagram). NEVER import it
+  from a browser script: each <item>.text.js pulls in every language. The browser has its own
+  registry, models.js (the model + ONE language's texts, loaded on demand).
+  A new figure: add it here AND in models.js.
+*/
+import * as tote from './tote.js';
+import { toteText } from './tote.text.js';
+
+const FIGURES = {
+  'tote-bag': { model: tote, text: toteText },
+};
+
+/** slug → { model, text(lang) } */
+export function figure(slug) {
+  const f = FIGURES[slug];
+  if (!f) throw new Error(`anatomy: no figure "${slug}" in figures.js`);
+  return f;
+}
