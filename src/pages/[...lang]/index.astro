@@ -34,8 +34,29 @@ const youtube = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
       </div>
     </section>
 
-    <!-- WELCOME / CATEGORY PREVIEW -->
+    <!-- SEW-ALONG PROJECTS -->
     <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">{text.sewAlong.eyebrow}</span>
+          <h2>{text.sewAlong.heading}</h2>
+          <p>{text.sewAlong.intro}</p>
+        </div>
+        <div class={`category-grid${sewAlong.length === 1 ? ' category-grid--single' : sewAlong.length === 2 ? ' category-grid--pair' : ''}`}>
+          {sewAlong.map((p) => (
+            <a class="category-card category-card--fabrics" href={pageUrl(`project/${p.slug}`, lang)}>
+              <div class="category-card__icon" aria-hidden="true">{p.icon}</div>
+              <h3>{p.title}</h3>
+              <p>{p.teaser}</p>
+              <span class="category-card__more">{text.sewAlong.more}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- WELCOME / CATEGORY PREVIEW -->
+    <section class="section section--tight">
       <div class="container">
         <div class="section-head">
           <span class="eyebrow">{text.shelves.eyebrow}</span>
@@ -64,27 +85,6 @@ const youtube = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
             <p>{text.cards.setup.text}</p>
             <span class="category-card__more">{text.cards.setup.more}</span>
           </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- SEW-ALONG PROJECTS -->
-    <section class="section section--tight">
-      <div class="container">
-        <div class="section-head">
-          <span class="eyebrow">{text.sewAlong.eyebrow}</span>
-          <h2>{text.sewAlong.heading}</h2>
-          <p>{text.sewAlong.intro}</p>
-        </div>
-        <div class={`category-grid${sewAlong.length === 1 ? ' category-grid--single' : sewAlong.length === 2 ? ' category-grid--pair' : ''}`}>
-          {sewAlong.map((p) => (
-            <a class="category-card category-card--fabrics" href={pageUrl(`project/${p.slug}`, lang)}>
-              <div class="category-card__icon" aria-hidden="true">{p.icon}</div>
-              <h3>{p.title}</h3>
-              <p>{p.teaser}</p>
-              <span class="category-card__more">{text.sewAlong.more}</span>
-            </a>
-          ))}
         </div>
       </div>
     </section>
