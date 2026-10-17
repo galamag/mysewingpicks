@@ -4,7 +4,13 @@
   The standing desk with the laptop stands against the left wall (x = 0) under
   the window, as in the approved sketch (house-v2, "Съёмка"); the two softboxes
   stand along the back wall, the phone on its tripod and the ring light in the
-  middle of the room; the chair and the plant are decoration.
+  middle of the room; the chair (in the front-left corner, facing the camera)
+  and the plant (in the back-right corner) are decoration.
+
+  Decoration must not turn into a link: every tap area is the convex hull of its
+  part's `hit` (render.js), so the chair, the plant and the window stand clear
+  of the hulls — the chair is NOT at the desk on purpose, the window is over the
+  back half of the desk and the laptop on its front half.
 
   Every product item links to its card (target.product); the two softboxes are
   ONE part (one product: the kit of two). No brand names or logos on anything.
@@ -41,7 +47,7 @@ function ring(center, r, stroke, width) {
 
 /* ---------- the items ---------- */
 
-const WINDOW = { wall: 'left', from: 10, to: 30, z: [27, 37] };
+const WINDOW = { wall: 'left', from: 4, to: 20, z: [28, 38] }; // over the back half of the desk
 
 // standing desk: top x 1.5..16.5, y 8..36, top surface at z 26.2
 const DESK = { x: 1.5, y: 8, w: 15, d: 28, z: 24, t: 2.2 };
@@ -63,8 +69,8 @@ function desk(p) {
   return s;
 }
 
-// the laptop on the desk: base x0..x1 × y0..y1, the lid hinged at x0 leaning back to x = lean
-const LAPTOP = { x0: 6, x1: 13, y0: 17, y1: 28, base: 0.7, lean: 4.6, lidH: 6.8 };
+// the laptop on the front half of the desk: base x0..x1 × y0..y1, the lid hinged at x0 leaning back to x = lean
+const LAPTOP = { x0: 5, x1: 12, y0: 20, y1: 31, base: 0.7, lean: 3.6, lidH: 6.8 };
 
 function laptop(p) {
   const { x0, x1, y0, y1, lean, lidH } = LAPTOP;
@@ -72,8 +78,9 @@ function laptop(p) {
   const LID = 0.6; // its thickness, behind the screen
   let s = p.box(x0, y0, deskTop, x1 - x0, y1 - y0, LAPTOP.base, C.metal);
   // keyboard and touchpad on the base
-  s += p.plane([[7.2, 18.2, base], [10.3, 18.2, base], [10.3, 26.8, base], [7.2, 26.8, base]], shade(C.metal, -0.16));
-  s += p.plane([[11, 20.5, base], [12.3, 20.5, base], [12.3, 24.5, base], [11, 24.5, base]], shade(C.metal, -0.07));
+  const flat = (a0, a1, b0, b1) => [[a0, b0, base], [a1, b0, base], [a1, b1, base], [a0, b1, base]];
+  s += p.plane(flat(x0 + 1.2, x0 + 4.3, y0 + 1.2, y1 - 1.2), shade(C.metal, -0.16));
+  s += p.plane(flat(x0 + 5, x0 + 6.3, y0 + 3.5, y1 - 3.5), shade(C.metal, -0.07));
   // the lid: its side and top edges, then the bezel and the screen facing the room (+x)
   const lid = (u, v) => [x0 + (lean - x0) * v, y0 + (y1 - y0) * u, base + lidH * v];
   const back = ([x, y, z]) => [x - LID, y, z];
@@ -109,8 +116,8 @@ function softbox(p, [x, y]) {
   return s;
 }
 
-// the office chair at the desk, facing it (its back towards +x)
-const CHAIR = { x: 13.5, y: 22, w: 9, d: 10 }; // pushed in: the seat half under the desk top
+// the office chair in the front-left corner, facing the room and the camera (+x): its back against the left wall
+export const CHAIR = { x: 2, y: 40, w: 9, d: 9 };
 
 function chair(p) {
   const { x, y, w, d } = CHAIR;
@@ -124,14 +131,14 @@ function chair(p) {
   }
   s += p.box(cx - 0.6, cy - 0.6, 2, 1.2, 1.2, 12, C.metal); // gas lift
   s += p.box(x, y, 14, w, d, 3, C.sage, { l: C.sageDeep, r: shade(C.sageDeep, -0.12) }); // seat
-  s += p.box(x + w - 1.5, cy - 0.5, 16, 1, 1, 3, C.metal); // back support
-  s += p.box(x + w - 2.2, y + 0.6, 18.5, 2.2, d - 1.2, 11, C.sage, { l: C.sageDeep, r: shade(C.sage, -0.08) }); // back
+  s += p.box(x + 0.5, cy - 0.5, 16, 1, 1, 3, C.metal); // back support
+  s += p.box(x, y + 0.6, 18.5, 2.2, d - 1.2, 11, C.sage, { l: C.sageDeep, r: shade(C.sage, 0.1) }); // back, its cushion towards +x
   return s;
 }
 
-// a potted plant in the front-left corner
+// a potted plant in the back-right corner
 function plant(p) {
-  const [x, y] = [3.5, 41.5];
+  const [x, y] = [52, 1];
   let s = p.shadow(x + 3.5, y + 3.5, 6, 3);
   s += p.box(x, y, 0, 7, 7, 7.5, C.rose, { l: C.roseDeep, r: shade(C.roseDeep, -0.12) });
   s += p.plane([[x + 0.6, y + 0.6, 7.5], [x + 6.4, y + 0.6, 7.5], [x + 6.4, y + 6.4, 7.5], [x + 0.6, y + 6.4, 7.5]], C.woodDark);
@@ -213,7 +220,12 @@ export default {
       id: 'desk',
       draw: desk,
       target: { product: 'ergear-standing-desk' },
-      hit: [...corners(DESK.x, DESK.y, DESK.z, DESK.w, DESK.d, DESK.t), [3, 10, 0], [15, 10, 0], [15, 34, 0], [3, 34, 0]],
+      // the top, the columns and the back foot; of the front foot only its inner end: its outer end
+      // would pull the hull over the chair in the corner
+      hit: [
+        ...corners(DESK.x, DESK.y, DESK.z, DESK.w, DESK.d, DESK.t),
+        [3, 10, 0], [15, 10, 0], [15, 13, 0], [7.6, 33.75, 0], [15, 34, 0],
+      ],
     },
     {
       id: 'laptop',
@@ -233,8 +245,8 @@ export default {
         [x, y + 4, 0],
       ]),
     },
-    { id: 'chair', draw: chair },
     { id: 'plant', draw: plant },
+    { id: 'chair', draw: chair },
     {
       id: 'tripod',
       draw: tripod,

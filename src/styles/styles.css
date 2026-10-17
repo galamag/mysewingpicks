@@ -689,11 +689,16 @@ p { margin: 0 0 1em; }
   .product-section { padding-top: 22px; }
   .product-section__title { font-size: 1.15rem; margin-bottom: 14px; }
 
-  /* The room edge to edge: as big as a phone allows (Room.astro sizes the tap areas
-     for a 320 px screen at this width). */
-  .room { margin: -12px -22px 24px; }
-  .room__svg { border-radius: 0; box-shadow: none; }
+  /* The room edge to edge on a phone, as big as it allows (Room.astro sizes the tap areas
+     for a 320 px screen at this width); from 520 px on, centred at its max-width. */
+  .room { margin: -12px -22px 24px; }          /* where max() is unknown: edge to edge */
+  .room { margin-inline: max(-22px, calc((100% - 520px) / 2)); }
   .room__hint { padding-inline: 22px; }
 
   .site-footer__inner { flex-direction: column; align-items: flex-start; }
+}
+
+/* The room edge to edge (up to its max-width, 520 px): no card corners or shadow. */
+@media (max-width: 520px) {
+  .room__svg { border-radius: 0; box-shadow: none; }
 }
