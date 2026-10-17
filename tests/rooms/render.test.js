@@ -101,33 +101,95 @@ test('hit is the hull of the projected points when it is big enough', () => {
   assert.ok(desk.points.length >= 3);
 });
 
-test('a flat hit (a line) still gets a thumb-size area', () => {
-  const stick = {
-    key: 'stick',
-    size: [60, 50, 40],
-    parts: [
-      {
-        id: 'pole',
-        draw: (p) => p.line([10, 10, 0], [10, 10, 40], PALETTE.dark, 1),
-        target: { product: 'x' },
-        hit: [[10, 10, 0], [10, 10, 40]], // a vertical line on screen: width 0
-      },
-      {
-        id: 'rail',
-        draw: (p) => p.line([10, 10, 0], [30, 30, 0], PALETTE.dark, 1),
-        target: { product: 'y' },
-        hit: [[10, 10, 0], [30, 30, 0]], // a diagonal line: only two hull points
-      },
-    ],
-  };
-  const { svg } = renderRoom(stick, { prefix: 'room-stick', resolve });
-  const found = anchors(svg);
-  assert.equal(found.length, 2);
-  for (const a of found) {
-    assert.ok(a.points.length >= 3, a.part);
-    assert.ok(extent(a.points, 0) >= MIN_HIT - 1e-6, `${a.part} x`);
-    assert.ok(extent(a.points, 1) >= MIN_HIT - 1e-6, `${a.part} y`);
-  }
+/* Geometry of a printed tap area (a convex polygon, either winding). */
+const cross = (a, b, q) => (b[0] - a[0]) * (q[1] - a[1]) - (b[1] - a[1]) * (q[0] - a[0]);
+const edges = (poly) => poly.map((a, i) => [a, poly[(i + 1) % poly.length]]);
+const areaOf = (poly) => Math.abs(edges(poly).reduce((s, [a, b]) => s + a[0] * b[1] - b[0] * a[1], 0)) / 2;
+
+/** The narrowest width of a convex polygon: for each edge, how far the polygon reaches from it. */
+const narrowest = (poly) => Math.min(...edges(poly).map(([a, b]) =>
+  Math.max(...poly.map((q) => Math.abs(cross(a, b, q)))) / Math.hypot(b[0] - a[0], b[1] - a[1])));
+
+/** Does the polygon contain the rectangle [x0, x1] x [y0, y1] (within `tol`)? */
+function contains(poly, [x0, x1, y0, y1], tol = 0.02) {
+  const sign = Math.sign(edges(poly).reduce((s, [a, b]) => s + a[0] * b[1] - b[0] * a[1], 0));
+  return [[x0, y0], [x1, y0], [x1, y1], [x0, y1]].every((q) =>
+    edges(poly).every(([a, b]) => (sign * cross(a, b, q)) / Math.hypot(b[0] - a[0], b[1] - a[1]) >= -tol));
+}
+
+/** The screen box of a hit: [x0, x1, y0, y1]. */
+function screenBox(hit) {
+  const pts = hit.map(project);
+  const xs = pts.map((q) => q[0]);
+  const ys = pts.map((q) => q[1]);
+  return [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+}
+
+/** Render one linked part with this hit and return its printed tap area. */
+function tapAreaOf(hit, options = {}) {
+  const room = { key: 'one', size: [60, 50, 40], parts: [{ id: 'p', draw: () => '', target: { product: 'x' }, hit }] };
+  return anchors(renderRoom(room, { prefix: 'room-one', resolve, ...options }).svg)[0].points;
+}
+
+/** The tap-area guarantee: a minHit x minHit square around the hit's centre fits inside it. */
+function assertThumb(name, hit, minHit = MIN_HIT) {
+  const poly = tapAreaOf(hit, { minHit });
+  const [x0, x1, y0, y1] = screenBox(hit);
+  const [cx, cy, half] = [(x0 + x1) / 2, (y0 + y1) / 2, minHit / 2];
+  assert.ok(contains(poly, [cx - half, cx + half, cy - half, cy + half]), `${name}: no thumb square around the centre`);
+  assert.ok(areaOf(poly) >= minHit * minHit - 0.5, `${name}: area ${areaOf(poly)}`);
+  assert.ok(narrowest(poly) >= minHit - 0.02, `${name}: narrowest width ${narrowest(poly)}`);
+  return poly;
+}
+
+const THUMB_CASES = {
+  'a point': [[28, 16, 23]],
+  'a vertical line (width 0 on screen)': [[10, 10, 0], [10, 10, 40]],
+  // three points in a line, over minHit on both axes: floating-point noise must not leave a flat "hull"
+  'collinear points': [[10, 10, 0], [30, 10, 0], [50, 10, 0]],
+  // a slanted line: two hull points, and its screen extent is not zero on either axis
+  'a slanted line': [[10, 10, 0], [40, 20, 0]],
+  // a 30 x 1 ruler: its screen box is big enough, but the shape is a sliver about 1 unit wide
+  'a thin ruler': [[10, 10, 0], [40, 10, 0], [40, 11, 0], [10, 11, 0]],
+  'a thin vertical strip': [[10, 10, 0], [10, 10, 40], [11, 10, 40], [11, 10, 0]],
+};
+
+for (const [name, hit] of Object.entries(THUMB_CASES)) {
+  test(`tap area holds a thumb-size square: ${name}`, () => {
+    assertThumb(name, hit);
+    assertThumb(name, hit, 30);
+  });
+}
+
+test('the thumb cases are the degenerate ones they claim to be', () => {
+  // slanted: neither screen extent is zero, both are over minHit, so a bounding-box check alone would pass it
+  const [x0, x1, y0, y1] = screenBox(THUMB_CASES['a slanted line']);
+  assert.ok(x1 - x0 > MIN_HIT && y1 - y0 > MIN_HIT);
+  // collinear: over minHit on both axes too
+  const [c0, c1, d0, d1] = screenBox(THUMB_CASES['collinear points']);
+  assert.ok(c1 - c0 > MIN_HIT && d1 - d0 > MIN_HIT);
+});
+
+test('a long thin item stays tappable along its whole length', () => {
+  // on screen: 34.6 wide, 2.5 tall (a strip lying across the room, like a shelf edge)
+  const hit = [[20, 0, 0], [0, 20, 0], [20, 0, 2.5], [0, 20, 2.5]];
+  const [x0, x1, y0, y1] = screenBox(hit);
+  const mid = (y0 + y1) / 2;
+  const poly = assertThumb('shelf edge', hit);
+  assert.ok(contains(poly, [x0, x1, mid - MIN_HIT / 2, mid + MIN_HIT / 2]), 'the full length, minHit tall');
+  // and the same upright
+  const upright = [[10, 10, 0], [10, 10, 40], [11, 10, 40], [11, 10, 0]];
+  const [u0, u1, v0, v1] = screenBox(upright);
+  const tall = assertThumb('upright', upright);
+  assert.ok(contains(tall, [(u0 + u1) / 2 - MIN_HIT / 2, (u0 + u1) / 2 + MIN_HIT / 2, v0, v1]), 'minHit wide, the full height');
+});
+
+test('a big hit keeps its own shape', () => {
+  const hit = toy.parts[0].hit; // the desk
+  const poly = tapAreaOf(hit);
+  const given = new Set(hit.map((q) => project(q).map((v) => +v.toFixed(2)).join(',')));
+  // every corner of the area is one of the given points: nothing was added or inflated
+  for (const q of poly) assert.ok(given.has(q.join(',')), `unexpected corner ${q}`);
 });
 
 test('small hits on top', () => {

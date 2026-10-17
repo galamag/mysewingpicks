@@ -167,21 +167,26 @@ const areaOf = (poly) => Math.abs(poly.reduce((sum, q, i) => {
 }, 0)) / 2;
 
 /**
-  The tap area of a part: the hull of its projected `hit` points. When it is
-  thinner than `minHit` in x or y (or flat: a line or a point), it is grown
-  about its centre to a box of at least minHit × minHit — rounded outwards, so
-  the printed numbers keep the size.
+  The tap area of a part: the hull of its projected `hit` points, always joined
+  with a box around the centre of their screen box, so the area holds a
+  minHit × minHit square whatever the points look like (a point, a line, a
+  sliver: every width is >= minHit, not just the bounding box). The box is
+  exactly minHit × minHit — except that an item thinner than minHit in one
+  direction keeps its full length in the other (a shelf edge stays tappable end
+  to end). A big, solid hit already holds the square, so it keeps its own shape.
+  Everything is rounded to the printed 2 decimals first (the box outwards), so
+  the numbers in the svg are the numbers that were checked.
 */
 function tapArea(hit, minHit) {
-  const pts = hit.map(project);
+  const pts = hit.map((q) => project(q).map(num));
   const xs = pts.map((q) => q[0]);
   const ys = pts.map((q) => q[1]);
   const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
-  const poly = hull(pts);
-  if (poly.length >= 3 && x1 - x0 >= minHit && y1 - y0 >= minHit) return poly;
+  const [w, h] = [x1 - x0, y1 - y0];
 
   const [cx, cy] = [(x0 + x1) / 2, (y0 + y1) / 2];
-  const [hw, hh] = [Math.max(x1 - x0, minHit) / 2, Math.max(y1 - y0, minHit) / 2];
+  const hw = (h < minHit ? Math.max(w, minHit) : minHit) / 2;
+  const hh = (w < minHit ? Math.max(h, minHit) : minHit) / 2;
   const down = (v) => Math.floor(v * 100) / 100;
   const up = (v) => Math.ceil(v * 100) / 100;
   const box = [
