@@ -3,13 +3,13 @@
    the dictionary (pages.home) and is baked static at build. */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { localePaths, langOf, pageUrl, t } from '../../i18n/index.js';
-import { projectBySlug } from '../../data/projects.js';
+import { projects } from '../../data/projects.js';
 import { projectText } from '../../i18n/content.js';
 
 export const getStaticPaths = localePaths;
 const lang = langOf(Astro.params);
 const { brand, ui, pages: { home: text } } = t(lang);
-const tote = projectText(projectBySlug('tote-bag'), lang);
+const sewAlong = projects.map((p) => projectText(p, lang));
 
 const youtube = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
 ---
@@ -76,13 +76,15 @@ const youtube = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
           <h2>{text.sewAlong.heading}</h2>
           <p>{text.sewAlong.intro}</p>
         </div>
-        <div class="category-grid category-grid--single">
-          <a class="category-card category-card--fabrics" href={pageUrl('project/tote-bag', lang)}>
-            <div class="category-card__icon" aria-hidden="true">{tote.icon}</div>
-            <h3>{tote.title}</h3>
-            <p>{tote.teaser}</p>
-            <span class="category-card__more">{text.sewAlong.more}</span>
-          </a>
+        <div class={`category-grid${sewAlong.length === 1 ? ' category-grid--single' : sewAlong.length === 2 ? ' category-grid--pair' : ''}`}>
+          {sewAlong.map((p) => (
+            <a class="category-card category-card--fabrics" href={pageUrl(`project/${p.slug}`, lang)}>
+              <div class="category-card__icon" aria-hidden="true">{p.icon}</div>
+              <h3>{p.title}</h3>
+              <p>{p.teaser}</p>
+              <span class="category-card__more">{text.sewAlong.more}</span>
+            </a>
+          ))}
         </div>
       </div>
     </section>

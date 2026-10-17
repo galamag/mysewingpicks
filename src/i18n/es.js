@@ -50,8 +50,8 @@ export default {
       },
       sewAlong: {
         eyebrow: 'Novedad · cose conmigo',
-        heading: 'Mira cómo toma forma una bolsa',
-        intro: 'Proyectos paso a paso con guías animadas y las medidas de corte reales, empezando por mi tote bag forrada en 10 minutos.',
+        heading: 'Mira cómo toma forma',
+        intro: 'Proyectos paso a paso con guías animadas y las medidas de corte reales: una tote bag forrada y una cesta de tela para Navidad.',
         more: 'Míralo paso a paso →',
       },
       channel: {

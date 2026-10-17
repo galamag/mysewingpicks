@@ -66,6 +66,63 @@ export const projects = [
       'janome-hd2200',
     ],
   },
+  {
+    // The maker's numbers: Vault «Анатомия изделий — Корзинка». The video's on-screen "50 × 50 cm" is a
+    // mistake — the squares are 60 × 60 (said on the page, under the video). Never the finished size.
+    slug: 'fabric-basket',
+    title: 'A fabric basket for Christmas',
+    blurb: 'A lined fabric basket from two squares of cotton: walls stiffened with interfacing, lace and bows glued on. Watch it come together step by step.',
+    pageTitle: 'How to Sew a Fabric Basket with Lining: Cutting Sizes',
+    pageDescription: 'Cutting sizes for a lined fabric basket: 60 × 60 cm squares, 20 cm corners cut away, five 19 cm squares of interfacing, 0.5 cm seams. Every step animated.',
+    heading: 'How to sew a lined fabric basket',
+    teaser: 'Two squares of cotton, a little interfacing, lace and bows — every fold and seam, animated.',
+    videoTitle: 'A fabric basket for the Christmas table',
+    videoIntro: 'The whole basket, sewn start to finish on the channel. One correction: the caption in the video says 50 × 50 cm by mistake — the squares are 60 × 60 cm.',
+    needsIntro: 'Cotton for the outer and the lining, lace for the trim, thread — and the tools I personally recommend for cutting, pressing and sewing it. You will also need heavy fusible interfacing and a hot glue gun.',
+    faq: [
+      {
+        q: 'How much fabric do I need for a fabric basket?',
+        a: 'For this basket you need two 60 × 60 cm (23⅝ in) squares of cotton — one for the outer, one for the lining — and five 19 × 19 cm (7½ in) squares of heavy fusible interfacing. From every corner of both cotton squares cut away a 20 × 20 cm (7⅞ in) square. The cutting diagram below shows it all.',
+      },
+      {
+        q: 'How do you make a fabric basket stand up?',
+        a: 'With heavy fusible interfacing on the outer: five 19 × 19 cm (7½ in) squares, one in the middle of the base and of each wall, 0.5 cm (³⁄₁₆ in) in from the edges, ironed onto the wrong side. The lining gets no interfacing.',
+      },
+      {
+        q: 'How do you sew the corners of a fabric basket?',
+        a: 'Fold up the walls of the cross so the edges of two neighbouring walls meet, right sides together. Pin them and sew 0.5 cm (³⁄₁₆ in) from the edge, from the top right down to the point at the base. Four corner seams make the box — first on the outer, then on the lining.',
+      },
+      {
+        q: 'Where do you leave the opening to turn a lined basket?',
+        a: 'In one corner seam of the lining: leave 15 cm (5⅞ in) unsewn. It is this big because the interfaced walls are stiff. Turn the basket right side out through it, then stitch the opening closed on the machine.',
+      },
+      {
+        q: 'What seam allowance should I use for a fabric basket?',
+        a: 'Every seam in this basket is 0.5 cm (³⁄₁₆ in): the four corner seams of the outer and of the lining and the seam round the top. The topstitching round the top is 0.5 cm from the edge too.',
+      },
+      {
+        q: 'How do you decorate a fabric basket for Christmas?',
+        a: 'The trim is glued on with a hot glue gun, not sewn: a ribbon all round the top, with the joint on a flat side rather than on a corner, and a bow on every corner. In the video it is lace and white bows with a red half-bead in the middle. Any ribbon works — a black one, or an orange one with pumpkins for Halloween — or no trim at all.',
+      },
+    ],
+    icon: '🧺',
+    video: '7kt1rZdiFCM',
+    // "What you'll need" — fabric and trim first, then tools in the order they are used. Not in the
+    // catalog yet (mentioned in needsIntro, no link): heavy fusible interfacing, a hot glue gun.
+    needs: [
+      'barcelonetta-broadcloth',
+      'lace-ribbon',
+      'hagbou-thread-set',
+      'olfa-rotary-cutter',
+      'olfa-cutting-mat',
+      'quilting-rulers-set',
+      'tailor-scissors',
+      'sewline-air-erasable-pen',
+      'rowenta-travel-iron',
+      'beaditive-magnetic-pin-holder',
+      'janome-1522rd',
+    ],
+  },
 ];
 
 export const projectBySlug = (slug) => {

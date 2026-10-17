@@ -21,7 +21,7 @@ const items = projects.map((p) => projectText(p, lang));
           <p>{text.intro}</p>
         </div>
 
-        <div class={`category-grid${items.length === 1 ? ' category-grid--single' : ''}`}>
+        <div class={`category-grid${items.length === 1 ? ' category-grid--single' : items.length === 2 ? ' category-grid--pair' : ''}`}>
           {items.map((p) => (
             <a class="category-card category-card--fabrics" href={pageUrl(`project/${p.slug}`, lang)}>
               <div class="category-card__icon" aria-hidden="true">{p.icon}</div>

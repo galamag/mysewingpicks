@@ -296,6 +296,8 @@ p { margin: 0 0 1em; }
 }
 /* One featured card (home "sew along" teaser), centred. */
 .category-grid--single { grid-template-columns: minmax(0, 420px); justify-content: center; }
+/* Two cards (two projects), centred side by side; one column on phones (media query below). */
+.category-grid--pair { grid-template-columns: repeat(2, minmax(0, 420px)); justify-content: center; }
 .category-card {
   display: block;
   background: var(--paper);

@@ -46,8 +46,8 @@ export default {
       },
       sewAlong: {
         eyebrow: 'New · sew along',
-        heading: 'Watch a bag come together',
-        intro: 'Step-by-step projects with animated guides and the real cutting sizes — starting with my 10-minute lined tote.',
+        heading: 'Watch it come together',
+        intro: 'Step-by-step projects with animated guides and the real cutting sizes — a lined tote and a fabric basket for Christmas.',
         more: 'See it step by step →',
       },
       channel: {

@@ -7,9 +7,12 @@
 */
 import * as tote from './tote.js';
 import { toteText } from './tote.text.js';
+import * as basket from './basket.js';
+import { basketText } from './basket.text.js';
 
 const FIGURES = {
   'tote-bag': { model: tote, text: toteText },
+  'fabric-basket': { model: basket, text: basketText },
 };
 
 /** slug → { model, text(lang) } */

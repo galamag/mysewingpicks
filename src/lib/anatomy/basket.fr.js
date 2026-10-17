@@ -1,0 +1,145 @@
+/* Fabric basket figure — French texts. Same shape as basket.en.js (basket.text.js checks
+   it): `steps` index-aligned with STEPS in basket.js, each step with the same number of
+   `details` lines as English. Centimetres only, decimal comma; « vous ».
+   The maker's numbers (60 × 60, 20 × 20, 19 × 19, 0,5, 15 cm) — unchanged; never the finished size.
+   Non-breaking spaces (U+00A0) as in src/i18n/fr.js: number–unit, before : ; ! ? */
+export default {
+  ui: {
+    fig: 'Fig. 1',
+    title: 'Panière en tissu · anatomie',
+    svgLabel: 'Un dessin isométrique de la panière en tissu doublée et de sa confection, étape par étape.',
+    prev: 'Étape précédente',
+    dot: (i, title) => (i ? `Étape ${i} : ${title}` : title),
+    start: 'Étapes →',
+    next: 'Suivant →',
+    overview: "Vue d'ensemble",
+    stepOf: (k, n) => `Étape ${k} sur ${n}`,
+    machine: (stitch) => `Machine : ${stitch.toLowerCase()}`,
+    inThisStep: 'Pour cette étape',
+    takeApart: 'Démonter',
+    putTogether: 'Assembler',
+    replay: '↻ Revoir',
+    parts: 'Pièces',
+    allSteps: 'Instructions étape par étape',
+    endView: 'VUE EN COUPE',
+    // The static cutting diagram (an <img> on the page; drawn by cut-diagram.mjs): its heading, alt, caption.
+    cutTitle: 'Panière en tissu · dimensions de coupe',
+    cutAlt: "Plan de coupe d'une panière en tissu doublée : l'extérieur et la doublure, chacun un carré de 60 × 60 cm dont on découpe un carré de 20 × 20 cm dans chaque coin, et cinq carrés d'entoilage de 19 × 19 cm.",
+    cutCaption: "Les pièces à couper, avec leurs dimensions — comme à l'étape 1.",
+  },
+  stitches: { straight: 'Point droit' },
+  labels: {
+    cm60: '60 cm', cm20: '20 cm', cm19: '19 cm',
+    cutCorners: 'découper les coins',
+    outerCotton: 'extérieur · coton',
+    liningCotton: 'doublure · coton',
+    iface5: '5 × entoilage',
+    wrongSideUp: 'extérieur, envers dessus',
+    ironOn: 'coller au fer',
+    edges05: 'à 0,5 cm des bords',
+    turnOver: 'retourner, endroit dessus',
+    rightSideIn: "endroit à l'intérieur",
+    seam05: 'couture 0,5 cm',
+    toThePoint: "jusqu'à la pointe",
+    opening15: 'ouverture 15 cm',
+    sameAsOuter: "comme l'extérieur",
+    outerRightOut: "extérieur sur l'endroit",
+    rightSides: 'endroit contre endroit',
+    turnThrough: "retourner par l'ouverture",
+    stitchClosed: "fermer l'ouverture",
+    pushLining: 'rentrer la doublure',
+    topstitch05: 'surpiqûre à 0,5 cm',
+    hotGlue: 'colle chaude, sans couture',
+    jointFlat: 'raccord sur un côté plat',
+    bows4: 'un nœud à chaque coin',
+    christmas: 'Noël : dentelle + nœuds',
+    halloween: 'Halloween : ruban noir',
+    everyday: 'au quotidien : sans déco',
+  },
+  steps: [
+    { title: 'La panière terminée', text: "Une panière en tissu doublée : un extérieur en coton rigidifié à l'entoilage, une doublure en coton, et de la dentelle et des nœuds collés. Appuyez sur la panière pour la démonter." },
+    {
+      title: 'Couper les pièces',
+      text: 'Extérieur et doublure : un carré de coton de 60 × 60 cm chacun, avec un carré de 20 × 20 cm découpé dans chaque coin. Entoilage : cinq carrés de 19 × 19 cm.',
+      details: [
+        "Coupez un carré de coton de 60 × 60 cm pour l'extérieur et un autre pour la doublure.",
+        'Dans chaque coin des deux carrés, découpez un carré de 20 × 20 cm. Il reste une croix : le carré du milieu forme le fond, les quatre branches forment les parois.',
+        "Dans l'entoilage thermocollant épais, coupez cinq carrés de 19 × 19 cm : un pour le fond et un pour chaque paroi de l'extérieur.",
+        'Toutes les marges de couture de cette panière font 0,5 cm.',
+        "Dans la vidéo, le texte à l'écran indique 50 × 50 cm : c'est une erreur, les carrés font 60 × 60 cm.",
+      ],
+    },
+    {
+      title: "Thermocoller l'entoilage",
+      text: "Posez l'extérieur envers dessus. Placez un carré d'entoilage au milieu du fond et de chaque paroi, à 0,5 cm des bords, et collez-le au fer.",
+      details: [
+        "Posez la croix de l'extérieur envers dessus.",
+        "Placez un carré d'entoilage, côté colle vers le bas, au milieu du fond et de chacune des quatre parois — à 0,5 cm des bords tout autour, pour qu'il reste en dehors des coutures.",
+        "Collez les carrés au fer. L'entoilage va seulement sur l'extérieur, pas sur la doublure.",
+      ],
+    },
+    {
+      title: "Coudre l'extérieur",
+      text: "Retournez l'extérieur endroit dessus et relevez les parois. Épinglez les bords qui se rejoignent et piquez les quatre coutures d'angle à 0,5 cm, du haut jusqu'à la pointe.",
+      details: [
+        "Retournez la croix de l'extérieur, endroit dessus.",
+        'Relevez les parois pour que les bords de deux parois voisines se rejoignent, endroit contre endroit. Épinglez-les.',
+        "Piquez la couture d'angle à 0,5 cm du bord, du bord supérieur jusqu'à la pointe, au fond. Sans point d'arrêt.",
+        "Cousez les quatre coins. L'extérieur forme maintenant une boîte sur l'envers — l'entoilage se trouve dehors.",
+      ],
+    },
+    {
+      title: 'Coudre la doublure',
+      text: "Préparez la doublure de la même façon, sans entoilage — mais laissez une ouverture de 15 cm dans une couture d'angle. C'est par là que vous retournerez la panière.",
+      details: [
+        'Relevez les parois de la croix de la doublure, endroit contre endroit, et épinglez les bords qui se rejoignent.',
+        "Piquez trois coutures d'angle à 0,5 cm du bord, du haut jusqu'à la pointe.",
+        "Piquez aussi la quatrième, mais laissez-y une ouverture de 15 cm. Elle est aussi grande parce que les parois entoilées de l'extérieur sont rigides et ont besoin de place pour passer.",
+        "Gardez la doublure sur l'envers.",
+      ],
+    },
+    {
+      title: 'Assembler extérieur et doublure',
+      text: "Retournez l'extérieur sur l'endroit et glissez-le dans la doublure restée sur l'envers, endroit contre endroit. Cousez tout autour du haut, à 0,5 cm du bord.",
+      details: [
+        "Retournez l'extérieur sur l'endroit.",
+        "Glissez-le dans la doublure, qui reste sur l'envers, pour que les endroits soient face à face. Alignez les coutures d'angle et les bords supérieurs.",
+        'Cousez tout autour du haut, à 0,5 cm du bord.',
+      ],
+    },
+    {
+      title: 'Retourner',
+      text: "Retournez la panière sur l'endroit par l'ouverture de la doublure, puis fermez l'ouverture à la machine.",
+      details: [
+        "Retournez toute la panière en la faisant passer par l'ouverture de 15 cm de la doublure.",
+        "Rentrez les bords bruts de l'ouverture et fermez-la à la machine, au ras du bord.",
+      ],
+    },
+    {
+      title: 'Surpiquer le haut',
+      text: 'Rentrez la doublure dans la panière et surpiquez tout autour du haut, à 0,5 cm du bord.',
+      details: [
+        'Poussez la doublure au fond de la panière, bien dans les coins.',
+        'Surpiquez tout autour du haut, à 0,5 cm du bord. La panière est terminée — à vous de choisir la décoration.',
+      ],
+    },
+    {
+      title: 'Ajouter la décoration',
+      text: "Collez un ruban autour du haut à la colle chaude, le raccord sur un côté plat, et un nœud sur chaque coin. N'importe quel ruban et n'importe quels nœuds font l'affaire — ou rien du tout.",
+      details: [
+        'La décoration se colle au pistolet à colle chaude, sans couture.',
+        "Collez un ruban tout autour du haut. Placez le raccord sur le plat d'une paroi, pas sur un coin.",
+        "Collez un nœud sur chacun des quatre coins. Dans la vidéo, ils sont préparés à l'avance dans un ruban blanc, avec une demi-perle rouge en plastique collée au milieu — des nœuds tout faits conviennent tout aussi bien.",
+        "N'importe quel ruban, de n'importe quelle largeur : de la dentelle pour Noël, comme dans la vidéo ; un simple ruban noir ou un ruban orange à citrouilles pour Halloween ; ou aucune décoration pour tous les jours. Dans la vidéo, la panière accueille des mandarines sur la table de Noël — utilisez la vôtre pour tout ce que vous voulez.",
+      ],
+    },
+  ],
+  legend: [
+    { title: 'Extérieur', text: 'coton · un carré de 60 × 60 cm avec un carré de 20 × 20 cm découpé dans chaque coin' },
+    { title: 'Entoilage ×5', text: "épais, thermocollant · carrés de 19 × 19 cm sur le fond et les parois de l'extérieur, à 0,5 cm des bords" },
+    { title: 'Doublure', text: "coton · la même croix que l'extérieur, sans entoilage" },
+    { title: 'Ruban', text: "dentelle ou n'importe quel ruban · collé autour du haut à la colle chaude, le raccord sur un côté plat" },
+    { title: 'Nœuds ×4', text: 'un sur chaque coin, collé, avec une demi-perle rouge au milieu' },
+    { title: 'Coutures', text: "toutes à 0,5 cm · une ouverture de 15 cm dans une couture d'angle de la doublure · surpiqûre à 0,5 cm du bord supérieur" },
+  ],
+};

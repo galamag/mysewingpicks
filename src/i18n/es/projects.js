@@ -38,4 +38,41 @@ export default {
       },
     ],
   },
+  'fabric-basket': {
+    title: 'Una cesta de tela para Navidad',
+    blurb: 'Una cesta de tela con forro hecha con dos cuadrados de algodón: paredes reforzadas con entretela, y encaje y lazos pegados. Mira cómo toma forma, paso a paso.',
+    pageTitle: 'Cómo hacer una cesta de tela con forro: medidas de corte',
+    pageDescription: 'Medidas de corte de una cesta de tela con forro: cuadrados de 60 × 60 cm, recorte de 20 cm en cada esquina, cinco cuadrados de entretela de 19 cm, costuras a 0,5 cm. Cada paso, animado.',
+    heading: 'Cómo hacer una cesta de tela con forro',
+    teaser: 'Dos cuadrados de algodón, un poco de entretela, encaje y lazos: cada doblez y cada costura, animados.',
+    videoTitle: 'Una cesta de tela para la mesa de Navidad',
+    videoIntro: 'La cesta completa, cosida de principio a fin en el canal. Una corrección: en el video, el texto en pantalla dice 50 × 50 cm por error; los cuadrados son de 60 × 60 cm.',
+    needsIntro: 'Algodón para el exterior y el forro, encaje para los adornos, hilo, y las herramientas que recomiendo personalmente para cortar, planchar y coser la cesta. También necesitarás entretela termoadhesiva gruesa y una pistola de pegamento caliente.',
+    faq: [
+      {
+        q: '¿Cuánta tela se necesita para una cesta de tela?',
+        a: 'Para esta cesta necesitas dos cuadrados de algodón de 60 × 60 cm (uno para el exterior y otro para el forro) y cinco cuadrados de entretela termoadhesiva gruesa de 19 × 19 cm. De cada esquina de los dos cuadrados de algodón recorta un cuadrado de 20 × 20 cm. El esquema de corte de abajo lo muestra todo.',
+      },
+      {
+        q: '¿Cómo se consigue que una cesta de tela quede firme?',
+        a: 'Con entretela termoadhesiva gruesa en el exterior: cinco cuadrados de 19 × 19 cm, uno en el centro de la base y de cada pared, a 0,5 cm de los bordes, pegados con la plancha en el revés. El forro no lleva entretela.',
+      },
+      {
+        q: '¿Cómo se cosen las esquinas de una cesta de tela?',
+        a: 'Levanta las paredes de la cruz para que los bordes de dos paredes vecinas se junten, derecho con derecho. Sujétalos con alfileres y cose a 0,5 cm del borde, desde arriba hasta la punta, en la base. Cuatro costuras de esquina forman la caja: primero en el exterior y luego en el forro.',
+      },
+      {
+        q: '¿Dónde se deja la abertura para dar la vuelta a una cesta con forro?',
+        a: 'En una costura de esquina del forro: deja 15 cm sin coser. Es así de grande porque las paredes con entretela son rígidas. Da la vuelta a la cesta al derecho por ahí y después cierra la abertura a máquina.',
+      },
+      {
+        q: '¿Qué margen de costura se deja en una cesta de tela?',
+        a: 'En esta cesta todas las costuras van a 0,5 cm: las cuatro costuras de las esquinas del exterior y del forro y la costura del borde superior. El pespunte de arriba también va a 0,5 cm del borde.',
+      },
+      {
+        q: '¿Cómo decorar una cesta de tela para Navidad?',
+        a: 'Los adornos se pegan con una pistola de pegamento caliente, no se cosen: una cinta alrededor de todo el borde superior, con la unión en un lado plano y no en una esquina, y un lazo en cada esquina. En el video son encaje y lazos blancos con una media perla roja en el centro. Sirve cualquier cinta (una negra, o una naranja con calabazas para Halloween) o ningún adorno.',
+      },
+    ],
+  },
 };

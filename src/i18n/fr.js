@@ -51,8 +51,8 @@ export default {
       },
       sewAlong: {
         eyebrow: 'Nouveau · cousez avec moi',
-        heading: 'Regardez un sac prendre forme',
-        intro: 'Des projets étape par étape, avec des guides animés et les vraies dimensions de coupe — pour commencer, mon tote bag doublé en 10 minutes.',
+        heading: 'Regardez chaque projet prendre forme',
+        intro: 'Des projets étape par étape, avec des guides animés et les vraies dimensions de coupe — un tote bag doublé et une panière en tissu pour Noël.',
         more: 'Voir étape par étape →',
       },
       channel: {

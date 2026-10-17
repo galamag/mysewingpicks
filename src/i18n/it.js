@@ -49,8 +49,8 @@ export default {
       },
       sewAlong: {
         eyebrow: 'Novità · cuci con me',
-        heading: 'Guarda come nasce una borsa',
-        intro: 'Progetti passo passo con guide animate e le vere misure di taglio — a cominciare dalla mia tote bag foderata in 10 minuti.',
+        heading: 'Guarda come prendono forma',
+        intro: 'Progetti passo passo con guide animate e le vere misure di taglio — una tote bag foderata e un cestino di stoffa per Natale.',
         more: 'Guarda passo passo →',
       },
       channel: {

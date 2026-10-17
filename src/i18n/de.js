@@ -48,8 +48,8 @@ export default {
       },
       sewAlong: {
         eyebrow: 'Neu · zum Mitnähen',
-        heading: 'Sieh zu, wie eine Tasche entsteht',
-        intro: 'Schritt-für-Schritt-Projekte mit animierten Anleitungen und echten Zuschnittmaßen – den Anfang macht meine gefütterte Tote Bag in 10 Minuten.',
+        heading: 'Sieh zu, wie Nähprojekte entstehen',
+        intro: 'Schritt-für-Schritt-Projekte mit animierten Anleitungen und echten Zuschnittmaßen – eine gefütterte Tote Bag und ein Stoffkorb für Weihnachten.',
         more: 'Schritt für Schritt ansehen →',
       },
       channel: {
