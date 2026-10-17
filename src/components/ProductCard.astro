@@ -15,6 +15,10 @@
     3. category placeholder icon
   Amazon rules for API images: shown only by Amazon's URL (never downloaded),
   link no older than 24 h, the image links to the product page, no cropping.
+
+  anchor (default false): the card gets id="product-<id>", so an item in a room
+  (src/components/Room.astro) can link to it. Catalog pages set it (ProductSections);
+  project pages show the same products again and leave it off.
 */
 import { Image } from 'astro:assets';
 import { amazonUrl } from '../data/amazon.js';
@@ -29,7 +33,7 @@ const imagesByName = Object.fromEntries(
   Object.entries(productImages).map(([path, mod]) => [path.split('/').pop(), mod.default])
 );
 
-const { product, lang } = Astro.props;
+const { product, lang, anchor = false } = Astro.props;
 const { ui } = t(lang);
 const text = productText(product, lang);
 
@@ -49,7 +53,7 @@ const mediaClass = !imgSrc
   : fit === 'contain' ? 'card__media card__media--contain' : 'card__media';
 const imgClass = fit === 'contain' ? 'card__img card__img--contain' : 'card__img';
 ---
-<article class="card" data-asin={product.asin} data-image={imgSrc ? 'own' : 'placeholder'}>
+<article class="card" id={anchor ? `product-${product.id}` : undefined} data-asin={product.asin} data-image={imgSrc ? 'own' : 'placeholder'}>
   <a class={mediaClass} href={url} target="_blank" rel="nofollow sponsored noopener"
      tabindex="-1" aria-label={text.name}>
     {imgSrc ? (

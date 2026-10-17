@@ -26,6 +26,15 @@ export default {
     amazonContentNotice:
       'Bestimmte Inhalte, die auf dieser Website angezeigt werden, stammen von Amazon. Diese Inhalte werden ‚wie besehen‘ bereitgestellt und können jederzeit geändert oder entfernt werden.',
     privacy: 'Datenschutz & Cookies',
+    rooms: {
+      tapRoom: 'Tippe auf ein Zimmer, um hineinzugehen',
+      tapItem: 'Tippe auf etwas im Zimmer, um es zu sehen',
+      tapShelf: 'Tippe auf einen Tisch oder ein Regal, um zum Abschnitt zu springen',
+      tapProject: 'Tippe auf ein Projekt, um es zu öffnen',
+      house: 'Unsere Nähstube: Tippe auf ein Zimmer',
+      roomLabel: (name) => `${name}: illustriertes Zimmer`,
+      close: 'Schließen',
+    },
   },
   pages: {
     home: {

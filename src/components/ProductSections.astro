@@ -5,6 +5,7 @@
   "jump to section" chips that stays under the sticky header while scrolling,
   so on a phone you can hop between sections instead of scrolling forever.
   Styled by src/styles/styles.css (.section-chips, .product-section).
+  Every card gets id="product-<id>" (anchor): the room above the list links its items to them.
 */
 import ProductCard from './ProductCard.astro';
 import { products } from '../data/products.js';
@@ -45,7 +46,7 @@ const showNav = sections.length > 1;
   <section class="product-section" id={s.id} aria-labelledby={`${s.id}-title`}>
     {showNav && <h3 class="product-section__title" id={`${s.id}-title`}>{s.title}</h3>}
     <div class="product-grid">
-      {s.items.map((product) => <ProductCard product={product} lang={lang} />)}
+      {s.items.map((product) => <ProductCard product={product} lang={lang} anchor />)}
     </div>
   </section>
 ))}

@@ -2,9 +2,11 @@
 /* My Setup page — filming gear (lights, tripod, camera, laptop, desk) for
    viewers who want to film their own sewing videos. One template for every
    language (src/i18n). Product cards are rendered STATICALLY at build from
-   src/data/products.js (category "setup"). */
+   src/data/products.js (category "setup"). Above them, after the disclosure,
+   the filming room (src/components/Room.astro): every item links to its card. */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductSections from '../../components/ProductSections.astro';
+import Room from '../../components/Room.astro';
 import { localePaths, langOf, t } from '../../i18n/index.js';
 
 export const getStaticPaths = localePaths;
@@ -23,6 +25,9 @@ const { brand, ui, pages: { setup: text } } = t(lang);
 
         <!-- Page-level affiliate disclosure, shown before any affiliate link. -->
         <p class="page-disclosure">{ui.pageDisclosure}</p>
+
+        <!-- The filming room: its items link to the cards below (no JS needed). -->
+        <Room room="setup" lang={lang} />
 
         <ProductSections category="setup" lang={lang} />
       </div>

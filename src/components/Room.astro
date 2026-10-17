@@ -1,0 +1,73 @@
+---
+/*
+  Room — the isometric room at the top of a section page, drawn at BUILD time
+  (src/lib/rooms/): the first frame is plain SVG in the HTML and every item is an
+  ordinary link, so it works without JS.
+    room  'setup' | 'tools' | 'fabrics' | 'projects' (the model: ROOMS in src/lib/rooms/rooms.js)
+    lang  the page's language
+
+  Nothing in the drawing links to Amazon. An item leads to OUR page:
+    product → its card in the list below (#product-<id>, ProductCard `anchor`)
+    section → the section of the list (#<section id>)
+    project → the project page in this language (pageUrl)
+  checkTargets fails the build when a part points at a product, section or project
+  that does not exist; a section without products turns its part into decoration.
+
+  Styles: src/styles/styles.css, "Rooms & house" — the svg is injected with set:html,
+  scoped styles would not reach it.
+*/
+import { ROOMS, ROOM_CATEGORY } from '../lib/rooms/rooms.js';
+import { renderRoom } from '../lib/rooms/render.js';
+import { checkTargets } from '../lib/rooms/check.js';
+import { products } from '../data/products.js';
+import { categories } from '../data/categories.js';
+import { projects } from '../data/projects.js';
+import { pageUrl, t } from '../i18n/index.js';
+import { productText, groupTitle, projectText } from '../i18n/content.js';
+
+const { room, lang } = Astro.props;
+const model = ROOMS[room];
+if (!model) throw new Error(`Room: no model for "${room}" (src/lib/rooms/rooms.js)`);
+const category = ROOM_CATEGORY[room];
+const { ui } = t(lang);
+
+const sections = category ? categories[category].groups.map((g) => g.id) : [];
+const { inactive } = checkTargets(model, {
+  productIds: new Map(products.map((p) => [p.id, p.category])),
+  category,
+  allSections: sections,
+  liveSections: sections.filter((id) => products.some((p) => p.category === category && p.group === id)),
+  projectSlugs: projects.map((p) => p.slug),
+});
+
+/** A part's target → our link: { href, label, kind } (check.js has made sure it exists). */
+function resolve(target) {
+  if (target.product) {
+    const product = products.find((p) => p.id === target.product);
+    return { href: `#product-${product.id}`, label: productText(product, lang).name, kind: 'product' };
+  }
+  if (target.section) {
+    return { href: `#${target.section}`, label: groupTitle(category, target.section, lang), kind: 'section' };
+  }
+  if (target.project) {
+    const project = projects.find((p) => p.slug === target.project);
+    return { href: pageUrl(`project/${project.slug}`, lang), label: projectText(project, lang).title, kind: 'page' };
+  }
+  return null;
+}
+
+// Tap areas of at least THUMB css px on the narrowest phone, where the room is as wide as
+// the screen (full-bleed on phones, styles.css): minHit in viewBox units from its width.
+const THUMB = 44;
+const NARROWEST = 320;
+const prefix = `room-${model.key}`;
+const [, , width] = renderRoom({ ...model, parts: [] }, { prefix }).viewBox;
+const minHit = Math.ceil((THUMB * width) / NARROWEST);
+const { svg, viewBox } = renderRoom(model, { prefix, resolve, inactive, minHit });
+
+const HINT = { setup: ui.rooms.tapItem, tools: ui.rooms.tapShelf, fabrics: ui.rooms.tapShelf, projects: ui.rooms.tapProject };
+---
+<figure class="room" data-room={room}>
+  <svg class="room__svg" viewBox={viewBox.join(' ')} role="group" aria-label={ui.rooms.roomLabel(ui.nav[room])} set:html={svg} />
+  <figcaption class="room__hint">{HINT[room]}</figcaption>
+</figure>

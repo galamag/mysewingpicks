@@ -28,6 +28,15 @@ export default {
     amazonContentNotice:
       'Parte del contenido que aparece en este sitio procede de Amazon. Este contenido se ofrece en su condición actual y podrá modificarse o eliminarse en cualquier momento.',
     privacy: 'Privacidad y cookies',
+    rooms: {
+      tapRoom: 'Toca una habitación para entrar',
+      tapItem: 'Toca un objeto de la habitación para verlo',
+      tapShelf: 'Toca una mesa o un estante para ir a su sección',
+      tapProject: 'Toca un proyecto para abrirlo',
+      house: 'Nuestro taller de costura: toca una habitación',
+      roomLabel: (name) => `${name}: habitación ilustrada`,
+      close: 'Cerrar',
+    },
   },
   pages: {
     home: {

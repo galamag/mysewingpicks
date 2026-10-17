@@ -27,6 +27,15 @@ export default {
     amazonContentNotice:
       'Alcuni contenuti che appaiono su questo sito provengono da Amazon. Questo contenuto è fornito "così com\'è" ed è soggetto a modifica o rimozione in qualsiasi momento.',
     privacy: 'Privacy e cookie',
+    rooms: {
+      tapRoom: 'Tocca una stanza per entrare',
+      tapItem: 'Tocca un oggetto nella stanza per vederlo',
+      tapShelf: 'Tocca un tavolo o uno scaffale per andare alla sua sezione',
+      tapProject: 'Tocca un progetto per aprirlo',
+      house: 'Il nostro laboratorio di cucito: tocca una stanza',
+      roomLabel: (name) => `${name}: stanza illustrata`,
+      close: 'Chiudi',
+    },
   },
   pages: {
     home: {

@@ -29,6 +29,15 @@ export default {
     amazonContentNotice:
       "Certains contenus qui s'affichent sur ce site proviennent d'Amazon. Ce contenu est fourni « en l'état » et peut être modifié ou supprimé à tout moment.",
     privacy: 'Confidentialité et cookies',
+    rooms: {
+      tapRoom: 'Touchez une pièce pour y entrer',
+      tapItem: 'Touchez un objet de la pièce pour le voir',
+      tapShelf: 'Touchez une table ou une étagère pour aller à sa section',
+      tapProject: "Touchez un projet pour l'ouvrir",
+      house: 'Notre atelier de couture : touchez une pièce',
+      roomLabel: (name) => `${name} : pièce illustrée`,
+      close: 'Fermer',
+    },
   },
   pages: {
     home: {

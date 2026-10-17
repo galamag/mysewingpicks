@@ -24,6 +24,15 @@ export default {
     amazonContentNotice:
       'Certain content that appears on this site comes from Amazon. This content is provided "as is" and is subject to change or removal at any time.',
     privacy: 'Privacy & Cookies',
+    rooms: {
+      tapRoom: 'Tap a room to go inside',
+      tapItem: 'Tap anything in the room to see it',
+      tapShelf: 'Tap a table or shelf to jump to its section',
+      tapProject: 'Tap a project to open it',
+      house: 'Our sewing house: tap a room',
+      roomLabel: (name) => `${name}: illustrated room`,
+      close: 'Close',
+    },
   },
   pages: {
     home: {

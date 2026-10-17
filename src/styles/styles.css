@@ -469,6 +469,8 @@ p { margin: 0 0 1em; }
   /* Anchor jumps land below the sticky header + chip row, not under them. */
   scroll-margin-top: calc(var(--header-h) + var(--chips-h) + 8px);
 }
+/* A card that a room links to (#product-<id>) lands below the sticky bars too. */
+.card[id] { scroll-margin-top: calc(var(--header-h) + var(--chips-h) + 8px); }
 .product-section__title {
   display: flex;
   align-items: center;
@@ -482,6 +484,48 @@ p { margin: 0 0 1em; }
   height: 1px;
   background: var(--beige-deep);
 }
+
+/* ---------------------------------------------------------------------
+   8c. ROOMS & HOUSE  (src/components/Room.astro, drawings: src/lib/rooms/)
+   The drawing is SVG put into the page at build time (set:html), so its
+   styles live here, not in the component. Classes start with room / house
+   only (.floor, .chip, .ln belong to the anatomy figures).
+   --------------------------------------------------------------------- */
+.room {
+  max-width: 520px;                /* the hint under it stays on a laptop's first screen */
+  margin: 0 auto 30px;
+}
+.room__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1.15;              /* = ROOM_ASPECT (render.js): the space is kept before the svg paints */
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  -webkit-tap-highlight-color: transparent;
+}
+.room__hint {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+/* Tap areas: invisible polygons on top of the drawing, one link per item. */
+.room__hot { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.room__hit { fill: transparent; }  /* the polygon has no fill attribute: without this it paints black */
+.room__hot:active .room__hit { fill: rgba(255, 253, 248, 0.25); }
+.room__hot:focus-visible { outline: 3px solid var(--amazon); outline-offset: 2px; }
+.room__hot:focus-visible .room__hit {
+  fill: rgba(255, 253, 248, 0.22);
+  stroke: var(--amazon);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+/* The item being shown (set by the room script). */
+.room__part { transition: filter 0.2s ease; }
+.room__part.is-on { filter: drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 3px var(--amazon)); }
+@media (prefers-reduced-motion: reduce) { .room__part { transition: none; } }
 
 /* ---------------------------------------------------------------------
    9. ABOUT PAGE
@@ -644,6 +688,12 @@ p { margin: 0 0 1em; }
   .section-chip { padding: 7px 12px; font-size: 0.85rem; }
   .product-section { padding-top: 22px; }
   .product-section__title { font-size: 1.15rem; margin-bottom: 14px; }
+
+  /* The room edge to edge: as big as a phone allows (Room.astro sizes the tap areas
+     for a 320 px screen at this width). */
+  .room { margin: -12px -22px 24px; }
+  .room__svg { border-radius: 0; box-shadow: none; }
+  .room__hint { padding-inline: 22px; }
 
   .site-footer__inner { flex-direction: column; align-items: flex-start; }
 }
