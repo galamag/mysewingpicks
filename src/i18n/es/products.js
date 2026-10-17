@@ -239,9 +239,9 @@ export default {
     name: 'Apple iPhone 15 Pro Max, 512 GB (Reacondicionado)',
     shortDescription: 'iPhone 15 Pro Max reacondicionado con pantalla de 6,7 pulgadas y una cámara que capta de cerca los detalles de la costura.',
   },
-  'macbook-pro-m5': {
-    name: 'Apple MacBook Pro de 14 pulgadas, M5, 16 GB / 1 TB',
-    shortDescription: 'Laptop de 14 pulgadas con chip M5 para editar videos, organizar fotos y llevar un pequeño negocio creativo.',
+  'asus-zenbook-pro-16x': {
+    name: 'ASUS ZenBook Pro 16X OLED, i9, 32 GB / 2 TB',
+    shortDescription: 'Laptop de 16 pulgadas con pantalla táctil OLED 4K, Core i9, gráfica RTX 3060 y dial de control para editar videos.',
   },
   'ergear-standing-desk': {
     name: 'Escritorio elevable eléctrico ErGear, 122 × 61 cm',

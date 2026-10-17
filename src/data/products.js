@@ -531,13 +531,13 @@ export const products = [
     asin: 'B0CMZH1SGK',
   },
   {
-    id: 'macbook-pro-m5',
-    name: 'Apple MacBook Pro 14 in, M5, 16GB / 1TB',
+    id: 'asus-zenbook-pro-16x',
+    name: 'ASUS ZenBook Pro 16X OLED, i9, 32GB / 2TB',
     shortDescription:
-      'A 14-inch laptop with the M5 chip for editing videos, organizing photos and running a small creative business.',
+      'A 16-inch 4K OLED touch laptop with a Core i9, RTX 3060 graphics and a control dial for editing videos.',
     category: 'setup',
     group: 'setup',
-    asin: 'B0FWD623D1',
+    asin: 'B09TPWFK6F',
   },
   {
     id: 'ergear-standing-desk',

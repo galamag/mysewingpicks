@@ -238,9 +238,9 @@ export default {
     name: 'Apple iPhone 15 Pro Max, 512 GB (Generalüberholt)',
     shortDescription: 'Ein generalüberholtes iPhone 15 Pro Max mit 6,7-Zoll-Display und einer Kamera, die feine Nähdetails aus der Nähe einfängt.',
   },
-  'macbook-pro-m5': {
-    name: 'Apple MacBook Pro 14 Zoll, M5, 16 GB / 1 TB',
-    shortDescription: 'Ein 14-Zoll-Laptop mit M5-Chip, um Videos zu schneiden, Fotos zu ordnen und ein kleines kreatives Unternehmen zu führen.',
+  'asus-zenbook-pro-16x': {
+    name: 'ASUS ZenBook Pro 16X OLED, i9, 32 GB / 2 TB',
+    shortDescription: 'Ein 16-Zoll-Laptop mit 4K-OLED-Touchscreen, Core i9, RTX-3060-Grafik und Drehregler, um Videos zu schneiden.',
   },
   'ergear-standing-desk': {
     name: 'ErGear elektrischer Stehschreibtisch, 122 × 61 cm',

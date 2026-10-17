@@ -238,9 +238,9 @@ export default {
     name: 'Apple iPhone 15 Pro Max, 512 ГБ (восстановленный)',
     shortDescription: 'Восстановленный iPhone 15 Pro Max с экраном 6,7 дюйма и камерой, которая снимает мелкие детали шитья крупным планом.',
   },
-  'macbook-pro-m5': {
-    name: 'Ноутбук Apple MacBook Pro 14 дюймов, M5, 16 ГБ / 1 ТБ',
-    shortDescription: 'Ноутбук с экраном 14 дюймов и чипом M5 — чтобы монтировать видео, разбирать фотографии и вести своё небольшое творческое дело.',
+  'asus-zenbook-pro-16x': {
+    name: 'Ноутбук ASUS ZenBook Pro 16X OLED, i9, 32 ГБ / 2 ТБ',
+    shortDescription: 'Ноутбук с сенсорным 4K OLED-экраном 16 дюймов, Core i9, видеокартой RTX 3060 и поворотным регулятором — чтобы монтировать видео.',
   },
   'ergear-standing-desk': {
     name: 'Электрический стол ErGear для работы стоя, 122 × 61 см',
