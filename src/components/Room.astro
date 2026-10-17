@@ -13,6 +13,12 @@
   checkTargets fails the build when a part points at a product, section or project
   that does not exist; a section without products turns its part into decoration.
 
+  The sheet: a room with at least one product item gets ONE <dialog class="room-sheet">.
+  Tapping an item shows a CLONE of that product's card from the list below (the ONE
+  ProductCard: "View on Amazon" and the paid-link marker come along) — never a second
+  card markup. Without <dialog>.showModal, without JS, or with a modifier key the tap is
+  an ordinary link to the card. The script only highlights and opens / closes the sheet.
+
   Styles: src/styles/styles.css, "Rooms & house" — the svg is injected with set:html,
   scoped styles would not reach it.
 */
@@ -63,7 +69,9 @@ const NARROWEST = 320;
 const prefix = `room-${model.key}`;
 const [, , width] = renderRoom({ ...model, parts: [] }, { prefix }).viewBox;
 const minHit = Math.ceil((THUMB * width) / NARROWEST);
-const { svg, viewBox } = renderRoom(model, { prefix, resolve, inactive, minHit });
+const { svg, viewBox, hots } = renderRoom(model, { prefix, resolve, inactive, minHit });
+
+const hasSheet = hots.some((h) => h.kind === 'product');
 
 const HINT = { setup: ui.rooms.tapItem, tools: ui.rooms.tapShelf, fabrics: ui.rooms.tapShelf, projects: ui.rooms.tapProject };
 ---
@@ -71,3 +79,91 @@ const HINT = { setup: ui.rooms.tapItem, tools: ui.rooms.tapShelf, fabrics: ui.ro
   <svg class="room__svg" viewBox={viewBox.join(' ')} role="group" aria-label={ui.rooms.roomLabel(ui.nav[room])} set:html={svg} />
   <figcaption class="room__hint">{HINT[room]}</figcaption>
 </figure>
+{hasSheet && (
+  <dialog class="room-sheet" data-room={room}>
+    <button type="button" class="room-sheet__close" aria-label={ui.rooms.close} title={ui.rooms.close} autofocus><span aria-hidden="true">×</span></button>
+    <div class="room-sheet__body"></div>
+  </dialog>
+)}
+
+<script>
+  // Highlight the item under the pointer / with focus; open the product sheet.
+  document.querySelectorAll('.room').forEach((room) => {
+    const sheet = document.querySelector('.room-sheet[data-room="' + room.getAttribute('data-room') + '"]');
+    const body = sheet && sheet.querySelector('.room-sheet__body');
+    let hover = null;   // part under the pointer or with focus
+    let shown = null;   // part whose card is in the sheet
+    let opener = null;  // the link that opened the sheet: focus goes back to it
+    let quiet = false;  // while focus is handed back, no glow
+    let pressed = null; // where the last mouse press began (a drag out of the card is not a backdrop tap)
+
+    const light = () => {
+      room.querySelectorAll('.room__part').forEach((g) => {
+        const part = g.getAttribute('data-part');
+        g.classList.toggle('is-on', part === hover || part === shown);
+      });
+    };
+    const partOf = (e) => {
+      const a = e.target.closest && e.target.closest('.room__hot');
+      return a ? a.getAttribute('data-part') : null;
+    };
+    const set = (part) => { hover = part; light(); };
+
+    room.addEventListener('focusin', (e) => { if (!quiet) set(partOf(e)); });
+    room.addEventListener('focusout', () => set(null));
+    // Not on touch screens: a tap there would leave the item lit.
+    if (window.matchMedia && window.matchMedia('(hover: hover)').matches) {
+      room.addEventListener('mouseover', (e) => set(partOf(e)));
+      room.addEventListener('mouseout', () => set(null));
+    }
+
+    if (!sheet || !body) return;
+
+    room.addEventListener('click', (e) => {
+      const hot = e.target.closest && e.target.closest('.room__hot[data-kind="product"]');
+      if (!hot || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (typeof sheet.showModal !== 'function') return; // no <dialog>: the link scrolls to the card
+      const card = document.getElementById((hot.getAttribute('href') || '').slice(1));
+      if (!card) return;
+
+      // The same card, copied: ids (the original keeps its own) must not repeat on the page.
+      const copy = card.cloneNode(true);
+      copy.removeAttribute('id');
+      copy.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
+      body.textContent = '';
+      body.appendChild(copy);
+      sheet.setAttribute('aria-label', hot.getAttribute('aria-label') || '');
+      try {
+        sheet.showModal();
+      } catch (err) {
+        body.textContent = ''; // could not open: leave the link to do its job
+        return;
+      }
+      e.preventDefault();
+      opener = hot;
+      shown = hot.getAttribute('data-part');
+      light();
+    });
+
+    sheet.querySelector('.room-sheet__close').addEventListener('click', () => sheet.close());
+    // A press and release on the dimmed page around the sheet (the dialog itself) closes it.
+    sheet.addEventListener('mousedown', (e) => { pressed = e.target; });
+    sheet.addEventListener('click', (e) => {
+      if (e.target === sheet && (pressed === null || pressed === sheet)) sheet.close();
+      pressed = null;
+    });
+    // Esc, the cross and the backdrop all end here.
+    sheet.addEventListener('close', () => {
+      body.textContent = '';
+      shown = null;
+      hover = null;
+      light();
+      if (opener) {
+        quiet = true;
+        if (opener.focus) opener.focus();
+        quiet = false;
+        opener = null;
+      }
+    });
+  });
+</script>

@@ -514,7 +514,9 @@ p { margin: 0 0 1em; }
 .room__hot { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .room__hit { fill: transparent; }  /* the polygon has no fill attribute: without this it paints black */
 .room__hot:active .room__hit { fill: rgba(255, 253, 248, 0.25); }
-.room__hot:focus-visible { outline: 3px solid var(--amazon); outline-offset: 2px; }
+/* One focus frame: the outline of an svg link is a box around the whole item, and next to the
+   polygon's own stroke it showed as a double frame. */
+.room__hot:focus-visible { outline: none; }
 .room__hot:focus-visible .room__hit {
   fill: rgba(255, 253, 248, 0.22);
   stroke: var(--amazon);
@@ -526,6 +528,70 @@ p { margin: 0 0 1em; }
 .room__part { transition: filter 0.2s ease; }
 .room__part.is-on { filter: drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 3px var(--amazon)); }
 @media (prefers-reduced-motion: reduce) { .room__part { transition: none; } }
+
+/* The sheet: the card of the tapped item (a clone of the one in the list) over the dimmed page.
+   A phone: from the bottom edge, full width. A laptop (>= 760px): centred, 380px at most. */
+.room-sheet:not([open]) { display: none; }  /* browsers that do not know <dialog> would show it */
+.room-sheet {
+  position: fixed;
+  top: auto; right: 0; bottom: 0; left: 0;
+  width: 100%; max-width: none;
+  margin: 0; padding: 0; border: 0;
+  max-height: 90vh;
+  max-height: 90dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 18px 18px 0 0;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+}
+.room-sheet[open] { animation: room-sheet-up 0.25s ease-out; }
+.room-sheet::backdrop { background: rgba(74, 63, 53, 0.45); }
+.room-sheet[open]::backdrop { animation: room-sheet-fade 0.25s ease-out; }
+@keyframes room-sheet-up { from { transform: translateY(100%); } }
+@keyframes room-sheet-fade { from { opacity: 0; } }
+
+.room-sheet__close {
+  position: absolute;
+  top: 8px; right: 8px;
+  z-index: 1;
+  width: 44px; height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 253, 248, 0.92);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+  color: var(--ink);
+  font: 400 30px/1 var(--font-body);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.room-sheet__close:focus-visible { outline: 3px solid var(--amazon-deep); outline-offset: 2px; }
+
+/* The card keeps its own markup; only the frame goes (the sheet is the frame). */
+.room-sheet .card { border: 0; border-radius: 0; box-shadow: none; }
+.room-sheet .card:hover { transform: none; box-shadow: none; }
+.room-sheet .card__media { aspect-ratio: 16 / 9; }  /* a phone: the lit item above the sheet stays in sight */
+
+@media (min-width: 760px) {
+  .room-sheet {
+    top: 0; bottom: 0;
+    width: 380px;
+    max-width: calc(100% - 32px);
+    margin: auto;                  /* centred, as the browser does for a modal dialog */
+    border-radius: var(--radius);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+    max-height: calc(100% - 32px);
+  }
+  .room-sheet .card__media { aspect-ratio: 4 / 3; }  /* as in the list */
+  .room-sheet[open] { animation-name: room-sheet-in; }
+  @keyframes room-sheet-in { from { opacity: 0; transform: translateY(12px); } }
+}
+/* Last, so it also wins over the desktop animation above. */
+@media (prefers-reduced-motion: reduce) {
+  .room-sheet[open], .room-sheet[open]::backdrop { animation: none; }
+}
 
 /* ---------------------------------------------------------------------
    9. ABOUT PAGE
