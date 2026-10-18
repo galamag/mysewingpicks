@@ -6,7 +6,7 @@
 export default {
   ui: {
     fig: 'Fig. 1',
-    title: 'Forrar una bolsa · paso a paso',
+    title: 'Forro · paso a paso',
     svgLabel: 'Dibujo isométrico de cómo se forra una bolsa: el forro con una abertura, el exterior metido dentro, la costura de arriba, la vuelta por la abertura, la abertura cerrada y el pespunte.',
     prev: 'Paso anterior',
     dot: (i, title) => (i ? `Paso ${i}: ${title}` : title),

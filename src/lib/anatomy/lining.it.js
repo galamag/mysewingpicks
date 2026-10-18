@@ -6,7 +6,7 @@
 export default {
   ui: {
     fig: 'Fig. 1',
-    title: 'Foderare una borsa · passo passo',
+    title: 'Fodera · passo passo',
     svgLabel: "Un disegno isometrico di come si fodera una borsa: la fodera con un'apertura, l'esterno infilato dentro, la cucitura in alto, la borsa rivoltata dall'apertura, l'apertura chiusa e l'impuntura.",
     prev: 'Passo precedente',
     dot: (i, title) => (i ? `Passo ${i}: ${title}` : title),

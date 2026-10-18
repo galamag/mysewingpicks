@@ -6,7 +6,7 @@
 export default {
   ui: {
     fig: 'Abb. 1',
-    title: 'Futter einnähen · Schritt für Schritt',
+    title: 'Futter einnähen',
     svgLabel: 'Eine isometrische Zeichnung, wie man Futter in eine Tasche einnäht: das Futter mit Wendeöffnung, das Außenteil darin, die Naht an der Oberkante, das Wenden durch die Öffnung, das Schließen der Öffnung und das Absteppen.',
     prev: 'Vorheriger Schritt',
     dot: (i, title) => (i ? `Schritt ${i}: ${title}` : title),

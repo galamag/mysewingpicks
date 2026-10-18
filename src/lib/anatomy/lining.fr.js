@@ -6,7 +6,7 @@
 export default {
   ui: {
     fig: 'Fig. 1',
-    title: 'Doubler un sac · pas à pas',
+    title: 'Doublure · pas à pas',
     svgLabel: "Un dessin isométrique pour doubler un sac : la doublure avec une ouverture, l'extérieur glissé dedans, la couture du haut, le retournement par l'ouverture, sa fermeture et la surpiqûre.",
     prev: 'Étape précédente',
     dot: (i, title) => (i ? `Étape ${i} : ${title}` : title),

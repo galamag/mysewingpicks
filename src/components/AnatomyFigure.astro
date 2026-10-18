@@ -227,6 +227,7 @@ const allTitleId = `${slug}-all-title`;
     display: flex; justify-content: space-between; gap: 12px; position: relative;
     font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft);
   }
+  .anatomy__fig { white-space: nowrap; } /* "Abb. 1" never breaks; a long title wraps instead (keep titles short) */
   .anatomy__title { font-weight: 700; color: var(--rose-deep); }
   .anatomy__svg { display: block; width: 100%; height: auto; cursor: pointer; touch-action: pan-y; }
   .anatomy__scene { transition: opacity 0.18s ease; }
