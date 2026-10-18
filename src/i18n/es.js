@@ -66,6 +66,12 @@ export default {
         intro: 'Proyectos paso a paso con guías animadas y las medidas de corte reales: una tote bag forrada y una cesta de tela para Navidad.',
         more: 'Míralo paso a paso →',
       },
+      guides: {
+        eyebrow: 'Técnicas de costura',
+        heading: 'Aprende una técnica a la vez',
+        intro: '¿Un paso de un proyecto no te queda claro? Cada tutorial te muestra cómo se hace, animado y con las medidas reales de mis proyectos.',
+        more: 'Todas las técnicas →',
+      },
       channel: {
         eyebrow: 'Videos nuevos a menudo',
         heading: 'Cose conmigo',

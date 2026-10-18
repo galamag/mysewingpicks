@@ -67,6 +67,12 @@ export default {
         intro: 'Des projets étape par étape, avec des guides animés et les vraies dimensions de coupe — un tote bag doublé et une panière en tissu pour Noël.',
         more: 'Voir étape par étape →',
       },
+      guides: {
+        eyebrow: 'Techniques de couture',
+        heading: 'Apprenez une technique à la fois',
+        intro: "Vous bloquez sur une étape d'un projet ? Chaque tuto montre comment faire, en animation et avec les vraies mesures de mes projets.",
+        more: 'Toutes les techniques →',
+      },
       channel: {
         eyebrow: 'De nouvelles vidéos régulièrement',
         heading: 'Cousez avec moi',

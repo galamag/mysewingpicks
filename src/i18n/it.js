@@ -65,6 +65,12 @@ export default {
         intro: 'Progetti passo passo con guide animate e le vere misure di taglio — una tote bag foderata e un cestino di stoffa per Natale.',
         more: 'Guarda passo passo →',
       },
+      guides: {
+        eyebrow: 'Tecniche di cucito',
+        heading: 'Impara una tecnica alla volta',
+        intro: 'Un passo di un progetto non ti è chiaro? Ogni tutorial mostra come si fa, in animazione e con le misure vere dei miei progetti.',
+        more: 'Tutte le tecniche →',
+      },
       channel: {
         eyebrow: 'Sempre nuovi video',
         heading: 'Cuci con me',

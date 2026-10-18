@@ -64,6 +64,12 @@ export default {
         intro: 'Schritt-für-Schritt-Projekte mit animierten Anleitungen und echten Zuschnittmaßen – eine gefütterte Tote Bag und ein Stoffkorb für Weihnachten.',
         more: 'Schritt für Schritt ansehen →',
       },
+      guides: {
+        eyebrow: 'Nähgrundlagen',
+        heading: 'Lerne eine Technik nach der anderen',
+        intro: 'Du kommst bei einem Schritt in einem Projekt nicht weiter? Jede Anleitung zeigt, wie es gemacht wird – animiert und mit den echten Maßen aus meinen Projekten.',
+        more: 'Alle Grundlagen ansehen →',
+      },
       channel: {
         eyebrow: 'Regelmäßig neue Videos',
         heading: 'Näh mit mir',

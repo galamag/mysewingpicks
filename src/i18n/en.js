@@ -65,6 +65,12 @@ export default {
         intro: 'Step-by-step projects with animated guides and the real cutting sizes — a lined tote and a fabric basket for Christmas.',
         more: 'See it step by step →',
       },
+      guides: {
+        eyebrow: 'Sewing guides',
+        heading: 'Learn it one technique at a time',
+        intro: "Stuck on a step of a project? Each guide shows how it's done, animated, with the real numbers from my projects.",
+        more: 'All sewing guides →',
+      },
       channel: {
         eyebrow: 'New videos often',
         heading: 'Sew along with me',
