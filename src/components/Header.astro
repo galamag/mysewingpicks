@@ -14,7 +14,7 @@ import { LOCALES, LANGS, hasPage, pageUrl, t } from '../i18n/index.js';
 
 const { active, page, lang } = Astro.props;
 const { brand, ui } = t(lang);
-const nav = ['home', 'projects', 'tools', 'fabrics', 'setup', 'about']
+const nav = ['home', 'projects', 'guides', 'tools', 'fabrics', 'setup', 'about']
   .map((key) => ({ key, label: ui.nav[key], href: pageUrl(key, lang) }));
 // Links come from pageUrl(): absolute (pages in sub-folders use the same nav),
 // and in the page's own language.

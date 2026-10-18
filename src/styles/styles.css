@@ -417,7 +417,8 @@ p { margin: 0 0 1em; }
    (src/components/ProductSections.astro, sections from data/categories.js)
    --------------------------------------------------------------------- */
 /* The chip row sticks just under the sticky site header, so on a long page
-   you can always hop to another section. --header-h matches the header. */
+   you can always hop to another section. --header-h matches the header (one row: 75 px;
+   the two-row tablet header, 761–1024 px, sets its own value in section 11). */
 :root { --header-h: 75px; --chips-h: 58px; }
 
 .section-chips {
@@ -826,17 +827,23 @@ p { margin: 0 0 1em; }
 /* ---------------------------------------------------------------------
    11. RESPONSIVE (mobile-first tweaks)
    --------------------------------------------------------------------- */
-/* Long nav labels (ru, de…) on tablets: keep the header on ONE line — it must stay as
-   tall as --header-h says (sticky chips). The Russian nav wraps to two lines at 881–892 px
-   with the normal spacing, so the compact spacing runs up to 1024 px (checked ru, de, fr, it, es). */
+/* Tablets (761–1024 px): the whole menu stays visible (7 links + language), in TWO rows —
+   the logo, then all links and the language switcher. One row with the normal spacing needs
+   ~991 px for ru, the longest (de 986, es 962, it 952, fr 939, en 868 incl. a 17 px scrollbar),
+   so one row starts at 1025 px. The header must be exactly as tall as --header-h says (the
+   sticky chips and anchor offsets use it): 10 + logo 46 + 4 + links row 40 + 10 + 1 border = 111.
+   Row 2 has viewport − 44 − 17 px: 700 at 761, 740 at 801. The 7 links + switcher need (gap 2)
+   ru 718 / de 712 / es 689 / it 678 / fr 665 / en 594 px with padding 8, and 676 / 670 / 647 /
+   636 / 623 / 552 px with padding 5 — so padding 5 up to 800 px, padding 8 above. */
 @media (min-width: 761px) and (max-width: 1024px) {
-  .site-nav { gap: 2px; }
-  .site-nav > a { padding-inline: 8px; white-space: nowrap; }
-  .lang-switch { margin-left: 2px; padding-left: 4px; }
-  .lang-switch__current { padding-inline: 7px; }
+  :root { --header-h: 111px; }
+  .site-header__inner { flex-direction: column; align-items: stretch; gap: 4px; padding-block: 10px; }
+  .brand { align-self: flex-start; }
+  .site-nav { gap: 2px; height: 40px; }
+  .site-nav > a { padding: 8px; line-height: 24px; white-space: nowrap; }
+  .lang-switch { margin-left: auto; padding-left: 4px; }
+  .lang-switch__current { padding-inline: 7px; line-height: 24px; }
 }
-/* The narrowest tablets (iPad mini portrait, 768): the Russian nav is 652 px wide even when
-   compact and would squeeze the logo, so the links get a little closer still. */
 @media (min-width: 761px) and (max-width: 800px) {
   .site-nav > a { padding-inline: 5px; }
 }
