@@ -1,0 +1,104 @@
+---
+/*
+  Guide page — one sewing technique (src/data/guides.js); ONE template for every guide and every
+  language (texts: src/i18n). Like a project page: the head (h1 = heading, the blurb) → page-disclosure
+  (the figure's "In this step" links are affiliate links) → the animated figure (AnatomyFigure, model =
+  guide.figure: src/lib/anatomy/<figure>.js) → the projects' own videos, each from where the technique
+  begins (video[].start) → "What you'll need" (catalog cards) → back to the list.
+  A wrong product id, project or project step in guides.js fails the build.
+  Spec: Vault «Гайды — спецификация», 5–6.
+*/
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AnatomyFigure from '../../../components/AnatomyFigure.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import YouTubeVideo from '../../../components/YouTubeVideo.astro';
+import { guides, guideBySlug } from '../../../data/guides.js';
+import { projectBySlug } from '../../../data/projects.js';
+import { products } from '../../../data/products.js';
+import { LOCALES, DEFAULT_LOCALE, langOf, pageUrl, t } from '../../../i18n/index.js';
+import { guideText, projectText } from '../../../i18n/content.js';
+import { figure } from '../../../lib/anatomy/figures.js';
+
+export const getStaticPaths = () =>
+  LOCALES.flatMap((lang) => guides.map((g) => ({ params: { lang: lang === DEFAULT_LOCALE ? undefined : lang, slug: g.slug } })));
+
+const lang = langOf(Astro.params);
+const guide = guideText(guideBySlug(Astro.params.slug), lang);
+const { ui, pages: { guide: text } } = t(lang);
+const where = `guides.js "${guide.slug}"`;
+
+const needs = guide.needs.map((id) => {
+  const p = products.find((x) => x.id === id);
+  if (!p) throw new Error(`${where}: unknown product "${id}"`);
+  return p;
+});
+// usedIn: real projects and real steps of their figures (a project's figure has the project's slug).
+for (const u of guide.usedIn) {
+  projectBySlug(u.project);
+  const last = figure(u.project).model.STEPS.length - 1;
+  for (const k of u.steps) {
+    if (!Number.isInteger(k) || k < 1 || k > last) throw new Error(`${where}: usedIn "${u.project}" step ${k} is not in 1…${last}`);
+  }
+}
+// The projects' own videos (id, cover, title), each from where the technique begins.
+const videos = (guide.video ?? []).map((v) => {
+  const p = projectText(projectBySlug(v.project), lang);
+  return { id: p.video, title: p.videoTitle, intro: text.videoIntro(p.title), start: v.start };
+});
+---
+<BaseLayout lang={lang} page={`guide/${guide.slug}`} active="guides" title={guide.pageTitle} description={guide.pageDescription}>
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">{text.eyebrow}</span>
+          <h1>{guide.heading}</h1>
+          <p>{guide.blurb}</p>
+        </div>
+
+        <!-- Page-level affiliate disclosure, shown before any affiliate link. -->
+        <p class="page-disclosure">{ui.pageDisclosureSome}</p>
+
+        <AnatomyFigure model={guide.figure} lang={lang} />
+      </div>
+    </section>
+
+    {videos.length > 0 && (
+      <section class="section section--tight">
+        <div class="container guide-video">
+          <div class="section-head">
+            <span class="eyebrow">{text.videoEyebrow}</span>
+            <h2>{text.videoHeading}</h2>
+          </div>
+          {videos.map((v) => (
+            <div class="guide-video__item">
+              <p class="guide-video__intro">{v.intro}</p>
+              <YouTubeVideo id={v.id} title={v.title} lang={lang} start={v.start} />
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">{text.needsEyebrow}</span>
+          <h2>{text.needsHeading}</h2>
+          <p>{guide.needsIntro}</p>
+        </div>
+        <div class="product-grid">
+          {needs.map((product) => <ProductCard product={product} lang={lang} />)}
+        </div>
+        <p class="guide-more"><a href={pageUrl('guides', lang)}>{text.more}</a></p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .guide-video { max-width: 760px; }
+  .guide-video__item + .guide-video__item { margin-top: 36px; }
+  .guide-video__intro { margin: 0 0 12px; text-align: center; color: var(--ink-soft); }
+  .guide-more { text-align: center; margin-top: 40px; font-weight: 700; }
+</style>

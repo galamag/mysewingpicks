@@ -1,38 +1,46 @@
-/* Translated product, section and project texts. English stays in src/data/*.js;
+/* Translated product, section, project and guide texts. English stays in src/data/*.js;
    other languages come from src/i18n/<lang>/*.js and must cover EVERY product,
-   section and project — a missing or extra id fails the build. */
+   section, project and guide — a missing or extra id fails the build. */
 import { products } from '../data/products.js';
 import { categories } from '../data/categories.js';
 import { projects } from '../data/projects.js';
+import { guides } from '../data/guides.js';
 import { DEFAULT_LOCALE } from './index.js';
 import ruProducts from './ru/products.js';
 import ruGroups from './ru/categories.js';
 import ruProjects from './ru/projects.js';
+import ruGuides from './ru/guides.js';
 import deProducts from './de/products.js';
 import deGroups from './de/categories.js';
 import deProjects from './de/projects.js';
+import deGuides from './de/guides.js';
 import frProducts from './fr/products.js';
 import frGroups from './fr/categories.js';
 import frProjects from './fr/projects.js';
+import frGuides from './fr/guides.js';
 import itProducts from './it/products.js';
 import itGroups from './it/categories.js';
 import itProjects from './it/projects.js';
+import itGuides from './it/guides.js';
 import esProducts from './es/products.js';
 import esGroups from './es/categories.js';
 import esProjects from './es/projects.js';
+import esGuides from './es/guides.js';
 
 export const PROJECT_FIELDS = ['title', 'blurb', 'pageTitle', 'pageDescription', 'heading', 'teaser', 'videoTitle', 'videoIntro', 'needsIntro'];
 /** Translatable LISTS of a project: field → the text keys of each item. A translation has as many
     items as English, each key a non-empty string (faq: the questions and answers of the page). */
 export const PROJECT_LISTS = { faq: ['q', 'a'] };
+/** Translatable texts of a guide (src/data/guides.js). */
+export const GUIDE_FIELDS = ['title', 'blurb', 'pageTitle', 'pageDescription', 'heading', 'teaser', 'needsIntro'];
 
-/** Translation sets by language: { products, groups, projects }. */
+/** Translation sets by language: { products, groups, projects, guides }. */
 const SETS = {
-  ru: { products: ruProducts, groups: ruGroups, projects: ruProjects },
-  de: { products: deProducts, groups: deGroups, projects: deProjects },
-  fr: { products: frProducts, groups: frGroups, projects: frProjects },
-  it: { products: itProducts, groups: itGroups, projects: itProjects },
-  es: { products: esProducts, groups: esGroups, projects: esProjects },
+  ru: { products: ruProducts, groups: ruGroups, projects: ruProjects, guides: ruGuides },
+  de: { products: deProducts, groups: deGroups, projects: deProjects, guides: deGuides },
+  fr: { products: frProducts, groups: frGroups, projects: frProjects, guides: frGuides },
+  it: { products: itProducts, groups: itGroups, projects: itProjects, guides: itGuides },
+  es: { products: esProducts, groups: esGroups, projects: esProjects, guides: esGuides },
 };
 
 function cover(lang, kind, ids, table, fields, lists = {}) {
@@ -79,12 +87,20 @@ for (const p of projects) {
   for (const [f, keys] of Object.entries(PROJECT_LISTS)) if (p[f] !== undefined) checkList(`data/projects.js: "${p.slug}".${f}`, p[f], keys);
 }
 
+// …and so must English guides.
+for (const g of guides) {
+  for (const f of GUIDE_FIELDS) {
+    if (typeof g[f] !== 'string' || !g[f].trim()) throw new Error(`data/guides.js: guide "${g.slug}" has no "${f}" text`);
+  }
+}
+
 const groupKeys = Object.entries(categories).flatMap(([c, cfg]) => cfg.groups.map((g) => `${c}/${g.id}`));
 for (const [lang, translations] of Object.entries(SETS)) {
   cover(lang, 'products', products.map((p) => p.id), translations.products, ['name', 'shortDescription']);
   cover(lang, 'categories', groupKeys, translations.groups, ['title']);
   cover(lang, 'projects', projects.map((p) => p.slug), translations.projects, PROJECT_FIELDS, PROJECT_LISTS);
   coverLists(lang, translations.projects);
+  cover(lang, 'guides', guides.map((g) => g.slug), translations.guides, GUIDE_FIELDS);
 }
 
 function set(lang) {
@@ -105,3 +121,6 @@ export function groupTitle(category, groupId, lang) {
 
 export const projectText = (project, lang) =>
   lang === DEFAULT_LOCALE ? project : { ...project, ...set(lang).projects[project.slug] };
+
+export const guideText = (guide, lang) =>
+  lang === DEFAULT_LOCALE ? guide : { ...guide, ...set(lang).guides[guide.slug] };

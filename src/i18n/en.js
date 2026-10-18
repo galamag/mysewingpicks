@@ -5,7 +5,7 @@
 export default {
   brand: 'My Sewing Picks',
   ui: {
-    nav: { home: 'Home', tools: 'Tools', fabrics: 'Fabrics', projects: 'Projects', setup: 'My Setup', about: 'About' },
+    nav: { home: 'Home', tools: 'Tools', fabrics: 'Fabrics', projects: 'Projects', guides: 'Guides', setup: 'My Setup', about: 'About' },
     homeLabel: 'home',
     logo: 'logo',
     toggleMenu: 'Toggle menu',
@@ -20,6 +20,8 @@ export default {
     toTop: 'Back to top',
     playVideo: (title) => `Play video: ${title}`,
     watchOnYouTube: 'Watch on YouTube',
+    // "How it's done →" — the link from a project's step to the guide with that technique.
+    howItsDone: "How it's done",
     socialLinks: 'Social links',
     ogImageAlt: 'My Sewing Picks — hand-picked sewing tools and fabrics',
     pageDisclosure: 'The links below are affiliate links. As an Amazon Associate I earn from qualifying purchases.',
@@ -105,6 +107,38 @@ export default {
       faqEyebrow: 'Good to know',
       faqHeading: 'Questions and answers',
       more: '← More sew-along projects',
+    },
+    // Guides — the list /guides.html (src/pages/[...lang]/guides.astro). title / description / heading (the h1):
+    // the words people search with (Vault «Гайды — спецификация», 10.1). groups: the list's groups, by the ids of
+    // GUIDE_GROUPS in src/data/guides.js (a group with no guide is not shown).
+    guides: {
+      title: 'Sewing Basics for Beginners: Step-by-Step Guides',
+      description: 'Sewing basics for beginners, step by step: every technique animated, with the real numbers from our projects. First guide: how to line a bag.',
+      eyebrow: 'Learn the basics',
+      heading: 'Sewing basics for beginners, step by step',
+      intro: "One technique at a time, every step animated and with the real numbers from my projects. Stuck on a step of a project? Its guide shows you how it's done.",
+      more: 'See it step by step →',
+      groups: {
+        machine: { title: 'The sewing machine', intro: 'Threading, the bobbin, stitches and presser feet — getting the machine ready to sew.' },
+        cutting: { title: 'Cutting', intro: 'Rotary cutter, ruler and mat — cutting strips, squares and triangles straight and true.' },
+        construction: { title: 'Putting it together', intro: 'The steps that turn cut pieces into a finished bag or basket: the lining, turning it out and topstitching.' },
+        patchwork: { title: 'Patchwork & quilting', intro: 'Ways to cut and join fabric into patterns: half-square triangles, flying geese, blocks and quilting.' },
+      },
+    },
+    // A guide's page (src/pages/[...lang]/guides/[slug].astro). usedInSteps(projectTitle, from, to) — a link to a
+    // project with the steps where the technique is used; videoIntro(projectTitle) — under each project video,
+    // which starts where the technique does.
+    guide: {
+      eyebrow: 'Sewing basics · guide',
+      usedInEyebrow: 'In the projects',
+      usedInHeading: "Where it's used",
+      usedInSteps: (projectTitle, from, to) => `${projectTitle}: ${from === to ? `step ${from}` : `steps ${from}–${to}`}`,
+      needsEyebrow: 'For this guide',
+      needsHeading: "What you'll need",
+      videoEyebrow: 'Watch it done',
+      videoHeading: 'On video',
+      videoIntro: (projectTitle) => `${projectTitle}: the video starts right where this technique begins.`,
+      more: '← More sewing guides',
     },
     about: {
       title: 'About — My Sewing Picks',

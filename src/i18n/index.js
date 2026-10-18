@@ -7,11 +7,12 @@
    Every page is ONE template in src/pages/[...lang]/, built once per language.
    Links between pages: ALWAYS pageUrl(page, lang) — never a hand-written path.
    Texts: src/i18n/<lang>.js (interface + pages, every language incl. en);
-   translations of products, sections and projects: src/i18n/<lang>/*.js
+   translations of products, sections, projects and guides: src/i18n/<lang>/*.js
    (English stays in src/data/*.js), see content.js.
    ===================================================================== */
 import { assertSameShape } from './shape.js';
 import { projects } from '../data/projects.js';
+import { guides } from '../data/guides.js';
 import en from './en.js';
 import ru from './ru.js';
 import de from './de.js';
@@ -35,16 +36,19 @@ export const LANGS = {
 const DICTS = { en, ru, de, fr, it, es };
 for (const [lang, dict] of Object.entries(DICTS)) if (lang !== DEFAULT_LOCALE) assertSameShape(en, dict, lang);
 
-/** Page key → file under the language root. Project pages come from src/data/projects.js. */
+/** Page key → file under the language root. Project pages come from src/data/projects.js,
+    guide pages from src/data/guides.js. */
 export const PAGES = {
   home: '',
   tools: 'tools.html',
   fabrics: 'fabrics.html',
   setup: 'setup.html',
   projects: 'projects.html',
+  guides: 'guides.html',
   about: 'about.html',
   privacy: 'privacy.html',
   ...Object.fromEntries(projects.map((p) => [`project/${p.slug}`, `projects/${p.slug}.html`])),
+  ...Object.fromEntries(guides.map((g) => [`guide/${g.slug}`, `guides/${g.slug}.html`])),
 };
 
 /** Pages that exist only in SOME languages and stay out of search: noindex, not in sitemap.xml, no hreflang.

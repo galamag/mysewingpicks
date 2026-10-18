@@ -5,20 +5,23 @@
   button, so the page stays fast and nothing from YouTube runs (no player, no
   cookies). The player is the privacy-enhanced youtube-nocookie.com embed.
   Without JS the button is a plain link to YouTube.
+  Optional `start` (whole seconds): the player starts there (&start=<n>; the plain link: &t=<n>s) —
+  a guide shows a project video from where the technique begins. Without it nothing changes.
 */
 import { Image } from 'astro:assets';
 import { t } from '../i18n/index.js';
 
-const { id, title, lang } = Astro.props;
+const { id, title, lang, start } = Astro.props;
 const { ui } = t(lang);
-const watch = `https://www.youtube.com/watch?v=${id}`;
+if (start !== undefined && !(Number.isInteger(start) && start >= 0)) throw new Error(`YouTubeVideo: start must be whole seconds, got ${start}`);
+const watch = `https://www.youtube.com/watch?v=${id}${start ? `&t=${start}s` : ''}`;
 // The video's own cover, served from this site (src/assets/video/<id>.jpg): until play is
 // pressed the browser does not contact YouTube at all. A missing file fails the build.
 const covers = import.meta.glob<{ default: ImageMetadata }>('../assets/video/*.jpg', { eager: true });
 const cover = covers[`../assets/video/${id}.jpg`]?.default;
 if (!cover) throw new Error(`YouTubeVideo: no cover src/assets/video/${id}.jpg — save the video's own thumbnail there`);
 ---
-<div class="yt" data-yt={id} data-title={title}>
+<div class="yt" data-yt={id} data-title={title} data-start={start}>
   <a class="yt__poster" href={watch} target="_blank" rel="noopener" aria-label={ui.playVideo(title)}>
     <Image src={cover} alt="" widths={[640, 1280]} sizes="(max-width: 760px) 100vw, 716px" format="webp" loading="lazy" decoding="async" />
     <span class="yt__play" aria-hidden="true">
@@ -33,7 +36,8 @@ if (!cover) throw new Error(`YouTubeVideo: no cover src/assets/video/${id}.jpg �
     box.querySelector('.yt__poster')?.addEventListener('click', (e) => {
       e.preventDefault();
       const frame = document.createElement('iframe');
-      frame.src = `https://www.youtube-nocookie.com/embed/${box.dataset.yt}?autoplay=1&rel=0`;
+      const start = box.dataset.start ? `&start=${box.dataset.start}` : '';
+      frame.src = `https://www.youtube-nocookie.com/embed/${box.dataset.yt}?autoplay=1&rel=0${start}`;
       frame.title = box.dataset.title ?? 'YouTube video';
       frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
       frame.allowFullscreen = true;
