@@ -7,11 +7,12 @@
 import setup from './setup.js';
 import tools from './tools.js';
 import fabrics from './fabrics.js';
+import projectRoom from './projects.js';
 import { products } from '../../data/products.js';
 import { categories } from '../../data/categories.js';
 import { projects } from '../../data/projects.js';
 
-export const ROOMS = { setup, tools, fabrics };
+export const ROOMS = { setup, tools, fabrics, projects: projectRoom };
 
 export const ROOM_CATEGORY = { setup: 'setup', tools: 'tools', fabrics: 'fabrics', projects: null };
 

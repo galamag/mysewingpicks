@@ -1,7 +1,10 @@
 ---
 /* Projects — the list of sew-along projects (src/data/projects.js), one template
-   for every language (src/i18n). */
+   for every language (src/i18n). Above the list, the project room (src/components/Room.astro):
+   each finished item opens its project page. No affiliate links on this page, so no
+   page-disclosure. */
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Room from '../../components/Room.astro';
 import { projects } from '../../data/projects.js';
 import { localePaths, langOf, pageUrl, t } from '../../i18n/index.js';
 import { projectText } from '../../i18n/content.js';
@@ -20,6 +23,9 @@ const items = projects.map((p) => projectText(p, lang));
           <h1>{text.heading}</h1>
           <p>{text.intro}</p>
         </div>
+
+        <!-- The project room: a finished item opens its project page (no JS needed). -->
+        <Room room="projects" lang={lang} />
 
         <div class={`category-grid${items.length === 1 ? ' category-grid--single' : items.length === 2 ? ' category-grid--pair' : ''}`}>
           {items.map((p) => (
