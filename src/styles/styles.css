@@ -779,7 +779,12 @@ p { margin: 0 0 1em; }
 @media (min-width: 761px) {
   .lang-offer { left: auto; right: 24px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); max-width: 560px; }
 }
-@media print { .lang-offer { display: none; } }
+/* While the banner is shown, the footer (Amazon disclosure, Privacy, Legal notice) ends above it at the very
+   bottom of the page, and a link reached with Tab is scrolled clear of it. --lang-offer-space = the banner's
+   height + its gap, measured by LangOffer.astro (it varies with the language and the screen). */
+.has-lang-offer { scroll-padding-bottom: var(--lang-offer-space, 0px); }
+.has-lang-offer .site-footer { padding-bottom: var(--lang-offer-space, 0px); }
+@media print { .lang-offer { display: none; } .has-lang-offer .site-footer { padding-bottom: 0; } }
 
 /* ---------------------------------------------------------------------
    11. RESPONSIVE (mobile-first tweaks)

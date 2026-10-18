@@ -32,10 +32,14 @@ const json = JSON.stringify(offers).replace(/</g, '\\u003c');
   let store: Storage | null = null;
   try { store = window.localStorage; } catch { /* blocked: the banner only hides for this page view */ }
 
+  // A click on a link, or a middle click (it opens the link in a new tab and fires `auxclick`, not `click`).
+  const followed = (e: MouseEvent) => e.type === 'click' || e.button === 1;
   // A language picked in the header's switcher is the visitor's choice: the banner never comes back.
-  document.addEventListener('click', (e) => {
-    if (e.target instanceof Element && e.target.closest('a.lang-switch__item')) remember(store, 'chosen');
-  });
+  const picked = (e: MouseEvent) => {
+    if (followed(e) && e.target instanceof Element && e.target.closest('a.lang-switch__item')) remember(store, 'chosen');
+  };
+  document.addEventListener('click', picked);
+  document.addEventListener('auxclick', picked);
 
   const data = document.getElementById('lang-offer-data');
   const offer = data && pickOffer({
@@ -59,18 +63,43 @@ const json = JSON.stringify(offers).replace(/</g, '\\u003c');
     const open = el('a', 'btn btn--primary lang-offer__open', offer.open) as HTMLAnchorElement;
     open.href = offer.href;
     open.hreflang = offer.lang;
-    open.addEventListener('click', () => remember(store, 'chosen'));
     const no = el('button', 'lang-offer__no', offer.dismiss) as HTMLButtonElement;
     no.type = 'button';
-    no.addEventListener('click', () => {
-      remember(store, 'dismissed');
-      box.remove();
-    });
     const actions = el('div', 'lang-offer__actions');
     actions.append(open, no);
     box.append(el('p', 'lang-offer__text', offer.text), actions);
+
+    // The footer (Amazon disclosure, Privacy, Legal notice) must stay readable above the banner: while it is
+    // shown, the footer gets bottom padding as tall as the banner plus its gap (.has-lang-offer in styles.css),
+    // measured here — the height depends on the language's text and the screen width.
+    const root = document.documentElement;
+    const fit = () => root.style.setProperty('--lang-offer-space', `${box.offsetHeight + parseFloat(getComputedStyle(box).bottom) + 12}px`);
+    const watch = 'ResizeObserver' in window ? new ResizeObserver(fit) : null;
+    const close = () => {
+      box.remove();
+      root.classList.remove('has-lang-offer');
+      root.style.removeProperty('--lang-offer-space');
+      watch?.disconnect();
+      removeEventListener('resize', fit);
+    };
+    const chose = (e: MouseEvent) => {
+      if (!followed(e)) return;
+      remember(store, 'chosen');
+      if (e.type === 'auxclick') close(); // opened in a new tab: this tab is answered too
+    };
+    open.addEventListener('click', chose);
+    open.addEventListener('auxclick', chose);
+    no.addEventListener('click', () => {
+      remember(store, 'dismissed');
+      close();
+    });
+
     document.body.append(box);
+    fit();
+    root.classList.add('has-lang-offer');
+    watch?.observe(box);
+    addEventListener('resize', fit);
     // Back to this page from the browser's cache after "Open" or the switcher: the banner goes.
-    addEventListener('pageshow', (e) => { if (e.persisted && suppressed(store)) box.remove(); });
+    addEventListener('pageshow', (e) => { if (e.persisted && suppressed(store)) close(); });
   }
 </script>
