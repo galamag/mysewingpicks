@@ -152,7 +152,7 @@ test('language rules: no-break space before the unit, decimal comma, French punc
 test('step 5 closes the opening on the machine, then by hand with a ladder stitch', () => {
   const names = {
     en: 'ladder stitch',
-    ru: 'потайной шов („лесенка“)',
+    ru: 'потайной шов («лесенка»)',
     de: 'Matratzenstich (Leiterstich)',
     fr: "point invisible (point d'échelle)",
     it: 'punto invisibile a mano',
