@@ -1,0 +1,86 @@
+---
+/*
+  House — the sewing house at the top of the home page: the four rooms of the section pages
+  under one roof (src/lib/rooms/house.js), drawn at BUILD time from the same models. The first
+  frame is plain SVG in the HTML; each room is ONE ordinary link to its section page in this
+  language (its floor), so it works without JS. Nothing inside a room is a link here.
+    lang  the page's language
+
+  The script only animates the way in: a tap zooms the camera into the room (the svg's viewBox
+  to the room's `data-zoom`, 650 ms), the other rooms fade, the labels hide, then the page opens.
+  With a modifier key, another mouse button or "reduce motion" the tap is an ordinary link.
+  Back from the room's page (the browser kept this page as it was) the house is whole again.
+  Only the home page uses this component, so its script runs nowhere else.
+
+  Styles: src/styles/styles.css, "Rooms & house" — the svg is injected with set:html,
+  scoped styles would not reach it.
+*/
+import { ROOMS } from '../lib/rooms/rooms.js';
+import { HOUSE, renderHouse } from '../lib/rooms/house.js';
+import { pageUrl, t } from '../i18n/index.js';
+
+const { lang } = Astro.props;
+const { ui } = t(lang);
+const keys = Object.keys(HOUSE.at);
+const labels = Object.fromEntries(keys.map((key) => [key, ui.nav[key]]));
+const hrefs = Object.fromEntries(keys.map((key) => [key, pageUrl(key, lang)]));
+const { svg, viewBox } = renderHouse(ROOMS, { prefix: 'house', labels, hrefs });
+---
+<figure class="house">
+  <svg class="house__svg" viewBox={viewBox.join(' ')} role="group" aria-label={ui.rooms.house} set:html={svg} />
+  <figcaption class="house__hint">{ui.rooms.tapRoom}</figcaption>
+</figure>
+
+<script>
+  // Zoom into the tapped room, then open its page.
+  const ZOOM_MS = 650;
+  const reduce = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+  const box = (s) => (s || '').split(' ').map(Number);
+  const isBox = (b) => b.length === 4 && !b.some((v) => Number.isNaN(v));
+
+  document.querySelectorAll('.house').forEach((house) => {
+    const svg = house.querySelector('.house__svg');
+    if (!svg) return;
+    const whole = svg.getAttribute('viewBox');
+    let busy = false; // a tap is on its way: later taps are ignored (one navigation)
+    let frame = 0;
+
+    svg.addEventListener('click', (e) => {
+      const hot = e.target.closest && e.target.closest('.house__hot');
+      if (!hot) return;
+      if (busy) { e.preventDefault(); return; }
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (reduce && reduce.matches) return;
+      const href = hot.getAttribute('href');
+      const from = box(whole);
+      const to = box(hot.getAttribute('data-zoom'));
+      if (!href || !isBox(from) || !isBox(to)) return;
+
+      e.preventDefault();
+      busy = true;
+      const room = hot.getAttribute('data-room');
+      svg.classList.add('is-zooming');
+      house.querySelectorAll('.house__room').forEach((g) => g.classList.toggle('is-dim', g.getAttribute('data-room') !== room));
+      const start = performance.now();
+      const step = (now) => {
+        const t = Math.min(1, Math.max(0, (now - start) / ZOOM_MS));
+        const k = ease(t);
+        svg.setAttribute('viewBox', from.map((v, i) => (v + (to[i] - v) * k).toFixed(2)).join(' '));
+        if (t < 1) frame = requestAnimationFrame(step);
+        else location.assign(href);
+      };
+      frame = requestAnimationFrame(step);
+    });
+
+    // Back from the room's page, restored as it was left (mid-zoom): the whole house again.
+    window.addEventListener('pageshow', (e) => {
+      if (!e.persisted) return;
+      cancelAnimationFrame(frame);
+      svg.setAttribute('viewBox', whole);
+      svg.classList.remove('is-zooming');
+      house.querySelectorAll('.house__room.is-dim').forEach((g) => g.classList.remove('is-dim'));
+      busy = false;
+    });
+  });
+</script>

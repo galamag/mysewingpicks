@@ -2,6 +2,7 @@
 /* Home page — one template for every language (src/i18n). All copy comes from
    the dictionary (pages.home) and is baked static at build. */
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import House from '../../components/House.astro';
 import { localePaths, langOf, pageUrl, t } from '../../i18n/index.js';
 import { projects } from '../../data/projects.js';
 import { projectText } from '../../i18n/content.js';
@@ -15,12 +16,14 @@ const youtube = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
 ---
 <BaseLayout lang={lang} page="home" active="home" title={text.title} description={text.description}>
   <main>
-    <!-- HERO -->
-    <section class="hero">
+    <!-- HERO: the title, the sewing house (on a phone, on the first screen), then the welcome.
+         From 900 px two columns: all the text on the left, the house on the right (styles.css) -->
+    <section class="hero hero--house">
       <div class="container hero__inner">
         <span class="eyebrow">{text.eyebrow}</span>
         <h1>{brand}</h1>
         <p class="hero__tagline">{text.tagline}</p>
+        <House lang={lang} />
         <p class="hero__blurb">
           <Fragment set:html={text.blurbHtml} />
         </p>

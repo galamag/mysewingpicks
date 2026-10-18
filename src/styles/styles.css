@@ -593,6 +593,76 @@ p { margin: 0 0 1em; }
   .room-sheet[open], .room-sheet[open]::backdrop { animation: none; }
 }
 
+/* The house on the home page (src/components/House.astro, drawing: src/lib/rooms/house.js),
+   in the hero between the tagline and the welcome text. */
+.house {
+  max-width: 560px;
+  margin: 4px auto 26px;
+}
+.house__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 224 / 196;         /* = HOUSE_ASPECT (house.js): the space is kept before the svg paints */
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  -webkit-tap-highlight-color: transparent;
+}
+.house__hint {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+/* The camera zooming into a room (the House.astro script): the other rooms fade, the labels go. */
+.house__room { transition: opacity 0.45s ease; }
+.house__room.is-dim { opacity: 0.08; }
+.house__label { pointer-events: none; transition: opacity 0.3s ease; }
+.house__label rect { fill: var(--paper); opacity: 0.94; }
+.house__label text { font: 700 7px var(--font-body); fill: var(--ink); text-anchor: middle; }
+.house__svg.is-zooming .house__label { opacity: 0; }
+/* A room's floor: one link to its page. */
+.house__hot { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.house__hit { fill: transparent; }  /* the polygon has no fill attribute: without this it paints black */
+.house__hot:active .house__hit { fill: rgba(255, 253, 248, 0.25); }
+@media (hover: hover) { .house__hot:hover .house__hit { fill: rgba(255, 253, 248, 0.22); } }
+.house__hot:focus-visible { outline: none; }
+.house__hot:focus-visible .house__hit {
+  fill: rgba(255, 253, 248, 0.22);
+  stroke: var(--amazon);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+@media (prefers-reduced-motion: reduce) { .house__room, .house__label { transition: none; } }
+
+/* A laptop: two columns — all the text of the hero on the left (centred in height), the house on
+   the right. Only the grid places them: the order in the page stays that of a phone. */
+@media (min-width: 900px) {
+  .hero--house .hero__inner {
+    max-width: var(--container);
+    display: grid;
+    grid-template-columns: minmax(360px, 1fr) minmax(0, 540px);  /* narrow laptops: the house gives way, not the text */
+    grid-template-rows: 1fr auto auto auto auto auto 1fr;
+    grid-template-areas:
+      ".       house"
+      "eyebrow house"
+      "title   house"
+      "tagline house"
+      "blurb   house"
+      "actions house"
+      ".       house";
+    column-gap: clamp(32px, 4vw, 56px);
+    padding-block: 52px 56px;
+  }
+  .hero--house .eyebrow { grid-area: eyebrow; justify-self: start; }
+  .hero--house h1 { grid-area: title; }
+  .hero--house .hero__tagline { grid-area: tagline; }
+  .hero--house .hero__blurb { grid-area: blurb; }
+  .hero--house .hero__actions { grid-area: actions; }
+  .hero--house .house { grid-area: house; align-self: center; width: 100%; max-width: none; margin: 0; }
+}
+
 /* ---------------------------------------------------------------------
    9. ABOUT PAGE
    --------------------------------------------------------------------- */
@@ -761,10 +831,21 @@ p { margin: 0 0 1em; }
   .room { margin-inline: max(-22px, calc((100% - 520px) / 2)); }
   .room__hint { padding-inline: 22px; }
 
+  /* The house edge to edge, as the room above (tests/rooms/house.test.js checks its tap areas on a
+     320 px screen at this width); from 560 px on, centred at its max-width. Less air above it: the
+     whole house is on the first screen of a phone. */
+  .hero--house .hero__inner { padding-top: 28px; }
+  .house { margin: 2px -22px 22px; }
+  .house { margin-inline: max(-22px, calc((100% - 560px) / 2)); }
+  .house__hint { padding-inline: 22px; }
+
   .site-footer__inner { flex-direction: column; align-items: flex-start; }
 }
 
 /* The room edge to edge (up to its max-width, 520 px): no card corners or shadow. */
 @media (max-width: 520px) {
   .room__svg { border-radius: 0; box-shadow: none; }
+}
+@media (max-width: 560px) {
+  .house__svg { border-radius: 0; box-shadow: none; }
 }

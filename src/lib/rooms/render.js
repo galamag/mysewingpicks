@@ -35,7 +35,7 @@ const PAD = 4; // around the box of the room, in the same units
 const PLANK = 8; // about this far apart
 const LIGHT_PATCH = '#ffe7b0';
 
-const esc = (s) => String(s)
+export const esc = (s) => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 /* ---------- the shell ---------- */
@@ -51,7 +51,7 @@ function checkWindow(model) {
 }
 
 /** The window: glass in a wooden frame with one cross, warm light laid over it. */
-function windowOnWall(p, { wall, from, to, z: [z0, z1] }) {
+export function windowOnWall(p, { wall, from, to, z: [z0, z1] }) {
   const pane = [onWall(wall, from, z0), onWall(wall, to, z0), onWall(wall, to, z1), onWall(wall, from, z1)];
   const a = (from + to) / 2;
   const z = (z0 + z1) / 2;
@@ -64,7 +64,7 @@ function windowOnWall(p, { wall, from, to, z: [z0, z1] }) {
 }
 
 /** The window's light on the floor: a blurred parallelogram leaning away from the wall. */
-function lightOnFloor(prefix, [w, d], { wall, from, to, z: [z0, z1] }) {
+export function lightOnFloor(prefix, [w, d], { wall, from, to, z: [z0, z1] }) {
   const REACH = 1; // floor distance from the wall per unit of window height
   const LEAN = 0.3; // sideways drift per unit of floor distance
   const [alongMax, depthMax] = wall === 'left' ? [d, w] : [w, d];
