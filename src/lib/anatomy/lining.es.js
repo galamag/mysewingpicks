@@ -84,7 +84,7 @@ export default {
         'Primera forma, a máquina: cose los dos dobleces juntos al ras del borde. Así se cierran la tote bag y la cesta; después la costura queda escondida dentro de la bolsa.',
         'Segunda forma, con punto invisible a mano: plancha los dos dobleces, enhebra la aguja con hilo del color de la tela y esconde el nudo dentro de un doblez.',
         'Da una puntada pequeña dentro de un doblez y luego, justo enfrente, otra puntada pequeña dentro del otro. Sigue así, de un lado al otro: los hilos entre los dobleces parecen los peldaños de una escalera.',
-        'Cada dos o tres puntadas, tira del hilo: los bordes se cierran y las puntadas desaparecen. Al final, remata el hilo y esconde la punta dentro del forro.',
+        'Cada pocas puntadas, tira del hilo: los bordes se cierran y las puntadas desaparecen. Al final, remata el hilo y esconde la punta dentro del forro.',
       ],
     },
     {

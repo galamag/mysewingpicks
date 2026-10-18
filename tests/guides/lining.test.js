@@ -143,6 +143,8 @@ test('language rules: no-break space before the unit, decimal comma, French punc
       if (lang !== 'ru') assert.doesNotMatch(s, /\d[ \t]*cm\b/, `${lang} ${where}: no no-break space before cm`);
       if (lang === 'fr') assert.doesNotMatch(s, /(?:^|[^\xa0])[:;!?]/, `fr ${where}: no no-break space before : ; ! ?`);
       if (lang === 'ru') assert.doesNotMatch(s, /подклад(?!к)/i, `ru ${where}: «подклад» — the guide says «подкладка»`);
+      // the site writes the straight apostrophe everywhere (tote.fr.js, src/i18n/fr.js …)
+      assert.ok(!s.includes(String.fromCharCode(0x2019)), `${lang} ${where}: typographic apostrophe — the site uses '`);
     }
   }
 });

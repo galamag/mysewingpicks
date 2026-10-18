@@ -84,7 +84,7 @@ export default {
         'Primo modo, a macchina: cuci insieme le due pieghe a filo del bordo. Così sono chiusi la tote bag e il cestino; la cucitura poi sparisce dentro la borsa.',
         "Secondo modo, con il punto invisibile a mano: stira le due pieghe, infila l'ago con un filo dello stesso colore del tessuto e nascondi il nodo dentro una piega.",
         "Fai un piccolo punto dentro una piega, poi proprio di fronte un piccolo punto dentro l'altra. Continua così, da un lato all'altro: i fili tra le pieghe sembrano i pioli di una scala.",
-        "Ogni due o tre punti tira il filo: i bordi si chiudono e i punti spariscono. Alla fine ferma il filo e nascondi l'estremità dentro la fodera.",
+        "Ogni pochi punti tira il filo: i bordi si chiudono e i punti spariscono. Alla fine ferma il filo e nascondi l'estremità dentro la fodera.",
       ],
     },
     {
