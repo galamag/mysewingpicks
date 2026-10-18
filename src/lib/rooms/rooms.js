@@ -3,32 +3,41 @@
   (its products and sections are checked against that category, see check.js).
   A new room: its model in src/lib/rooms/<key>.js, registered here.
   projects has no category: its items are projects, not products.
+  guides (the classroom of /guides.html) is no catalogue category: its sections are the guide
+  groups (GUIDE_GROUPS, src/data/guides.js), live while a group has a guide (liveGroups).
+  ROOMS holds every room of a page; the house (house.js) draws the ones in HOUSE.at.
 */
 import setup from './setup.js';
 import tools from './tools.js';
 import fabrics from './fabrics.js';
 import projectRoom from './projects.js';
+import guideRoom from './guides.js';
 import { products } from '../../data/products.js';
 import { categories } from '../../data/categories.js';
 import { projects } from '../../data/projects.js';
+import { GUIDE_GROUPS, guides, liveGroups } from '../../data/guides.js';
 
-export const ROOMS = { setup, tools, fabrics, projects: projectRoom };
+export const ROOMS = { setup, tools, fabrics, projects: projectRoom, guides: guideRoom };
 
-export const ROOM_CATEGORY = { setup: 'setup', tools: 'tools', fabrics: 'fabrics', projects: null };
+export const ROOM_CATEGORY = { setup: 'setup', tools: 'tools', fabrics: 'fabrics', projects: null, guides: 'guides' };
 
 /**
   The catalogue as checkTargets (check.js) wants it, for a room of `category` (null: none).
   Room.astro and the tests both call this, so the tests check the build's own catalogue.
 */
 export function catalogOf(category) {
+  const common = {
+    productIds: new Map(products.map((p) => [p.id, p.category])),
+    category,
+    projectSlugs: projects.map((p) => p.slug),
+  };
+  if (category === 'guides') return { ...common, allSections: GUIDE_GROUPS, liveSections: liveGroups(guides) };
   const groups = category ? categories[category]?.groups : [];
   if (!groups) throw new Error(`rooms: no category "${category}" in src/data/categories.js`);
   const sections = groups.map((g) => g.id);
   return {
-    productIds: new Map(products.map((p) => [p.id, p.category])),
-    category,
+    ...common,
     allSections: sections,
     liveSections: sections.filter((id) => products.some((p) => p.category === category && p.group === id)),
-    projectSlugs: projects.map((p) => p.slug),
   };
 }

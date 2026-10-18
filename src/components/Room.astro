@@ -3,15 +3,17 @@
   Room — the isometric room at the top of a section page, drawn at BUILD time
   (src/lib/rooms/): the first frame is plain SVG in the HTML and every item is an
   ordinary link, so it works without JS.
-    room  'setup' | 'tools' | 'fabrics' | 'projects' (the model: ROOMS in src/lib/rooms/rooms.js)
+    room  'setup' | 'tools' | 'fabrics' | 'projects' | 'guides' (the model: ROOMS in src/lib/rooms/rooms.js)
     lang  the page's language
 
   Nothing in the drawing links to Amazon. An item leads to OUR page:
     product → its card in the list below (#product-<id>, ProductCard `anchor`)
-    section → the section of the list (#<section id>)
+    section → the section of the list (#<section id>); in the classroom (guides) a group of
+              guides, named by its title on the guides page
     project → the project page in this language (pageUrl)
   checkTargets fails the build when a part points at a product, section or project
-  that does not exist; a section without products turns its part into decoration.
+  that does not exist; a section without products (a group without guides) turns its
+  part into decoration.
 
   The sheet: a room with at least one product item gets ONE <dialog class="room-sheet">.
   Tapping an item shows a CLONE of that product's card from the list below (the ONE
@@ -34,9 +36,12 @@ const { room, lang } = Astro.props;
 const model = ROOMS[room];
 if (!model) throw new Error(`Room: no model for "${room}" (src/lib/rooms/rooms.js)`);
 const category = ROOM_CATEGORY[room];
-const { ui } = t(lang);
+const { ui, pages } = t(lang);
 
 const { inactive } = checkTargets(model, catalogOf(category));
+
+/** A section's name: a group of the catalogue, or (the classroom) a group of guides. */
+const sectionTitle = (id) => (room === 'guides' ? pages.guides.groups[id].title : groupTitle(category, id, lang));
 
 /** A part's target → our link: { href, label, kind } (check.js has made sure it exists). */
 function resolve(target) {
@@ -45,7 +50,7 @@ function resolve(target) {
     return { href: `#product-${product.id}`, label: productText(product, lang).name, kind: 'product' };
   }
   if (target.section) {
-    return { href: `#${target.section}`, label: groupTitle(category, target.section, lang), kind: 'section' };
+    return { href: `#${target.section}`, label: sectionTitle(target.section), kind: 'section' };
   }
   if (target.project) {
     const project = projects.find((p) => p.slug === target.project);
@@ -61,7 +66,7 @@ const { svg, viewBox, hots } = renderRoom(model, { prefix, resolve, inactive, mi
 
 const hasSheet = hots.some((h) => h.kind === 'product');
 
-const HINT = { setup: ui.rooms.tapItem, tools: ui.rooms.tapShelf, fabrics: ui.rooms.tapShelf, projects: ui.rooms.tapProject };
+const HINT = { setup: ui.rooms.tapItem, tools: ui.rooms.tapShelf, fabrics: ui.rooms.tapShelf, projects: ui.rooms.tapProject, guides: ui.rooms.tapShelf };
 ---
 <figure class="room" data-room={room}>
   <svg class="room__svg" viewBox={viewBox.join(' ')} role="group" aria-label={ui.rooms.roomLabel(ui.nav[room])} set:html={svg} />

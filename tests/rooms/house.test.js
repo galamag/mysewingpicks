@@ -108,7 +108,8 @@ const panesOf = (svg) => [...svg.matchAll(PANE)].map((m) => m[1]);
 
 test('the house is the four rooms of the site, each a cell of it', () => {
   assert.deepEqual(Object.keys(HOUSE.at), KEYS, 'back to front: the order they are drawn in');
-  assert.deepEqual(Object.keys(ROOMS).sort(), [...KEYS].sort());
+  // ROOMS may hold rooms that are not in the house (yet): the classroom of /guides.html joins it in stage 3
+  for (const key of KEYS) assert.ok(key in ROOMS, `${key} is in ROOMS`);
   for (const key of KEYS) assert.deepEqual(ROOMS[key].size, [...HOUSE.cell, HOUSE.wallH], key);
   assert.equal(HOUSE.partitionH, 7);
   assert.equal(HOUSE_ASPECT, 224 / 196);

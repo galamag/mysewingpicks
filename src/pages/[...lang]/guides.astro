@@ -2,8 +2,12 @@
 /* Guides — the list of sewing guides (src/data/guides.js), one template for every language
    (src/i18n). The groups come in the order of GUIDE_GROUPS; a group with no guide is not shown
    (liveGroups) — no empty section, no anchor to nowhere. Each group is a <section id={group}>
-   with its guides as cards. No affiliate links on this page, so no page-disclosure. */
+   with its guides as cards. Above them, the classroom (src/components/Room.astro, model
+   src/lib/rooms/guides.js): a zone per group jumps to it; the zone of a group with no guide is
+   decoration. No affiliate links on this page (the room links only to the groups below), so no
+   page-disclosure. */
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Room from '../../components/Room.astro';
 import { guides, liveGroups } from '../../data/guides.js';
 import { localePaths, langOf, pageUrl, t } from '../../i18n/index.js';
 import { guideText } from '../../i18n/content.js';
@@ -22,11 +26,14 @@ const gridClass = (n) => `category-grid${n === 1 ? ' category-grid--single' : n 
   <main>
     <section class="section guides-top">
       <div class="container">
-        <div class="section-head guides-head">
+        <div class="section-head">
           <span class="eyebrow">{text.eyebrow}</span>
           <h1>{text.heading}</h1>
           <p>{text.intro}</p>
         </div>
+
+        <!-- The classroom: its zones jump to the groups below (no JS needed). -->
+        <Room room="guides" lang={lang} />
       </div>
     </section>
 
@@ -54,9 +61,9 @@ const gridClass = (n) => `category-grid${n === 1 ? ' category-grid--single' : n 
 </BaseLayout>
 
 <style>
-  /* the page head and the first group: one gap, not two */
+  /* the classroom and the first group: one gap (the group's own), not two */
   .guides-top { padding-bottom: 0; }
-  .guides-head { margin-bottom: 0; }
+  .guides-top :global(.room) { margin-bottom: 0; }
   /* a jump to a group (#construction) keeps its heading clear of the sticky header */
   .guide-group { scroll-margin-top: var(--header-h); }
 </style>

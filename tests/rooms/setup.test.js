@@ -31,7 +31,7 @@ test('setup is registered with its category', () => {
   assert.deepEqual(setup.size, [60, 50, 40]);
   assert.equal(setup.window?.wall, 'left');
   assert.equal(ROOMS.setup, setup);
-  assert.deepEqual(ROOM_CATEGORY, { setup: 'setup', tools: 'tools', fabrics: 'fabrics', projects: null });
+  assert.deepEqual(ROOM_CATEGORY, { setup: 'setup', tools: 'tools', fabrics: 'fabrics', projects: null, guides: 'guides' });
 });
 
 test('catalogOf gives checkTargets the live catalogue (Room.astro uses the same function)', () => {

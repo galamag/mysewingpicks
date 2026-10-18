@@ -6,16 +6,20 @@ import assert from 'node:assert/strict';
 import { project } from '../../src/lib/anatomy/iso.js';
 import { renderRoom, minHitFor } from '../../src/lib/rooms/render.js';
 import { groupTitle, projectText } from '../../src/i18n/content.js';
-import { pageUrl } from '../../src/i18n/index.js';
+import { pageUrl, t } from '../../src/i18n/index.js';
 import { projects } from '../../src/data/projects.js';
 
 /**
   The links of a room as the page makes them (Room.astro `resolve`, kept in step with it): a section
-  → #<id> named by its title in `lang`, a project → its page, named by its title. `names` (optional)
-  names made-up projects of the tests: slug → name.
+  → #<id> named by its title in `lang` (the classroom's sections are guide groups: their titles are on the
+  guides page), a project → its page, named by its title. `names` (optional) names made-up projects of the
+  tests: slug → name.
 */
 export const siteResolve = (category, lang, names = {}) => (target) => {
-  if (target.section) return { href: `#${target.section}`, label: groupTitle(category, target.section, lang), kind: 'section' };
+  if (target.section) {
+    const label = category === 'guides' ? t(lang).pages.guides.groups[target.section].title : groupTitle(category, target.section, lang);
+    return { href: `#${target.section}`, label, kind: 'section' };
+  }
   if (target.project) {
     const real = projects.find((p) => p.slug === target.project);
     if (real) return { href: pageUrl(`project/${real.slug}`, lang), label: projectText(real, lang).title, kind: 'page' };
