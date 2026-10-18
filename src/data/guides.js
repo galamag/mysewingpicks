@@ -40,9 +40,10 @@ export const guides = [
       { project: 'tote-bag', steps: [7, 8, 9] },
       { project: 'fabric-basket', steps: [4, 5, 6, 7] },
     ],
-    // Where the maker puts the outer into the lining (Galamat, 2026-10-18): tote 6:00, basket 5:55.
+    // Where the lining work starts in the maker's video (Galamat): tote 4:40 — she sews the lining
+    // (2026-10-19; at 6:00 it is already turned out); basket 5:55 — the outer goes into the lining.
     video: [
-      { project: 'tote-bag', start: 360 },
+      { project: 'tote-bag', start: 280 },
       { project: 'fabric-basket', start: 355 },
     ],
   },

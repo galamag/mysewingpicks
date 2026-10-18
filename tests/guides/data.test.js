@@ -66,7 +66,7 @@ test('the pilot', () => {
   assert.equal(g.icon, '🪡');
   assert.deepEqual(g.needs, ['hagbou-thread-set', 'soraco-sewing-clips', 'beaditive-thread-snips', 'rowenta-travel-iron', 'janome-hd2200']);
   assert.deepEqual(g.usedIn, [{ project: 'tote-bag', steps: [7, 8, 9] }, { project: 'fabric-basket', steps: [4, 5, 6, 7] }]);
-  assert.deepEqual(g.video, [{ project: 'tote-bag', start: 360 }, { project: 'fabric-basket', start: 355 }]);
+  assert.deepEqual(g.video, [{ project: 'tote-bag', start: 280 }, { project: 'fabric-basket', start: 355 }]);
   assert.throws(() => guideBySlug('nope'), /nope/);
 });
 
