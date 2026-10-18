@@ -8,4 +8,5 @@
 export const MODELS = {
   'tote-bag': { model: () => import('./tote.js'), texts: import.meta.glob('./tote.??.js') },
   'fabric-basket': { model: () => import('./basket.js'), texts: import.meta.glob('./basket.??.js') },
+  'line-a-bag': { model: () => import('./lining.js'), texts: import.meta.glob('./lining.??.js') },
 };
