@@ -787,6 +787,43 @@ p { margin: 0 0 1em; }
 @media print { .lang-offer { display: none; } .has-lang-offer .site-footer { padding-bottom: 0; } }
 
 /* ---------------------------------------------------------------------
+   10c. BACK-TO-TOP BUTTON  (src/components/ToTop.astro)
+   A round arrow fixed at the bottom-right of every page. Hidden until its script adds
+   .is-shown (the page is scrolled past ~1.5 screens); without JS it stays hidden.
+   z 44: just under the language banner (45), the header (50) and over the chips (40). While the banner
+   is shown it sits ABOVE it: --lang-offer-space = the banner's height + its gap (LangOffer.astro).
+   --------------------------------------------------------------------- */
+.to-top {
+  position: fixed;
+  z-index: 44;
+  right: 16px;
+  bottom: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--beige-deep);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: var(--shadow-soft);
+  opacity: 0;
+  visibility: hidden;                /* hidden = not focusable either */
+  transform: translateY(12px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s, color 0.18s ease, border-color 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.to-top.is-shown { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.to-top svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.to-top:focus-visible { border-color: var(--rose); color: var(--rose-deep); outline: 3px solid var(--amazon-deep); outline-offset: 2px; }
+@media (hover: hover) { .to-top:hover { border-color: var(--rose); color: var(--rose-deep); text-decoration: none; } }
+.has-lang-offer .to-top { bottom: var(--lang-offer-space, calc(16px + env(safe-area-inset-bottom, 0px))); }
+@media (min-width: 761px) { .to-top { right: 24px; } }  /* in line with the banner's right edge */
+@media (prefers-reduced-motion: reduce) { .to-top { transform: none; transition: none; } }
+@media print { .to-top { display: none; } }
+
+/* ---------------------------------------------------------------------
    11. RESPONSIVE (mobile-first tweaks)
    --------------------------------------------------------------------- */
 /* Long nav labels (ru, de…) on tablets: keep the header on ONE line — it must stay as

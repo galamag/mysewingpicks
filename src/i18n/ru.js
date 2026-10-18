@@ -16,6 +16,7 @@ export default {
     viewOnAmazon: 'Смотреть на Amazon',
     paidLink: '(партнёрская ссылка)',
     jumpToSection: 'Перейти к разделу',
+    toTop: 'Наверх',
     playVideo: (title) => `Смотреть видео: ${title}`,
     watchOnYouTube: 'Смотреть на YouTube',
     socialLinks: 'Соцсети',

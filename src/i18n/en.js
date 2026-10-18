@@ -17,6 +17,7 @@ export default {
     viewOnAmazon: 'View on Amazon',
     paidLink: '(paid link)',
     jumpToSection: 'Jump to section',
+    toTop: 'Back to top',
     playVideo: (title) => `Play video: ${title}`,
     watchOnYouTube: 'Watch on YouTube',
     socialLinks: 'Social links',

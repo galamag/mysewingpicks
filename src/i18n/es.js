@@ -19,6 +19,7 @@ export default {
     viewOnAmazon: 'Ver en Amazon',
     paidLink: '(enlace pagado)',
     jumpToSection: 'Ir a la sección',
+    toTop: 'Volver arriba',
     playVideo: (title) => `Reproducir el video: ${title}`,
     watchOnYouTube: 'Ver en YouTube',
     socialLinks: 'Redes sociales',

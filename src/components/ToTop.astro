@@ -1,0 +1,32 @@
+---
+/*
+  Back-to-top button — a round arrow fixed at the bottom-right of every page. It is a real link to
+  `#top` (the <body> in BaseLayout); the script shows it (class `is-shown`) once the page is scrolled
+  past ~1.5 screens and, on a tap, scrolls to the very top and puts keyboard focus on the logo link
+  (without scrolling), so a keyboard user carries on from the top. Without JS it stays hidden.
+  Pass `lang` (the page's language), as to BaseLayout. Styled by src/styles/styles.css (.to-top).
+*/
+import { t } from '../i18n/index.js';
+
+const { lang } = Astro.props;
+const label = t(lang).ui.toTop;
+---
+<a class="to-top" href="#top" aria-label={label} title={label}>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" /></svg>
+</a>
+
+<script>
+  const btn = document.querySelector<HTMLAnchorElement>('.to-top');
+  if (btn) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => btn.classList.toggle('is-shown', scrollY > Math.max(700, innerHeight * 1.5));
+    addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    update();
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      scrollTo({ top: 0, behavior: reduce.matches ? 'instant' : 'smooth' });
+      document.querySelector<HTMLElement>('.brand')?.focus({ preventScroll: true });
+    });
+  }
+</script>

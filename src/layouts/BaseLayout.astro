@@ -2,14 +2,16 @@
 /*
   Base page layout — the shared HTML shell (head + fonts + stylesheet),
   with the Header and Footer wrapped around each page's content (<slot/>), and the
-  language suggestion (LangOffer: the same page in the visitor's browser language,
-  offered — never switched by itself) after them.
+  back-to-top button (ToTop) and the language suggestion (LangOffer: the same page in the visitor's
+  browser language, offered — never switched by itself) after them. The <body> is the `#top` the
+  button links to.
   Pass title/description/active, plus `page` (a key of PAGES or LIMITED_PAGES in src/i18n/index.js)
   and `lang` (the page's language; canonical, hreflang and og:locale follow it).
 */
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import LangOffer from '../components/LangOffer.astro';
+import ToTop from '../components/ToTop.astro';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 // Global stylesheet imported through Astro so it gets a CONTENT-HASHED filename
@@ -99,10 +101,11 @@ for (const file of preloadFonts) {
   <!-- The hashed <link rel="stylesheet"> for our global CSS is injected here by
        Astro (from the `import '../styles/styles.css'` above). No manual link. -->
 </head>
-<body>
+<body id="top">
   <Header active={active} page={page} lang={lang} />
   <slot />
   <Footer lang={lang} />
+  <ToTop lang={lang} />
   <LangOffer page={page} lang={lang} />
 </body>
 </html>
