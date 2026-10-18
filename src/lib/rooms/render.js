@@ -157,7 +157,7 @@ export function minHitFor(model) {
 /* ---------- tap areas ---------- */
 
 /** Convex hull of 2D points (monotone chain); fewer than 3 points back when they are all in a line. */
-function hull(points) {
+export function hull(points) {
   const pts = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1])
     .filter((q, i, all) => i === 0 || q[0] !== all[i - 1][0] || q[1] !== all[i - 1][1]);
   if (pts.length < 3) return pts;

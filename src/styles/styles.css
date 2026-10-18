@@ -621,9 +621,10 @@ p { margin: 0 0 1em; }
 .house__label rect { fill: var(--paper); opacity: 0.94; }
 .house__label text { font: 700 7px var(--font-body); fill: var(--ink); text-anchor: middle; }
 .house__svg.is-zooming .house__label { opacity: 0; }
-/* A room's floor: one link to its page. */
+/* A room: one link to its page — its floor (the feedback below) and, never painted, its walls,
+   furniture and label (house.js `reach`). */
 .house__hot { cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.house__hit { fill: transparent; }  /* the polygon has no fill attribute: without this it paints black */
+.house__hit, .house__pad { fill: transparent; }  /* no fill attribute: without this they paint black */
 .house__hot:active .house__hit { fill: rgba(255, 253, 248, 0.25); }
 @media (hover: hover) { .house__hot:hover .house__hit { fill: rgba(255, 253, 248, 0.22); } }
 .house__hot:focus-visible { outline: none; }

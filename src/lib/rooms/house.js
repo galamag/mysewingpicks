@@ -12,14 +12,15 @@
   is for its page only); furniture standing against a model's wall stands against the house's
   wall too (the Setup desk, the Fabrics shelf, the Projects shelf).
 
-  Nothing inside the house is a link: the rooms are drawn as decoration (roomParts with a resolver
-  that knows nothing). Each room is ONE link to its page — its floor (`house__hot`), carrying the
-  frame the camera zooms to (`data-zoom`, the House.astro script). Labels: pills outside the house.
+  Nothing inside a room is a link of its own: the rooms are drawn as decoration (roomParts with a
+  resolver that knows nothing). Each room is ONE link to its page (`house__hot`), carrying the frame
+  the camera zooms to (`data-zoom`, the House.astro script), and a tap reaches it wherever the room is
+  seen: its floor, its outer walls, its furniture, its label (see `reach`). Labels: pills outside the house.
   Pure functions, no DOM — the first frame is drawn at build time (Astro).
 */
 import { project } from '../anatomy/iso.js';
 import { PALETTE, painter, shade, num } from './paint.js';
-import { roomParts, windowOnWall, lightOnFloor, esc, WALL_THICK, FLOOR_THICK } from './render.js';
+import { roomParts, windowOnWall, lightOnFloor, hull, esc, WALL_THICK, FLOOR_THICK } from './render.js';
 
 /**
   cell        [w, d] of a room (every model is this big)
@@ -120,12 +121,43 @@ function shell(p) {
 const partition = (p, x, y, w, d) =>
   p.box(x, y, 0, w, d, HOUSE.partitionH, PALETTE.wallTop, { l: PALETTE.wall, r: shade(PALETTE.wall, -0.12) });
 
-/** A label: the text in a pill centred on the world point. Hidden from screen readers: the room's link has the same name. */
-function label(text, at) {
+/** The pill round a label's text, centred on the world point: the rect's attributes (the label and its link share it). */
+function pill(text, at) {
   const [cx, cy] = project(at);
   const w = [...String(text)].length * PILL.font * PILL.em + 2 * PILL.side;
-  return `<g class="house__label" aria-hidden="true"><rect x="${num(cx - w / 2)}" y="${num(cy - PILL.h / 2)}" width="${num(w)}" height="${PILL.h}" rx="${PILL.h / 2}"/>` +
+  return `x="${num(cx - w / 2)}" y="${num(cy - PILL.h / 2)}" width="${num(w)}" height="${PILL.h}" rx="${PILL.h / 2}"`;
+}
+
+/** A label: the text in its pill. Hidden from screen readers: the room's link has the same name. */
+function label(text, at) {
+  const [cx, cy] = project(at);
+  return `<g class="house__label" aria-hidden="true"><rect ${pill(text, at)}/>` +
     `<text x="${num(cx)}" y="${num(cy)}" dy=".35em">${esc(text)}</text></g>`;
+}
+
+const points = (pts) => pts.map(([x, y]) => `${x},${y}`).join(' ');
+
+/** The hull, on the screen, of world points (each rounded as the svg prints it). */
+const outline = (pts3) => hull(pts3.map((q) => project(q).map(num)));
+
+/**
+  What a tap on a room reaches, besides its floor ("what you see is what you tap"): its OUTER walls
+  (the faces of the house's walls along its cell) and every linked part's `hit` hull, moved to its
+  cell — tall furniture rises on the screen over the floor of the room behind it, and a tap on it
+  must open its own room. The links are in drawing order (back to front), so where a nearer room's
+  furniture covers this room's, the nearer one wins, as the eye sees it.
+*/
+function reach(model, [ox, oy]) {
+  const [w, d] = HOUSE.cell;
+  const [T, F, H] = [WALL_THICK, FLOOR_THICK, HOUSE.wallH];
+  const box = ([x0, x1], [y0, y1]) => [x0, x1].flatMap((x) => [y0, y1].flatMap((y) => [-F, H].map((z) => [x, y, z])));
+  const walls = [
+    ...(oy === 0 ? [box([ox === 0 ? -T : ox, ox + w], [-T, 0])] : []), // the back wall (y = 0) along the cell
+    ...(ox === 0 ? [box([-T, 0], [oy, oy + d])] : []), // the left wall (x = 0)
+  ];
+  const parts = model.parts.filter((part) => part.hit?.length)
+    .map((part) => part.hit.map(([x, y, z]) => [x + ox, y + oy, z]));
+  return [...walls, ...parts].map(outline).filter((poly) => poly.length >= 3);
 }
 
 /**
@@ -179,13 +211,16 @@ export function renderHouse(rooms, { prefix = 'house', labels, hrefs } = {}) {
 
   const pills = keys.map((key) => label(labels[key], HOUSE.label[key])).join('');
 
+  // one link per room, back to front as drawn (a nearer room wins where it covers one behind):
+  // its floor (house__hit: the hover / focus feedback), then, never painted (house__pad), its
+  // outer walls, its furniture and its label's pill
   const zooms = keys.map((key) => ({ key, zoom: zoomOf(HOUSE.at[key]) }));
   const hots = zooms.map(({ key, zoom }) => {
     const [ox, oy] = HOUSE.at[key];
-    const floor = [[ox, oy, 0], [ox + cw, oy, 0], [ox + cw, oy + cd, 0], [ox, oy + cd, 0]]
-      .map((q) => project(q).map(num).join(',')).join(' ');
+    const floor = [[ox, oy, 0], [ox + cw, oy, 0], [ox + cw, oy + cd, 0], [ox, oy + cd, 0]].map((q) => project(q).map(num));
+    const pads = reach(rooms[key], [ox, oy]).map((poly) => `<polygon class="house__pad" points="${points(poly)}"/>`).join('');
     return `<a class="house__hot" href="${esc(hrefs[key])}" aria-label="${esc(labels[key])}" data-room="${key}" data-zoom="${zoom.join(' ')}">` +
-      `<polygon class="house__hit" points="${floor}"/></a>`;
+      `<polygon class="house__hit" points="${points(floor)}"/>${pads}<rect class="house__pad" ${pill(labels[key], HOUSE.label[key])}/></a>`;
   }).join('');
 
   // after drawing: the painter makes its gradients while it paints
