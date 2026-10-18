@@ -1,12 +1,15 @@
 ---
 /*
   Base page layout — the shared HTML shell (head + fonts + stylesheet),
-  with the Header and Footer wrapped around each page's content (<slot/>).
+  with the Header and Footer wrapped around each page's content (<slot/>), and the
+  language suggestion (LangOffer: the same page in the visitor's browser language,
+  offered — never switched by itself) after them.
   Pass title/description/active, plus `page` (a key of PAGES or LIMITED_PAGES in src/i18n/index.js)
   and `lang` (the page's language; canonical, hreflang and og:locale follow it).
 */
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import LangOffer from '../components/LangOffer.astro';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 // Global stylesheet imported through Astro so it gets a CONTENT-HASHED filename
@@ -100,5 +103,6 @@ for (const file of preloadFonts) {
   <Header active={active} page={page} lang={lang} />
   <slot />
   <Footer lang={lang} />
+  <LangOffer page={page} lang={lang} />
 </body>
 </html>

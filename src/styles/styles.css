@@ -735,6 +735,53 @@ p { margin: 0 0 1em; }
 .social-btn svg { width: 22px; height: 22px; fill: #efe6d8; }
 
 /* ---------------------------------------------------------------------
+   10b. LANGUAGE SUGGESTION  (src/components/LangOffer.astro)
+   A small card at the bottom of the screen, built by JS only when the visitor's
+   browser prefers another site language. Fixed, so nothing on the page moves.
+   Under the header (z 50: an open phone menu covers it), over the chips (40).
+   --------------------------------------------------------------------- */
+.lang-offer {
+  position: fixed;
+  z-index: 45;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px 12px;
+  padding: 12px 12px 12px 18px;
+  background: var(--paper);
+  border: 1px solid var(--beige-deep);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 32px rgba(74, 63, 53, 0.22);
+  font-family: var(--font-body);
+  animation: lang-offer-up 0.3s ease-out;
+}
+.lang-offer__text { flex: 1 1 14em; margin: 0; font-size: 0.95rem; font-weight: 600; line-height: 1.4; }
+.lang-offer__actions { display: flex; align-items: center; gap: 4px; }
+.lang-offer__open, .lang-offer__no { min-height: 44px; padding: 10px 20px; line-height: 24px; }
+.lang-offer__no {
+  padding-inline: 14px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--ink-soft);
+  font: 700 0.95rem/24px var(--font-body);
+  cursor: pointer;
+}
+.lang-offer__no:hover { background: var(--beige); color: var(--ink); }
+.lang-offer :focus-visible { outline: 3px solid var(--amazon-deep); outline-offset: 2px; }
+@keyframes lang-offer-up { from { opacity: 0; transform: translateY(16px); } }
+@media (prefers-reduced-motion: reduce) { .lang-offer { animation: none; } }
+@media (min-width: 761px) {
+  .lang-offer { left: auto; right: 24px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); max-width: 560px; }
+}
+@media print { .lang-offer { display: none; } }
+
+/* ---------------------------------------------------------------------
    11. RESPONSIVE (mobile-first tweaks)
    --------------------------------------------------------------------- */
 /* Long nav labels (ru, de…) on tablets: keep the header on ONE line — it must stay as

@@ -1,0 +1,76 @@
+---
+/*
+  Language suggestion — instead of a redirect by the browser's language (CLAUDE.md: never switch by
+  itself). When the visitor's browser prefers ANOTHER site language, a small banner at the bottom of
+  the screen offers the same page in it, in THAT language: "Open" or "No, thanks". Rules and storage —
+  src/lib/langOffer.js. Without JS there is no banner; the header's switcher stays the way to change.
+
+  The page carries only the data (a JSON block): for every other language its address — the same as the
+  header's switcher gives — and its four short texts. They are not visible text, so a translated page
+  keeps no English interface text (i18n-check, EN_UI). The banner is built only when it is needed.
+  Pass `page` (a key of PAGES or LIMITED_PAGES) and `lang` (the page's language), as to BaseLayout.
+  Styled by src/styles/styles.css (.lang-offer).
+*/
+import { LOCALES, hasPage, pageUrl, t } from '../i18n/index.js';
+import { buildOffers } from '../lib/langOffer.js';
+
+const { page, lang } = Astro.props;
+const offers = buildOffers(page, lang, {
+  locales: LOCALES,
+  hasPage,
+  pageUrl,
+  texts: (l) => ({ ...t(l).ui.langOffer, label: t(l).ui.language }),
+});
+// JSON inside <script>: "<" escaped, so no text can ever close the block.
+const json = JSON.stringify(offers).replace(/</g, '\\u003c');
+---
+{LOCALES.length > 1 && <script type="application/json" id="lang-offer-data" is:inline set:html={json} />}
+
+<script>
+  import { pickOffer, remember, suppressed } from '../lib/langOffer.js';
+
+  let store: Storage | null = null;
+  try { store = window.localStorage; } catch { /* blocked: the banner only hides for this page view */ }
+
+  // A language picked in the header's switcher is the visitor's choice: the banner never comes back.
+  document.addEventListener('click', (e) => {
+    if (e.target instanceof Element && e.target.closest('a.lang-switch__item')) remember(store, 'chosen');
+  });
+
+  const data = document.getElementById('lang-offer-data');
+  const offer = data && pickOffer({
+    languages: navigator.languages?.length ? navigator.languages : [navigator.language],
+    pageLang: document.documentElement.lang,
+    offers: JSON.parse(data.textContent || '{}'),
+    storage: store,
+  });
+
+  if (offer) {
+    const el = (tag: string, cls: string, text?: string) => {
+      const node = document.createElement(tag);
+      node.className = cls;
+      if (text) node.textContent = text;
+      return node;
+    };
+    const box = el('div', 'lang-offer');
+    box.setAttribute('role', 'region');
+    box.setAttribute('aria-label', offer.label);
+    box.lang = offer.lang;
+    const open = el('a', 'btn btn--primary lang-offer__open', offer.open) as HTMLAnchorElement;
+    open.href = offer.href;
+    open.hreflang = offer.lang;
+    open.addEventListener('click', () => remember(store, 'chosen'));
+    const no = el('button', 'lang-offer__no', offer.dismiss) as HTMLButtonElement;
+    no.type = 'button';
+    no.addEventListener('click', () => {
+      remember(store, 'dismissed');
+      box.remove();
+    });
+    const actions = el('div', 'lang-offer__actions');
+    actions.append(open, no);
+    box.append(el('p', 'lang-offer__text', offer.text), actions);
+    document.body.append(box);
+    // Back to this page from the browser's cache after "Open" or the switcher: the banner goes.
+    addEventListener('pageshow', (e) => { if (e.persisted && suppressed(store)) box.remove(); });
+  }
+</script>

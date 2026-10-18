@@ -16,6 +16,7 @@ export default {
     toggleMenu: 'Ouvrir ou fermer le menu',
     primaryNav: 'Menu principal',
     language: 'Langue',
+    langOffer: { page: 'Cette page existe aussi en français', site: 'Ce site existe aussi en français', open: 'Ouvrir', dismiss: 'Non, merci' },
     viewOnAmazon: 'Voir sur Amazon',
     paidLink: '(publicité)',
     jumpToSection: 'Aller à la section',
@@ -128,13 +129,17 @@ export default {
       description: 'Comment My Sewing Picks utilise les cookies et quelles informations sont collectées lors de votre visite — par Amazon, Cloudflare et YouTube.',
       eyebrow: 'Confidentialité et cookies',
       heading: 'Confidentialité et cookies',
-      updated: 'Dernière mise à jour : 15 octobre 2026',
+      updated: 'Dernière mise à jour : 18 octobre 2026',
       bodyHtml: (links) => `
           <p>
             My Sewing Picks est un petit site en lecture seule. Il n'y a ni comptes, ni inscriptions,
             ni commentaires, ni formulaires de contact, ni newsletters, ni outil d'analyse ou traceur
             publicitaire qui me soit propre ; ce site ne dépose aucun cookie qui lui soit propre et
-            ne conserve lui-même aucune information sur les visiteurs. Quelques services extérieurs
+            ne conserve lui-même aucune information sur les visiteurs. Seule exception : si vous
+            répondez à la suggestion de langue en bas de l'écran (ou choisissez une langue en haut
+            de la page), une petite note est conservée dans le stockage local (local storage) de
+            votre navigateur pour retenir ce choix — ce n'est pas un cookie, elle n'est envoyée
+            nulle part et vous pouvez l'effacer dans votre navigateur. Quelques services extérieurs
             aident le site à fonctionner, et Amazon intervient parce qu'il s'agit d'un site affilié.
             Cette page explique ce qu'ils font.
           </p>
