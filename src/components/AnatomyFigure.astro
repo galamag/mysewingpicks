@@ -21,8 +21,9 @@
 import { figure } from '../lib/anatomy/figures.js';
 import { products } from '../data/products.js';
 import { amazonUrl } from '../data/amazon.js';
-import { t } from '../i18n/index.js';
-import { productText } from '../i18n/content.js';
+import { guidesForStep } from '../data/guides.js';
+import { t, pageUrl } from '../i18n/index.js';
+import { productText, guideText } from '../i18n/content.js';
 
 const { model: slug, lang } = Astro.props;
 const { model, text } = figure(slug);
@@ -36,6 +37,13 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
   if (!byId[id]) throw new Error(`AnatomyFigure (${slug}): step ${k} uses unknown product "${id}"`);
   return { name: productText(byId[id], lang).name, url: amazonUrl(byId[id]) };
 }));
+// "How it's done ->": the guides this step's technique is explained in (none on most steps, and none on
+// a guide's own figure). French sets a no-break space before the colon.
+const colon = lang === 'fr' ? String.fromCharCode(0xa0) + ':' : ':';
+const guideLinks = STEPS.map((_, k) => guidesForStep(slug, k).map((g) => ({
+  text: `${ui.howItsDone}${colon} ${guideText(g, lang).title} →`,
+  url: pageUrl(`guide/${g.slug}`, lang),
+})));
 const allTitleId = `${slug}-all-title`;
 ---
 <div class="anatomy" data-anatomy={slug} data-lang={lang}>
@@ -78,6 +86,9 @@ const allTitleId = `${slug}-all-title`;
         </ul>
       </div>
     ))}
+    {guideLinks.map((list, k) => list.map((item) => (
+      <p class="anatomy__guide" data-step={k} hidden><a href={item.url}>{item.text}</a></p>
+    )))}
     <div class="anatomy__actions">
       <button type="button" class="anatomy__action anatomy__toggle" aria-pressed="false">{L.ui.takeApart}</button>
       <button type="button" class="anatomy__action anatomy__replay" hidden>{L.ui.replay}</button>
@@ -100,6 +111,7 @@ const allTitleId = `${slug}-all-title`;
             <h4><button type="button" class="anatomy__jump" data-step={i + 1}>{st.title}</button></h4>
             {st.details.map((line) => <p>{line}</p>)}
             {s.stitch && <p class="anatomy__all-stitch">{L.ui.machine(L.stitches[s.stitch])}</p>}
+            {guideLinks[i + 1].map((item) => <p class="anatomy__all-guide"><a href={item.url}>{item.text}</a></p>)}
           </li>
         );
       })}
@@ -135,6 +147,7 @@ const allTitleId = `${slug}-all-title`;
     const dots = [...root.querySelectorAll('.anatomy__dot')];
     const stitch = $('.anatomy__stitch'), stitchName = $('.anatomy__stitch-name');
     const usesRows = [...root.querySelectorAll('.anatomy__uses')];
+    const guideRows = [...root.querySelectorAll('.anatomy__guide')]; // "How it's done ->" (none on most figures)
     const last = STEPS.length - 1;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -180,6 +193,7 @@ const allTitleId = `${slug}-all-title`;
       stitch.hidden = !STEPS[k].stitch;
       stitchName.textContent = STEPS[k].stitch ? L.ui.machine(L.stitches[STEPS[k].stitch]) : '';
       usesRows.forEach((row) => { row.hidden = +row.dataset.step !== k; });
+      guideRows.forEach((row) => { row.hidden = +row.dataset.step !== k; });
       scene.classList.add('is-switching');
       requestAnimationFrame(() => {
         draw();
@@ -282,6 +296,9 @@ const allTitleId = `${slug}-all-title`;
   .anatomy__uses ul { margin: 4px 0 0; padding: 0; list-style: none; display: grid; gap: 4px; }
   .anatomy__uses a { font-weight: 700; color: var(--rose-deep); }
   .anatomy__uses .paid-link { font-size: 0.8rem; color: var(--ink-soft); }
+
+  .anatomy__guide { margin: 10px 0 0; font-size: 0.92rem; }
+  .anatomy__guide a, .anatomy__all-guide a { font-weight: 700; color: var(--rose-deep); }
 
   .anatomy__legend { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
   .anatomy__legend li { display: flex; gap: 10px; align-items: baseline; line-height: 1.45; }

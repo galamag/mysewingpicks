@@ -5,6 +5,8 @@
   (the figure's "In this step" links are affiliate links) → the animated figure (AnatomyFigure, model =
   guide.figure: src/lib/anatomy/<figure>.js) → the projects' own videos, each from where the technique
   begins (video[].start) → "What you'll need" (catalog cards) → back to the list.
+  Right after the figure: "Where it's used" — one plain link per usedIn entry to that project's page
+  (the same pairs the project figures link back from with "How it's done ->"; not affiliate links).
   A wrong product id, project or project step in guides.js fails the build.
   Spec: Vault «Гайды — спецификация», 5–6.
 */
@@ -40,6 +42,11 @@ for (const u of guide.usedIn) {
     if (!Number.isInteger(k) || k < 1 || k > last) throw new Error(`${where}: usedIn "${u.project}" step ${k} is not in 1…${last}`);
   }
 }
+// "Where it's used": a link to each project, with the steps (first and last) where the technique is used.
+const usedIn = guide.usedIn.map((u) => ({
+  url: pageUrl(`project/${u.project}`, lang),
+  text: text.usedInSteps(projectText(projectBySlug(u.project), lang).title, Math.min(...u.steps), Math.max(...u.steps)),
+}));
 // The projects' own videos (id, cover, title), each from where the technique begins.
 const videos = (guide.video ?? []).map((v) => {
   const p = projectText(projectBySlug(v.project), lang);
@@ -62,6 +69,20 @@ const videos = (guide.video ?? []).map((v) => {
         <AnatomyFigure model={guide.figure} lang={lang} />
       </div>
     </section>
+
+    {usedIn.length > 0 && (
+      <section class="section section--tight">
+        <div class="container guide-used">
+          <div class="section-head">
+            <span class="eyebrow">{text.usedInEyebrow}</span>
+            <h2>{text.usedInHeading}</h2>
+          </div>
+          <ul class="guide-used__list">
+            {usedIn.map((u) => <li><a class="btn btn--ghost" href={u.url}>{u.text}</a></li>)}
+          </ul>
+        </div>
+      </section>
+    )}
 
     {videos.length > 0 && (
       <section class="section section--tight">
@@ -97,6 +118,8 @@ const videos = (guide.video ?? []).map((v) => {
 </BaseLayout>
 
 <style>
+  .guide-used__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .guide-used .section-head { margin-bottom: 24px; }
   .guide-video { max-width: 760px; }
   .guide-video__item + .guide-video__item { margin-top: 36px; }
   .guide-video__intro { margin: 0 0 12px; text-align: center; color: var(--ink-soft); }

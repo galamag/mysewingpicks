@@ -56,6 +56,14 @@ if (new Set(guides.map((g) => g.slug)).size !== guides.length) throw new Error('
 /** The groups that have at least one guide, in GUIDE_GROUPS order — the list page shows only these. */
 export const liveGroups = (list = guides) => GUIDE_GROUPS.filter((id) => list.some((g) => g.group === id));
 
+/**
+ * The guides a project's figure links to from step `step` ("How it's done ->" under the step): those whose
+ * `usedIn` has this figure with that step. A project's figure has the project's slug (tote-bag,
+ * fabric-basket). A guide's own figure is no project, so it gets no links (no self-links).
+ */
+export const guidesForStep = (figureSlug, step, list = guides) =>
+  list.filter((g) => g.usedIn.some((u) => u.project === figureSlug && u.steps.includes(step)));
+
 export const guideBySlug = (slug) => {
   const g = guides.find((x) => x.slug === slug);
   if (!g) throw new Error(`guides.js: no guide "${slug}"`);
