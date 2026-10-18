@@ -5,7 +5,8 @@
   projects has no category: its items are projects, not products.
 */
 import setup from './setup.js';
+import tools from './tools.js';
 
-export const ROOMS = { setup };
+export const ROOMS = { setup, tools };
 
 export const ROOM_CATEGORY = { setup: 'setup', tools: 'tools', fabrics: 'fabrics', projects: null };

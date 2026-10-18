@@ -1,8 +1,11 @@
 ---
 /* Tools page — one template for every language (src/i18n). Product cards are
-   rendered STATICALLY at build, split into sections by src/data/categories.js. */
+   rendered STATICALLY at build, split into sections by src/data/categories.js.
+   Above them, after the disclosure, the sewing room (src/components/Room.astro):
+   its four zones link to the sections below (no JS needed). */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductSections from '../../components/ProductSections.astro';
+import Room from '../../components/Room.astro';
 import { localePaths, langOf, t } from '../../i18n/index.js';
 
 export const getStaticPaths = localePaths;
@@ -21,6 +24,9 @@ const { brand, ui, pages: { tools: text } } = t(lang);
 
         <!-- Page-level affiliate disclosure, shown before any affiliate link. -->
         <p class="page-disclosure">{ui.pageDisclosure}</p>
+
+        <!-- The sewing room: its zones jump to the sections below (no JS needed). -->
+        <Room room="tools" lang={lang} />
 
         <ProductSections category="tools" lang={lang} />
       </div>
