@@ -50,7 +50,7 @@ test('fabrics draws one tap area per section, nothing links to Amazon, no letter
   assert.ok(hots.every((h) => h.kind === 'section'));
   assert.ok(!svg.includes('amazon.'), 'nothing in the drawing links to Amazon');
   assert.ok(!svg.includes('#product-'), 'zones, not items');
-  assert.ok(!svg.includes('<text'), 'no names or labels drawn on anything');
+  assert.ok(!unlink(svg).includes('<text'), 'no names or lettering drawn on anything (the corner labels aside)');
 });
 
 test('an empty section turns its zone into decoration', () => {

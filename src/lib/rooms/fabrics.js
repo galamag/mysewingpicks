@@ -16,6 +16,10 @@
   clear of the tap areas. Every tap area is the convex hull of its part's `hit`
   (render.js); the zones barely overlap, so a tap opens the zone you see.
 
+  Every zone has its section's name in a corner of the picture (`label`, render.js; the
+  names are the only lettering): batting top left, the fabric shelf top right, the notions
+  table bottom left, the ribbon rack bottom right — the leaders do not cross.
+
   No brand names, logos or lettering on anything (the rolls' paper bands are plain).
   Model contract: src/lib/rooms/render.js. World units (cm-like): x → right-down,
   y → left-down, z → up; parts are listed back to front (painted in order).
@@ -351,12 +355,14 @@ export default {
       id: 'fabric-shelf',
       draw: shelf,
       target: { section: 'fabrics' },
+      label: { corner: 'tr', at: [SHELF.x + SHELF.w / 2, SHELF.y + SHELF.d, LEVELS[1] + 4] }, // the folded fabric, second level
       hit: corners(SHELF.x, SHELF.y, 0, SHELF.w, SHELF.d, SHELF.h),
     },
     {
       id: 'trims-cabinet',
       draw: (p) => cabinet(p) + ribbonRack(p),
       target: { section: 'trims' },
+      label: { corner: 'br', at: [CAB.x + CAB.w / 2, RACK.y + RACK.r, RACK.rods[0]] }, // the lower ribbon spools
       hit: [
         ...corners(CAB.x, CAB.y, 0, CAB.w, CAB.d, CAB.h),
         ...corners(RACK.from - 1.2, RACK.y - RACK.r, CAB.h, RACK.to - RACK.from + 2.4, 2 * RACK.r, RACK.top - CAB.h),
@@ -366,6 +372,7 @@ export default {
       id: 'batting-rolls',
       draw: (p) => batting(p) + interfacing(p) + stuffing(p),
       target: { section: 'batting-interfacing' },
+      label: { corner: 'tl', at: [BATTING.x + BATTING.r * Math.SQRT1_2, BATTING.y + BATTING.r * Math.SQRT1_2, 15] }, // the batting roll, over its band
       hit: [
         ...ringHit([BATTING.x, BATTING.y, 0], BATTING.r), ...ringHit([BATTING.x, BATTING.y, BATTING.h], BATTING.r),
         ...ringHit([INTERFACING.x, INTERFACING.y, 0], INTERFACING.r), ...ringHit([INTERFACING.x, INTERFACING.y, INTERFACING.h], INTERFACING.r),
@@ -376,6 +383,7 @@ export default {
       id: 'notions-table',
       draw: (p) => table(p) + sewingBox(p) + spools(p) + ZIPPERS.map(([a, b, c]) => zipper(p, a, b, c)).join('') + looseButtons() + jar(p),
       target: { section: 'notions' },
+      label: { corner: 'bl', at: [TABLE.x + 8, TABLE.y + 11, tableTop] }, // the zippers on the table
       hit: [
         ...corners(TABLE.x, TABLE.y, 0, TABLE.w, TABLE.d, tableTop),
         [BOX.x, BOX.y - 1, tableTop + BOX.h + BOX.lid], [BOX.x + BOX.w, BOX.y - 1, tableTop + BOX.h + BOX.lid],

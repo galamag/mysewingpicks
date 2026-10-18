@@ -5,20 +5,80 @@
 import assert from 'node:assert/strict';
 import { project } from '../../src/lib/anatomy/iso.js';
 import { renderRoom, minHitFor } from '../../src/lib/rooms/render.js';
+import { groupTitle, projectText } from '../../src/i18n/content.js';
+import { pageUrl } from '../../src/i18n/index.js';
+import { projects } from '../../src/data/projects.js';
+
+/**
+  The links of a room as the page makes them (Room.astro `resolve`, kept in step with it): a section
+  → #<id> named by its title in `lang`, a project → its page, named by its title. `names` (optional)
+  names made-up projects of the tests: slug → name.
+*/
+export const siteResolve = (category, lang, names = {}) => (target) => {
+  if (target.section) return { href: `#${target.section}`, label: groupTitle(category, target.section, lang), kind: 'section' };
+  if (target.project) {
+    const real = projects.find((p) => p.slug === target.project);
+    if (real) return { href: pageUrl(`project/${real.slug}`, lang), label: projectText(real, lang).title, kind: 'page' };
+    const label = names[target.project];
+    return label ? { href: `/projects/${target.project}.html`, label, kind: 'page' } : null;
+  }
+  return null;
+};
 
 // The thumb rule, pinned here on purpose (not read from render.js): a tap area of a real room
 // must be at least a 44 css px thumb on a 320 px phone, where the room is as wide as the screen.
 export const THUMB_PX = 44;
 export const PHONE_PX = 320;
 
-/** The printed tap areas of an svg, in document order (later = on top): { part, href, poly }. */
+const PAD = /<rect class="room__pad" x="([^"]*)" y="([^"]*)" width="([^"]*)" height="([^"]*)"[^>]*fill="transparent"\/>/g;
+
+/**
+  The printed tap areas of an svg, in document order (later = on top): { part, href, poly, pads }.
+    pads  the label pills inside the link ({ x, y, w, h }; none without a label)
+*/
 export function areasOf(svg) {
-  return [...svg.matchAll(/<a class="room__hot"([^>]*)><polygon class="room__hit" points="([^"]*)"/g)]
-    .map(([, attrs, points]) => ({
-      part: /data-part="([^"]*)"/.exec(attrs)[1],
-      href: /href="([^"]*)"/.exec(attrs)[1],
-      poly: points.split(' ').map((q) => q.split(',').map(Number)),
-    }));
+  return [...svg.matchAll(/<a class="room__hot"([^>]*)><polygon class="room__hit" points="([^"]*)" fill="transparent"\/>(.*?)<\/a>/g)]
+    .map(([, attrs, points, rest]) => {
+      const pads = [...rest.matchAll(PAD)].map(([, x, y, w, h]) => ({ x: +x, y: +y, w: +w, h: +h }));
+      assert.equal(rest.replace(PAD, ''), '', 'nothing else in a link than its polygon and its pill');
+      return {
+        part: /data-part="([^"]*)"/.exec(attrs)[1],
+        href: /href="([^"]*)"/.exec(attrs)[1],
+        poly: points.split(' ').map((q) => q.split(',').map(Number)),
+        pads,
+      };
+    });
+}
+
+/** Is the point in the rect { x, y, w, h }? */
+export const inRect = ({ x, y, w, h }, [px, py]) => px >= x && px <= x + w && py >= y && py <= y + h;
+
+/** Does a tap at `pt` land in this area: its polygon or its pill? */
+export const reaches = (area, pt) => inside(area.poly, pt) || area.pads.some((r) => inRect(r, pt));
+
+/** The part a tap at `pt` opens: the LAST area that reaches it (later = on top), or null. */
+export function ownerAt(areas, pt) {
+  let owner = null;
+  for (const a of areas) if (reaches(a, pt)) owner = a.part;
+  return owner;
+}
+
+/**
+  The printed labels of an svg, in document order: { part, lines, text, pill: { x, y, w, h }, dot, end }.
+    text  the lines joined by a space (the name it shows)
+*/
+export function labelsOf(svg) {
+  return [...svg.matchAll(/<g class="room__label" data-part="([^"]*)" aria-hidden="true"[^>]*>(.*?)<\/g>/g)].map(([, part, inner]) => {
+    const [, x0, y0, x1, y1] = /<path d="M([^ ]*) ([^L]*)L([^ ]*) ([^"]*)"/.exec(inner);
+    const [, x, y, w, h] = /<rect x="([^"]*)" y="([^"]*)" width="([^"]*)" height="([^"]*)"/.exec(inner);
+    const [, cx, cy] = /<circle cx="([^"]*)" cy="([^"]*)"/.exec(inner);
+    const lines = [...inner.matchAll(/<tspan[^>]*>([^<]*)<\/tspan>/g)].map((m) => m[1]);
+    return {
+      part, lines, text: lines.join(' '),
+      pill: { x: +x, y: +y, w: +w, h: +h },
+      dot: [+cx, +cy], start: [+x0, +y0], end: [+x1, +y1],
+    };
+  });
 }
 
 /**
@@ -38,11 +98,12 @@ export function onPhone(model, resolve) {
   return { svg, areas, hots, thumb: (THUMB_PX * viewBox[2]) / PHONE_PX, minHit };
 }
 
-/** An svg without its tap areas and without the <g class="room__part"> wrappers (what is inside them stays). */
+/** An svg without its tap areas, its labels and the <g class="room__part"> wrappers (what is inside them stays). */
 export function unlink(svg) {
   const wrappers = []; // for every open <g>: is it a wrapper?
   return svg
     .replace(/<a class="room__hot".*?<\/a>/g, '')
+    .replace(/<g class="room__label".*?<\/g>/g, '')
     .replace(/<g class="room__part"[^>]*>|<g\b[^>]*>|<\/g>/g, (tag) => {
       if (tag === '</g>') return wrappers.pop() ? '' : tag;
       const wrapper = tag.startsWith('<g class="room__part"');
@@ -78,8 +139,9 @@ export const glassOf = ({ wall, from, to, z: [z0, z1] }) => (u, v) => {
 };
 
 /**
-  The side of the largest square (viewBox units) where a tap reaches area `i`: inside it and
-  under no area printed after it (later = on top). Sampled every `step` units.
+  The side of the largest square (viewBox units) where a tap reaches area `i` on its object: inside
+  its polygon and under nothing printed after it (later = on top: another polygon or another label's
+  pill). Sampled every `step` units.
 */
 export function ownSquare(areas, i, step = 0.25) {
   const xs = areas[i].poly.map((q) => q[0]);
@@ -93,7 +155,7 @@ export function ownSquare(areas, i, step = 0.25) {
     const row = new Array(cols + 1).fill(0);
     for (let c = 0; c <= cols; c++) {
       const pt = [x0 + c * step, y0 + r * step];
-      const own = inside(areas[i].poly, pt) && !areas.slice(i + 1).some((a) => inside(a.poly, pt));
+      const own = inside(areas[i].poly, pt) && !areas.slice(i + 1).some((a) => reaches(a, pt));
       if (!own) continue;
       row[c] = r && c ? Math.min(prev[c], row[c - 1], prev[c - 1]) + 1 : 1;
       best = Math.max(best, row[c]);

@@ -6,7 +6,7 @@ import { checkTargets } from '../../src/lib/rooms/check.js';
 import { renderRoom } from '../../src/lib/rooms/render.js';
 import { projects } from '../../src/data/projects.js';
 import { pageUrl } from '../../src/i18n/index.js';
-import { onPhone, linked, glassOf, ownSquare } from './helpers.js';
+import { onPhone, linked, glassOf, ownSquare, unlink } from './helpers.js';
 
 const toPage = (target) => ({ href: `/projects/${target.project}.html`, label: target.project, kind: 'page' });
 const shown = (model) => model.parts.filter((part) => part.target).map((part) => part.target.project);
@@ -90,7 +90,7 @@ test('the room links only to project pages: no Amazon, no products, no lettering
     assert.ok(hots.every((h) => h.kind === 'page' && h.href.startsWith('/projects/')));
     assert.ok(!svg.includes('amazon.'), 'nothing in the drawing links to Amazon');
     assert.ok(!svg.includes('#product-'), 'no product cards here');
-    assert.ok(!svg.includes('<text'), 'no names or labels drawn on anything');
+    assert.ok(!unlink(svg).includes('<text'), 'no names or lettering drawn on anything (the corner labels aside)');
   }
   for (const [slug, draw] of Object.entries(ITEMS)) {
     assert.equal(typeof draw, 'function', slug);

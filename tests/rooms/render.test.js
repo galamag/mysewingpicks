@@ -281,10 +281,11 @@ test('a target without a hit throws', () => {
     { message: 'rooms/toy: part "lamp" has a target but no hit' });
 });
 
-test('roomParts gives body, hits and hots without a shell', () => {
+test('roomParts gives body, labels, hits and hots without a shell', () => {
   const p = painter('room-toy');
   const out = roomParts(toy, p, resolve);
-  assert.deepEqual(Object.keys(out).sort(), ['body', 'hits', 'hots']);
+  assert.deepEqual(Object.keys(out).sort(), ['body', 'hits', 'hots', 'labels']);
+  assert.equal(out.labels, '', 'the toy has no labels');
   assert.ok(!out.body.includes('<a '));
   assert.ok(out.body.includes('<g class="room__part" data-part="desk">'));
   assert.equal((out.hits.match(/<a /g) ?? []).length, 2);

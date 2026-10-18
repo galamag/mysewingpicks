@@ -20,6 +20,10 @@
   house this room has no walls of its own, so nothing hangs on a wall (its window
   is for the page only).
 
+  Every zone has its section's name in a corner of the picture (`label`, render.js), the dot
+  on what the eye takes for the zone: the ironing board top left, the machine top right, the
+  cutting mat bottom left, the shelf bottom right — the leaders do not cross.
+
   No brand names or logos on anything (the machine is a generic one).
   Model contract: src/lib/rooms/render.js. World units (cm-like): x → right-down,
   y → left-down, z → up; parts are listed back to front (painted in order).
@@ -394,6 +398,7 @@ export default {
       id: 'sewing-table',
       draw: (p) => sewingTable(p) + threadRack(p) + machine(p),
       target: { section: 'machines' },
+      label: { corner: 'tr', at: [MACHINE.x + MACHINE.w / 2, MACHINE.y + MACHINE.d - 0.5, sewTop + 9.9] }, // the rose front of the arm
       // the top, the machine and the rack; the legs only down to where the cutting table hides them
       hit: [
         ...corners(SEW.x, SEW.y, SEW.z, SEW.w, SEW.d, SEW.t),
@@ -406,6 +411,7 @@ export default {
       id: 'shelf',
       draw: (p) => shelf(p) + dressForm(p),
       target: { section: 'helpers' },
+      label: { corner: 'br', at: [SHELF.x + SHELF.w / 2, SHELF.y + SHELF.d, LEVELS[1] + 3] }, // the snap kit on the lower shelf
       hit: [
         ...corners(SHELF.x, SHELF.y, 0, SHELF.w, SHELF.d, SHELF.h + 1),
         // the torso's outline (a circle of radius r looks widest at (∓r/√2, ±r/√2)), its knob, its feet
@@ -418,6 +424,7 @@ export default {
       id: 'ironing-board',
       draw: (p) => ironingBoard(p) + pens(p) + iron(p) + station(p),
       target: { section: 'marking-pressing' },
+      label: { corner: 'tl', at: [BOARD.x + BOARD.w / 2, BOARD.y1 - 3, BOARD.z] }, // the cover, between the iron and its station
       // the board, the station, the iron and the front foot; of the back legs only their upper
       // part: lower down the cutting table stands in front of them
       hit: [
@@ -432,6 +439,7 @@ export default {
       id: 'cutting-table',
       draw: (p) => cuttingTable(p) + cuttingMat(p),
       target: { section: 'cutting' },
+      label: { corner: 'bl', at: [CUT.x + 9, CUT.y + 12, cutTop] }, // the mat, by the rotary cutter
       hit: corners(CUT.x, CUT.y, 0, CUT.w, CUT.d, cutTop),
     },
   ],

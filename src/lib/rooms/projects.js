@@ -13,6 +13,9 @@
   project simply is not in the room — the build never fails for that. An empty place on
   the shelf holds a few small things instead (SPARE: a vase, folded fabric, spools — decoration).
 
+  The four newest items carry their project's title in a corner of the picture (render.js labels):
+  the corner belongs to the slot (SLOTS `corner`), the dot sits in the middle of the item.
+
   In the house this room is the far corner: both its walls are outer walls, so the window
   and the picture (the back wall) and the shelf (the left wall) stay there.
 
@@ -140,14 +143,19 @@ const TABLE = { x: 32, y: 14, w: 26, d: 19, z: 14, t: 1.4 };
 const tableTop = TABLE.z + TABLE.t;
 
 /**
-  The six places: `at` the world point the item's origin goes to, `k` its scale.
+  The six places: `at` the world point the item's origin goes to, `k` its scale, `corner` where its
+  project's name goes (render.js labels; the dot is in the middle of the item).
   0 and 1 on the table (0 in front), 2–5 on the shelf (on its top first, then inside).
+  Four corners for the four newest: 0 bottom right, 1 bottom left (above it hangs the picture),
+  2 top right, 3 top left — no two leaders cross, none runs over another item. 4 and 5 (only with
+  more than four projects) have no name: still a link, like every item.
 */
+const CORNERS = ['br', 'bl', 'tr', 'tl'];
 export const SLOTS = [
   { at: [54, 21, tableTop], k: 1 },
   { at: [38, 27, tableTop], k: 1 },
   ...SHELF.levels.slice().reverse().flatMap((z) => BAYS.map((y) => ({ at: [SHELF.x + SHELF.d / 2, y, z + 1], k: 0.5 }))),
-];
+].map((slot, i) => (CORNERS[i] ? { ...slot, corner: CORNERS[i] } : slot));
 
 function shelf(p) {
   const { x, d, posts, levels: [low, top] } = SHELF;
@@ -254,6 +262,9 @@ function placed(draw, { at, k }) {
 const hitAt = ([w, d, h], { at: [x, y, z], k }) =>
   corners(-w / 2, -d / 2, 0, w, d, h).map(([u, v, t]) => [x + k * u, y + k * v, z + k * t]);
 
+/** An item's label at its slot (slots 0–3): the slot's corner, the dot in the middle of the item's box. */
+const labelAt = ([, , h], { at: [x, y, z], k, corner }) => (corner ? { label: { corner, at: [x, y, z + (k * h) / 2] } } : {});
+
 /**
   The room for a list of projects (oldest first, as in src/data/projects.js): the last six
   that have an item, the newest in slot 0. `items` is ITEMS (the tests pass made-up ones).
@@ -265,7 +276,7 @@ export function projectsRoom(list, items = ITEMS) {
     if (!pr) return SPARE[i] ? [{ id: `spare-${i}`, draw: (p) => SPARE[i](p, SLOTS[i].at) }] : [];
     const draw = items[pr.slug];
     if (draw.box?.length !== 3) throw new Error(`rooms/projects: ITEMS["${pr.slug}"] must be item([w, d, h], draw)`);
-    return [{ id: `project-${pr.slug}`, slot: i, draw: placed(draw, SLOTS[i]), target: { project: pr.slug }, hit: hitAt(draw.box, SLOTS[i]) }];
+    return [{ id: `project-${pr.slug}`, slot: i, draw: placed(draw, SLOTS[i]), target: { project: pr.slug }, hit: hitAt(draw.box, SLOTS[i]), ...labelAt(draw.box, SLOTS[i]) }];
   };
   return {
     key: 'projects',
