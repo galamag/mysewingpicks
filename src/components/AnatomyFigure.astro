@@ -38,10 +38,10 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
   return { name: productText(byId[id], lang).name, url: amazonUrl(byId[id]) };
 }));
 // "How it's done ->": the guides this step's technique is explained in (none on most steps, and none on
-// a guide's own figure). French sets a no-break space before the colon.
-const colon = lang === 'fr' ? String.fromCharCode(0xa0) + ':' : ':';
+// a guide's own figure). Rendered "How it's done — <title> →": a dash, because the titles hold a colon; the
+// arrow is decoration (aria-hidden), so a screen reader does not read it out.
 const guideLinks = STEPS.map((_, k) => guidesForStep(slug, k).map((g) => ({
-  text: `${ui.howItsDone}${colon} ${guideText(g, lang).title} →`,
+  text: `${ui.howItsDone} — ${guideText(g, lang).title}`,
   url: pageUrl(`guide/${g.slug}`, lang),
 })));
 const allTitleId = `${slug}-all-title`;
@@ -87,7 +87,7 @@ const allTitleId = `${slug}-all-title`;
       </div>
     ))}
     {guideLinks.map((list, k) => list.map((item) => (
-      <p class="anatomy__guide" data-step={k} hidden><a href={item.url}>{item.text}</a></p>
+      <p class="anatomy__guide" data-step={k} hidden><a href={item.url}>{item.text} <span aria-hidden="true">→</span></a></p>
     )))}
     <div class="anatomy__actions">
       <button type="button" class="anatomy__action anatomy__toggle" aria-pressed="false">{L.ui.takeApart}</button>
@@ -111,7 +111,7 @@ const allTitleId = `${slug}-all-title`;
             <h4><button type="button" class="anatomy__jump" data-step={i + 1}>{st.title}</button></h4>
             {st.details.map((line) => <p>{line}</p>)}
             {s.stitch && <p class="anatomy__all-stitch">{L.ui.machine(L.stitches[s.stitch])}</p>}
-            {guideLinks[i + 1].map((item) => <p class="anatomy__all-guide"><a href={item.url}>{item.text}</a></p>)}
+            {guideLinks[i + 1].map((item) => <p class="anatomy__all-guide"><a href={item.url}>{item.text} <span aria-hidden="true">→</span></a></p>)}
           </li>
         );
       })}
