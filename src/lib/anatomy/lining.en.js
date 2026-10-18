@@ -10,7 +10,7 @@
 export default {
   ui: {
     fig: 'Fig. 1',
-    title: 'Lining a bag · step by step',
+    title: 'Lining · step by step',
     svgLabel: 'An isometric drawing of how a bag is lined: the lining sewn with an opening, the outer slipped inside it, the top seam, turning the bag through the opening, closing it and topstitching.',
     prev: 'Previous step',
     dot: (i, title) => (i ? `Step ${i}: ${title}` : title),
