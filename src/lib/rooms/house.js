@@ -218,9 +218,9 @@ export function renderHouse(rooms, { prefix = 'house', labels, hrefs } = {}) {
   const hots = zooms.map(({ key, zoom }) => {
     const [ox, oy] = HOUSE.at[key];
     const floor = [[ox, oy, 0], [ox + cw, oy, 0], [ox + cw, oy + cd, 0], [ox, oy + cd, 0]].map((q) => project(q).map(num));
-    const pads = reach(rooms[key], [ox, oy]).map((poly) => `<polygon class="house__pad" points="${points(poly)}"/>`).join('');
+    const pads = reach(rooms[key], [ox, oy]).map((poly) => `<polygon class="house__pad" points="${points(poly)}" fill="transparent"/>`).join('');
     return `<a class="house__hot" href="${esc(hrefs[key])}" aria-label="${esc(labels[key])}" data-room="${key}" data-zoom="${zoom.join(' ')}">` +
-      `<polygon class="house__hit" points="${points(floor)}"/>${pads}<rect class="house__pad" ${pill(labels[key], HOUSE.label[key])}/></a>`;
+      `<polygon class="house__hit" points="${points(floor)}" fill="transparent"/>${pads}<rect class="house__pad" ${pill(labels[key], HOUSE.label[key])} fill="transparent"/></a>`;
   }).join('');
 
   // after drawing: the painter makes its gradients while it paints

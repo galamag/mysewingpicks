@@ -39,7 +39,7 @@ const resolve = (target) => LINKS[target.product] ?? null;
 
 /** The tap areas of an svg, in document order: part id + polygon points. */
 function anchors(svg) {
-  return [...svg.matchAll(/<a class="room__hot"[^>]*data-part="([^"]*)"[^>]*><polygon class="room__hit" points="([^"]*)"\/><\/a>/g)]
+  return [...svg.matchAll(/<a class="room__hot"[^>]*data-part="([^"]*)"[^>]*><polygon class="room__hit" points="([^"]*)" fill="transparent"\/><\/a>/g)]
     .map((m) => ({ part: m[1], points: m[2].split(' ').map((q) => q.split(',').map(Number)) }));
 }
 

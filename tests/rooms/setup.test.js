@@ -4,7 +4,7 @@ import setup, { CHAIR } from '../../src/lib/rooms/setup.js';
 import { ROOMS, ROOM_CATEGORY, catalogOf } from '../../src/lib/rooms/rooms.js';
 import { checkTargets } from '../../src/lib/rooms/check.js';
 import { renderRoom } from '../../src/lib/rooms/render.js';
-import { onPhone, linked, glassOf } from './helpers.js';
+import { onPhone, linked, glassOf, ownSquare } from './helpers.js';
 
 // Pinned here, not read from products.js: a new Setup product without an item in
 // the room must not break the build or the tests.
@@ -54,6 +54,18 @@ test('setup draws one tap area per item, decoration stays plain', () => {
   }
   assert.ok(setup.parts.some((p) => !p.target), 'the room has decoration (chair, plant)');
   assert.ok(!svg.includes('amazon.'), 'nothing in the drawing links to Amazon');
+});
+
+/* ---------- tap areas on the narrowest phone ---------- */
+
+test('every item keeps a thumb-size square of its own on a 320 px phone', () => {
+  const { areas, thumb, minHit } = onPhone(setup, toProduct);
+  assert.equal(minHit, Math.ceil(thumb), 'minHitFor: the whole units that hold a thumb');
+  const sides = areas.map((a, i) => [a.href, ownSquare(areas, i)]);
+  for (const [href, side] of sides) {
+    assert.ok(side >= thumb, `${href}: own square ${side.toFixed(1)} < ${thumb.toFixed(1)} units (44 px)`);
+  }
+  console.log(`  own squares at 320 px: ${sides.map(([h, side]) => `${h.slice('#product-'.length)} ${Math.floor((side / thumb) * 44)} px`).join(', ')}`);
 });
 
 // Decoration must not turn into a link: sample its surfaces against the printed tap areas.

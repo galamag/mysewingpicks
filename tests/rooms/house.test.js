@@ -13,8 +13,8 @@ const LABELS = { projects: 'Projects', fabrics: 'Fabrics', setup: 'My Setup', to
 const HREFS = { projects: '/projects.html', fabrics: '/fabrics.html', setup: '/setup.html', tools: '/tools.html' };
 const OPTS = { prefix: 'house', labels: LABELS, hrefs: HREFS };
 
-const POLY = /<polygon class="(house__hit|house__pad)" points="([^"]*)"\/>/g;
-const PILL_PAD = /<rect class="house__pad" x="([^"]*)" y="([^"]*)" width="([^"]*)" height="([^"]*)"[^>]*\/>/g;
+const POLY = /<polygon class="(house__hit|house__pad)" points="([^"]*)" fill="transparent"\/>/g;
+const PILL_PAD = /<rect class="house__pad" x="([^"]*)" y="([^"]*)" width="([^"]*)" height="([^"]*)"[^>]*fill="transparent"\/>/g;
 
 /**
   The printed room links of a house svg, in document order (later = on top):

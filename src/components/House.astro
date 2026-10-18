@@ -3,13 +3,16 @@
   House — the sewing house at the top of the home page: the four rooms of the section pages
   under one roof (src/lib/rooms/house.js), drawn at BUILD time from the same models. The first
   frame is plain SVG in the HTML; each room is ONE ordinary link to its section page in this
-  language (its floor), so it works without JS. Nothing inside a room is a link here.
+  language, so it works without JS. It opens by what is seen: the floor, the room's outer walls,
+  its furniture and its label (back to front, a nearer room wins). Nothing inside a room is a
+  link of its own here.
     lang  the page's language
 
   The script only animates the way in: a tap zooms the camera into the room (the svg's viewBox
   to the room's `data-zoom`, 650 ms), the other rooms fade, the labels hide, then the page opens.
   With a modifier key, another mouse button or "reduce motion" the tap is an ordinary link.
-  Back from the room's page (the browser kept this page as it was) the house is whole again.
+  Back from the room's page (the browser kept this page as it was), or the navigation stopped
+  (Stop, Esc: a timer of 4 s), the house is whole again.
   Only the home page uses this component, so its script runs nowhere else.
 
   Styles: src/styles/styles.css, "Rooms & house" — the svg is injected with set:html,
@@ -34,6 +37,7 @@ const { svg, viewBox } = renderHouse(ROOMS, { prefix: 'house', labels, hrefs });
 <script>
   // Zoom into the tapped room, then open its page.
   const ZOOM_MS = 650;
+  const STOP_MS = 4000; // a navigation that has not left the page by then was stopped
   const reduce = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
   const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
   const box = (s) => (s || '').split(' ').map(Number);
@@ -45,6 +49,17 @@ const { svg, viewBox } = renderHouse(ROOMS, { prefix: 'house', labels, hrefs });
     const whole = svg.getAttribute('viewBox');
     let busy = false; // a tap is on its way: later taps are ignored (one navigation)
     let frame = 0;
+    let timer = 0;
+
+    // The whole house again: after the way back, or when the navigation was stopped.
+    const reset = () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(timer);
+      svg.setAttribute('viewBox', whole);
+      svg.classList.remove('is-zooming');
+      house.querySelectorAll('.house__room.is-dim').forEach((g) => g.classList.remove('is-dim'));
+      busy = false;
+    };
 
     svg.addEventListener('click', (e) => {
       const hot = e.target.closest && e.target.closest('.house__hot');
@@ -68,19 +83,17 @@ const { svg, viewBox } = renderHouse(ROOMS, { prefix: 'house', labels, hrefs });
         const k = ease(t);
         svg.setAttribute('viewBox', from.map((v, i) => (v + (to[i] - v) * k).toFixed(2)).join(' '));
         if (t < 1) frame = requestAnimationFrame(step);
-        else location.assign(href);
+        else {
+          location.assign(href);
+          timer = setTimeout(reset, STOP_MS); // still here: the navigation was stopped
+        }
       };
       frame = requestAnimationFrame(step);
     });
 
     // Back from the room's page, restored as it was left (mid-zoom): the whole house again.
     window.addEventListener('pageshow', (e) => {
-      if (!e.persisted) return;
-      cancelAnimationFrame(frame);
-      svg.setAttribute('viewBox', whole);
-      svg.classList.remove('is-zooming');
-      house.querySelectorAll('.house__room.is-dim').forEach((g) => g.classList.remove('is-dim'));
-      busy = false;
+      if (e.persisted) reset();
     });
   });
 </script>

@@ -35,6 +35,14 @@ test('projects without an item are skipped', () => {
   assert.deepEqual(renderRoom(empty, { resolve: toPage }).hots, []);
 });
 
+test('an item without its box says what is wrong', () => {
+  const list = [{ slug: 'x' }];
+  const draw = () => '';
+  assert.throws(() => projectsRoom(list, { x: draw }), { message: 'rooms/projects: ITEMS["x"] must be item([w, d, h], draw)' });
+  assert.throws(() => projectsRoom(list, { x: Object.assign(() => '', { box: [1, 2] }) }), /ITEMS\["x"\] must be item/);
+  assert.doesNotThrow(() => projectsRoom(list, { x: Object.assign(draw, { box: [1, 2, 3] }) }));
+});
+
 test('at most six, newest first', () => {
   assert.equal(SLOTS.length, 6, 'six places: two on the table, four on the shelf');
   const placed = full.parts.filter((part) => part.target);

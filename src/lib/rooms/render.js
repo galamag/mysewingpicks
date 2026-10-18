@@ -246,7 +246,7 @@ export function roomParts(model, p, resolve, { minHit = MIN_HIT, inactive = new 
 
   const hits = links.map((l) =>
     `<a class="room__hot" href="${esc(l.href)}" aria-label="${esc(l.label)}" data-kind="${esc(l.kind)}" data-part="${esc(l.part)}">` +
-    `<polygon class="room__hit" points="${l.poly.map(([x, y]) => `${num(x)},${num(y)}`).join(' ')}"/></a>`,
+    `<polygon class="room__hit" points="${l.poly.map(([x, y]) => `${num(x)},${num(y)}`).join(' ')}" fill="transparent"/></a>`,
   ).join('');
   const hots = links.map(({ part, kind, href, label }) => ({ part, kind, href, label }));
   return { body, hits, hots };

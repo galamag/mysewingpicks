@@ -264,6 +264,7 @@ export function projectsRoom(list, items = ITEMS) {
     const pr = shown[i];
     if (!pr) return SPARE[i] ? [{ id: `spare-${i}`, draw: (p) => SPARE[i](p, SLOTS[i].at) }] : [];
     const draw = items[pr.slug];
+    if (draw.box?.length !== 3) throw new Error(`rooms/projects: ITEMS["${pr.slug}"] must be item([w, d, h], draw)`);
     return [{ id: `project-${pr.slug}`, slot: i, draw: placed(draw, SLOTS[i]), target: { project: pr.slug }, hit: hitAt(draw.box, SLOTS[i]) }];
   };
   return {
