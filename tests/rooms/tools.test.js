@@ -4,7 +4,7 @@ import tools, { BASKET } from '../../src/lib/rooms/tools.js';
 import { ROOMS, ROOM_CATEGORY, catalogOf } from '../../src/lib/rooms/rooms.js';
 import { checkTargets } from '../../src/lib/rooms/check.js';
 import { renderRoom } from '../../src/lib/rooms/render.js';
-import { onPhone, linked, glassOf, ownSquare } from './helpers.js';
+import { onPhone, linked, glassOf, ownSquare, unlink } from './helpers.js';
 
 // The zones of the spec (4.2), pinned here: a zone links to a section of the page, not to products.
 const SECTIONS = ['machines', 'cutting', 'marking-pressing', 'helpers'];
@@ -59,19 +59,6 @@ test('an empty section turns its zone into decoration', () => {
   const plain = renderRoom(tools, { resolve: () => null }).svg;
   assert.equal(unlink(svg), plain);
 });
-
-/** An svg without its tap areas and without the <g class="room__part"> wrappers (what is inside them stays). */
-function unlink(svg) {
-  const wrappers = []; // for every open <g>: is it a wrapper?
-  return svg
-    .replace(/<a class="room__hot".*?<\/a>/g, '')
-    .replace(/<g class="room__part"[^>]*>|<g\b[^>]*>|<\/g>/g, (tag) => {
-      if (tag === '</g>') return wrappers.pop() ? '' : tag;
-      const wrapper = tag.startsWith('<g class="room__part"');
-      wrappers.push(wrapper);
-      return wrapper ? '' : tag;
-    });
-}
 
 /* ---------- tap areas on the narrowest phone ---------- */
 

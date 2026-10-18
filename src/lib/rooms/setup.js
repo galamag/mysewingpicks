@@ -19,9 +19,8 @@
 */
 import { project } from '../anatomy/iso.js';
 import { PALETTE as C, shade, num } from './paint.js';
-import { dot, flat, corners, ISO_RX } from './props.js';
+import { dot, flat, corners, ISO_RX, FRAME } from './props.js';
 
-const FRAME = shade(C.dark, 0.12); // desk frame, tripods, stands
 const SCREEN = '#5f6f73'; // a dark, slightly cool screen
 const SCREEN_LIT = '#8fa3a0';
 

@@ -2,6 +2,7 @@
   Helpers shared by the room tests (setup.test.js, tools.test.js, the next rooms).
   NOT a test file (no .test.js in its name): the test glob of package.json must not pick it up.
 */
+import assert from 'node:assert/strict';
 import { project } from '../../src/lib/anatomy/iso.js';
 import { renderRoom, minHitFor } from '../../src/lib/rooms/render.js';
 
@@ -23,12 +24,31 @@ export function areasOf(svg) {
 /**
   A room as the narrowest phone gets it: drawn with minHitFor(model), as Room.astro does it.
     resolve  as for renderRoom
-  → svg, the printed tap areas, the thumb in viewBox units (44 px on a 320 px phone), minHit
+  → svg, the printed tap areas, hots (renderRoom's), the thumb in viewBox units (44 px on a
+    320 px phone), minHit
+  Fails loudly when the room has no tap areas or when `areas` is not exactly the tap areas
+  renderRoom made (same count, same order): a coverage test must never pass on nothing.
 */
 export function onPhone(model, resolve) {
   const minHit = minHitFor(model);
-  const { svg, viewBox } = renderRoom(model, { resolve, minHit });
-  return { svg, areas: areasOf(svg), thumb: (THUMB_PX * viewBox[2]) / PHONE_PX, minHit };
+  const { svg, viewBox, hots } = renderRoom(model, { resolve, minHit });
+  const areas = areasOf(svg);
+  assert.ok(hots.length > 0, `${model.key}: no tap areas to check`);
+  assert.deepEqual(areas.map((a) => [a.part, a.href]), hots.map((h) => [h.part, h.href]), `${model.key}: parsed tap areas != renderRoom's hots`);
+  return { svg, areas, hots, thumb: (THUMB_PX * viewBox[2]) / PHONE_PX, minHit };
+}
+
+/** An svg without its tap areas and without the <g class="room__part"> wrappers (what is inside them stays). */
+export function unlink(svg) {
+  const wrappers = []; // for every open <g>: is it a wrapper?
+  return svg
+    .replace(/<a class="room__hot".*?<\/a>/g, '')
+    .replace(/<g class="room__part"[^>]*>|<g\b[^>]*>|<\/g>/g, (tag) => {
+      if (tag === '</g>') return wrappers.pop() ? '' : tag;
+      const wrapper = tag.startsWith('<g class="room__part"');
+      wrappers.push(wrapper);
+      return wrapper ? '' : tag;
+    });
 }
 
 /** Is the point inside the convex polygon (either winding)? */

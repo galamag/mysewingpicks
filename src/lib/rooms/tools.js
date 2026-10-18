@@ -26,17 +26,7 @@
 */
 import { project } from '../anatomy/iso.js';
 import { PALETTE as C, shade, num } from './paint.js';
-import { dot, disc, flat, corners, ISO_RX, ISO_RY } from './props.js';
-
-const FRAME = shade(C.dark, 0.12); // the legs of the ironing board
-const STEEL = shade(C.metal, -0.22);
-const WOOD = { l: shade(C.wood, -0.12), r: shade(C.wood, -0.22) };
-
-/**
-  A soft shadow on a surface at height z (a table top): the painter's floor shadow, moved so its
-  centre lands where (x, y, z) is on the screen — (x - z, y - z, 0) projects to the same point.
-*/
-const shadowOn = (p, [x, y, z], rx, ry) => p.shadow(x - z, y - z, rx, ry);
+import { dot, disc, flat, corners, shadowOn, ISO_RX, ISO_RY, FRAME, STEEL, WOOD } from './props.js';
 
 /**
   A flat-topped solid with any convex outline (the ironing board, the iron): the sides that
