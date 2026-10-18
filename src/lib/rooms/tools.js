@@ -25,33 +25,18 @@
   y → left-down, z → up; parts are listed back to front (painted in order).
 */
 import { project } from '../anatomy/iso.js';
-import { PALETTE as C, shade } from './paint.js';
+import { PALETTE as C, shade, num } from './paint.js';
+import { dot, disc, flat, corners, ISO_RX, ISO_RY } from './props.js';
 
-const num = (n) => +n.toFixed(2);
 const FRAME = shade(C.dark, 0.12); // the legs of the ironing board
 const STEEL = shade(C.metal, -0.22);
 const WOOD = { l: shade(C.wood, -0.12), r: shade(C.wood, -0.22) };
-
-/** A circle drawn flat on the screen around a world point (knobs, pin heads, clips). */
-const dot = ([x, y, z], r, fill) => {
-  const [cx, cy] = project([x, y, z]);
-  return `<circle cx="${num(cx)}" cy="${num(cy)}" r="${r}" fill="${fill}"/>`;
-};
-
-/** A horizontal circle of radius r around a world point: on screen an ellipse rx = 1.22 r, ry = 0.71 r. */
-const disc = ([x, y, z], r, fill, extra = '') => {
-  const [cx, cy] = project([x, y, z]);
-  return `<ellipse cx="${num(cx)}" cy="${num(cy)}" rx="${num(r * 1.2247)}" ry="${num(r * 0.7071)}" fill="${fill}"${extra}/>`;
-};
 
 /**
   A soft shadow on a surface at height z (a table top): the painter's floor shadow, moved so its
   centre lands where (x, y, z) is on the screen — (x - z, y - z, 0) projects to the same point.
 */
 const shadowOn = (p, [x, y, z], rx, ry) => p.shadow(x - z, y - z, rx, ry);
-
-/** The points of a rectangle lying flat at height z. */
-const flat = (x0, x1, y0, y1, z) => [[x0, y0, z], [x1, y0, z], [x1, y1, z], [x0, y1, z]];
 
 /**
   A flat-topped solid with any convex outline (the ironing board, the iron): the sides that
@@ -223,14 +208,14 @@ function dressForm(p) {
   zs.push(TORSO[TORSO.length - 1][0]);
   const at = (z, side) => {
     const [cx, cy] = project([x, y, z]);
-    return [cx + side * r(z) * 1.2247, cy];
+    return [cx + side * r(z) * ISO_RX, cy];
   };
   const path = (pts) => pts.map(([a, b], i) => `${i ? 'L' : 'M'}${num(a)} ${num(b)}`).join('') + 'Z';
   const [bx, by] = project([x, y, TORSO[0][0]]);
   const bottom = []; // the lower half of the hip ellipse, right to left
   for (let i = 0; i <= 8; i++) {
     const t = (i / 8) * Math.PI;
-    bottom.push([bx + Math.cos(t) * TORSO[0][1] * 1.2247, by + Math.sin(t) * TORSO[0][1] * 0.7071]);
+    bottom.push([bx + Math.cos(t) * TORSO[0][1] * ISO_RX, by + Math.sin(t) * TORSO[0][1] * ISO_RY]);
   }
   const left = zs.map((z) => at(z, -1));
   const right = zs.map((z) => at(z, 1)).reverse();
@@ -408,12 +393,7 @@ function scrapBasket(p) {
 
 /* ---------- the model ---------- */
 
-const corners = (x, y, z, w, d, h) => [
-  [x, y, z], [x + w, y, z], [x + w, y + d, z], [x, y + d, z],
-  [x, y, z + h], [x + w, y, z + h], [x + w, y + d, z + h], [x, y + d, z + h],
-];
-
-export const WINDOW = { wall: 'left', from: 22, to: 39, z: [25, 36] }; // over the ironing board
+const WINDOW = { wall: 'left', from: 22, to: 39, z: [25, 36] }; // over the ironing board
 
 export default {
   key: 'tools',

@@ -25,7 +25,8 @@ export const PALETTE = {
 const EDGE = 0.9; // outline of a face: its own colour, rounded joins
 const SHADOW = '#5a3d24';
 
-const num = (n) => +n.toFixed(2);
+/** A number as it is printed in the svg: 2 decimals, no trailing zeros. The one formatter of the rooms. */
+export const num = (n) => +n.toFixed(2);
 const mark = ([x, y]) => `${num(x)},${num(y)}`;
 const points = (pts3) => pts3.map((p) => mark(project(p))).join(' ');
 

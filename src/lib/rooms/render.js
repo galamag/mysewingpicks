@@ -20,18 +20,21 @@
   { href, label, kind } for OUR page / card / section, or null (decoration).
 */
 import { project } from '../anatomy/iso.js';
-import { PALETTE, painter, shade } from './paint.js';
+import { PALETTE, painter, shade, num } from './paint.js';
 
 export const ROOM_ASPECT = 1.15; // viewBox width / height, so the page can reserve the space
-export const MIN_HIT = 14; // world units on screen: the room is ~110 wide on a ~340 px phone, 14 ≈ 44 px
+// The side of a tap area, in viewBox units, when the caller gives no `minHit` (the toy rooms of the
+// tests). It is NOT a thumb size for a real room: those pass minHitFor(model).
+export const MIN_HIT = 14;
 export const WALL_THICK = 6;
 export const FLOOR_THICK = 6;
 
+const THUMB = 44; // css px: a finger (see minHitFor)
+const NARROWEST = 320; // css px: the narrowest phone
 const PAD = 4; // around the box of the room, in the same units
 const PLANK = 8; // about this far apart
 const LIGHT_PATCH = '#ffe7b0';
 
-const num = (n) => +n.toFixed(2);
 const esc = (s) => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -139,6 +142,16 @@ function viewBoxOf([w, d, h]) {
     vh = tall;
   }
   return [x0, y0, vw, vh].map(num);
+}
+
+/**
+  The side of a tap area, in viewBox units, that is at least THUMB css px on the narrowest phone,
+  where the room is as wide as the screen (full-bleed on phones, styles.css). Worked out from the
+  viewBox of the room alone: nothing is drawn. Pass it to renderRoom as `minHit`.
+*/
+export function minHitFor(model) {
+  const [, , width] = viewBoxOf(model.size);
+  return Math.ceil((THUMB * width) / NARROWEST);
 }
 
 /* ---------- tap areas ---------- */

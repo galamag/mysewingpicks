@@ -22,11 +22,10 @@
   Styles: src/styles/styles.css, "Rooms & house" — the svg is injected with set:html,
   scoped styles would not reach it.
 */
-import { ROOMS, ROOM_CATEGORY } from '../lib/rooms/rooms.js';
-import { renderRoom } from '../lib/rooms/render.js';
+import { ROOMS, ROOM_CATEGORY, catalogOf } from '../lib/rooms/rooms.js';
+import { renderRoom, minHitFor } from '../lib/rooms/render.js';
 import { checkTargets } from '../lib/rooms/check.js';
 import { products } from '../data/products.js';
-import { categories } from '../data/categories.js';
 import { projects } from '../data/projects.js';
 import { pageUrl, t } from '../i18n/index.js';
 import { productText, groupTitle, projectText } from '../i18n/content.js';
@@ -37,14 +36,7 @@ if (!model) throw new Error(`Room: no model for "${room}" (src/lib/rooms/rooms.j
 const category = ROOM_CATEGORY[room];
 const { ui } = t(lang);
 
-const sections = category ? categories[category].groups.map((g) => g.id) : [];
-const { inactive } = checkTargets(model, {
-  productIds: new Map(products.map((p) => [p.id, p.category])),
-  category,
-  allSections: sections,
-  liveSections: sections.filter((id) => products.some((p) => p.category === category && p.group === id)),
-  projectSlugs: projects.map((p) => p.slug),
-});
+const { inactive } = checkTargets(model, catalogOf(category));
 
 /** A part's target → our link: { href, label, kind } (check.js has made sure it exists). */
 function resolve(target) {
@@ -62,14 +54,10 @@ function resolve(target) {
   return null;
 }
 
-// Tap areas of at least THUMB css px on the narrowest phone, where the room is as wide as
-// the screen (full-bleed on phones, styles.css): minHit in viewBox units from its width.
-const THUMB = 44;
-const NARROWEST = 320;
+// Tap areas of at least a thumb on the narrowest phone, where the room is as wide as the
+// screen (full-bleed on phones, styles.css): minHit in viewBox units, see minHitFor.
 const prefix = `room-${model.key}`;
-const [, , width] = renderRoom({ ...model, parts: [] }, { prefix }).viewBox;
-const minHit = Math.ceil((THUMB * width) / NARROWEST);
-const { svg, viewBox, hots } = renderRoom(model, { prefix, resolve, inactive, minHit });
+const { svg, viewBox, hots } = renderRoom(model, { prefix, resolve, inactive, minHit: minHitFor(model) });
 
 const hasSheet = hots.some((h) => h.kind === 'product');
 

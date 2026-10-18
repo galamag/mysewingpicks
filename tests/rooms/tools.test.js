@@ -1,29 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import tools, { BASKET, WINDOW } from '../../src/lib/rooms/tools.js';
-import { ROOMS, ROOM_CATEGORY } from '../../src/lib/rooms/rooms.js';
+import tools, { BASKET } from '../../src/lib/rooms/tools.js';
+import { ROOMS, ROOM_CATEGORY, catalogOf } from '../../src/lib/rooms/rooms.js';
 import { checkTargets } from '../../src/lib/rooms/check.js';
 import { renderRoom } from '../../src/lib/rooms/render.js';
-import { project } from '../../src/lib/anatomy/iso.js';
-import { products } from '../../src/data/products.js';
-import { categories } from '../../src/data/categories.js';
-import { projects } from '../../src/data/projects.js';
+import { onPhone, linked, glassOf, ownSquare } from './helpers.js';
 
 // The zones of the spec (4.2), pinned here: a zone links to a section of the page, not to products.
 const SECTIONS = ['machines', 'cutting', 'marking-pressing', 'helpers'];
-
-/** The catalogue as the page sees it (Room.astro builds the same thing). */
-function catalogOf(category) {
-  const productIds = new Map(products.map((p) => [p.id, p.category]));
-  const groups = categories[category]?.groups ?? [];
-  return {
-    productIds,
-    category,
-    allSections: groups.map((g) => g.id),
-    liveSections: groups.filter((g) => products.some((p) => p.category === category && p.group === g.id)).map((g) => g.id),
-    projectSlugs: projects.map((p) => p.slug),
-  };
-}
 
 const toSection = (target) => ({ href: `#${target.section}`, label: target.section, kind: 'section' });
 
@@ -34,8 +18,15 @@ test('tools zones are the four sections from the spec', () => {
 });
 
 test('tools passes the catalog check', () => {
+  // An empty section is legal (spec 4.2): its zone just turns into decoration. The check only throws
+  // for a zone that points at nothing.
+  assert.doesNotThrow(() => checkTargets(tools, catalogOf(ROOM_CATEGORY.tools)));
+});
+
+test('all four sections of tools have products today, so all four zones are live', () => {
+  // A snapshot of the catalogue, not a rule: when a section is emptied on purpose, update this test.
   const { inactive } = checkTargets(tools, catalogOf(ROOM_CATEGORY.tools));
-  assert.equal(inactive.size, 0);
+  assert.deepEqual([...inactive], []);
 });
 
 test('tools is registered with its category', () => {
@@ -84,77 +75,21 @@ function unlink(svg) {
 
 /* ---------- tap areas on the narrowest phone ---------- */
 
-/** As Room.astro: minHit = 44 px on a 320 px phone, in viewBox units. */
-function tapAreas(model) {
-  const width = renderRoom({ ...model, parts: [] }).viewBox[2];
-  const minHit = Math.ceil((44 * width) / 320);
-  const { svg } = renderRoom(model, { resolve: toSection, minHit });
-  const areas = [...svg.matchAll(/<a class="room__hot"[^>]*href="#([^"]*)"[^>]*><polygon class="room__hit" points="([^"]*)"/g)]
-    .map((m) => ({ section: m[1], poly: m[2].split(' ').map((q) => q.split(',').map(Number)) }));
-  return { areas, thumb: (44 * width) / 320 };
-}
-
-const inside = (poly, [x, y]) => {
-  const side = poly.map((a, i) => {
-    const b = poly[(i + 1) % poly.length];
-    return Math.sign((b[0] - a[0]) * (y - a[1]) - (b[1] - a[1]) * (x - a[0]));
-  });
-  return side.every((v) => v >= 0) || side.every((v) => v <= 0);
-};
-
-/**
-  The side of the largest square (viewBox units) where a tap reaches area `i`: inside it and
-  under no area printed after it (later = on top). Sampled every `step` units.
-*/
-function ownSquare(areas, i, step = 0.25) {
-  const xs = areas[i].poly.map((q) => q[0]);
-  const ys = areas[i].poly.map((q) => q[1]);
-  const [x0, y0] = [Math.min(...xs), Math.min(...ys)];
-  const cols = Math.ceil((Math.max(...xs) - x0) / step);
-  const rows = Math.ceil((Math.max(...ys) - y0) / step);
-  let best = 0;
-  let prev = new Array(cols + 1).fill(0);
-  for (let r = 0; r <= rows; r++) {
-    const row = new Array(cols + 1).fill(0);
-    for (let c = 0; c <= cols; c++) {
-      const pt = [x0 + c * step, y0 + r * step];
-      const own = inside(areas[i].poly, pt) && !areas.slice(i + 1).some((a) => inside(a.poly, pt));
-      if (!own) continue;
-      row[c] = r && c ? Math.min(prev[c], row[c - 1], prev[c - 1]) + 1 : 1;
-      best = Math.max(best, row[c]);
-    }
-    prev = row;
-  }
-  return (best - 1) * step;
-}
-
 test('every zone keeps a thumb-size square of its own on a 320 px phone', () => {
-  const { areas, thumb } = tapAreas(tools);
-  const sides = areas.map((a, i) => [a.section, ownSquare(areas, i)]);
-  for (const [section, side] of sides) {
-    assert.ok(side >= thumb, `${section}: own square ${side.toFixed(1)} < ${thumb.toFixed(1)} units (44 px)`);
+  const { areas, thumb, minHit } = onPhone(tools, toSection);
+  assert.equal(minHit, Math.ceil(thumb), 'minHitFor: the whole units that hold a thumb');
+  const sides = areas.map((a, i) => [a.href, ownSquare(areas, i)]);
+  for (const [href, side] of sides) {
+    assert.ok(side >= thumb, `${href}: own square ${side.toFixed(1)} < ${thumb.toFixed(1)} units (44 px)`);
   }
-  console.log(`  own squares at 320 px: ${sides.map(([s, side]) => `${s} ${Math.floor((side / thumb) * 44)} px`).join(', ')}`);
+  console.log(`  own squares at 320 px: ${sides.map(([h, side]) => `${h.slice(1)} ${Math.floor((side / thumb) * 44)} px`).join(', ')}`);
 });
 
-/* Decoration must not turn into a link: sample its surfaces against the printed tap areas. */
-
-/** Share of the points of a world rectangle at(u, v), u, v in 0..1, that land in a tap area. */
-function linked(areas, at) {
-  let n = 0, hit = 0;
-  for (let i = 0; i <= 20; i++) for (let j = 0; j <= 20; j++) {
-    n++;
-    if (areas.some((a) => inside(a.poly, project(at(i / 20, j / 20))))) hit++;
-  }
-  return hit / n;
-}
-
+// Decoration must not turn into a link: sample its surfaces against the printed tap areas.
 test('tools: the window and the scrap basket stay clear of the tap areas', () => {
-  const { areas } = tapAreas(tools);
-  assert.equal(tools.window, WINDOW);
-  const { wall, from, to, z: [z0, z1] } = WINDOW;
-  const onWall = (along, z) => (wall === 'left' ? [0, along, z] : [along, 0, z]);
-  const glass = linked(areas, (u, v) => onWall(from + (to - from) * u, z0 + (z1 - z0) * v));
+  const { areas } = onPhone(tools, toSection);
+  assert.ok(tools.window, 'the room has a window to keep clear');
+  const glass = linked(areas, glassOf(tools.window));
   const { x, y, w, d, h } = BASKET;
   const top = linked(areas, (u, v) => [x + w * u, y + d * v, h + 2]); // with the scraps poking out
   const front = linked(areas, (u, v) => [x + w * u, y + d, h * v]);

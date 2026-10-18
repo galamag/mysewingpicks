@@ -18,18 +18,12 @@
   y → left-down, z → up; parts are listed back to front (painted in order).
 */
 import { project } from '../anatomy/iso.js';
-import { PALETTE as C, shade } from './paint.js';
+import { PALETTE as C, shade, num } from './paint.js';
+import { dot, flat, corners, ISO_RX } from './props.js';
 
-const num = (n) => +n.toFixed(2);
 const FRAME = shade(C.dark, 0.12); // desk frame, tripods, stands
 const SCREEN = '#5f6f73'; // a dark, slightly cool screen
 const SCREEN_LIT = '#8fa3a0';
-
-/** A circle drawn flat on the screen around a world point (leaves, wheels). */
-const dot = ([x, y, z], r, fill) => {
-  const [cx, cy] = project([x, y, z]);
-  return `<circle cx="${num(cx)}" cy="${num(cy)}" r="${r}" fill="${fill}"/>`;
-};
 
 /** Three legs from a joint at (x, y, top) to the floor, `reach` away, turned by `turn` degrees. */
 function legs(p, [x, y], top, reach, turn, color = FRAME, width = 0.7) {
@@ -39,10 +33,10 @@ function legs(p, [x, y], top, reach, turn, color = FRAME, width = 0.7) {
   }).join('');
 }
 
-/** A ring of radius r standing across the diagonal (facing ±(1, 1, 0)): on screen an upright ellipse, rx = 1.22 r, ry = r. */
+/** A ring of radius r standing across the diagonal (facing ±(1, 1, 0)): on screen an upright ellipse, rx = ISO_RX · r, ry = r. */
 function ring(center, r, stroke, width) {
   const [cx, cy] = project(center);
-  return `<ellipse cx="${num(cx)}" cy="${num(cy)}" rx="${num(r * 1.2247)}" ry="${r}" fill="none" stroke="${stroke}" stroke-width="${width}"/>`;
+  return `<ellipse cx="${num(cx)}" cy="${num(cy)}" rx="${num(r * ISO_RX)}" ry="${r}" fill="none" stroke="${stroke}" stroke-width="${width}"/>`;
 }
 
 /* ---------- the items ---------- */
@@ -78,9 +72,8 @@ function laptop(p) {
   const LID = 0.6; // its thickness, behind the screen
   let s = p.box(x0, y0, deskTop, x1 - x0, y1 - y0, LAPTOP.base, C.metal);
   // keyboard and touchpad on the base
-  const flat = (a0, a1, b0, b1) => [[a0, b0, base], [a1, b0, base], [a1, b1, base], [a0, b1, base]];
-  s += p.plane(flat(x0 + 1.2, x0 + 4.3, y0 + 1.2, y1 - 1.2), shade(C.metal, -0.16));
-  s += p.plane(flat(x0 + 5, x0 + 6.3, y0 + 3.5, y1 - 3.5), shade(C.metal, -0.07));
+  s += p.plane(flat(x0 + 1.2, x0 + 4.3, y0 + 1.2, y1 - 1.2, base), shade(C.metal, -0.16));
+  s += p.plane(flat(x0 + 5, x0 + 6.3, y0 + 3.5, y1 - 3.5, base), shade(C.metal, -0.07));
   // the lid: its side and top edges, then the bezel and the screen facing the room (+x)
   const lid = (u, v) => [x0 + (lean - x0) * v, y0 + (y1 - y0) * u, base + lidH * v];
   const back = ([x, y, z]) => [x - LID, y, z];
@@ -205,11 +198,6 @@ function ringLight(p) {
 }
 
 /* ---------- the model ---------- */
-
-const corners = (x, y, z, w, d, h) => [
-  [x, y, z], [x + w, y, z], [x + w, y + d, z], [x, y + d, z],
-  [x, y, z + h], [x + w, y, z + h], [x + w, y + d, z + h], [x, y + d, z + h],
-];
 
 export default {
   key: 'setup',
