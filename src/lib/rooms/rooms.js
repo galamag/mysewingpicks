@@ -5,6 +5,7 @@
   projects has no category: its items are projects, not products.
   guides (the classroom of /guides.html) is no catalogue category: its sections are the guide
   groups (GUIDE_GROUPS, src/data/guides.js), live while a group has a guide (liveGroups).
+  about (the maker's corner of /about.html) has no category either: an illustration, nothing links.
   ROOMS holds every room of a page; the house (house.js) draws the ones in HOUSE.at.
 */
 import setup from './setup.js';
@@ -12,14 +13,15 @@ import tools from './tools.js';
 import fabrics from './fabrics.js';
 import projectRoom from './projects.js';
 import guideRoom from './guides.js';
+import aboutRoom from './about.js';
 import { products } from '../../data/products.js';
 import { categories } from '../../data/categories.js';
 import { projects } from '../../data/projects.js';
 import { GUIDE_GROUPS, guides, liveGroups } from '../../data/guides.js';
 
-export const ROOMS = { setup, tools, fabrics, projects: projectRoom, guides: guideRoom };
+export const ROOMS = { setup, tools, fabrics, projects: projectRoom, guides: guideRoom, about: aboutRoom };
 
-export const ROOM_CATEGORY = { setup: 'setup', tools: 'tools', fabrics: 'fabrics', projects: null, guides: 'guides' };
+export const ROOM_CATEGORY = { setup: 'setup', tools: 'tools', fabrics: 'fabrics', projects: null, guides: 'guides', about: null };
 
 /**
   The catalogue as checkTargets (check.js) wants it, for a room of `category` (null: none).

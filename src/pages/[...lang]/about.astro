@@ -3,9 +3,12 @@
   About page — one template for every language (src/i18n, pages.about).
   Content is the same warm, personal copy as the old about.html, kept in the
   dictionary and baked into the page as static text at build.
-  Header/Footer come from BaseLayout. Visually identical to the original.
+  Header/Footer come from BaseLayout.
+  Above the text, the maker's corner (src/components/Room.astro, model src/lib/rooms/about.js):
+  a picture, nothing in it links — no affiliate links on this page, so no page-disclosure.
 */
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Room from '../../components/Room.astro';
 import { localePaths, langOf, t } from '../../i18n/index.js';
 
 export const getStaticPaths = localePaths;
@@ -16,6 +19,7 @@ const { pages: { about: text } } = t(lang);
   <main>
     <section class="section">
       <div class="container">
+        <Room room="about" lang={lang} />
         <article class="about">
           <span class="eyebrow">{text.eyebrow}</span>
           <h1>{text.heading}</h1>

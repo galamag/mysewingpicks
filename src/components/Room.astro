@@ -3,8 +3,11 @@
   Room — the isometric room at the top of a section page, drawn at BUILD time
   (src/lib/rooms/): the first frame is plain SVG in the HTML and every item is an
   ordinary link, so it works without JS.
-    room  'setup' | 'tools' | 'fabrics' | 'projects' | 'guides' (the model: ROOMS in src/lib/rooms/rooms.js)
+    room  'setup' | 'tools' | 'fabrics' | 'projects' | 'guides' | 'about' (the model: ROOMS in src/lib/rooms/rooms.js)
     lang  the page's language
+
+  A room with no links (about: the maker's corner of /about.html) is a picture: the svg is an
+  image (role img, its name as the aria-label) and there is no hint under it.
 
   Nothing in the drawing links to Amazon. An item leads to OUR page:
     product → its card in the list below (#product-<id>, ProductCard `anchor`)
@@ -65,12 +68,16 @@ const prefix = `room-${model.key}`;
 const { svg, viewBox, hots } = renderRoom(model, { prefix, resolve, inactive, minHit: minHitFor(model) });
 
 const hasSheet = hots.some((h) => h.kind === 'product');
+// nothing to tap (about): a picture, not a group of links
+const picture = hots.length === 0;
 
+// what to tap; a picture has nothing to tap, so no hint (and no caption at all)
 const HINT = { setup: ui.rooms.tapItem, tools: ui.rooms.tapShelf, fabrics: ui.rooms.tapShelf, projects: ui.rooms.tapProject, guides: ui.rooms.tapShelf };
+const hint = picture ? null : HINT[room];
 ---
 <figure class="room" data-room={room}>
-  <svg class="room__svg" viewBox={viewBox.join(' ')} role="group" aria-label={ui.rooms.roomLabel(ui.nav[room])} set:html={svg} />
-  <figcaption class="room__hint">{HINT[room]}</figcaption>
+  <svg class="room__svg" viewBox={viewBox.join(' ')} role={picture ? 'img' : 'group'} aria-label={ui.rooms.roomLabel(ui.nav[room])} set:html={svg} />
+  {hint && <figcaption class="room__hint">{hint}</figcaption>}
 </figure>
 {hasSheet && (
   <dialog class="room-sheet" data-room={room}>
