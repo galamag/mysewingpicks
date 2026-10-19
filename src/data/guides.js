@@ -41,10 +41,10 @@ export const guides = [
       { project: 'fabric-basket', steps: [4, 5, 6, 7] },
     ],
     // Where the lining work starts in the maker's video (Galamat): tote 4:40 — she sews the lining
-    // (2026-10-19; at 6:00 it is already turned out); basket 5:55 — the outer goes into the lining.
+    // (2026-10-19; at 6:00 it is already turned out). Only the tote: the figure shows a bag's lining,
+    // and the cube-shaped basket is lined differently (Galamat, 2026-10-19).
     video: [
       { project: 'tote-bag', start: 280 },
-      { project: 'fabric-basket', start: 355 },
     ],
   },
 ];
