@@ -1,17 +1,27 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { project } from '../../src/lib/anatomy/iso.js';
 import { PALETTE, num } from '../../src/lib/rooms/paint.js';
-import { FLOOR_THICK } from '../../src/lib/rooms/render.js';
+import { FLOOR_THICK, textEm } from '../../src/lib/rooms/render.js';
 import { HOUSE, HOUSE_ASPECT, renderHouse } from '../../src/lib/rooms/house.js';
 import { ROOMS } from '../../src/lib/rooms/rooms.js';
 import { LOCALES, pageUrl, t } from '../../src/i18n/index.js';
 import { THUMB_PX, PHONE_PX, inside } from './helpers.js';
 
-const KEYS = ['projects', 'fabrics', 'setup', 'tools'];
-const LABELS = { projects: 'Projects', fabrics: 'Fabrics', setup: 'My Setup', tools: 'Tools' };
-const HREFS = { projects: '/projects.html', fabrics: '/fabrics.html', setup: '/setup.html', tools: '/tools.html' };
+// HOUSE.at: the back row left to right, then the front row (layout A of the spec «Гайды», 9)
+const KEYS = ['projects', 'guides', 'fabrics', 'setup', 'about', 'tools'];
+// back to front, as drawn and as linked (a nearer room is drawn, and linked, after the rooms behind it)
+const DRAWN = ['projects', 'setup', 'guides', 'about', 'fabrics', 'tools'];
+const LABELS = { projects: 'Projects', guides: 'Guides', fabrics: 'Fabrics', setup: 'My Setup', about: 'About', tools: 'Tools' };
+const HREFS = {
+  projects: '/projects.html', guides: '/guides.html', fabrics: '/fabrics.html',
+  setup: '/setup.html', about: '/about.html', tools: '/tools.html',
+};
 const OPTS = { prefix: 'house', labels: LABELS, hrefs: HREFS };
+
+// the narrowest phones: the house is as wide as the screen (styles.css), its labels must stay readable
+const READABLE = [[320, 9], [375, 10]]; // [screen css px, smallest label text css px]
 
 const POLY = /<polygon class="(house__hit|house__pad)" points="([^"]*)" fill="transparent"\/>/g;
 const PILL_PAD = /<rect class="house__pad" x="([^"]*)" y="([^"]*)" width="([^"]*)" height="([^"]*)"[^>]*fill="transparent"\/>/g;
@@ -43,8 +53,21 @@ function hotsOf(svg) {
 
 /** Does a tap at screen point `pt` land in this link (any of its shapes)? */
 const reaches = (hot, pt) =>
-  hot.floors.some((poly) => inside(poly, pt)) || hot.pads.some((poly) => inside(poly, pt)) ||
+  hot.floors.some((poly) => inPoly(poly, pt)) || hot.pads.some((poly) => inPoly(poly, pt)) ||
   hot.pills.some(({ x, y, w, h }) => pt[0] >= x && pt[0] <= x + w && pt[1] >= y && pt[1] <= y + h);
+
+/** `inside`, after a quick look at the polygon's screen box (the 320 px test asks this ~1.3 million times). */
+const BOXES = new WeakMap();
+function inPoly(poly, pt) {
+  let b = BOXES.get(poly);
+  if (!b) {
+    const xs = poly.map((q) => q[0]);
+    const ys = poly.map((q) => q[1]);
+    b = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+    BOXES.set(poly, b);
+  }
+  return pt[0] >= b[0] && pt[0] <= b[1] && pt[1] >= b[2] && pt[1] <= b[3] && inside(poly, pt);
+}
 
 /** The room a tap at `pt` opens: the LAST link that reaches it (later links are on top), or null. */
 const ownerAt = (hots, pt) => {
@@ -68,7 +91,7 @@ function hullOf(points) {
   return chain(pts).concat(chain([...pts].reverse()));
 }
 
-/** The screen outline of a linked part in the house: the hull of its `hit`, moved to its room's cell. */
+/** The screen outline of a part in the house: the hull of its `hit`, moved to its room's cell. */
 const partOutline = (key, part) => {
   const [ox, oy] = HOUSE.at[key];
   return hullOf(part.hit.map(([x, y, z]) => project([x + ox, y + oy, z])));
@@ -85,10 +108,10 @@ function samples(poly, step = 0.5) {
   return out;
 }
 
-/** The printed label pills: { x, y, w, h, text }. */
+/** The printed label pills: { x, y, w, h, text, fs } (fs: the font size of its text, viewBox units). */
 function labelsOf(svg) {
-  return [...svg.matchAll(/<g class="house__label" aria-hidden="true"><rect x="([^"]*)" y="([^"]*)" width="([^"]*)" height="([^"]*)"[^>]*\/><text[^>]*>([^<]*)<\/text><\/g>/g)]
-    .map(([, x, y, w, h, text]) => ({ x: +x, y: +y, w: +w, h: +h, text }));
+  return [...svg.matchAll(/<g class="house__label" aria-hidden="true"><rect x="([^"]*)" y="([^"]*)" width="([^"]*)" height="([^"]*)"[^>]*\/><text([^>]*)>([^<]*)<\/text><\/g>/g)]
+    .map(([, x, y, w, h, attrs, text]) => ({ x: +x, y: +y, w: +w, h: +h, text, fs: Number(/ font-size="([^"]*)"/.exec(attrs)?.[1]) }));
 }
 
 /** The floor of a cell of the house as the svg prints it. */
@@ -103,23 +126,74 @@ const pane = (wall, from, to, [z0, z1]) => {
   const on = (a, z) => (wall === 'left' ? [0, a, z] : [a, 0, z]);
   return [on(from, z0), on(to, z0), on(to, z1), on(from, z1)].map((q) => project(q).map(num).join(',')).join(' ');
 };
+/** A pane at the window's place inside its cell, wherever that is in the house (on a partition, say). */
+const paneInCell = (key, { wall, from, to, z: [z0, z1] }) => {
+  const [ox, oy] = HOUSE.at[key];
+  const on = (a, z) => (wall === 'left' ? [ox, oy + a, z] : [ox + a, oy, z]);
+  return [on(from, z0), on(to, z0), on(to, z1), on(from, z1)].map((q) => project(q).map(num).join(',')).join(' ');
+};
 const PANE = new RegExp(`<polygon points="([^"]*)" fill="${PALETTE.glass}" stroke="${PALETTE.woodDark}" stroke-width="0.8"`, 'g');
 const panesOf = (svg) => [...svg.matchAll(PANE)].map((m) => m[1]);
 
-test('the house is the four rooms of the site, each a cell of it', () => {
-  assert.deepEqual(Object.keys(HOUSE.at), KEYS, 'back to front: the order they are drawn in');
-  // ROOMS may hold rooms that are not in the house (yet): the classroom of /guides.html joins it in stage 3
+/** Two rects { x, y, w, h } overlap (touching edges do not)? */
+const overlap = (a, b) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
+
+/** The body of the first css rule with exactly this selector. */
+const ruleOf = (css, selector) => {
+  const at = css.indexOf(`${selector} {`);
+  assert.ok(at >= 0, `styles.css: no rule "${selector}"`);
+  return css.slice(css.indexOf('{', at) + 1, css.indexOf('}', at));
+};
+const read = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
+
+test('the house is the six rooms of the site, 3 × 2, each a cell of it', () => {
+  assert.deepEqual(HOUSE.cell, [60, 50]);
+  assert.equal(HOUSE.cols, 3);
+  assert.equal(HOUSE.rows, 2);
+  assert.equal(HOUSE.wallH, 40);
+  assert.equal(HOUSE.partitionH, 7);
+  // layout A: Projects in the far corner, Guides, Fabrics at the back; My Setup, About, Tools in front
+  assert.deepEqual(HOUSE.at, { projects: [0, 0], guides: [60, 0], fabrics: [120, 0], setup: [0, 50], about: [60, 50], tools: [120, 50] });
+  assert.deepEqual(Object.keys(HOUSE.at), KEYS);
+  assert.deepEqual(Object.keys(HOUSE.label).sort(), [...KEYS].sort(), 'a label for every room');
+  // ROOMS may hold more rooms than the house; every room of the house is one of them, a cell big
   for (const key of KEYS) assert.ok(key in ROOMS, `${key} is in ROOMS`);
   for (const key of KEYS) assert.deepEqual(ROOMS[key].size, [...HOUSE.cell, HOUSE.wallH], key);
-  assert.equal(HOUSE.partitionH, 7);
-  assert.equal(HOUSE_ASPECT, 224 / 196);
+  // every cell of the grid holds exactly one room
+  const [cw, cd] = HOUSE.cell;
+  const cells = Object.values(HOUSE.at).map(([x, y]) => `${x / cw},${y / cd}`).sort();
+  const grid = [];
+  for (let c = 0; c < HOUSE.cols; c++) for (let r = 0; r < HOUSE.rows; r++) grid.push(`${c},${r}`);
+  assert.deepEqual(cells, grid.sort());
 });
 
-test('four rooms link to their pages', () => {
+test('aspect matches the view', () => {
+  const { viewBox, rooms } = renderHouse(ROOMS, OPTS);
+  assert.equal(HOUSE_ASPECT, viewBox[2] / viewBox[3], 'worked out from the view, not typed in');
+  for (const { key, zoom } of rooms) assert.ok(Math.abs(zoom[2] / zoom[3] - HOUSE_ASPECT) <= 0.01, `${key}: the zoom keeps the aspect`);
+  // the page keeps the space before the svg paints: the svg carries the aspect of its own viewBox …
+  const astro = read('src/components/House.astro');
+  assert.match(astro, /aspect-ratio:\s*\$\{viewBox\[2\]\}\s*\/\s*\$\{viewBox\[3\]\}/, 'House.astro: aspect-ratio from the viewBox');
+  // … and no number typed into the stylesheet can go stale
+  assert.ok(!/aspect-ratio/.test(ruleOf(read('src/styles/styles.css'), '.house__svg')), 'styles.css: no aspect-ratio for .house__svg');
+});
+
+test('six rooms link to their pages, back to front', () => {
   const { svg } = renderHouse(ROOMS, OPTS);
   const hots = hotsOf(svg);
-  assert.equal((svg.match(/class="house__hot"/g) ?? []).length, 4, 'exactly four room links');
-  assert.deepEqual(hots.map((h) => h.room), KEYS);
+  assert.equal((svg.match(/class="house__hot"/g) ?? []).length, 6, 'exactly six room links');
+  assert.deepEqual(hots.map((h) => h.room), DRAWN);
+  // back to front: a room's neighbour in front (+x or +y) comes after it
+  const [cw, cd] = HOUSE.cell;
+  for (const a of KEYS) {
+    for (const b of KEYS) {
+      const [ax, ay] = HOUSE.at[a];
+      const [bx, by] = HOUSE.at[b];
+      if ((bx === ax + cw && by === ay) || (bx === ax && by === ay + cd)) {
+        assert.ok(DRAWN.indexOf(a) < DRAWN.indexOf(b), `${b} is in front of ${a}: linked after it`);
+      }
+    }
+  }
   for (const h of hots) {
     assert.equal(h.href, HREFS[h.room], h.room);
     assert.equal(h.label, LABELS[h.room], h.room);
@@ -137,9 +211,11 @@ test('four rooms link to their pages', () => {
   for (const lang of LOCALES) {
     const hrefs = Object.fromEntries(KEYS.map((k) => [k, pageUrl(k, lang)]));
     const got = hotsOf(renderHouse(ROOMS, { ...OPTS, hrefs }).svg);
-    assert.deepEqual(got.map((h) => h.href), KEYS.map((k) => pageUrl(k, lang)), lang);
+    assert.deepEqual(got.map((h) => h.href), DRAWN.map((k) => pageUrl(k, lang)), lang);
   }
   assert.equal(pageUrl('setup', 'ru'), '/ru/setup.html');
+  assert.equal(pageUrl('guides', 'ru'), '/ru/guides.html');
+  assert.equal(pageUrl('about', 'de'), '/de/about.html');
 });
 
 test('no product links in the house', () => {
@@ -147,20 +223,21 @@ test('no product links in the house', () => {
   assert.ok(!svg.includes('room__hot'), 'no tap areas of the rooms');
   assert.ok(!svg.includes('room__part'), 'nothing in a room is a link');
   assert.ok(!svg.includes('#product-'), 'no product cards');
+  assert.ok(!svg.includes('href="#'), 'no sections of the classroom');
   assert.ok(!svg.includes('amazon.'), 'nothing links to Amazon');
-  assert.equal((svg.match(/<a /g) ?? []).length, 4, 'the four rooms are the only links');
-  assert.equal((svg.match(/ href="/g) ?? []).length, 4);
+  assert.equal((svg.match(/<a /g) ?? []).length, 6, 'the six rooms are the only links');
+  assert.equal((svg.match(/ href="/g) ?? []).length, 6);
 });
 
 test('every room is drawn in its own group, back to front', () => {
   const { svg } = renderHouse(ROOMS, OPTS);
   const groups = [...svg.matchAll(/<g class="house__room" data-room="([^"]*)">/g)].map((m) => m[1]);
-  assert.deepEqual(groups, KEYS);
+  assert.deepEqual(groups, DRAWN);
 });
 
 test('zoom frames each room', () => {
   const { svg, viewBox, rooms } = renderHouse(ROOMS, OPTS);
-  assert.deepEqual(rooms.map((r) => r.key), KEYS);
+  assert.deepEqual(rooms.map((r) => r.key), DRAWN);
   const hots = hotsOf(svg);
   const [w, d] = HOUSE.cell;
   for (const { key, zoom } of rooms) {
@@ -176,16 +253,16 @@ test('zoom frames each room', () => {
     }
     assert.equal(hots.find((h) => h.room === key).zoom, zoom.join(' '), `${key}: data-zoom`);
   }
-  assert.ok(Math.abs(viewBox[2] / viewBox[3] - HOUSE_ASPECT) <= 0.01, `the house: aspect ${viewBox[2] / viewBox[3]}`);
 });
 
 test('labels come from the caller', () => {
-  const labels = { projects: 'Proj & "Co"', fabrics: 'Ткани', setup: 'Il mio studio', tools: '<Tools>' };
+  const labels = { projects: 'Proj & "Co"', guides: 'Уроки', fabrics: 'Ткани', setup: 'Il mio studio', about: 'À propos', tools: '<Tools>' };
   const { svg } = renderHouse(ROOMS, { ...OPTS, labels });
   const pills = labelsOf(svg);
-  assert.deepEqual(pills.map((l) => l.text), ['Proj &amp; &quot;Co&quot;', 'Ткани', 'Il mio studio', '&lt;Tools&gt;']);
+  const printed = { projects: 'Proj &amp; &quot;Co&quot;', guides: 'Уроки', fabrics: 'Ткани', setup: 'Il mio studio', about: 'À propos', tools: '&lt;Tools&gt;' };
+  assert.deepEqual(pills.map((l) => l.text), KEYS.map((k) => printed[k]));
   assert.ok(!svg.includes('<Tools>'), 'escaped');
-  assert.deepEqual(hotsOf(svg).map((h) => h.label), ['Proj &amp; &quot;Co&quot;', 'Ткани', 'Il mio studio', '&lt;Tools&gt;']);
+  assert.deepEqual(hotsOf(svg).map((h) => h.label), DRAWN.map((k) => printed[k]));
   // each pill sits at its world point outside the house (HOUSE.label)
   for (const [i, key] of KEYS.entries()) {
     const [cx, cy] = project(HOUSE.label[key]);
@@ -194,42 +271,84 @@ test('labels come from the caller', () => {
   }
 });
 
-test('every language\'s labels fit in the picture', () => {
+test('every language\'s labels fit in the picture, hold their text and keep apart', () => {
   for (const lang of LOCALES) {
     const { ui } = t(lang);
     const labels = Object.fromEntries(KEYS.map((k) => [k, ui.nav[k]]));
     const { svg, viewBox: [vx, vy, vw, vh] } = renderHouse(ROOMS, { ...OPTS, labels });
     const pills = labelsOf(svg);
-    assert.equal(pills.length, 4, lang);
-    for (const { x, y, w, h, text } of pills) {
+    assert.equal(pills.length, 6, lang);
+    for (const [i, { x, y, w, h, text, fs }] of pills.entries()) {
+      assert.equal(text, labels[KEYS[i]], `${lang}: the name of the menu`);
       assert.ok(x >= vx && y >= vy && x + w <= vx + vw && y + h <= vy + vh, `${lang} "${text}": pill outside the viewBox`);
+      // the text (its width never under-guessed: render.js textEm) with half an em of air at each end
+      assert.ok(w >= (textEm(text) + 1) * fs, `${lang} "${text}": the pill is too narrow for its text`);
+      assert.ok(h >= 1.5 * fs, `${lang} "${text}": the pill is too low for its text`);
+    }
+    for (const [i, a] of pills.entries()) {
+      for (const b of pills.slice(i + 1)) assert.ok(!overlap(a, b), `${lang}: "${a.text}" and "${b.text}" overlap`);
+    }
+    // a label hangs outside the rooms: it hides no furniture (no part's hit hull), every quarter unit
+    for (const { x, y, w, h, text } of pills) {
+      for (const [key, part, poly] of FURNITURE) {
+        let hidden = false;
+        for (let px = x; px <= x + w && !hidden; px += 0.25) {
+          for (let py = y; py <= y + h && !hidden; py += 0.25) hidden = inPoly(poly, [px, py]);
+        }
+        assert.ok(!hidden, `${lang} "${text}" hides ${key}/${part.id}`);
+      }
     }
   }
+});
+
+/** Every part with a hit in the house: [key, part, its screen outline]. */
+const FURNITURE = KEYS.flatMap((key) => ROOMS[key].parts.filter((pt) => pt.hit?.length).map((part) => [key, part, partOutline(key, part)]));
+
+test('labels are readable on a phone', () => {
+  const { svg, viewBox: [, , vw] } = renderHouse(ROOMS, OPTS);
+  const sizes = [...new Set(labelsOf(svg).map((l) => l.fs))];
+  assert.equal(sizes.length, 1, 'one font size for every label, printed on its text');
+  const [fs] = sizes;
+  assert.ok(fs > 0, 'a font size');
+  // the house is as wide as the phone: a label's text is fs × screen / viewBox width css px
+  const px = READABLE.map(([screen]) => [screen, (fs * screen) / vw]);
+  for (const [[screen, least], [, got]] of READABLE.map((r, i) => [r, px[i]])) {
+    assert.ok(got >= least, `${got.toFixed(2)} px on a ${screen} px phone, at least ${least}`);
+  }
+  console.log(`  label text: ${px.map(([screen, got]) => `${got.toFixed(1)} px at ${screen}`).join(', ')}`);
+  // the stylesheet must not set it over the svg's own size
+  const rule = ruleOf(read('src/styles/styles.css'), '.house__label text');
+  assert.ok(!/font-size|font:/.test(rule), `styles.css .house__label text sets its own font size: ${rule.trim()}`);
 });
 
 test('windows only on outer walls', () => {
   // the models: the window walls the house relies on
   assert.equal(ROOMS.projects.window.wall, 'back');
+  assert.equal(ROOMS.guides.window.wall, 'back');
   assert.equal(ROOMS.fabrics.window.wall, 'back');
   assert.equal(ROOMS.setup.window.wall, 'left');
+  assert.equal(ROOMS.about.window.wall, 'left');
   assert.equal(ROOMS.tools.window.wall, 'left');
 
   const { svg } = renderHouse(ROOMS, OPTS);
   const at = (key) => HOUSE.at[key];
-  const { projects, fabrics, setup, tools } = ROOMS;
+  const { projects, guides, fabrics, setup, about, tools } = ROOMS;
   const kept = [
     pane('back', projects.window.from + at('projects')[0], projects.window.to + at('projects')[0], projects.window.z),
+    pane('back', guides.window.from + at('guides')[0], guides.window.to + at('guides')[0], guides.window.z),
     pane('back', fabrics.window.from + at('fabrics')[0], fabrics.window.to + at('fabrics')[0], fabrics.window.z),
     pane('left', setup.window.from + at('setup')[1], setup.window.to + at('setup')[1], setup.window.z),
   ];
-  assert.deepEqual(panesOf(svg).sort(), [...kept].sort(), 'Projects and Fabrics on the back wall, Setup on the left wall');
+  assert.deepEqual(panesOf(svg).sort(), [...kept].sort(), 'Projects, Guides and Fabrics on the back wall, Setup on the left wall');
+  // the light of those four windows on their floors (render.js lightOnFloor: the only blurred polygon), no other
+  assert.equal(svg.match(/<polygon [^>]*filter="url\(#house-blur\)"/g)?.length ?? 0, 4, 'four patches of window light');
 
-  // Tools has no outer wall: its window is neither on the partition it would face nor anywhere else
-  const [tx, ty] = at('tools');
-  const shifted = [[tx, ty + tools.window.from, tools.window.z[0]], [tx, ty + tools.window.to, tools.window.z[0]], [tx, ty + tools.window.to, tools.window.z[1]], [tx, ty + tools.window.from, tools.window.z[1]]]
-    .map((q) => project(q).map(num).join(',')).join(' ');
-  assert.ok(!svg.includes(shifted), 'no Tools window on the partition');
-  assert.ok(!svg.includes(pane('left', tools.window.from, tools.window.to, tools.window.z)), 'no Tools window at its page place');
+  // About and Tools have no outer wall: their windows are neither on the partition they would face
+  // nor anywhere else
+  for (const [key, model] of [['about', about], ['tools', tools]]) {
+    assert.ok(!svg.includes(paneInCell(key, model.window)), `no ${key} window on the partition`);
+    assert.ok(!svg.includes(pane(model.window.wall, model.window.from, model.window.to, model.window.z)), `no ${key} window at its page place`);
+  }
 });
 
 test('windows only on outer walls: the rule, for any wall', () => {
@@ -237,8 +356,8 @@ test('windows only on outer walls: the rule, for any wall', () => {
   const house = (wall) => panesOf(renderHouse(Object.fromEntries(KEYS.map((k) => [k, toy(k, wall)])), OPTS).svg).sort();
   // a left-wall window survives where the room's left wall is the house's (x = 0): Projects, Setup
   assert.deepEqual(house('left'), [pane('left', 10, 30, [20, 32]), pane('left', 60, 80, [20, 32])].sort());
-  // a back-wall window where the room's back wall is the house's (y = 0): Projects, Fabrics
-  assert.deepEqual(house('back'), [pane('back', 10, 30, [20, 32]), pane('back', 70, 90, [20, 32])].sort());
+  // a back-wall window where the room's back wall is the house's (y = 0): Projects, Guides, Fabrics
+  assert.deepEqual(house('back'), [pane('back', 10, 30, [20, 32]), pane('back', 70, 90, [20, 32]), pane('back', 130, 150, [20, 32])].sort());
 });
 
 test('svg is the inner content: defs first, ids carry the prefix, every url() is defined', () => {
@@ -255,36 +374,41 @@ test('svg is the inner content: defs first, ids carry the prefix, every url() is
   assert.equal(new Set(stops).size, stops.length, 'no gradient twice');
 });
 
-test('every room link keeps a big tap area on a 320 px phone', () => {
-  const { svg, viewBox: [vx, vy, vw, vh] } = renderHouse(ROOMS, OPTS);
-  const hots = hotsOf(svg);
-  const thumb = (THUMB_PX * vw) / PHONE_PX; // 44 px in viewBox units, the house as wide as the phone
-  const px = (units) => Math.floor((units * PHONE_PX) / vw);
-  // who a tap opens, every half unit over the whole picture; then each room's largest square of its own
-  const step = 0.5;
-  const [cols, rows] = [Math.ceil(vw / step), Math.ceil(vh / step)];
-  const grid = [];
-  for (let r = 0; r <= rows; r++) {
-    const row = [];
-    for (let c = 0; c <= cols; c++) row.push(ownerAt(hots, [vx + c * step, vy + r * step]));
-    grid.push(row);
-  }
-  const sides = KEYS.map((key) => {
-    let best = 0;
-    let prev = new Array(cols + 1).fill(0);
+test('every room link keeps a big tap area on a 320 px phone, in every language', () => {
+  // the labels are the only shapes that change with the language (a longer name, a wider pill)
+  for (const lang of LOCALES) {
+    const { ui } = t(lang);
+    const labels = Object.fromEntries(KEYS.map((k) => [k, ui.nav[k]]));
+    const { svg, viewBox: [vx, vy, vw, vh] } = renderHouse(ROOMS, { ...OPTS, labels });
+    const hots = hotsOf(svg);
+    const thumb = (THUMB_PX * vw) / PHONE_PX; // 44 px in viewBox units, the house as wide as the phone
+    const px = (units) => Math.floor((units * PHONE_PX) / vw);
+    // who a tap opens, every half unit over the whole picture; then each room's largest square of its own
+    const step = 0.5;
+    const [cols, rows] = [Math.ceil(vw / step), Math.ceil(vh / step)];
+    const grid = [];
     for (let r = 0; r <= rows; r++) {
-      const row = new Array(cols + 1).fill(0);
-      for (let c = 0; c <= cols; c++) {
-        if (grid[r][c] !== key) continue;
-        row[c] = r && c ? Math.min(prev[c], row[c - 1], prev[c - 1]) + 1 : 1;
-        best = Math.max(best, row[c]);
-      }
-      prev = row;
+      const row = [];
+      for (let c = 0; c <= cols; c++) row.push(ownerAt(hots, [vx + c * step, vy + r * step]));
+      grid.push(row);
     }
-    return [key, (best - 1) * step];
-  });
-  for (const [room, side] of sides) assert.ok(side >= thumb, `${room}: own square ${side.toFixed(1)} < ${thumb.toFixed(1)} units (44 px)`);
-  console.log(`  own squares at 320 px: ${sides.map(([room, side]) => `${room} ${px(side)} px`).join(', ')}`);
+    const sides = KEYS.map((key) => {
+      let best = 0;
+      let prev = new Array(cols + 1).fill(0);
+      for (let r = 0; r <= rows; r++) {
+        const row = new Array(cols + 1).fill(0);
+        for (let c = 0; c <= cols; c++) {
+          if (grid[r][c] !== key) continue;
+          row[c] = r && c ? Math.min(prev[c], row[c - 1], prev[c - 1]) + 1 : 1;
+          best = Math.max(best, row[c]);
+        }
+        prev = row;
+      }
+      return [key, (best - 1) * step];
+    });
+    for (const [room, side] of sides) assert.ok(side >= thumb, `${lang} ${room}: own square ${side.toFixed(1)} < ${thumb.toFixed(1)} units (44 px)`);
+    console.log(`  own squares at 320 px, ${lang}: ${sides.map(([room, side]) => `${room} ${px(side)} px`).join(', ')}`);
+  }
 });
 
 // "What you see is what you tap": a tap on a room's furniture opens THAT room, also where the
@@ -299,20 +423,24 @@ test('a tap on a room\'s furniture opens that room', () => {
       const own = pts.filter((pt) => ownerAt(hots, pt) === key).length / pts.length;
       const lost = pts.filter((pt) => ownerAt(hots, pt) === null).length / pts.length;
       shares.push([`${key}/${part.id}`, own]);
-      // most of it; what a nearer room's furniture stands in front of goes to that room (today the
-      // least: Fabrics' notions table, 60%, behind the Tools shelf and dress form)
+      // most of it; what a nearer room's furniture stands in front of goes to that room
       assert.ok(own > 0.5, `${key} ${part.id}: only ${(own * 100).toFixed(0)}% of it opens ${key}`);
       assert.ok(lost <= 0.02, `${key} ${part.id}: ${(lost * 100).toFixed(0)}% of it opens nothing`);
     }
   }
-  assert.ok(shares.length >= 14, 'every linked part of the four rooms was checked');
+  // the four rooms of before (16 parts), the four zones of the classroom, the six pieces of the corner
+  assert.ok(shares.length >= 26, `every part with a hit of the six rooms was checked (${shares.length})`);
+  for (const key of KEYS) assert.ok(shares.some(([name]) => name.startsWith(`${key}/`)), `${key}: parts checked`);
   console.log(`  own room: ${shares.map(([name, own]) => `${name} ${Math.round(own * 100)}%`).join(', ')}`);
-  // the cases of the review: the machine, the laptop, the fabric shelf, the tote
+  // the cases of the review: the machine, the laptop, the fabric shelf, the tote; the classroom's
+  // design wall (on the outer wall) and the corner's armchair (in the middle of the house)
   const at = (key, id) => shares.find(([name]) => name === `${key}/${id}`)[1];
   assert.ok(at('tools', 'sewing-table') >= 0.95, 'the sewing machine opens Tools');
   assert.ok(at('setup', 'laptop') >= 0.95, 'the laptop opens My Setup');
   assert.ok(at('fabrics', 'fabric-shelf') >= 0.95, 'the fabric shelf opens Fabrics');
   assert.ok(at('projects', 'project-tote-bag') >= 0.95, 'the tote opens Projects');
+  assert.ok(at('guides', 'design-wall') >= 0.95, 'the design wall opens Guides');
+  assert.ok(at('about', 'armchair') >= 0.95, 'the armchair opens About');
 });
 
 test('a tap on a room\'s label opens that room', () => {
@@ -329,31 +457,40 @@ test('a tap on a room\'s label opens that room', () => {
   }
 });
 
-test('a tap on an outer wall opens the room it belongs to; Tools has none', () => {
+test('a tap on an outer wall opens the room it belongs to; About and Tools have none', () => {
   const hots = hotsOf(renderHouse(ROOMS, OPTS).svg);
   const top = HOUSE.wallH - 2; // high on the wall, over the furniture
   const [w, d] = HOUSE.cell;
   const walls = [
     ['projects', [w / 2, 0, top]], ['projects', [0, d / 2, top]],
-    ['fabrics', [w + w / 2, 0, top]], ['setup', [0, d + d / 2, top]],
+    ['guides', [w + w / 2, 0, top]], ['fabrics', [2 * w + w / 2, 0, top]],
+    ['setup', [0, d + d / 2, top]],
   ];
   for (const [key, q] of walls) assert.equal(ownerAt(hots, project(q)), key, `${key}: its wall at ${q}`);
-  // one shape per linked part, plus one per outer wall: Projects 2, Fabrics 1, Setup 1, Tools none
-  const WALLS = { projects: 2, fabrics: 1, setup: 1, tools: 0 };
+  // the edge of a room's floor where it is the edge of the house (the slab seen from the side, under
+  // the floor, above the label): the front row at the front, the right column at the right
+  const low = -FLOOR_THICK / 2;
+  const edges = [
+    ['setup', [w / 2, 2 * d, low]], ['about', [w + w / 4, 2 * d, low]], ['about', [w + (3 * w) / 4, 2 * d, low]],
+    ['tools', [2 * w + w / 2, 2 * d, low]], ['tools', [3 * w, d + d / 2, low]], ['fabrics', [3 * w, d / 2, low]],
+  ];
+  for (const [key, q] of edges) assert.equal(ownerAt(hots, project(q)), key, `${key}: the edge of its floor at ${q}`);
+  // one shape per part with a hit, plus one per outer wall and one per edge of the slab
+  const SIDES = { projects: 2, guides: 1, fabrics: 1 + 1, setup: 1 + 1, about: 0 + 1, tools: 0 + 2 };
   for (const hot of hots) {
-    assert.equal(hot.pads.length, ROOMS[hot.room].parts.filter((pt) => pt.hit?.length).length + WALLS[hot.room], hot.room);
+    assert.equal(hot.pads.length, ROOMS[hot.room].parts.filter((pt) => pt.hit?.length).length + SIDES[hot.room], hot.room);
   }
-  // above the walls and outside the house, away from the labels: nothing
-  assert.equal(ownerAt(hots, project([w, 0, HOUSE.wallH + 12])), null);
-  assert.equal(ownerAt(hots, project([2 * w + 10, 2 * d, 0])), null);
+  // above the back wall between two labels, and outside the house past its right corner: nothing
+  assert.equal(ownerAt(hots, project([w / 2, -6, HOUSE.wallH + 8])), null);
+  assert.equal(ownerAt(hots, project([3 * w + 4, -6, -FLOOR_THICK - 4])), null);
 });
 
 test('a room that does not fit its cell, or a missing label or link, fails loudly', () => {
   assert.throws(() => renderHouse({ ...ROOMS, tools: { ...ROOMS.tools, size: [70, 50, 40] } }, OPTS), /house: room "tools" is 70 × 50 × 40/);
-  const { tools, ...three } = ROOMS;
-  assert.ok(tools);
-  assert.throws(() => renderHouse(three, OPTS), /house: no room "tools"/);
+  const { about, ...five } = ROOMS;
+  assert.ok(about);
+  assert.throws(() => renderHouse(five, OPTS), /house: no room "about"/);
   assert.throws(() => renderHouse(ROOMS), /house: no label for "projects"/);
-  assert.throws(() => renderHouse(ROOMS, { ...OPTS, labels: { ...LABELS, setup: undefined } }), /house: no label for "setup"/);
+  assert.throws(() => renderHouse(ROOMS, { ...OPTS, labels: { ...LABELS, guides: undefined } }), /house: no label for "guides"/);
   assert.throws(() => renderHouse(ROOMS, { ...OPTS, hrefs: { ...HREFS, fabrics: '' } }), /house: no link for "fabrics"/);
 });

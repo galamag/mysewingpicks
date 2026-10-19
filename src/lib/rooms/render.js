@@ -13,7 +13,9 @@
               id      unique within the model
               draw    (painter) → svg string
               target  optional, exactly one of { product } | { section } | { project }
-              hit     [[x, y, z], …] world points of the tap area (needed with a target)
+              hit     [[x, y, z], …] world points of the tap area (needed with a target); the house
+                      (house.js reach) also uses it on a part WITHOUT a target: a tap on that
+                      furniture opens its room there (About's)
               label   optional (with a target), { corner: 'tl' | 'tr' | 'bl' | 'br', at: [x, y, z] }:
                       the link's name in that corner of the picture, a leader to a dot at `at`
                       (on the object, inside its tap area); see "labels" below

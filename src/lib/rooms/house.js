@@ -1,16 +1,17 @@
 /*
-  The sewing house of the home page (spec 3): the four rooms of the section pages under one
-  roof, drawn from the SAME models (ROOMS, rooms.js) — a room is drawn once, in its model.
+  The sewing house of the home page (spec «Изометрические комнаты», 3; layout A of spec «Гайды», 9):
+  six rooms of the site under one roof, 3 × 2, drawn from the SAME models (ROOMS, rooms.js) — a room
+  is drawn once, in its model.
 
-    projects  the far corner (top)      both its walls are the house's walls
-    fabrics   on the right              its back wall (y = 0) is the house's
-    setup     on the left               its left wall (x = 0) is the house's
-    tools     in front (bottom)         no wall of its own
+    back row   projects (the far corner)   guides               fabrics
+    front row  setup                       about                tools (the near corner)
 
   One floor, two tall walls at the back (y = 0 and x = 0), low partitions between the rooms.
-  A model's window is drawn only when its wall is an outer wall of the house (the Tools window
-  is for its page only); furniture standing against a model's wall stands against the house's
-  wall too (the Setup desk, the Fabrics shelf, the Projects shelf).
+  The back row's back walls and the left column's left walls are the house's walls: Projects has
+  both, Guides and Fabrics the back one, My Setup the left one; About and Tools have none.
+  A model's window is drawn only when its wall is an outer wall of the house (the About and Tools
+  windows are for their pages only); furniture standing against a model's wall stands against the
+  house's wall too (the Setup desk, the Fabrics shelf, the Projects shelf, the Guides design wall).
 
   Nothing inside a room is a link of its own: the rooms are drawn as decoration (roomParts with a
   resolver that knows nothing). Each room is ONE link to its page (`house__hot`), carrying the frame
@@ -20,39 +21,82 @@
 */
 import { project } from '../anatomy/iso.js';
 import { PALETTE, painter, shade, num } from './paint.js';
-import { roomParts, windowOnWall, lightOnFloor, hull, esc, WALL_THICK, FLOOR_THICK } from './render.js';
+import { roomParts, windowOnWall, lightOnFloor, hull, esc, textEm, WALL_THICK, FLOOR_THICK } from './render.js';
 
 /**
   cell        [w, d] of a room (every model is this big)
+  cols, rows  the grid of cells: cols along x, rows along y
   wallH       height of the two outer walls
   partitionH  height of the partitions between the rooms
-  at          where each room's corner (0, 0) is in the house; back to front, the order they are drawn in
+  at          where each room's corner (0, 0) is in the house (a corner of a cell of the grid)
   label       world point of each room's label, outside the house
 */
 export const HOUSE = {
   cell: [60, 50],
+  cols: 3,
+  rows: 2,
   wallH: 40,
   partitionH: 7,
-  at: { projects: [0, 0], fabrics: [60, 0], setup: [0, 50], tools: [60, 50] },
-  label: { projects: [0, 0, 49], fabrics: [120, 25, -12], setup: [25, 100, -12], tools: [120, 100, -16] },
+  at: { projects: [0, 0], guides: [60, 0], fabrics: [120, 0], setup: [0, 50], about: [60, 50], tools: [120, 50] },
+  // the sketch's places, three moved: Guides higher (z 49 → 56: its pill, bigger now, hid the top of
+  // the design wall), Tools lower (−12 → −16: a long name hid the foot of the cutting table), About
+  // 10 to the left of its middle (90 → 80: there its pill joins the front of its floor, the test
+  // "every room link keeps a big tap area on a 320 px phone")
+  label: { projects: [0, 0, 49], guides: [90, 0, 56], fabrics: [180, 25, -12], tools: [180, 75, -16], about: [80, 100, -12], setup: [30, 100, -12] },
 };
-
-export const HOUSE_ASPECT = 224 / 196; // viewBox width / height (and of every zoom), so the page can reserve the space
 
 const PARTITION = 2; // thickness, centred on the line between two rooms
 const PAD = 4; // around the house and its labels
 const ZOOM_PAD = 6; // around a room the camera zooms to
 const PLANK = 8; // floor boards about this far apart (as in a room)
-// a label: a pill PILL.h tall round its text; the text's width is guessed (no DOM at build time) —
-// EM wide per letter of the font size (the site's sans, bold), see the test "labels fit"
-const PILL = { h: 12, font: 7, em: 0.64, side: 5 };
+// a label: its text in a pill. The font size (viewBox units) is the one knob: on the narrowest phones
+// the house is as wide as the screen, so the text is font × screen / viewBox width css px (the test
+// "labels are readable on a phone"). The pill is 1.7 font sizes tall and as wide as the text — guessed,
+// there is no DOM at build time, by render.js textEm (the site's sans, bold; never short) — plus `side`
+// font sizes at each end.
+const FONT = 8.5;
+const PILL = { font: FONT, h: num(FONT * 1.7), side: 0.7 };
+
+/** The rooms back to front, the order they are drawn (and linked) in: by the diagonal of their cell, then left to right. */
+const ORDER = Object.keys(HOUSE.at).sort((a, b) => {
+  const [[ax, ay], [bx, by]] = [HOUSE.at[a], HOUSE.at[b]];
+  const [cw, cd] = HOUSE.cell;
+  return ax / cw + ay / cd - (bx / cw + by / cd) || ax - bx;
+});
+
+/** The corners of the box from (x0, y0, z0) to (x1, y1, z1), on the screen. */
+const boxCorners = ([x0, x1], [y0, y1], [z0, z1]) =>
+  [x0, x1].flatMap((x) => [y0, y1].flatMap((y) => [z0, z1].map((z) => project([x, y, z]))));
+
+/** [x, y, w, h] of the screen box of `pts` + pad. */
+function boxOf(pts, pad) {
+  const xs = pts.map((q) => q[0]);
+  const ys = pts.map((q) => q[1]);
+  const [x0, y0] = [Math.min(...xs) - pad, Math.min(...ys) - pad];
+  return [x0, y0, Math.max(...xs) + pad - x0, Math.max(...ys) + pad - y0];
+}
+
+/**
+  The viewBox: the walls and the floor of the whole grid, and the labels' points (± half a pill: the
+  pills' widths depend on the language, the test "labels fit" keeps every language's inside), + PAD.
+*/
+function houseView() {
+  const [w, d] = HOUSE.cell;
+  const pts = boxCorners([-WALL_THICK, HOUSE.cols * w], [-WALL_THICK, HOUSE.rows * d], [-FLOOR_THICK, HOUSE.wallH]);
+  for (const q of Object.values(HOUSE.label)) {
+    const [x, y] = project(q);
+    pts.push([x, y - PILL.h / 2], [x, y + PILL.h / 2]);
+  }
+  return boxOf(pts, PAD).map(num);
+}
+
+const VIEW = houseView();
+// viewBox width / height, and of every zoom (the camera never stretches the picture); worked out, never typed in
+export const HOUSE_ASPECT = VIEW[2] / VIEW[3];
 
 /** [x, y, w, h] of the screen box of `pts` + pad, widened to HOUSE_ASPECT (centred). */
 function frame(pts, pad) {
-  const xs = pts.map((q) => q[0]);
-  const ys = pts.map((q) => q[1]);
-  let [x0, y0] = [Math.min(...xs) - pad, Math.min(...ys) - pad];
-  let [w, h] = [Math.max(...xs) + pad - x0, Math.max(...ys) + pad - y0];
+  let [x0, y0, w, h] = boxOf(pts, pad);
   if (w / h < HOUSE_ASPECT) {
     const wide = h * HOUSE_ASPECT;
     x0 -= (wide - w) / 2;
@@ -63,21 +107,6 @@ function frame(pts, pad) {
     h = tall;
   }
   return [x0, y0, w, h].map(num);
-}
-
-/** The corners of the box from (x0, y0, z0) to (x1, y1, z1), on the screen. */
-const boxCorners = ([x0, x1], [y0, y1], [z0, z1]) =>
-  [x0, x1].flatMap((x) => [y0, y1].flatMap((y) => [z0, z1].map((z) => project([x, y, z]))));
-
-/** The viewBox: the walls and the floor, and the labels' points (± half a pill), + PAD. */
-function houseView() {
-  const [w, d] = HOUSE.cell;
-  const pts = boxCorners([-WALL_THICK, 2 * w], [-WALL_THICK, 2 * d], [-FLOOR_THICK, HOUSE.wallH]);
-  for (const q of Object.values(HOUSE.label)) {
-    const [x, y] = project(q);
-    pts.push([x, y - PILL.h / 2], [x, y + PILL.h / 2]);
-  }
-  return frame(pts, PAD);
 }
 
 /** The zoom of a room: its box — the floor, the slab under it, up to the top of the walls — + ZOOM_PAD. */
@@ -102,7 +131,7 @@ function outerWindow(model, [ox, oy]) {
 
 /** The two tall walls, the floor slab of the whole house and its boards. As a room's shell (render.js). */
 function shell(p) {
-  const [w, d] = [2 * HOUSE.cell[0], 2 * HOUSE.cell[1]];
+  const [w, d] = [HOUSE.cols * HOUSE.cell[0], HOUSE.rows * HOUSE.cell[1]];
   const [T, F, H] = [WALL_THICK, FLOOR_THICK, HOUSE.wallH];
   const wall = PALETTE.wall;
   let s =
@@ -121,18 +150,25 @@ function shell(p) {
 const partition = (p, x, y, w, d) =>
   p.box(x, y, 0, w, d, HOUSE.partitionH, PALETTE.wallTop, { l: PALETTE.wall, r: shade(PALETTE.wall, -0.12) });
 
+/** The partitions a room stands behind: along its back side and its left side, where it has a neighbour there. */
+function partitionsOf(p, [ox, oy]) {
+  const [cw, cd] = HOUSE.cell;
+  const half = PARTITION / 2;
+  return (oy > 0 ? partition(p, ox, oy - half, cw, PARTITION) : '') + (ox > 0 ? partition(p, ox - half, oy, PARTITION, cd) : '');
+}
+
 /** The pill round a label's text, centred on the world point: the rect's attributes (the label and its link share it). */
 function pill(text, at) {
   const [cx, cy] = project(at);
-  const w = [...String(text)].length * PILL.font * PILL.em + 2 * PILL.side;
-  return `x="${num(cx - w / 2)}" y="${num(cy - PILL.h / 2)}" width="${num(w)}" height="${PILL.h}" rx="${PILL.h / 2}"`;
+  const w = (textEm(text) + 2 * PILL.side) * PILL.font;
+  return `x="${num(cx - w / 2)}" y="${num(cy - PILL.h / 2)}" width="${num(w)}" height="${PILL.h}" rx="${num(PILL.h / 2)}"`;
 }
 
 /** A label: the text in its pill. Hidden from screen readers: the room's link has the same name. */
 function label(text, at) {
   const [cx, cy] = project(at);
   return `<g class="house__label" aria-hidden="true"><rect ${pill(text, at)}/>` +
-    `<text x="${num(cx)}" y="${num(cy)}" dy=".35em">${esc(text)}</text></g>`;
+    `<text x="${num(cx)}" y="${num(cy)}" dy=".35em" font-size="${PILL.font}">${esc(text)}</text></g>`;
 }
 
 const points = (pts) => pts.map(([x, y]) => `${x},${y}`).join(' ');
@@ -142,32 +178,39 @@ const outline = (pts3) => hull(pts3.map((q) => project(q).map(num)));
 
 /**
   What a tap on a room reaches, besides its floor ("what you see is what you tap"): its OUTER walls
-  (the faces of the house's walls along its cell) and every linked part's `hit` hull, moved to its
-  cell — tall furniture rises on the screen over the floor of the room behind it, and a tap on it
-  must open its own room. The links are in drawing order (back to front), so where a nearer room's
-  furniture covers this room's, the nearer one wins, as the eye sees it.
+  (the faces of the house's walls along its cell), the edge of its floor where that is the edge of
+  the house (the front face of the slab under a front-row room, the right face under a right-column
+  one: the floor seen from the side, between the floor and the label below it) and the `hit` hull of
+  EVERY part that has one — with a target or not (About links nowhere on its own page, its furniture
+  still opens it here) — moved to its cell: tall furniture rises on the screen over the floor of the
+  room behind it, and a tap on it must open its own room. The links are in drawing order (back to
+  front), so where a nearer room's furniture covers this room's, the nearer one wins, as the eye sees it.
 */
 function reach(model, [ox, oy]) {
   const [w, d] = HOUSE.cell;
   const [T, F, H] = [WALL_THICK, FLOOR_THICK, HOUSE.wallH];
-  const box = ([x0, x1], [y0, y1]) => [x0, x1].flatMap((x) => [y0, y1].flatMap((y) => [-F, H].map((z) => [x, y, z])));
-  const walls = [
-    ...(oy === 0 ? [box([ox === 0 ? -T : ox, ox + w], [-T, 0])] : []), // the back wall (y = 0) along the cell
-    ...(ox === 0 ? [box([-T, 0], [oy, oy + d])] : []), // the left wall (x = 0)
+  /** the corners of the box x0..x1 × y0..y1 × z0..z1 */
+  const box = ([x0, x1], [y0, y1], [z0, z1]) => [x0, x1].flatMap((x) => [y0, y1].flatMap((y) => [z0, z1].map((z) => [x, y, z])));
+  const sides = [
+    ...(oy === 0 ? [box([ox === 0 ? -T : ox, ox + w], [-T, 0], [-F, H])] : []), // the back wall (y = 0) along the cell
+    ...(ox === 0 ? [box([-T, 0], [oy, oy + d], [-F, H])] : []), // the left wall (x = 0)
+    ...(oy + d === HOUSE.rows * d ? [box([ox, ox + w], [oy + d, oy + d], [-F, 0])] : []), // the slab's front face
+    ...(ox + w === HOUSE.cols * w ? [box([ox + w, ox + w], [oy, oy + d], [-F, 0])] : []), // the slab's right face
   ];
   const parts = model.parts.filter((part) => part.hit?.length)
     .map((part) => part.hit.map(([x, y, z]) => [x + ox, y + oy, z]));
-  return [...walls, ...parts].map(outline).filter((poly) => poly.length >= 3);
+  return [...sides, ...parts].map(outline).filter((poly) => poly.length >= 3);
 }
 
 /**
-  rooms   the models by key (ROOMS): exactly the keys of HOUSE.at, each HOUSE.cell big
+  rooms   the models by key (ROOMS): every key of HOUSE.at must be there (it may hold more), each
+          HOUSE.cell big
   prefix  starts every id (one painter for the whole house: a gradient is made once)
   labels  key → the room's name (its label and the link's aria-label)
   hrefs   key → the room's page
   → svg      the INNER content of an <svg> (starts with <defs>); House.astro wraps it
     viewBox  [x, y, w, h]: the house and its labels + padding, w / h = HOUSE_ASPECT
-    rooms    [{ key, zoom }] in the order of HOUSE.at: zoom = [x, y, w, h] the camera ends on
+    rooms    [{ key, zoom }] back to front (the order of the links): zoom = [x, y, w, h] the camera ends on
 */
 export function renderHouse(rooms, { prefix = 'house', labels, hrefs } = {}) {
   const keys = Object.keys(HOUSE.at);
@@ -183,7 +226,7 @@ export function renderHouse(rooms, { prefix = 'house', labels, hrefs } = {}) {
   }
 
   const p = painter(prefix);
-  const viewBox = houseView();
+  const viewBox = [...VIEW];
   const [vx, vy, vw, vh] = viewBox;
 
   /** A room: the window on the house's wall, then (moved to its cell) the light on its floor and its parts. */
@@ -197,24 +240,16 @@ export function renderHouse(rooms, { prefix = 'house', labels, hrefs } = {}) {
       `<g transform="translate(${num(dx)} ${num(dy)})">${win ? lightOnFloor(prefix, model.size, model.window) : ''}${body}</g></g>`;
   };
 
-  // back to front: the far room, the partitions in front of it, the two side rooms, the
-  // partitions behind the front room, the front room
-  const [cw, cd] = HOUSE.cell;
-  const half = PARTITION / 2;
-  const drawing =
-    shell(p) +
-    room('projects') +
-    partition(p, cw - half, 0, PARTITION, cd) + partition(p, 0, cd - half, cw, PARTITION) +
-    room('fabrics') + room('setup') +
-    partition(p, cw, cd - half, cw, PARTITION) + partition(p, cw - half, cd, PARTITION, cd) +
-    room('tools');
+  // back to front: each room after the partitions it stands behind (so they hide its back and left edges)
+  const drawing = shell(p) + ORDER.map((key) => partitionsOf(p, HOUSE.at[key]) + room(key)).join('');
 
   const pills = keys.map((key) => label(labels[key], HOUSE.label[key])).join('');
 
   // one link per room, back to front as drawn (a nearer room wins where it covers one behind):
   // its floor (house__hit: the hover / focus feedback), then, never painted (house__pad), its
   // outer walls, its furniture and its label's pill
-  const zooms = keys.map((key) => ({ key, zoom: zoomOf(HOUSE.at[key]) }));
+  const [cw, cd] = HOUSE.cell;
+  const zooms = ORDER.map((key) => ({ key, zoom: zoomOf(HOUSE.at[key]) }));
   const hots = zooms.map(({ key, zoom }) => {
     const [ox, oy] = HOUSE.at[key];
     const floor = [[ox, oy, 0], [ox + cw, oy, 0], [ox + cw, oy + cd, 0], [ox, oy + cd, 0]].map((q) => project(q).map(num));

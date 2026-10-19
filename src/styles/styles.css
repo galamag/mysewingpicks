@@ -603,8 +603,7 @@ p { margin: 0 0 1em; }
 .house__svg {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 224 / 196;         /* = HOUSE_ASPECT (house.js): the space is kept before the svg paints */
+  height: auto;                    /* its proportions: its own viewBox's, inline (House.astro) */
   border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
   -webkit-tap-highlight-color: transparent;
@@ -620,7 +619,8 @@ p { margin: 0 0 1em; }
 .house__room.is-dim { opacity: 0.08; }
 .house__label { pointer-events: none; transition: opacity 0.3s ease; }
 .house__label rect { fill: var(--paper); opacity: 0.94; }
-.house__label text { font: 700 7px var(--font-body); fill: var(--ink); text-anchor: middle; }
+/* the size is the svg's (font-size on the text, house.js PILL: readable on a 320 px phone) */
+.house__label text { font-family: var(--font-body); font-weight: 700; fill: var(--ink); text-anchor: middle; }
 .house__svg.is-zooming .house__label { opacity: 0; }
 /* A room: one link to its page — its floor (the feedback below) and, never painted, its walls,
    furniture and label (house.js `reach`). */

@@ -316,7 +316,11 @@ test('Projects with every slot taken: the labels still fit and keep clear of eac
 /* ---------- the house and My Setup do not change ---------- */
 
 test('the house draws no room labels, and its drawing does not depend on them', () => {
-  const OPTS = { prefix: 'house', labels: { projects: 'P', fabrics: 'F', setup: 'S', tools: 'T' }, hrefs: { projects: '/p', fabrics: '/f', setup: '/s', tools: '/t' } };
+  const OPTS = {
+    prefix: 'house',
+    labels: { projects: 'P', guides: 'G', fabrics: 'F', setup: 'S', about: 'A', tools: 'T' },
+    hrefs: { projects: '/p', guides: '/g', fabrics: '/f', setup: '/s', about: '/a', tools: '/t' },
+  };
   const { svg } = renderHouse(ROOMS, OPTS);
   assert.ok(!svg.includes('room__label') && !svg.includes('room__pad'));
   const plain = Object.fromEntries(Object.entries(ROOMS).map(([key, model]) => [key, unlabelled(model)]));

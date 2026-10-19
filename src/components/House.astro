@@ -1,11 +1,11 @@
 ---
 /*
-  House — the sewing house at the top of the home page: the four rooms of the section pages
-  under one roof (src/lib/rooms/house.js), drawn at BUILD time from the same models. The first
+  House — the sewing house at the top of the home page: six rooms of the site, 3 × 2, under one
+  roof (src/lib/rooms/house.js), drawn at BUILD time from the same models. The first
   frame is plain SVG in the HTML; each room is ONE ordinary link to its section page in this
-  language, so it works without JS. It opens by what is seen: the floor, the room's outer walls,
-  its furniture and its label (back to front, a nearer room wins). Nothing inside a room is a
-  link of its own here.
+  language, so it works without JS. It opens by what is seen: the floor (with the edge of the slab
+  under it, where that is the house's edge), the room's outer walls, its furniture and its label
+  (back to front, a nearer room wins). Nothing inside a room is a link of its own here.
     lang  the page's language
 
   The script only animates the way in: a tap zooms the camera into the room (the svg's viewBox
@@ -16,7 +16,8 @@
   Only the home page uses this component, so its script runs nowhere else.
 
   Styles: src/styles/styles.css, "Rooms & house" — the svg is injected with set:html,
-  scoped styles would not reach it.
+  scoped styles would not reach it. The svg's aspect-ratio is its own viewBox's (inline), so the
+  page keeps the space before it paints and no number in the stylesheet can go stale.
 */
 import { ROOMS } from '../lib/rooms/rooms.js';
 import { HOUSE, renderHouse } from '../lib/rooms/house.js';
@@ -30,7 +31,7 @@ const hrefs = Object.fromEntries(keys.map((key) => [key, pageUrl(key, lang)]));
 const { svg, viewBox } = renderHouse(ROOMS, { prefix: 'house', labels, hrefs });
 ---
 <figure class="house">
-  <svg class="house__svg" viewBox={viewBox.join(' ')} role="group" aria-label={ui.rooms.house} set:html={svg} />
+  <svg class="house__svg" viewBox={viewBox.join(' ')} style={`aspect-ratio: ${viewBox[2]} / ${viewBox[3]}`} role="group" aria-label={ui.rooms.house} set:html={svg} />
   <figcaption class="house__hint">{ui.rooms.tapRoom}</figcaption>
 </figure>
 
