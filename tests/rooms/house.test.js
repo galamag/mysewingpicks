@@ -24,14 +24,14 @@ const OPTS = { prefix: 'house', labels: LABELS, hrefs: HREFS };
 const READABLE = [[320, 9], [375, 10]]; // [screen css px, smallest label text css px]
 
 const POLY = /<polygon class="(house__hit|house__pad)" points="([^"]*)" fill="transparent"\/>/g;
-const PILL_PAD = /<rect class="house__pad" x="([^"]*)" y="([^"]*)" width="([^"]*)" height="([^"]*)"[^>]*fill="transparent"\/>/g;
+const PILL_PAD = /<rect class="house__pad" x="([^"]*)" y="([^"]*)" width="([^"]*)" height="([^"]*)" rx="([^"]*)"[^>]*fill="transparent"\/>/g;
 
 /**
   The printed room links of a house svg, in document order (later = on top):
   { attrs, room, href, label, zoom, floors, pads, pills, rest }
     floors  the styled polygons (house__hit) — the room's floor
     pads    the always-transparent polygons (house__pad): walls, furniture
-    pills   the transparent rects over the labels: { x, y, w, h }
+    pills   the transparent rounded rects over the labels: { x, y, w, h, rx }
     rest    whatever else is inside the link (should be nothing)
 */
 function hotsOf(svg) {
@@ -45,7 +45,7 @@ function hotsOf(svg) {
       zoom: /data-zoom="([^"]*)"/.exec(attrs)?.[1],
       floors: polys.filter((p) => p.cls === 'house__hit').map((p) => p.poly),
       pads: polys.filter((p) => p.cls === 'house__pad').map((p) => p.poly),
-      pills: [...inner.matchAll(PILL_PAD)].map(([, x, y, w, h]) => ({ x: +x, y: +y, w: +w, h: +h })),
+      pills: [...inner.matchAll(PILL_PAD)].map(([, x, y, w, h, rx]) => ({ x: +x, y: +y, w: +w, h: +h, rx: +rx })),
       rest: inner.replace(POLY, '').replace(PILL_PAD, ''),
     };
   });
@@ -53,8 +53,14 @@ function hotsOf(svg) {
 
 /** Does a tap at screen point `pt` land in this link (any of its shapes)? */
 const reaches = (hot, pt) =>
-  hot.floors.some((poly) => inPoly(poly, pt)) || hot.pads.some((poly) => inPoly(poly, pt)) ||
-  hot.pills.some(({ x, y, w, h }) => pt[0] >= x && pt[0] <= x + w && pt[1] >= y && pt[1] <= y + h);
+  hot.floors.some((poly) => inPoly(poly, pt)) || hot.pads.some((poly) => inPoly(poly, pt)) || hot.pills.some((pill) => inPill(pill, pt));
+
+/** Is the point on the pill { x, y, w, h, rx } — its rounded shape, as the browser hit-tests the rect? */
+function inPill({ x, y, w, h, rx }, [px, py]) {
+  const r = Math.min(rx, w / 2, h / 2);
+  const [cx, cy] = [Math.min(Math.max(px, x + r), x + w - r), Math.min(Math.max(py, y + r), y + h - r)];
+  return (px - cx) ** 2 + (py - cy) ** 2 <= r * r;
+}
 
 /** `inside`, after a quick look at the polygon's screen box (the 320 px test asks this ~1.3 million times). */
 const BOXES = new WeakMap();
@@ -108,10 +114,10 @@ function samples(poly, step = 0.5) {
   return out;
 }
 
-/** The printed label pills: { x, y, w, h, text, fs } (fs: the font size of its text, viewBox units). */
+/** The printed label pills: { x, y, w, h, rx, text, fs } (fs: the font size of its text, viewBox units). */
 function labelsOf(svg) {
-  return [...svg.matchAll(/<g class="house__label" aria-hidden="true"><rect x="([^"]*)" y="([^"]*)" width="([^"]*)" height="([^"]*)"[^>]*\/><text([^>]*)>([^<]*)<\/text><\/g>/g)]
-    .map(([, x, y, w, h, attrs, text]) => ({ x: +x, y: +y, w: +w, h: +h, text, fs: Number(/ font-size="([^"]*)"/.exec(attrs)?.[1]) }));
+  return [...svg.matchAll(/<g class="house__label" aria-hidden="true"><rect x="([^"]*)" y="([^"]*)" width="([^"]*)" height="([^"]*)" rx="([^"]*)"\/><text([^>]*)>([^<]*)<\/text><\/g>/g)]
+    .map(([, x, y, w, h, rx, attrs, text]) => ({ x: +x, y: +y, w: +w, h: +h, rx: +rx, text, fs: Number(/ font-size="([^"]*)"/.exec(attrs)?.[1]) }));
 }
 
 /** The floor of a cell of the house as the svg prints it. */
@@ -443,18 +449,38 @@ test('a tap on a room\'s furniture opens that room', () => {
   assert.ok(at('about', 'armchair') >= 0.95, 'the armchair opens About');
 });
 
-test('a tap on a room\'s label opens that room', () => {
-  const { svg } = renderHouse(ROOMS, OPTS);
-  const hots = hotsOf(svg);
-  const pills = labelsOf(svg);
-  for (const [i, key] of KEYS.entries()) {
-    const hot = hots.find((h) => h.room === key);
-    assert.deepEqual(hot.pills, [{ x: pills[i].x, y: pills[i].y, w: pills[i].w, h: pills[i].h }], `${key}: the link covers its pill`);
-    const { x, y, w, h } = pills[i];
-    for (const pt of [[x + w / 2, y + h / 2], [x + h / 2, y + h / 2], [x + w - h / 2, y + h / 2]]) {
-      assert.equal(ownerAt(hots, pt), key, `${key}: a tap on its pill at ${pt}`);
+// A label is painted over every room, so ALL of it opens its own room: no shape of a link that comes
+// later (a nearer room's floor, slab edge, furniture or label) may reach under it. The whole pill as
+// the browser hit-tests it (its rounded ends), every tenth of a unit, in every language.
+test('a tap anywhere on a room\'s label opens that room, in every language', () => {
+  const lost = [];
+  for (const lang of LOCALES) {
+    const labels = Object.fromEntries(KEYS.map((k) => [k, t(lang).ui.nav[k]]));
+    const { svg } = renderHouse(ROOMS, { ...OPTS, labels });
+    const hots = hotsOf(svg);
+    const pills = labelsOf(svg);
+    for (const [i, key] of KEYS.entries()) {
+      const { x, y, w, h, rx } = pills[i];
+      const at = hots.findIndex((hot) => hot.room === key);
+      assert.deepEqual(hots[at].pills, [{ x, y, w, h, rx }], `${lang} ${key}: the link covers its pill`);
+      // its own link reaches all of the pill: a tap there opens another room only if a LATER link reaches it too
+      const later = hots.slice(at + 1);
+      let all = 0;
+      const away = {};
+      for (let px = x; px <= x + w; px += 0.1) {
+        for (let py = y; py <= y + h; py += 0.1) {
+          if (!inPill(pills[i], [px, py])) continue;
+          all++;
+          const owner = ownerAt(later, [px, py]);
+          if (owner) away[owner] = (away[owner] ?? 0) + 1;
+        }
+      }
+      assert.ok(all > 1000, `${lang} ${key}: the pill was sampled`);
+      const n = Object.values(away).reduce((a, b) => a + b, 0);
+      if (n) lost.push(`${lang} ${key}: ${((100 * n) / all).toFixed(2)}% opens ${Object.keys(away).join(', ')}`);
     }
   }
+  assert.deepEqual(lost, [], 'every point of every label opens its own room');
 });
 
 test('a tap on an outer wall opens the room it belongs to; About and Tools have none', () => {

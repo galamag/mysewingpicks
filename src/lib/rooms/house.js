@@ -22,6 +22,7 @@
 import { project } from '../anatomy/iso.js';
 import { PALETTE, painter, shade, num } from './paint.js';
 import { roomParts, windowOnWall, lightOnFloor, hull, esc, textEm, WALL_THICK, FLOOR_THICK } from './render.js';
+import { LOCALES, t } from '../../i18n/index.js';
 
 /**
   cell        [w, d] of a room (every model is this big)
@@ -38,11 +39,13 @@ export const HOUSE = {
   wallH: 40,
   partitionH: 7,
   at: { projects: [0, 0], guides: [60, 0], fabrics: [120, 0], setup: [0, 50], about: [60, 50], tools: [120, 50] },
-  // the sketch's places, three moved: Guides higher (z 49 → 56: its pill, bigger now, hid the top of
+  // the sketch's places, four moved: Guides higher (z 49 → 56: its pill, bigger now, hid the top of
   // the design wall), Tools lower (−12 → −16: a long name hid the foot of the cutting table), About
   // 10 to the left of its middle (90 → 80: there its pill joins the front of its floor, the test
-  // "every room link keeps a big tap area on a 320 px phone")
-  label: { projects: [0, 0, 49], guides: [90, 0, 56], fabrics: [180, 25, -12], tools: [180, 75, -16], about: [80, 100, -12], setup: [30, 100, -12] },
+  // "every room link keeps a big tap area on a 320 px phone"), My Setup 8 to the left ([30, 100, -12]
+  // → [22, 100, -14]: the right end of a long name, "Il mio studio", lay over About's floor corner,
+  // and About's link, later, took the taps there — the test "a tap anywhere on a room's label")
+  label: { projects: [0, 0, 49], guides: [90, 0, 56], fabrics: [180, 25, -12], tools: [180, 75, -16], about: [80, 100, -12], setup: [22, 100, -14] },
 };
 
 const PARTITION = 2; // thickness, centred on the line between two rooms
@@ -56,6 +59,16 @@ const PLANK = 8; // floor boards about this far apart (as in a room)
 // font sizes at each end.
 const FONT = 8.5;
 const PILL = { font: FONT, h: num(FONT * 1.7), side: 0.7 };
+
+/** The width of the pill round a name. */
+const pillWidth = (text) => (textEm(text) + 2 * PILL.side) * PILL.font;
+
+/**
+  The widest pill each room's label gets in any language of the site (its name in the menu, ui.nav —
+  what House.astro shows): the picture leaves room for it, so a label can stand where its longest
+  name still clears its neighbours, and a longer translation widens the picture instead of spilling out.
+*/
+const WIDEST = Object.fromEntries(Object.keys(HOUSE.at).map((key) => [key, Math.max(...LOCALES.map((lang) => pillWidth(t(lang).ui.nav[key])))]));
 
 /** The rooms back to front, the order they are drawn (and linked) in: by the diagonal of their cell, then left to right. */
 const ORDER = Object.keys(HOUSE.at).sort((a, b) => {
@@ -77,15 +90,15 @@ function boxOf(pts, pad) {
 }
 
 /**
-  The viewBox: the walls and the floor of the whole grid, and the labels' points (± half a pill: the
-  pills' widths depend on the language, the test "labels fit" keeps every language's inside), + PAD.
+  The viewBox: the walls and the floor of the whole grid, and round each label's point its widest pill
+  (WIDEST: the same box in every language, so HOUSE_ASPECT is one number), + PAD.
 */
 function houseView() {
   const [w, d] = HOUSE.cell;
   const pts = boxCorners([-WALL_THICK, HOUSE.cols * w], [-WALL_THICK, HOUSE.rows * d], [-FLOOR_THICK, HOUSE.wallH]);
-  for (const q of Object.values(HOUSE.label)) {
+  for (const [key, q] of Object.entries(HOUSE.label)) {
     const [x, y] = project(q);
-    pts.push([x, y - PILL.h / 2], [x, y + PILL.h / 2]);
+    pts.push([x - WIDEST[key] / 2, y - PILL.h / 2], [x + WIDEST[key] / 2, y + PILL.h / 2]);
   }
   return boxOf(pts, PAD).map(num);
 }
@@ -160,7 +173,7 @@ function partitionsOf(p, [ox, oy]) {
 /** The pill round a label's text, centred on the world point: the rect's attributes (the label and its link share it). */
 function pill(text, at) {
   const [cx, cy] = project(at);
-  const w = (textEm(text) + 2 * PILL.side) * PILL.font;
+  const w = pillWidth(text);
   return `x="${num(cx - w / 2)}" y="${num(cy - PILL.h / 2)}" width="${num(w)}" height="${PILL.h}" rx="${num(PILL.h / 2)}"`;
 }
 
