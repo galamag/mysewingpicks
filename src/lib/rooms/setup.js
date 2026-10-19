@@ -10,7 +10,9 @@
   Decoration must not turn into a link: every tap area is the convex hull of its
   part's `hit` (render.js), so the chair, the plant and the window stand clear
   of the hulls — the chair is NOT at the desk on purpose, the window is over the
-  back half of the desk and the laptop on its front half.
+  back half of the desk and the laptop on its front half. The plant still has a
+  `hit`, without a target: never a link here, it lets the house open this room
+  where the leaves rise over the Projects room behind (house.js reach).
 
   Every product item links to its card (target.product); the two softboxes are
   ONE part (one product: the kit of two). No brand names or logos on anything.
@@ -19,7 +21,7 @@
 */
 import { project } from '../anatomy/iso.js';
 import { PALETTE as C, shade, num } from './paint.js';
-import { dot, flat, corners, ISO_RX, FRAME } from './props.js';
+import { dot, flat, corners, ellipseHit, ISO_RX, FRAME } from './props.js';
 
 const SCREEN = '#5f6f73'; // a dark, slightly cool screen
 const SCREEN_LIT = '#8fa3a0';
@@ -108,6 +110,20 @@ function softbox(p, [x, y]) {
   return s;
 }
 
+/** A softbox's head as drawn (its diffuser, its body narrowing to the back): a piece of the softboxes' `hit`. */
+function head([x, y]) {
+  const { w, h, depth, z } = SB;
+  const [front, back, l, r, b, t] = [y + depth / 2, y - depth / 2, x - w / 2, x + w / 2, z, z + h];
+  const inset = 1.6; // as in softbox()
+  return [[l, front, b], [r, front, b], [r, front, t], [l, front, t], [r - inset, back, b + inset], [r - inset, back, t - inset], [l + inset, back, t - inset]];
+}
+
+/** The foot of a softbox's stand as drawn (legs(p, [x, y], 9, 5, 15) in softbox()): its joint and its three feet. */
+const stand = ([x, y]) => [[x, y, 9], ...[0, 120, 240].map((a) => {
+  const t = ((a + 15) * Math.PI) / 180;
+  return [x + 5 * Math.cos(t), y + 5 * Math.sin(t), 0];
+})];
+
 // the office chair in the front-left corner, facing the room and the camera (+x): its back against the left wall
 export const CHAIR = { x: 2, y: 40, w: 9, d: 9 };
 
@@ -128,25 +144,37 @@ function chair(p) {
   return s;
 }
 
-// a potted plant in the back-right corner
+// a potted plant in the back-right corner: a pot of 7 × 7, 7.5 tall, its leaves fanning out of it from
+// STEM: [angle from upright°, length, colour], the back ones first
+const PLANT = { x: 52, y: 1, w: 7, h: 7.5 };
+const STEM = [PLANT.x + 3.5, PLANT.y + 3.5, 8];
+const LEAVES = [
+  [-48, 10, C.sageDeep], [42, 10.5, C.sageDeep], [-16, 13, C.sageDeep], [14, 12.5, C.sageDeep],
+  [-62, 8, C.sage], [64, 8.5, C.sage], [-30, 11, C.sage], [30, 10, C.sage], [0, 11.5, shade(C.sage, 0.12)],
+];
+
 function plant(p) {
-  const [x, y] = [52, 1];
+  const { x, y, w, h } = PLANT;
   let s = p.shadow(x + 3.5, y + 3.5, 6, 3);
-  s += p.box(x, y, 0, 7, 7, 7.5, C.rose, { l: C.roseDeep, r: shade(C.roseDeep, -0.12) });
-  s += p.plane([[x + 0.6, y + 0.6, 7.5], [x + 6.4, y + 0.6, 7.5], [x + 6.4, y + 6.4, 7.5], [x + 0.6, y + 6.4, 7.5]], C.woodDark);
-  // leaves fanning out of the pot: [angle from upright°, length, colour]; the back ones first
-  const [bx, by] = project([x + 3.5, y + 3.5, 8]);
+  s += p.box(x, y, 0, w, w, h, C.rose, { l: C.roseDeep, r: shade(C.roseDeep, -0.12) });
+  s += p.plane([[x + 0.6, y + 0.6, h], [x + 6.4, y + 0.6, h], [x + 6.4, y + 6.4, h], [x + 0.6, y + 6.4, h]], C.woodDark);
+  const [bx, by] = project(STEM);
   const leaf = ([a, len, c]) => {
     const t = (a * Math.PI) / 180;
     const [cx, cy] = [bx + Math.sin(t) * len * 0.55, by - Math.cos(t) * len * 0.55];
     return `<ellipse cx="${num(cx)}" cy="${num(cy)}" rx="${num(len * 0.2)}" ry="${num(len * 0.55)}" fill="${c}" transform="rotate(${a} ${num(cx)} ${num(cy)})"/>`;
   };
-  s += [
-    [-48, 10, C.sageDeep], [42, 10.5, C.sageDeep], [-16, 13, C.sageDeep], [14, 12.5, C.sageDeep],
-    [-62, 8, C.sage], [64, 8.5, C.sage], [-30, 11, C.sage], [30, 10, C.sage], [0, 11.5, shade(C.sage, 0.12)],
-  ].map(leaf).join('');
-  return s;
+  return s + LEAVES.map(leaf).join('');
 }
+
+/** The plant as drawn — its pot, each leaf (props.js ellipseHit) —: its `hit`, for the house only (no target). */
+const plantHit = () => [
+  ...corners(PLANT.x, PLANT.y, 0, PLANT.w, PLANT.w, PLANT.h),
+  ...LEAVES.flatMap(([a, len]) => {
+    const t = (a * Math.PI) / 180;
+    return ellipseHit(STEM, Math.sin(t) * len * 0.55, Math.cos(t) * len * 0.55, len * 0.2, len * 0.55, a);
+  }),
+];
 
 // the phone tripod, the phone on it filming the desk (its screen towards the room, +x)
 const TRIPOD = { x: 43, y: 35, joint: 17, top: 27.5 };
@@ -227,12 +255,14 @@ export default {
       id: 'softboxes',
       draw: (p) => SOFTBOXES.map((at) => softbox(p, at)).join(''),
       target: { product: 'skytex-softbox-kit' },
-      hit: SOFTBOXES.flatMap(([x, y]) => [
-        ...corners(x - SB.w / 2, y - SB.depth / 2, SB.z, SB.w, SB.depth, SB.h),
-        [x, y + 4, 0],
-      ]),
+      // a piece each (render.js hitPieces) for the two heads and the feet of their stands, low on the
+      // floor of this room — not the air between the heads, nor the thin poles up to them: the house
+      // shows the Projects room behind there. On this page the link is one shape, the hull of all four.
+      hit: SOFTBOXES.flatMap((at) => [head(at), stand(at)]),
     },
-    { id: 'plant', draw: plant },
+    // decoration (no target): its hit is for the house, where its leaves rise over the Projects room
+    // behind and a tap on them must open this room (render.js: a part without a target never links here)
+    { id: 'plant', draw: plant, hit: plantHit() },
     { id: 'chair', draw: chair },
     {
       id: 'tripod',
@@ -250,10 +280,14 @@ export default {
       id: 'ring-light',
       draw: ringLight,
       target: { product: 'sensyne-ring-light' },
+      // the ring all round, as drawn — its rim 3 wide on the screen, so a radius 1.5 bigger, a hair
+      // outside it (its top arcs rise over the Projects room in the house) — and the stand's foot
       hit: [
-        [RING.x + RING.r / Math.SQRT2, RING.y - RING.r / Math.SQRT2, RING.z], // the ring's sides
-        [RING.x - RING.r / Math.SQRT2, RING.y + RING.r / Math.SQRT2, RING.z],
-        [RING.x, RING.y, RING.z + RING.r], [RING.x, RING.y, 0], // its top, the stand's foot
+        ...Array.from({ length: 16 }, (_, i) => {
+          const [t, out] = [(i * Math.PI) / 8, (RING.r + 1.5) / Math.cos(Math.PI / 16)];
+          return [RING.x + (out * Math.cos(t)) / Math.SQRT2, RING.y - (out * Math.cos(t)) / Math.SQRT2, RING.z + out * Math.sin(t)];
+        }),
+        [RING.x, RING.y, 0],
       ],
     },
   ],

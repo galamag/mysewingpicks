@@ -14,7 +14,8 @@
 
   Decoration: the window and a basket of scraps on the floor (BASKET), both clear
   of the tap areas. Every tap area is the convex hull of its part's `hit`
-  (render.js), so the hits leave out what the room in front hides anyway — the
+  (render.js; in the house, of each of its pieces: the sewing table's three),
+  so the hits leave out what the room in front hides anyway — the
   lower legs of the sewing table and the ironing board are behind the cutting
   table — and the zones barely overlap: a tap opens the zone you see. In the
   house this room has no walls of its own, so nothing hangs on a wall (its window
@@ -399,12 +400,25 @@ export default {
       draw: (p) => sewingTable(p) + threadRack(p) + machine(p),
       target: { section: 'machines' },
       label: { corner: 'tr', at: [MACHINE.x + MACHINE.w / 2, MACHINE.y + MACHINE.d - 0.5, sewTop + 9.9] }, // the rose front of the arm
-      // the top, the machine and the rack; the legs only down to where the cutting table hides them
+      // three pieces (render.js hitPieces), each as drawn: the table — its top, the legs only down to
+      // where the cutting table hides them —, the machine on it — its bed, its arm, the spool on top —
+      // and the thread rack. One hull took in the air over the table between them, where the house
+      // shows the classroom's cutting table and Fabrics behind.
       hit: [
-        ...corners(SEW.x, SEW.y, SEW.z, SEW.w, SEW.d, SEW.t),
-        ...corners(MACHINE.x, MACHINE.y, sewTop, MACHINE.w, MACHINE.d, MACHINE.h + 2),
-        [RACK.x, RACK.y, sewTop + RACK.h], [RACK.x + RACK.w, RACK.y, sewTop + RACK.h],
-        [SEW.x, SEW.y, 0], [SEW.x + SEW.w, SEW.y, 0], [SEW.x, SEW.y + SEW.d, 6], [SEW.x + SEW.w, SEW.y + SEW.d, 6],
+        [
+          ...corners(SEW.x, SEW.y, SEW.z, SEW.w, SEW.d, SEW.t),
+          [SEW.x, SEW.y, 0], [SEW.x + SEW.w, SEW.y, 0], [SEW.x, SEW.y + SEW.d, 6], [SEW.x + SEW.w, SEW.y + SEW.d, 6],
+        ],
+        [
+          ...corners(MACHINE.x, MACHINE.y, sewTop, MACHINE.w, MACHINE.d, 2.4),
+          ...corners(MACHINE.x + 0.5, MACHINE.y + 0.5, sewTop + 8.4, MACHINE.w - 1, MACHINE.d - 1, MACHINE.h - 8.4),
+          ...corners(MACHINE.x + 2.75, MACHINE.y + 2.15, sewTop + MACHINE.h, 1.9, 1.9, 1.8),
+        ],
+        [
+          ...corners(RACK.x, RACK.y, sewTop, RACK.w, 0.7, RACK.h), // the board
+          ...corners(RACK.x - 0.4, RACK.y - 0.2, sewTop, RACK.w + 0.8, 2.6, 0.6), // its foot
+          ...corners(RACK.x + 0.6, RACK.y + 0.8, sewTop + 1.8, 4.6, 1.2, 7), // the spools on it
+        ],
       ],
     },
     {

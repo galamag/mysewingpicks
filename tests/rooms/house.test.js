@@ -2,12 +2,13 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { project } from '../../src/lib/anatomy/iso.js';
-import { PALETTE, num } from '../../src/lib/rooms/paint.js';
-import { FLOOR_THICK, textEm } from '../../src/lib/rooms/render.js';
+import { PALETTE, painter, shade, num } from '../../src/lib/rooms/paint.js';
+import { FLOOR_THICK, textEm, hitPieces } from '../../src/lib/rooms/render.js';
 import { HOUSE, HOUSE_ASPECT, renderHouse } from '../../src/lib/rooms/house.js';
 import { ROOMS } from '../../src/lib/rooms/rooms.js';
 import { LOCALES, pageUrl, t } from '../../src/i18n/index.js';
 import { THUMB_PX, PHONE_PX, inside } from './helpers.js';
+import { shapesOf, grid } from './seen.js';
 
 // HOUSE.at: the back row left to right, then the front row (layout A of the spec «Гайды», 9)
 const KEYS = ['projects', 'guides', 'fabrics', 'setup', 'about', 'tools'];
@@ -97,10 +98,10 @@ function hullOf(points) {
   return chain(pts).concat(chain([...pts].reverse()));
 }
 
-/** The screen outline of a part in the house: the hull of its `hit`, moved to its room's cell. */
-const partOutline = (key, part) => {
+/** The screen outlines of a part in the house: the hull of each piece of its `hit` (render.js hitPieces), moved to its room's cell. */
+const partOutlines = (key, part) => {
   const [ox, oy] = HOUSE.at[key];
-  return hullOf(part.hit.map(([x, y, z]) => project([x + ox, y + oy, z])));
+  return hitPieces(part.hit).map((piece) => hullOf(piece.map(([x, y, z]) => project([x + ox, y + oy, z]))));
 };
 
 /** Points every `step` units inside a convex polygon. */
@@ -307,8 +308,8 @@ test('every language\'s labels fit in the picture, hold their text and keep apar
   }
 });
 
-/** Every part with a hit in the house: [key, part, its screen outline]. */
-const FURNITURE = KEYS.flatMap((key) => ROOMS[key].parts.filter((pt) => pt.hit?.length).map((part) => [key, part, partOutline(key, part)]));
+/** Every part with a hit in the house: [key, part, a screen outline of it] — one per piece. */
+const FURNITURE = KEYS.flatMap((key) => ROOMS[key].parts.filter((pt) => pt.hit?.length).flatMap((part) => partOutlines(key, part).map((poly) => [key, part, poly])));
 
 test('labels are readable on a phone', () => {
   const { svg, viewBox: [, , vw] } = renderHouse(ROOMS, OPTS);
@@ -425,7 +426,7 @@ test('a tap on a room\'s furniture opens that room', () => {
   const shares = [];
   for (const key of KEYS) {
     for (const part of ROOMS[key].parts.filter((pt) => pt.hit?.length)) {
-      const pts = samples(partOutline(key, part));
+      const pts = partOutlines(key, part).flatMap((poly) => samples(poly));
       const own = pts.filter((pt) => ownerAt(hots, pt) === key).length / pts.length;
       const lost = pts.filter((pt) => ownerAt(hots, pt) === null).length / pts.length;
       shares.push([`${key}/${part.id}`, own]);
@@ -447,6 +448,123 @@ test('a tap on a room\'s furniture opens that room', () => {
   assert.ok(at('projects', 'project-tote-bag') >= 0.95, 'the tote opens Projects');
   assert.ok(at('guides', 'design-wall') >= 0.95, 'the design wall opens Guides');
   assert.ok(at('about', 'armchair') >= 0.95, 'the armchair opens About');
+});
+
+/* ---------- an outline is its furniture, not the air round it ---------- */
+
+const SEEN_STEP = 0.25; // viewBox units
+const [C30, S30] = [Math.cos(Math.PI / 6), Math.sin(Math.PI / 6)];
+
+/** The room whose floor is drawn at the screen point [sx, sy] (z = 0: project() undone), or null. */
+function floorAt([sx, sy]) {
+  const [x, y] = [(sx / C30 + sy / S30) / 2, (sy / S30 - sx / C30) / 2];
+  const [w, d] = HOUSE.cell;
+  return KEYS.find((key) => {
+    const [ox, oy] = HOUSE.at[key];
+    return x >= ox && x < ox + w && y >= oy && y < oy + d;
+  }) ?? null;
+}
+
+/**
+  What the eye sees over a house svg (seen.js: the last shape painted over a point): a grid of a room
+  key where a room's furniture or its label is seen, 'floor' where the floor slab or its boards are
+  (whose room: floorAt), 'wall' on the walls and the partitions (they stand between rooms), null on
+  the background.
+*/
+function seenOf(svg, viewBox) {
+  const seen = grid(viewBox, SEEN_STEP);
+  const boards = shade(PALETTE.floor, -0.12);
+  let label = -1;
+  for (const { tag, shape, at } of shapesOf(svg)) {
+    const room = at.find((g) => g.class === 'house__room')?.room;
+    if (room) seen.paint(shape, room);
+    else if (at.some((g) => g.class === 'house__label')) seen.paint(shape, KEYS[++label]); // a label is one rect, in the order of KEYS
+    else if (tag.includes('url(#house-bg)')) continue;
+    else seen.paint(shape, tag.includes(`stroke="${PALETTE.floor}"`) || tag.includes(`stroke="${boards}"`) ? 'floor' : 'wall');
+  }
+  assert.equal(label, KEYS.length - 1, 'every label painted');
+  return seen;
+}
+
+/**
+  The air in the outlines of the house's furniture: per part with a hit ('room/part'), the side
+  (viewBox units) of the largest square in one of its outlines (a piece's hull) where ANOTHER room is
+  seen — its furniture or its floor —, yet a tap opens the part's room, and the part's own drawing is
+  not under it (a nearer room's furniture standing over it is that room's business). → Map
+*/
+function airOf(rooms) {
+  const { svg, viewBox } = renderHouse(rooms, OPTS);
+  const hots = hotsOf(svg);
+  const seen = seenOf(svg, viewBox);
+  const air = new Map();
+  for (const key of KEYS) {
+    const [dx, dy] = project([...HOUSE.at[key], 0]);
+    for (const part of rooms[key].parts.filter((pt) => pt.hit?.length)) {
+      const own = shapesOf(part.draw(painter('air'))).map((s) => s.shape);
+      const isAir = (pt, value) => {
+        const room = value === 'floor' ? floorAt(pt) : value;
+        return !!room && room !== 'wall' && room !== key && ownerAt(hots, pt) === key && !own.some((s) => s.covers([pt[0] - dx, pt[1] - dy]));
+      };
+      let best = 0;
+      for (const poly of partOutlines(key, part)) {
+        const [c0, r0] = seen.cell([Math.min(...poly.map((q) => q[0])), Math.min(...poly.map((q) => q[1]))]);
+        const [c1, r1] = seen.cell([Math.max(...poly.map((q) => q[0])), Math.max(...poly.map((q) => q[1]))]);
+        let prev = [];
+        for (let r = r0; r <= r1; r++) {
+          const row = [];
+          for (let c = c0; c <= c1; c++) {
+            const pt = seen.pt(c, r);
+            const i = c - c0;
+            row[i] = inside(poly, pt) && isAir(pt, seen.get(c, r)) ? (r > r0 && i ? Math.min(prev[i], row[i - 1], prev[i - 1]) : 0) + 1 : 0;
+            best = Math.max(best, row[i]);
+          }
+          prev = row;
+        }
+      }
+      air.set(`${key}/${part.id}`, best ? (best - 1) * SEEN_STEP : 0);
+    }
+  }
+  return air;
+}
+
+// The largest square of air an outline may hold: a hairline (the gaps between a plant's leaves, the
+// rounding at an edge), 2.4 px on a 320 px phone — far under a fingertip.
+const AIR = 2;
+// Outlines older than this test with a bigger square of air, pinned at their size today (they may
+// shrink, not grow): trim them as the ones below were trimmed, then take them off the list.
+const AIR_KNOWN = new Map([['guides/sewing-table', 3], ['setup/desk', 3], ['fabrics/batting-rolls', 2.5]]);
+
+// The converse of the test above, and of about.test's "every piece of furniture has a hit that
+// covers it": an outline must be its furniture, not the air round it. Through the air in an outline
+// the eye sees the room behind, but a tap there opens the room in front — the review of 2026-10-19
+// found the softboxes' one hull over the Projects shelf, the box round the corner's lamp over My
+// Setup's floor, the Tools machine's and the corner screen's over the classroom's cutting table.
+// Where one hull would take in air, the hit comes in pieces (render.js hitPieces).
+test('an outline of furniture is its own drawing, not another room seen through the air in it', () => {
+  const air = airOf(ROOMS);
+  assert.ok(air.size >= 26, `every part with a hit of the six rooms was checked (${air.size})`);
+  for (const [id, side] of air) {
+    const limit = AIR_KNOWN.get(id) ?? AIR;
+    assert.ok(side <= limit, `${id}: a square of another room ${side} units wide opens ${id.split('/')[0]} (at most ${limit})`);
+  }
+  for (const [id, side] of AIR_KNOWN) assert.ok(air.get(id) > AIR, `${id} holds ${air.get(id)} units of air now: take it off AIR_KNOWN`);
+  console.log(`  air in outlines: ${[...air].filter(([, side]) => side > 0).sort((a, b) => b[1] - a[1]).map(([id, side]) => `${id} ${side}`).join(', ')}`);
+});
+
+// …and the test can see it: one hull over the pieces of the softboxes, the lamp or the Tools table
+// takes the air back in. (The corner screen gained most by being outlined as drawn: as one hull its
+// pieces hold 2 units of air, at the limit; in pieces, none.)
+test('an outline of furniture: one hull over the pieces would hold the air again', () => {
+  const merged = (key, id) => ({
+    ...ROOMS,
+    [key]: { ...ROOMS[key], parts: ROOMS[key].parts.map((part) => (part.id === id ? { ...part, hit: hitPieces(part.hit).flat() } : part)) },
+  });
+  const sides = [['setup', 'softboxes'], ['about', 'lamp'], ['tools', 'sewing-table']].map(([key, id]) => {
+    assert.ok(hitPieces(ROOMS[key].parts.find((part) => part.id === id).hit).length > 1, `${key}/${id} comes in pieces`);
+    return [`${key}/${id}`, airOf(merged(key, id)).get(`${key}/${id}`)];
+  });
+  console.log(`  air as one hull: ${sides.map(([id, side]) => `${id} ${side}`).join(', ')}`);
+  for (const [id, side] of sides) assert.ok(side > AIR, `${id} as one hull: ${side} units of air`);
 });
 
 // A label is painted over every room, so ALL of it opens its own room: no shape of a link that comes
@@ -501,10 +619,10 @@ test('a tap on an outer wall opens the room it belongs to; About and Tools have 
     ['tools', [2 * w + w / 2, 2 * d, low]], ['tools', [3 * w, d + d / 2, low]], ['fabrics', [3 * w, d / 2, low]],
   ];
   for (const [key, q] of edges) assert.equal(ownerAt(hots, project(q)), key, `${key}: the edge of its floor at ${q}`);
-  // one shape per part with a hit, plus one per outer wall and one per edge of the slab
+  // one shape per piece of a part's hit, plus one per outer wall and one per edge of the slab
   const SIDES = { projects: 2, guides: 1, fabrics: 1 + 1, setup: 1 + 1, about: 0 + 1, tools: 0 + 2 };
   for (const hot of hots) {
-    assert.equal(hot.pads.length, ROOMS[hot.room].parts.filter((pt) => pt.hit?.length).length + SIDES[hot.room], hot.room);
+    assert.equal(hot.pads.length, ROOMS[hot.room].parts.flatMap((pt) => hitPieces(pt.hit)).length + SIDES[hot.room], hot.room);
   }
   // above the back wall between two labels, and outside the house past its right corner: nothing
   assert.equal(ownerAt(hots, project([w / 2, -6, HOUSE.wallH + 8])), null);

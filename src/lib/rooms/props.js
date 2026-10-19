@@ -41,6 +41,25 @@ export const flat = (x0, x1, y0, y1, z) => [[x0, y0, z], [x1, y0, z], [x1, y1, z
 */
 export const shadowOn = (p, [x, y, z], rx, ry) => p.shadow(x - z, y - z, rx, ry);
 
+/** The world point drawn `right` and `up` (screen units) of the world point q: x + a, y − a moves it a · ISO_RX · √2 right. */
+export const onScreen = ([x, y, z], right, up) => [x + right / (ISO_RX * Math.SQRT2), y - right / (ISO_RX * Math.SQRT2), z + up];
+
+/**
+  Points round an ellipse drawn flat on the screen — its centre `right` and `up` of the world point q,
+  radii rx × ry, turned by `turn` degrees as svg rotate() turns it (a leaf) — a hair outside it: for a
+  part's `hit` (world points, onScreen).
+*/
+export const ellipseHit = (q, right, up, rx, ry, turn) => {
+  const a = (turn * Math.PI) / 180;
+  const out = 1 / Math.cos(Math.PI / 8);
+  return Array.from({ length: 8 }, (_, i) => {
+    const t = (i * Math.PI) / 4;
+    const [ex, ey] = [rx * out * Math.cos(t), ry * out * Math.sin(t)];
+    // rotate() on the screen, whose y runs down
+    return onScreen(q, right + ex * Math.cos(a) - ey * Math.sin(a), up - (ex * Math.sin(a) + ey * Math.cos(a)));
+  });
+};
+
 /** The eight corners of the box from (x, y, z), size w × d × h: the points for a part's `hit`. */
 export const corners = (x, y, z, w, d, h) => [
   [x, y, z], [x + w, y, z], [x + w, y + d, z], [x, y + d, z],

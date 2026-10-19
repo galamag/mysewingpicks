@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { project } from '../../src/lib/anatomy/iso.js';
 import { PALETTE, painter, num } from '../../src/lib/rooms/paint.js';
-import { renderRoom, minHitFor, hull } from '../../src/lib/rooms/render.js';
+import { renderRoom, minHitFor, hull, hitPieces } from '../../src/lib/rooms/render.js';
 import { checkTargets } from '../../src/lib/rooms/check.js';
 import { HOUSE } from '../../src/lib/rooms/house.js';
 import about from '../../src/lib/rooms/about.js';
@@ -40,7 +40,7 @@ test('about: a house cell', () => {
   // in the house its furniture must stay in its own cell
   const [w, d, h] = about.size;
   for (const part of about.parts) {
-    for (const [x, y, z] of part.hit ?? []) {
+    for (const [x, y, z] of hitPieces(part.hit).flat()) {
       assert.ok(x >= 0 && x <= w && y >= 0 && y <= d && z >= 0 && z <= h, `${part.id}: ${[x, y, z]} outside the room`);
     }
   }
@@ -63,8 +63,8 @@ test('about: window on an outer wall', () => {
 
 /**
   The screen points of a drawing: the corners of its polygons and rects, the ends of its lines, the
-  points of its paths, the extremes of its circles and ellipses. Blurred shadows on the floor aside
-  (the floor of the room is its own in the house).
+  points of its paths, the ends of the axes of its circles and ellipses (turned as a rotate() turns
+  them: the leaves). Blurred shadows on the floor aside (the floor of the room is its own in the house).
 */
 function drawnPoints(svg) {
   const pts = [];
@@ -81,7 +81,9 @@ function drawnPoints(svg) {
     } else {
       const [cx, cy] = [at('cx'), at('cy')];
       const [rx, ry] = tag.startsWith('<circle') ? [at('r'), at('r')] : [at('rx'), at('ry')];
-      pts.push([cx - rx, cy], [cx + rx, cy], [cx, cy - ry], [cx, cy + ry]);
+      const turn = (Number(/rotate\(([^ )]*)/.exec(tag)?.[1] ?? 0) * Math.PI) / 180;
+      const [c, s] = [Math.cos(turn), Math.sin(turn)];
+      for (const [u, v] of [[-rx, 0], [rx, 0], [0, -ry], [0, ry]]) pts.push([cx + u * c - v * s, cy + u * s + v * c]);
     }
   }
   return pts;
@@ -98,11 +100,12 @@ test('about: every piece of furniture has a hit that covers it (the house opens 
       assert.equal(part.hit, undefined, 'the rug is the floor');
       continue;
     }
-    assert.ok(part.hit?.length >= 3, `${part.id}: a hit`);
-    const poly = hull(part.hit.map((q) => project(q).map(num)));
+    // what the house reaches: the hull of each piece of the hit (render.js hitPieces)
+    const polys = hitPieces(part.hit).map((piece) => hull(piece.map((q) => project(q).map(num))));
+    assert.ok(polys.length > 0 && polys.every((poly) => poly.length >= 3), `${part.id}: a hit`);
     const pts = drawnPoints(part.draw(painter('t')));
     assert.ok(pts.length > 0 && pts.every((q) => q.every(Number.isFinite)), `${part.id}: points read`);
-    const share = pts.filter((q) => inside(poly, q)).length / pts.length;
+    const share = pts.filter((q) => polys.some((poly) => inside(poly, q))).length / pts.length;
     shares.push([part.id, share]);
     assert.ok(share >= 0.95, `${part.id}: only ${(share * 100).toFixed(0)}% of its drawing is in its hit`);
   }

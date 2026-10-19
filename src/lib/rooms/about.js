@@ -19,14 +19,16 @@
   room, drawn after it, stands in front there. Every piece of furniture still has a `hit` (the rug
   lies on the floor): here it links nowhere (no target), but the house reaches a room through its
   parts' `hit` (house.js reach), so a tap on the armchair or on the lamp rising over the room behind
-  opens About there ("what you see is what you tap"; tested: each `hit` covers its drawing).
+  opens About there ("what you see is what you tap"; tested: each `hit` covers its drawing) — and
+  only it: the lamp's and the screen's come in pieces (render.js hitPieces), the plant's round its
+  leaves, so no air round them takes the taps of the room seen behind (tested in house.test.js).
 
   No brand names, logos or lettering on anything. Model contract: src/lib/rooms/render.js. World
   units (cm-like): x → right-down, y → left-down, z → up; parts are listed back to front.
 */
 import { project } from '../anatomy/iso.js';
 import { PALETTE as C, shade, num } from './paint.js';
-import { dot, disc, corners, ISO_RX, ISO_RY, WOOD, FRAME } from './props.js';
+import { dot, disc, corners, ellipseHit, ISO_RX, ISO_RY, WOOD, FRAME } from './props.js';
 
 const xy = ([a, b]) => `${num(a)} ${num(b)}`;
 
@@ -37,6 +39,15 @@ function drum([x, y, z], r, h, side, top, extra = '') {
   return `<path d="M${xy([cx - rx, cb - h])}L${xy([cx - rx, cb])}A${num(rx)} ${num(ry)} 0 0 0 ${xy([cx + rx, cb])}L${xy([cx + rx, cb - h])}Z" fill="${side}"/>` +
     disc([x, y, z + h], r, top, extra);
 }
+
+/**
+  The `hit` of an upright cylinder of radius r standing on (x, y, z), h tall: points round its two rims,
+  a hair outside them, so their hull holds the cylinder as drawn.
+*/
+const drumHit = ([x, y, z], r, h) => {
+  const out = r / Math.cos(Math.PI / 16);
+  return [z, z + h].flatMap((zz) => Array.from({ length: 16 }, (_, i) => [x + out * Math.cos((i * Math.PI) / 8), y + out * Math.sin((i * Math.PI) / 8), zz]));
+};
 
 /** The points of a rectangle standing in the plane y = const (facing the room, +y): x0..x1 × z0..z1. */
 const upright = (y, x0, x1, z0, z1) => [[x0, y, z0], [x1, y, z0], [x1, y, z1], [x0, y, z1]];
@@ -131,6 +142,7 @@ function sideTable(p) {
 const CAB = { x: 34, y: 0.6, w: 18, d: 6.6, h: 9.6 };
 // the screen: x0..x1 × z0..z1 in the plane y, on a foot in the middle
 const TV = { x0: 37, x1: 49, y: 3.6, z0: CAB.h + 1.6, z1: CAB.h + 9.2, t: 0.8 };
+const TV_MID = (TV.x0 + TV.x1) / 2; // its foot and its neck stand here
 
 function screen(p) {
   const { x, y, w, d, h } = CAB;
@@ -202,6 +214,16 @@ function plant(p) {
   return s;
 }
 
+/**
+  The plant's `hit`: its pot and its leaves as drawn (props.js ellipseHit), not a box round all of it:
+  the box's corners took in the air beside the leaves, where the house shows My Setup's plant and
+  Projects' rug behind.
+*/
+const plantHit = () => [
+  ...drumHit([PLANT.x, PLANT.y, 0], PLANT.r, PLANT.pot),
+  ...LEAVES.flatMap(([u, v, k, turn]) => ellipseHit([PLANT.x, PLANT.y, PLANT.pot], u, v, k, 0.62 * k, turn)),
+];
+
 /* ---------- the model ---------- */
 
 export default {
@@ -210,9 +232,20 @@ export default {
   window: WINDOW,
   parts: [
     { id: 'rug', draw: rug },
-    { id: 'plant', draw: plant, hit: corners(PLANT.x - 3.5, PLANT.y - 3.5, 0, 7, 7, PLANT.pot + 14) },
-    { id: 'lamp', draw: lamp, hit: corners(LAMP.x - LAMP.r, LAMP.y - LAMP.r, 0, 2 * LAMP.r, 2 * LAMP.r, LAMP.top) },
-    { id: 'screen', draw: screen, hit: [...corners(CAB.x, CAB.y, 0, CAB.w, CAB.d, CAB.h), ...corners(TV.x0, TV.y - 1, CAB.h, TV.x1 - TV.x0, TV.t + 1.2, TV.z1 - CAB.h)] },
+    { id: 'plant', draw: plant, hit: plantHit() },
+    // its foot and its shade, a piece each (render.js hitPieces), not the thin pole between them:
+    // over the partition the house shows the floor and the plant of My Setup there
+    { id: 'lamp', draw: lamp, hit: [drumHit([LAMP.x, LAMP.y, 0], 2, 0.2), drumHit([LAMP.x, LAMP.y, LAMP.top - LAMP.shade], LAMP.r, LAMP.shade)] },
+    // two pieces: the cabinet with the screen's foot on it, the screen on its neck (as screen() draws
+    // them) — one hull took in the air beside the screen, where the house shows the classroom behind
+    {
+      id: 'screen',
+      draw: screen,
+      hit: [
+        [...corners(CAB.x, CAB.y, 0, CAB.w, CAB.d, CAB.h), ...corners(TV_MID - 2, TV.y - 1, CAB.h, 4, 2.4, 0.4)],
+        [...corners(TV.x0, TV.y, TV.z0, TV.x1 - TV.x0, TV.t, TV.z1 - TV.z0), ...corners(TV_MID - 0.5, TV.y - 0.2, CAB.h + 0.4, 1, 0.6, TV.z0 - CAB.h - 0.4)],
+      ],
+    },
     { id: 'armchair', draw: armchair, hit: corners(CHAIR.x, CHAIR.y, 0, CHAIR.w, CHAIR.d, CHAIR.top) },
     { id: 'side-table', draw: sideTable, hit: corners(TABLE.x - TABLE.r, TABLE.y - TABLE.r, 0, 2 * TABLE.r, 2 * TABLE.r, tableTop + 4.8) },
     { id: 'basket', draw: basket, hit: corners(BASKET.x - BASKET.r, BASKET.y - BASKET.r, 0, 2 * BASKET.r, 2 * BASKET.r, 1 + Math.max(...ROLLS.map((q) => q[3])) + 0.3) },

@@ -15,7 +15,12 @@
               target  optional, exactly one of { product } | { section } | { project }
               hit     [[x, y, z], …] world points of the tap area (needed with a target); the house
                       (house.js reach) also uses it on a part WITHOUT a target: a tap on that
-                      furniture opens its room there (About's)
+                      furniture opens its room there (About's). Or PIECES, [[[x, y, z], …], …], where
+                      one hull would span the empty air between them (the two softboxes; a lamp's
+                      foot and its shade, not the thin pole): the house reaches the part through each
+                      piece's hull — the air between shows the room behind, and a tap there opens
+                      it; a room page links the part through ONE shape, the hull of all the points
+                      (tapArea). hitPieces() reads either form.
               label   optional (with a target), { corner: 'tl' | 'tr' | 'bl' | 'br', at: [x, y, z] }:
                       the link's name in that corner of the picture, a leader to a dot at `at`
                       (on the object, inside its tap area); see "labels" below
@@ -178,6 +183,9 @@ export function hull(points) {
   };
   return chain(pts).concat(chain([...pts].reverse()));
 }
+
+/** The pieces of a part's `hit`, each a list of world points: a plain list of points is one piece. */
+export const hitPieces = (hit) => (!hit?.length ? [] : Array.isArray(hit[0][0]) ? hit : [hit]);
 
 const areaOf = (poly) => Math.abs(poly.reduce((sum, q, i) => {
   const r = poly[(i + 1) % poly.length];
@@ -387,7 +395,7 @@ export function roomParts(model, p, resolve, { minHit = MIN_HIT, inactive = new 
     seen.add(part.id);
 
     const art = part.draw(p);
-    if (part.target && !part.hit?.length) {
+    if (part.target && !hitPieces(part.hit).length) {
       throw new Error(`rooms/${model.key}: part "${part.id}" has a target but no hit`);
     }
     const info = part.target && !inactive.has(part.id) ? resolve?.(part.target) : null;
@@ -397,7 +405,7 @@ export function roomParts(model, p, resolve, { minHit = MIN_HIT, inactive = new 
     }
 
     body += `<g class="room__part" data-part="${esc(part.id)}">${art}</g>`;
-    const poly = tapArea(part.hit, minHit);
+    const poly = tapArea(hitPieces(part.hit).flat(), minHit);
     const label = part.label && frame ? labelLayout(info.label, part.label, frame) : null;
     if (label) labels += labelSvg(part.id, label);
     links.push({ part: part.id, ...info, poly, area: areaOf(poly), pill: label?.pill });

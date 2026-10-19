@@ -21,7 +21,7 @@
 */
 import { project } from '../anatomy/iso.js';
 import { PALETTE, painter, shade, num } from './paint.js';
-import { roomParts, windowOnWall, lightOnFloor, hull, esc, textEm, WALL_THICK, FLOOR_THICK } from './render.js';
+import { roomParts, windowOnWall, lightOnFloor, hull, hitPieces, esc, textEm, WALL_THICK, FLOOR_THICK } from './render.js';
 import { LOCALES, t } from '../../i18n/index.js';
 
 /**
@@ -195,9 +195,11 @@ const outline = (pts3) => hull(pts3.map((q) => project(q).map(num)));
   the house (the front face of the slab under a front-row room, the right face under a right-column
   one: the floor seen from the side, between the floor and the label below it) and the `hit` hull of
   EVERY part that has one — with a target or not (About links nowhere on its own page, its furniture
-  still opens it here) — moved to its cell: tall furniture rises on the screen over the floor of the
-  room behind it, and a tap on it must open its own room. The links are in drawing order (back to
-  front), so where a nearer room's furniture covers this room's, the nearer one wins, as the eye sees it.
+  still opens it here), a hull per piece of it (render.js hitPieces) — moved to its cell: tall
+  furniture rises on the screen over the floor of the room behind it, and a tap on it must open its
+  own room. Only on it: the air between two pieces shows the room behind, and a tap there opens that.
+  The links are in drawing order (back to front), so where a nearer room's furniture covers this
+  room's, the nearer one wins, as the eye sees it.
 */
 function reach(model, [ox, oy]) {
   const [w, d] = HOUSE.cell;
@@ -210,8 +212,8 @@ function reach(model, [ox, oy]) {
     ...(oy + d === HOUSE.rows * d ? [box([ox, ox + w], [oy + d, oy + d], [-F, 0])] : []), // the slab's front face
     ...(ox + w === HOUSE.cols * w ? [box([ox + w, ox + w], [oy, oy + d], [-F, 0])] : []), // the slab's right face
   ];
-  const parts = model.parts.filter((part) => part.hit?.length)
-    .map((part) => part.hit.map(([x, y, z]) => [x + ox, y + oy, z]));
+  const parts = model.parts.flatMap((part) => hitPieces(part.hit))
+    .map((piece) => piece.map(([x, y, z]) => [x + ox, y + oy, z]));
   return [...sides, ...parts].map(outline).filter((poly) => poly.length >= 3);
 }
 
