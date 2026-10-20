@@ -32,6 +32,11 @@ export default {
         choose: "Quand le sac est plié au fond, que vous cousez d'abord les côtés et que vous voulez un fond plat : avec les coins découpés, les coutures se rejoignent proprement, et la méthode convient aussi aux tissus épais.",
         note: 'Sur la panière en tissu, les coins sont découpés dès la coupe : dans un carré de 60 × 60 cm, un carré de 20 × 20 cm à chaque coin.',
       },
+      boxed: {
+        title: 'Coins carrés (en triangle)',
+        line: "Le sac est d'abord cousu, puis chaque coin du bas est aplati en triangle et cousu en travers.",
+        choose: "Quand vous voulez d'abord essayer la profondeur : rien n'est découpé à l'avance, vous pouvez donc encore coudre un fond plus profond. Le coin est solide, et la méthode convient aux tissus légers.",
+      },
     },
   },
 };

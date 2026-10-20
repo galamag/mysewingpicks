@@ -31,6 +31,11 @@ export default {
         choose: 'Quando la borsa è piegata sul fondo, cuci prima i lati e vuoi un fondo piatto: con gli angoli tagliati le cuciture si incontrano con precisione, e va bene anche per i tessuti spessi.',
         note: 'Nel cestino di stoffa gli angoli si tagliano già al momento del taglio: da un quadrato di 60 × 60 cm, un quadrato di 20 × 20 cm da ogni angolo.',
       },
+      boxed: {
+        title: 'Angoli a triangolo',
+        line: 'Prima si cuce la borsa, poi ogni angolo in basso si appiattisce a triangolo e si cuce di traverso.',
+        choose: "Quando vuoi provare prima la profondità: non si taglia niente in anticipo, quindi puoi ancora cucire un fondo più profondo. L'angolo è robusto, ed è adatto ai tessuti leggeri.",
+      },
     },
   },
 };

@@ -54,9 +54,9 @@ export const guides = [
   },
   {
     // One page, one section per kind of bottom (Vault «Гайды — Дно сумки (спецификация)»), in this order:
-    // folded (the maker's, the tote), cut-out (the maker's, the makeup bag), then - still to come - boxed, panel.
+    // folded (the maker's, the tote), cut-out (the maker's, the makeup bag), boxed (public, no numbers), then - still to come - panel.
     // Section numbers: only the maker's (spec 3); `folded` - the tote's 6, 12, 0.5 cm; `cut-out` - the makeup bag's
-    // 23 x 31, 0.5, 3.5 x 2.5 cm and the basket's 60, 20 cm. Title, h1 and page title: spec 5.1 as approved.
+    // 23 x 31, 0.5, 3.5 x 2.5 cm and the basket's 60, 20 cm; `boxed` - none at all. Title, h1 and page title: spec 5.1 as approved.
     // No video (spec 6): "Where it's used" links to the projects instead.
     slug: 'bag-bottom',
     group: 'construction',
@@ -93,6 +93,18 @@ export const guides = [
         line: 'A small piece cut from each bottom corner, then the corner opened and sewn straight across.',
         choose: 'When the bag is folded at the bottom, its sides are sewn first and you want a flat bottom: with the corners cut out, the seams meet neatly, and it suits thicker fabrics too.',
         note: 'On the fabric basket the corners are cut out right at cutting time: a 60 × 60 cm square with a 20 × 20 cm square cut from each corner.',
+      },
+      {
+        // A public technique, no maker's project yet (usedIn: [] - no "Where it's used"): the sources of spec 5.2
+        // agree on the method; NO numbers (spec 3), the relations in words - the line across is as long as the base
+        // is wide, marked half the base width from the end of the seam; the tip trimmed leaving a small allowance.
+        // "When to choose it": the sources' advice (Sew4Home, spec 5.2), no numbers.
+        id: 'boxed',
+        figure: 'bag-bottom-boxed',
+        usedIn: [],
+        title: 'Boxed corners (pinched)',
+        line: 'The bag is sewn first, then each bottom corner is flattened into a triangle and sewn straight across.',
+        choose: 'When you want to try the depth first: nothing is cut beforehand, so you can still sew a deeper bottom. The corner is strong, and it suits light fabrics.',
       },
     ],
   },

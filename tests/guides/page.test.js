@@ -89,3 +89,19 @@ test('the cosmetic bag and the basket link their steps to #cut-out of the same l
     }
   }
 });
+
+// "Bag bottoms", section `boxed` on the built pages: its own figure, after cut-out; no project yet, so no
+// "Where it's used" block and no note; three figures on one page, none sharing an id (the duplicate test above).
+test('bag-bottom #boxed: its own figure, third, no "Where it\'s used"', () => {
+  for (const [lang, dir] of Object.entries(LANG_DIRS)) {
+    const html = readFileSync(join(dist, dir, 'guides', 'bag-bottom.html'), 'utf8');
+    const sec = sectionHtml(html, 'boxed');
+    assert.ok(sec, `${lang}: no <section id="boxed">`);
+    assert.match(sec, /data-anatomy="bag-bottom-boxed"/, `${lang}: the section's figure`);
+    assert.doesNotMatch(sec, /data-anatomy="bag-bottom-(?:folded|cut-out)"/, `${lang}: another figure inside boxed`);
+    assert.doesNotMatch(sec, /guide-used/, `${lang}: "Where it's used" without a project`);
+    assert.ok(html.indexOf('id="cut-out"') < html.indexOf('id="boxed"'), `${lang}: cut-out comes before boxed`);
+    assert.equal((html.match(/data-anatomy="/g) ?? []).length, 3, `${lang}: three figures on the page`);
+    assert.match(html, /href="#boxed"/, `${lang}: the contents link to #boxed`);
+  }
+});

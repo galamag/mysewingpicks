@@ -31,6 +31,11 @@ export default {
         choose: 'Wenn die Tasche unten gefaltet ist, zuerst die Seiten genäht werden und du einen flachen Boden möchtest: Mit ausgeschnittenen Ecken treffen die Nähte sauber aufeinander, und es eignet sich auch für dickere Stoffe.',
         note: 'Beim Stoffkorb werden die Ecken gleich beim Zuschneiden ausgeschnitten: aus einem Quadrat von 60 × 60 cm an jeder Ecke ein Quadrat von 20 × 20 cm.',
       },
+      boxed: {
+        title: 'Ecken abnähen',
+        line: 'Erst wird die Tasche genäht, dann wird jede untere Ecke zu einem Dreieck flach gelegt und quer abgenäht.',
+        choose: 'Wenn du die Tiefe erst ausprobieren möchtest: Vorher wird nichts ausgeschnitten, also kannst du den Boden noch tiefer nähen. Die Ecke ist fest, und die Methode passt gut zu leichten Stoffen.',
+      },
     },
   },
 };

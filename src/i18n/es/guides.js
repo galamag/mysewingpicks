@@ -32,6 +32,11 @@ export default {
         choose: 'Cuando la bolsa va doblada en la base, coses primero los lados y quieres una base plana: con las esquinas recortadas, las costuras coinciden con limpieza, y sirve también para telas gruesas.',
         note: 'En la cesta de tela las esquinas se recortan ya al cortar: de un cuadrado de 60 × 60 cm, un cuadrado de 20 × 20 cm en cada esquina.',
       },
+      boxed: {
+        title: 'Esquinas en triángulo',
+        line: 'Primero se cose la bolsa; luego cada esquina de abajo se aplana en triángulo y se cose de lado a lado.',
+        choose: 'Cuando quieres probar primero la profundidad: no se recorta nada antes, así que todavía puedes coser una base más honda. La esquina queda resistente y va bien con telas ligeras.',
+      },
     },
   },
 };

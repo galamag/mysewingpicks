@@ -12,4 +12,5 @@ export const MODELS = {
   'cosmetic-bag': { model: () => import('./cosmetic.js'), texts: import.meta.glob('./cosmetic.??.js') },
   'bag-bottom-folded': { model: () => import('./bottom-folded.js'), texts: import.meta.glob('./bottom-folded.??.js') },
   'bag-bottom-cut-out': { model: () => import('./bottom-cutout.js'), texts: import.meta.glob('./bottom-cutout.??.js') },
+  'bag-bottom-boxed': { model: () => import('./bottom-boxed.js'), texts: import.meta.glob('./bottom-boxed.??.js') },
 };
