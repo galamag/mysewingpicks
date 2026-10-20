@@ -63,6 +63,7 @@ export default {
     liningHalf: 'Futter',
     cutCorners: 'Ecken ausschneiden',
     pinchSew: 'auffalten, quer nähen',
+    seamOnFold: 'Naht auf den Bruch',
     allFour: 'alle vier Ecken',
     turnThrough: 'durch die Öffnung wenden',
     byHand: 'von Hand schließen',
@@ -164,7 +165,7 @@ export default {
       details: [
         'Zeichne in jede der vier unteren Ecken ein Rechteck von 3,5 × 2,5 cm: 3,5 cm entlang des Bodens, 2,5 cm entlang der Seitennaht.',
         'Schneide sie aus.',
-        'Falte jede Ecke so auf, dass die Seitennaht auf dem Bodenbruch liegt.',
+        'Falte jede Ecke so auf, dass die Seitennaht auf dem Bodenbruch liegt und die Schnittkanten eine gerade Linie bilden.',
         'Nähe quer darüber, 0,5 cm von der Kante. So alle vier Ecken.',
       ],
     },

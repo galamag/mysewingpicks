@@ -69,6 +69,7 @@ export default {
     liningHalf: 'lining',
     cutCorners: 'cut the corners',
     pinchSew: 'pinch, sew across',
+    seamOnFold: 'side seam on the fold',
     allFour: 'all four corners',
     turnThrough: 'turn through the opening',
     byHand: 'close it by hand',
@@ -170,7 +171,7 @@ export default {
       details: [
         'Mark a 3.5 × 2.5 cm (1⅜ × 1 in) rectangle in each of the four bottom corners: 3.5 cm along the bottom, 2.5 cm along the side seam.',
         'Cut them out.',
-        'Open each corner and pinch it so that the side seam meets the bottom fold.',
+        'Open each corner and flatten it so that the side seam lies on the bottom fold and the cut edges form one straight line.',
         'Sew straight across, 0.5 cm (³⁄₁₆ in) from the edge. Do all four corners.',
       ],
     },

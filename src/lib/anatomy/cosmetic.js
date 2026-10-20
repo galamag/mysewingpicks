@@ -430,20 +430,35 @@ function stepZip1(t) {
 */
 const Y_LINE = 0; // where the zipper is
 
+/*
+  The halves of outer and lining with the bottom corners cut away (step 10 on): 3.5 along the
+  bottom (the fold) × 2.5 along the side seam. `atEnd` — the fold is at v = HALF (the near halves),
+  else at v = 0 (the far halves). The interfacing outline goes round the cut too.
+*/
+function notched(atEnd) {
+  const f = atEnd ? (v) => v : (v) => HALF - v; // v measured from the far edge → the piece's own v
+  const piece = [[0, 0], [OW, 0], [OW, HALF - NY], [OW - NX, HALF - NY], [OW - NX, HALF], [NX, HALF], [NX, HALF - NY], [0, HALF - NY]];
+  const iface = [[IM, IM], [OW - IM, IM], [OW - IM, HALF - NY], [OW - NX, HALF - NY], [OW - NX, HALF], [NX, HALF], [NX, HALF - NY], [IM, HALF - NY], [IM, IM]];
+  const map = (pts) => pts.map(([u, v]) => [u, f(v)]);
+  return { pts: map(piece), iface: [{ pts: map(iface), kind: 'iface', side: 'in' }] };
+}
+
 /** Split a piece's rect [0,OW]×[y0,y1] (in its own coords, placed by O/U/V) — near and far parts. */
-function stateFolded({ flipL, foldO, foldL }) {
+function stateFolded({ flipL, foldO, foldL, cut = false }) {
   const hinge = [0, HALF, T];
   const aO = Math.PI * foldO;
-  const outerNear = table('f-outer-near', rect(OW, HALF), 0, PRINT, BACK, true, { lines: ifaceOn(0, HALF, 'in') });
-  const farRaw = table('f-outer-far', rect(OW, HALF), 0, PRINT, BACK, true, { O: [0, HALF, 0], lines: ifaceOn(HALF, OL, 'in').map((l) => ({ ...l, pts: l.pts.map(([u, v]) => [u, v - HALF]) })) });
+  const nEnd = notched(true), nStart = notched(false);
+  const outerNear = table('f-outer-near', cut ? nEnd.pts : rect(OW, HALF), 0, PRINT, BACK, true, { lines: cut ? nEnd.iface : ifaceOn(0, HALF, 'in') });
+  const farRaw = table('f-outer-far', cut ? nStart.pts : rect(OW, HALF), 0, PRINT, BACK, true, { O: [0, HALF, 0], lines: cut ? nStart.iface : ifaceOn(HALF, OL, 'in').map((l) => ({ ...l, pts: l.pts.map(([u, v]) => [u, v - HALF]) })) });
   const outerFar = turn({ ...farRaw, O: [0, HALF, T] }, hinge, [1, 0, 0], aO);
-  const moonsNear = moonsOnOuter(T * 1.5, -1);
-  const moonsFar = moonsOnOuter(T * 2.5, 1).map((m) => turn(m, hinge, [1, 0, 0], aO));
+  // the half-moons lie between the outer's layers, hidden; once the corners are cut they are left out
+  const moonsNear = cut ? [] : moonsOnOuter(T * 1.5, -1);
+  const moonsFar = cut ? [] : moonsOnOuter(T * 2.5, 1).map((m) => turn(m, hinge, [1, 0, 0], aO));
   // the lining: first flipped about y = 0 (lies over y -31…0, right side up), then its far half folds over
   const aF = Math.PI * flipL, aL = -Math.PI * foldL;
   const zLine = [0, Y_LINE, 4 * T];
-  const linNear = turn(table('f-lin-near', rect(OW, HALF), 4 * T, LIN, LIN_BACK, false, { O: [0, 0, 4 * T] }), zLine, [1, 0, 0], aF);
-  const linFar0 = turn(table('f-lin-far', rect(OW, HALF), 4 * T, LIN, LIN_BACK, false, { O: [0, HALF, 4 * T] }), zLine, [1, 0, 0], aF);
+  const linNear = turn(table('f-lin-near', cut ? nEnd.pts : rect(OW, HALF), 4 * T, LIN, LIN_BACK, false, { O: [0, 0, 4 * T] }), zLine, [1, 0, 0], aF);
+  const linFar0 = turn(table('f-lin-far', cut ? nStart.pts : rect(OW, HALF), 4 * T, LIN, LIN_BACK, false, { O: [0, HALF, 4 * T] }), zLine, [1, 0, 0], aF);
   const lHinge = [0, -HALF, T];
   const linFar = flipL >= 0.999 ? turn({ ...linFar0, O: [linFar0.O[0], linFar0.O[1], T] }, lHinge, [1, 0, 0], aL) : linFar0;
   const zip = zipFlat(2 * T, 1, 'f-zip', flipL >= 0.5 ? -ZW + 0.4 : 0, flipL < 0.5);
@@ -487,7 +502,7 @@ function stepZip2(t) {
 
 /* Steps 9–10: the bag flat, inside out: the outer half (y 0…15.5) and the lining half (y -15.5…0). */
 
-const FLAT = () => stateFolded({ flipL: 1, foldO: 1, foldL: 1 });
+const FLAT = (cut = false) => stateFolded({ flipL: 1, foldO: 1, foldL: 1, cut });
 const GAP_Y = [-HALF / 2 - SPEC.opening / 2, -HALF / 2 + SPEC.opening / 2]; // the opening, in the middle of the lining's side
 
 function stepSides(t) {
@@ -514,43 +529,79 @@ function stepSides(t) {
   };
 }
 
-/* Step 10: cut 3.5 (along the bottom) × 2.5 (along the side seam) from each bottom corner; pinch and sew. */
+/* Step 10: cut 3.5 (along the bottom) × 2.5 (along the side seam) from each bottom corner; flatten and sew. */
 const NOTCHES = [
   { x: 0, y: HALF, sx: 1, sy: -1 }, { x: OW, y: HALF, sx: -1, sy: -1 },
   { x: 0, y: -HALF, sx: 1, sy: 1 }, { x: OW, y: -HALF, sx: -1, sy: 1 },
 ];
 const notchRect = (n) => [[n.x, n.y], [n.x + n.sx * NX, n.y], [n.x + n.sx * NX, n.y + n.sy * NY], [n.x, n.y + n.sy * NY]];
 
+/*
+  Mark the four rectangles, cut them out through both layers (the outline gets a real step, the
+  cut-offs slide away on the table), then open each cut corner and flatten it so that the side
+  seam lies on the bottom fold: the corner stands up as a small flat fin, its cut edge one
+  straight line; sew across it. The END VIEW looks at a corner end-on: the opened cut is a
+  triangle (the side seam at its tip, the fold in the middle of its base) that flattens into a line.
+*/
+const FIN_H = 2 * NY; // the fin's cut edge — the bottom's cut, across the fold (drawing)
+
+function cornerFin(n, i, h, z) {
+  const c = [n.x + n.sx * NX, n.y + n.sy * NY]; // the inner corner of the cut
+  const dx = n.x - c[0], dy = n.y - c[1], len = Math.hypot(dx, dy);
+  const d = [dx / len, dy / len, 0];
+  const fill = n.y > 0 ? BACK : LIN_BACK;
+  const fin = {
+    id: `fin-${i}`, pts: [[0, h / 2], [len, 0], [len, h]], O: [c[0], c[1], z], U: d, V: [0, 0, 1], out: [-d[1], d[0], 0],
+    fill, inner: fill, lines: [{ pts: [[0, h / 2], [len, h / 2]], kind: 'seam' }],
+  };
+  const at = (s, v) => [c[0] + d[0] * s, c[1] + d[1] * s, z + v];
+  return { fin, stitch: [at(len - SPEC.seam, SPEC.seam * (h / FIN_H)), at(len - SPEC.seam, h - SPEC.seam * (h / FIN_H))], top: at(len, h) };
+}
+
+/** The END VIEW: the opened cut seen end-on — a triangle whose tip (the side seam) comes down onto the fold. */
+function cornerInset(pinch) {
+  const b = FIN_H / 2, tip = Math.sqrt(NX ** 2 - b ** 2) * (1 - pinch);
+  return {
+    segs: [
+      { a: [-b, 0], b: [b, 0] }, // the bottom's cut, across the fold
+      { a: [-b, 0], b: [0, tip] }, { a: [b, 0], b: [0, tip] }, // the cuts along the side seam, front and back
+      { a: [0, 0], b: [0, -0.7] }, // the fold
+      { a: [0, tip], b: [0, tip + 0.7] }, // the side seam
+    ],
+    range: [-3.6, 3.6],
+  };
+}
+
 function stepCorners(t) {
-  const mark = span(t, 0.04, 0.2), cut = span(t, 0.26, 0.4), pinch = span(t, 0.5, 0.62), sew = span(t, 0.66, 0.92);
+  const mark = span(t, 0.04, 0.18), cut = span(t, 0.22, 0.26), away = span(t, 0.26, 0.4);
+  const pinch = span(t, 0.48, 0.64), sew = span(t, 0.7, 0.92);
   const z = 7.5 * T;
-  const pieces = [...FLAT()];
+  const pieces = [...FLAT(cut > 0.5)];
   const over = [];
+  const fins = NOTCHES.map((n, i) => cornerFin(n, i, FIN_H * Math.max(pinch, 0.001), z));
   NOTCHES.forEach((n, i) => {
     const r = notchRect(n);
     const fill = n.y > 0 ? BACK : LIN_BACK;
-    // the corner square: marked, then it lifts away; the gap closes into a diagonal seam
-    if (cut < 0.999) pieces.push(table(`nc-${i}`, r, z + cut * 3, fill, fill, true, { O: [n.sx * -cut * 3, n.sy * -cut * 3, z + cut * 3], opacity: 1 - cut }));
     over.push({ type: 'line', pts: [r[1], r[2], r[3]].map(([x, y]) => [x, y, z + 0.05]), t: mark, kind: 'mark', o: 1 - cut });
-    if (cut > 0.001) pieces.push(table(`hole-${i}`, r, z + 0.04, F('board'), F('board'), true, { opacity: cut * (1 - pinch) }));
-    if (pinch > 0.001) {
-      const tri = [r[1], r[2], r[3]];
-      pieces.push(table(`pinch-${i}`, tri, z + 0.06, fill, fill, true, { opacity: pinch }));
-      over.push({ type: 'line', pts: [r[1], r[3]].map(([x, y]) => [x, y, z + 0.1]), t: sew, kind: 'hot', o: pinch });
-    }
+    // the cut-off rectangle slides away on the table and is gone
+    if (cut > 0.5 && away < 0.999) pieces.push(table(`cutoff-${i}`, r, z, fill, fill, true, { O: [-n.sx * away * 4, -n.sy * away * 4, z], opacity: 1 - away }));
+    if (pinch > 0.001) pieces.push(fins[i].fin);
+    over.push({ type: 'line', pts: fins[i].stitch, t: sew, kind: 'hot', o: pinch > 0.001 ? 1 : 0 });
   });
-  const n0 = NOTCHES[1];
+  const near = fins[0]; // the outer's left corner: its fin faces the viewer
   return {
     pieces,
     over: [
       ...over,
-      { type: 'dim', a: [OW - NX, HALF + 2, z], b: [OW, HALF + 2, z], label: 'cm35', o: span(t, 0.08, 0.14) * (1 - span(t, 0.44, 0.48)), hot: true },
-      { type: 'dim', a: [OW + 2, HALF - NY, z], b: [OW + 2, HALF, z], label: 'cm25', o: span(t, 0.08, 0.14) * (1 - span(t, 0.44, 0.48)), hot: true },
-      { type: 'label', p: [n0.x - NX, n0.y, z], label: 'cutCorners', o: span(t, 0.26, 0.32) * (1 - span(t, 0.44, 0.48)), dx: -10, dy: 6 },
-      { type: 'label', p: [n0.x - NX / 2, n0.y - NY / 2, z], label: 'pinchSew', o: span(t, 0.52, 0.58), dx: -12, dy: 9, hot: true },
-      { type: 'label', p: [OW / 2, 0, z], label: 'allFour', o: span(t, 0.9, 0.96) },
+      { type: 'dim', a: [0, HALF + 2, z], b: [NX, HALF + 2, z], label: 'cm35', o: span(t, 0.08, 0.14) * (1 - span(t, 0.4, 0.44)), hot: true },
+      { type: 'dim', a: [-2, HALF - NY, z], b: [-2, HALF, z], label: 'cm25', o: span(t, 0.08, 0.14) * (1 - span(t, 0.4, 0.44)), hot: true },
+      { type: 'label', p: [NX, HALF - NY, z], label: 'cutCorners', o: span(t, 0.22, 0.28) * (1 - span(t, 0.4, 0.44)), dx: 12, dy: -6 },
+      { type: 'label', p: near.top, label: 'seamOnFold', o: span(t, 0.5, 0.56) * (1 - span(t, 0.68, 0.72)), dx: 14, dy: -8, hot: true },
+      { type: 'label', p: near.top, label: 'pinchSew', o: span(t, 0.72, 0.78) * (1 - span(t, 0.9, 0.94)), dx: 14, dy: -8, hot: true },
+      { type: 'label', p: [OW / 2, 0, z], label: 'allFour', o: span(t, 0.92, 0.97) },
     ],
-    focus: { pts: [[OW - 9, HALF - 7, 0], [OW + 3, HALF + 3, 0]], k: 0.45 * span(t, 0.02, 0.1) * (1 - span(t, 0.86, 0.94)) },
+    inset: t > 0.44 ? cornerInset(pinch) : null,
+    focus: { pts: [[-3, HALF - 6, 0], [7, HALF + 3, 0], [NX, HALF - NY, FIN_H + 1], [-3, HALF, FIN_H + 1]], k: 0.8 * span(t, 0.02, 0.1) * (1 - span(t, 0.9, 0.97)) },
   };
 }
 
@@ -566,7 +617,7 @@ const tube = (ext, close) => shell({
 function stepTurn(t) {
   const turned = span(t, 0.08, 0.3), close = span(t, 0.36, 0.62), push = span(t, 0.7, 0.86), zipUp = span(t, 0.88, 0.97);
   const ext = 12 * (1 - push);
-  const flat = fadeAll(FLAT(), 1 - turned);
+  const flat = fadeAll([...FLAT(true), ...NOTCHES.map((n, i) => cornerFin(n, i, FIN_H, 7.5 * T).fin)], 1 - turned);
   const bag = fadeAll(bagPieces({ open: 1 - zipUp, zip: false }), turned);
   const lining = fadeAll(tube(ext, close), turned * (1 - span(t, 0.8, 0.86)));
   const zip = fadeAll(zipperOnTop(TOPZ, (1 - zipUp) * 0.85), turned);
@@ -609,7 +660,7 @@ export const STEPS = [
   { scene: stepZip1, duration: 6, stitch: 'straight', sew: [[0.62, 0.92, 'lining']], uses: ['soraco-sewing-clips', 'janome-1522rd'] },
   { scene: stepZip2, duration: 7, stitch: 'straight', sew: [[0.7, 0.94, 'lining']], pad: 0.22, uses: ['janome-1522rd'] },
   { scene: stepSides, duration: 6, stitch: 'straight', sew: [[0.3, 0.88, 'lining']], uses: ['soraco-sewing-clips', 'janome-1522rd'] },
-  { scene: stepCorners, duration: 6.5, stitch: 'straight', sew: [[0.66, 0.92, 'print']], uses: ['quilting-rulers-set', 'sewline-air-erasable-pen', 'tailor-scissors', 'janome-1522rd'] },
+  { scene: stepCorners, duration: 7.5, stitch: 'straight', sew: [[0.7, 0.92, 'print']], uses: ['quilting-rulers-set', 'sewline-air-erasable-pen', 'tailor-scissors', 'janome-1522rd'] },
   { scene: stepTurn, duration: 7, uses: [] },
 ];
 

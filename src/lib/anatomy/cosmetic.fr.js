@@ -63,6 +63,7 @@ export default {
     liningHalf: 'doublure',
     cutCorners: 'découper les coins',
     pinchSew: 'ouvrir, coudre en travers',
+    seamOnFold: 'couture sur la pliure',
     allFour: 'les quatre coins',
     turnThrough: "retourner par l'ouverture",
     byHand: 'fermer à la main',
@@ -164,7 +165,7 @@ export default {
       details: [
         'Tracez dans chacun des quatre coins du bas un rectangle de 3,5 × 2,5 cm : 3,5 cm le long du fond, 2,5 cm le long de la couture de côté.',
         'Découpez-les.',
-        "Ouvrez chaque coin et aplatissez-le pour que la couture de côté tombe sur la pliure du fond.",
+        "Ouvrez chaque coin et aplatissez-le pour que la couture de côté tombe sur la pliure du fond et que les bords coupés forment une ligne droite.",
         "Cousez en travers, à 0,5 cm du bord. Faites les quatre coins.",
       ],
     },

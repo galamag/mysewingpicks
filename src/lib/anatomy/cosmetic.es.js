@@ -63,6 +63,7 @@ export default {
     liningHalf: 'forro',
     cutCorners: 'recortar las esquinas',
     pinchSew: 'abrir, coser de lado a lado',
+    seamOnFold: 'costura sobre el doblez',
     allFour: 'las cuatro esquinas',
     turnThrough: 'vuelta por la abertura',
     byHand: 'cerrar a mano',
@@ -164,7 +165,7 @@ export default {
       details: [
         'Marca en cada una de las cuatro esquinas de abajo un rectángulo de 3,5 × 2,5 cm: 3,5 cm a lo largo de la base, 2,5 cm a lo largo de la costura lateral.',
         'Recórtalos.',
-        'Abre cada esquina y aplánala para que la costura lateral quede sobre el doblez de la base.',
+        'Abre cada esquina y aplánala para que la costura lateral quede sobre el doblez de la base y los bordes cortados formen una línea recta.',
         'Cose de lado a lado a 0,5 cm del borde. Haz las cuatro esquinas.',
       ],
     },

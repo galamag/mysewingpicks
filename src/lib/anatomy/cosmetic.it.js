@@ -63,6 +63,7 @@ export default {
     liningHalf: 'fodera',
     cutCorners: 'taglia gli angoli',
     pinchSew: 'apri, cuci di traverso',
+    seamOnFold: 'cucitura sulla piega',
     allFour: 'tutti e quattro gli angoli',
     turnThrough: "rivolta dall'apertura",
     byHand: 'chiudi a mano',
@@ -164,7 +165,7 @@ export default {
       details: [
         'Disegna in ognuno dei quattro angoli in basso un rettangolo di 3,5 × 2,5 cm: 3,5 cm lungo il fondo, 2,5 cm lungo la cucitura laterale.',
         'Ritagliali.',
-        'Apri ogni angolo e appiattiscilo in modo che la cucitura laterale cada sulla piega del fondo.',
+        'Apri ogni angolo e appiattiscilo in modo che la cucitura laterale cada sulla piega del fondo e i bordi tagliati formino una linea retta.',
         'Cuci di traverso a 0,5 cm dal bordo. Fai tutti e quattro gli angoli.',
       ],
     },
