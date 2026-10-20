@@ -47,7 +47,7 @@ export default {
   steps: [
     {
       title: 'Fond rapporté',
-      text: "Le fond du sac, le sac à l'envers : le fond est une pièce à part, ici dans un autre tissu, cousue aux parois tout autour. Touchez le sac pour le remettre debout.",
+      text: "Le fond du sac, le sac retourné, fond en haut : le fond est une pièce à part, ici dans un autre tissu, cousue aux parois tout autour. Touchez le sac pour le remettre debout.",
     },
     {
       title: 'Coudre les parois en tube',

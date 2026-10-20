@@ -8,6 +8,7 @@ import { products } from '../../src/data/products.js';
 import { figure } from '../../src/lib/anatomy/figures.js';
 import { LOCALES, PAGES, pageUrl, t } from '../../src/i18n/index.js';
 import { GUIDE_FIELDS, SECTION_FIELDS, SECTION_OPTIONAL, guideText } from '../../src/i18n/content.js';
+import { cmNumbers } from './helpers.js';
 
 const SLUG = 'line-a-bag';
 const OTHER = LOCALES.filter((l) => l !== 'en');
@@ -126,9 +127,7 @@ test("cm numbers are the maker's", () => {
   for (const g of guides) assert.ok(MAKER[g.slug], `${g.slug}: list its maker's numbers in MAKER`);
   for (const [lang, where, s, slug] of texts()) {
     const allowed = new Set(MAKER[slug]);
-    for (const m of s.matchAll(/(\d+(?:[.,]\d+)?)[\s\xa0]*(?:cm|см)/g)) {
-      assert.ok(allowed.has(m[1].replace(',', '.')), `${lang} ${where}: "${m[0]}"`);
-    }
+    for (const [m, n] of cmNumbers(s)) assert.ok(allowed.has(n), `${lang} ${where}: "${m}" (${n})`);
     if (lang !== 'en') assert.doesNotMatch(s, /\d\.\d/, `${lang} ${where}: decimal point instead of a comma`);
   }
 });

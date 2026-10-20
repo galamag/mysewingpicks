@@ -28,7 +28,7 @@ export default {
     rightSides: 'endroit contre endroit',
     sidesBottom: 'côtés et fond',
     aPouch: 'une poche plate',
-    standUp: "poser à l'envers",
+    standUp: 'poser fond en haut',
     openCorner: 'ouvrir le coin',
     seamOnSeam: 'couture sur couture',
     triangle: 'un triangle',
@@ -47,7 +47,7 @@ export default {
   steps: [
     {
       title: 'Coins carrés (en triangle)',
-      text: "Le fond du sac, le sac à l'envers : un fond plat, avec la couture du fond au milieu et une courte couture en travers à chaque bout, là où la couture de côté la rejoint. Touchez le sac pour le remettre debout.",
+      text: "Le fond du sac, le sac retourné, fond en haut : un fond plat, avec la couture du fond au milieu et une courte couture en travers à chaque bout, là où la couture de côté la rejoint. Touchez le sac pour le remettre debout.",
     },
     {
       title: 'Coudre le sac',
@@ -67,7 +67,7 @@ export default {
         'Aplatissez le coin pour que la couture de côté tombe exactement sur la couture du fond (ou sur la pliure du fond).',
         "Le coin est maintenant un triangle, la couture en son milieu jusqu'à sa pointe, où se trouve la fin de la couture.",
         "Ouvrez l'autre coin du bas de la même façon.",
-        "Sur le dessin, le sac est posé à l'envers sur son ouverture, pour que les deux coins soient visibles.",
+        "Sur le dessin, le sac est posé fond en haut, sur son ouverture, pour que les deux coins soient visibles.",
       ],
     },
     {

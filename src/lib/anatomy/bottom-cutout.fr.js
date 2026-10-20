@@ -42,7 +42,7 @@ export default {
   steps: [
     {
       title: 'Coins découpés',
-      text: "Le fond de la trousse, le sac à l'envers : un fond plat, avec une courte couture en travers à chaque bout, là où la couture de côté rejoint la pliure du fond. Touchez le sac pour le remettre debout.",
+      text: "Le fond de la trousse, le sac retourné, fond en haut : un fond plat, avec une courte couture en travers à chaque bout, là où la couture de côté rejoint la pliure du fond. Touchez le sac pour le remettre debout.",
     },
     {
       title: 'Plier en deux',

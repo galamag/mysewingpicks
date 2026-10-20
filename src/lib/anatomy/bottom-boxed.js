@@ -152,10 +152,12 @@ const OPEN = box(D);
 const XB = OPEN.xb, XA = OPEN.xa, HB = OPEN.h;
 const YA = YC - D / 2, YB = YC + D / 2;
 const NEAR = { end: earAt(1, HE, 0), mid: earAt(1, HE * 0.5, 0), tip: earAt(1, HE + TIP, 0) };
-const FAR = { mid: earAt(-1, HE * 0.5, 0) };
+const FAR = { end: earAt(-1, HE, 0), mid: earAt(-1, HE * 0.5, 0) };
 const lineAt = (sx, u) => [earAt(sx, u, -(HE - u), 0.05), earAt(sx, u, HE - u, 0.05)];
 const LINES = [lineAt(-1, LU), lineAt(1, LU)]; // the line across each triangle (far, near)
 const CORNER_FOCUS = [[XB - 6, YA - 4, HB], [XB + HE + 4, YA - 4, HB], [XB - 6, YB + 3, HB], [XB + HE + 4, YB + 3, HB], [XB, YB, HB - 6]];
+// step 3 (the mark): the far corner, whose triangle reads clearly at 375 px, and the base beside it
+const FAR_FOCUS = [[XA - HE - 3, YA - 2, HB], [XB - 1, YA - 2, HB], [XA - HE - 3, YB + 6, HB], [XB - 1, YB + 6, HB], [XA, YB, HB - 4]];
 
 /* ---------- Step 2: stand the pouch on its open top and open each bottom corner into a triangle ---------- */
 
@@ -188,13 +190,14 @@ function stepMark(t) {
     pieces: box(D, { marked: done }).pieces,
     over: [
       ...LINES.map((pts) => ({ type: 'line', pts, t: draw, kind: 'mark', o: done ? 0 : 1 })),
-      { type: 'label', p: NEAR.end, label: 'seamEnd', o: span(t, 0.06, 0.14), dx: 0, dy: -9, hot: true },
-      // along the near triangle's seam, beside it: from the line to the end of the seam
-      { type: 'dim', a: earAt(1, 0, HE + 1.2), b: earAt(1, HE, HE + 1.2), label: 'halfBase', o: span(t, 0.2, 0.3), hot: true },
-      // across the base, by the far triangle: the base width — the line across is as long
-      { type: 'dim', a: [XA + 2.4, YA, HB], b: [XA + 2.4, YB, HB], label: 'baseWidth', o: span(t, 0.7, 0.8) },
+      // on the far triangle — at 375 px the near one is a thin sliver, the far one reads clearly
+      { type: 'label', p: FAR.end, label: 'seamEnd', o: span(t, 0.06, 0.14), dx: 0, dy: -9, hot: true },
+      // along the far triangle's seam, beside it: from the line to the end of the seam
+      { type: 'dim', a: earAt(-1, 0, HE + 1.2), b: earAt(-1, HE, HE + 1.2), label: 'halfBase', o: span(t, 0.2, 0.3), hot: true },
+      // across the base, towards the near end (clear of the far corner's chips): the base width — the line across is as long
+      { type: 'dim', a: [XB - 3.5, YA, HB], b: [XB - 3.5, YB, HB], label: 'baseWidth', o: span(t, 0.7, 0.8) },
     ],
-    focus: { pts: CORNER_FOCUS, k: 0.4 * span(t, 0.02, 0.1) },
+    focus: { pts: FAR_FOCUS, k: 0.6 * span(t, 0.02, 0.1) },
   };
 }
 

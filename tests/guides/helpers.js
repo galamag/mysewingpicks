@@ -16,8 +16,16 @@ export function strings(L) {
   return out;
 }
 
-/** The cm numbers of a text: [[match, number with a decimal point]] ("0,5 см" → "0.5"). */
-export const cmNumbers = (s) => [...s.matchAll(/(\d+(?:[.,]\d+)?)[\s\xa0]*(?:cm|см)/g)].map((m) => [m[0], m[1].replace(',', '.')]);
+/** A number (decimal comma or point), a chain of them joined by × ("23 × 31", "3,5 × 2,5"), then cm. */
+const NUM = /\d+(?:[.,]\d+)?/g;
+const CM_CHAIN = /\d+(?:[.,]\d+)?(?:[\s\xa0]*[×x][\s\xa0]*\d+(?:[.,]\d+)?)*[\s\xa0]*(?:cm|см)/g;
+
+/**
+  The cm numbers of a text — EVERY number of a chain: [[match, number with a decimal point]]
+  ("0,5 см" → "0.5"; "23 × 31 cm" → "23" and "31"). The inches in brackets after the cm ("(9 × 12¼ in)") are not cm.
+*/
+export const cmNumbers = (s) =>
+  [...s.matchAll(CM_CHAIN)].flatMap((m) => [...m[0].matchAll(NUM)].map((n) => [m[0], n[0].replace(',', '.')]));
 
 /** A chip as iso.js draws it: its group's translate, then its rect. */
 export const CHIP = /<g class="chip[^"]*" transform="translate\(([-\d.e]+) ([-\d.e]+)\)"><rect x="([-\d.e]+)" y="([-\d.e]+)" width="([-\d.e]+)" height="([-\d.e]+)"/g;
