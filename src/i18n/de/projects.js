@@ -75,4 +75,41 @@ export default {
       },
     ],
   },
+  'cosmetic-bag': {
+    title: 'Kosmetiktasche mit runden Ecken',
+    blurb: 'Eine gefütterte Kosmetiktasche mit Reißverschluss aus einem Rechteck bedruckter Baumwolle, mit einer runden rosa Ecke an jedem Ende des Bodens. Sieh Schritt für Schritt zu, wie sie entsteht.',
+    pageTitle: 'Kosmetiktasche nähen mit Futter und Reißverschluss',
+    pageDescription: 'Zuschnittmaße für eine gefütterte Kosmetiktasche: Außenteil und Futter 23 × 31 cm, vier rosa Teile 18 × 10 cm, Reißverschluss 20 cm, Nähte 0,5 cm. Jeder Schritt animiert.',
+    heading: 'Kosmetiktasche mit Reißverschluss und Futter nähen',
+    teaser: 'Ein Rechteck Baumwolle, ein Reißverschluss und zwei rosa Halbmonde, aus denen runde Ecken werden – jede Naht animiert.',
+    videoTitle: 'Kosmetiktasche mit Reißverschluss und runden Ecken',
+    videoIntro: 'Die ganze Tasche, von Anfang bis Ende genäht – auf dem Kanal.',
+    needsIntro: 'Bedruckte Baumwolle für Außenteil und Futter, rosa Baumwolle für die Ecken, dünne Bügeleinlage, Garn – und die Werkzeuge, die ich persönlich zum Zuschneiden, Bügeln und Nähen empfehle. Außerdem brauchst du einen Reißverschluss von 20 cm.',
+    faq: [
+      {
+        q: 'Wie viel Stoff braucht man für eine Kosmetiktasche?',
+        a: 'Für diese Tasche brauchst du ein Stück bedruckte Baumwolle von 23 × 31 cm für das Außenteil und ein gleich großes für das Futter, vier Teile rosa Baumwolle von 18 × 10 cm für die runden Ecken, dünne Bügeleinlage – 21 × 29 cm und ein Quadrat von 16 × 16 cm – und einen Reißverschluss von 20 cm. Der Zuschnittplan unten zeigt alles.',
+      },
+      {
+        q: 'Wie näht man den Reißverschluss mit Futter ein?',
+        a: 'Leg das Außenteil mit der rechten Seite nach oben, den Reißverschluss mit der rechten Seite nach unten mittig an eine kurze Seite von 23 cm und darauf das Futter mit der rechten Seite nach unten. Nähe durch alle Lagen, 0,5 cm von der Kante. Dann falte Außenteil und Futter in der Mitte, sodass ihre anderen kurzen Seiten an die andere Seite des Reißverschlusses kommen, und nähe sie genauso an. Am Reißverschluss wird nicht abgesteppt.',
+      },
+      {
+        q: 'Wie näht man die Ecken einer Kosmetiktasche?',
+        a: 'Nach den Seitennähten schneidest du aus jeder unteren Ecke – zwei am Außenteil, zwei am Futter – ein Stück von 3,5 × 2,5 cm aus: 3,5 cm entlang des Bodens, 2,5 cm entlang der Seitennaht. Falte jede Ecke so auf, dass die Seitennaht auf dem Bodenbruch liegt, und nähe 0,5 cm von der Kante quer darüber.',
+      },
+      {
+        q: 'Wie macht man die runden Ecken?',
+        a: 'Schneide mit einer Papierschablone aus einem Quadrat Bügeleinlage von 16 × 16 cm einen Kreis mit 8 cm Radius und halbiere ihn. Bügle jeden Halbkreis auf ein rosa Teil von 18 × 10 cm, die gerade Seite 1 cm von der langen Kante, nähe es entlang der Rundung an ein zweites rosa Teil, schneide zurück, schneide ein und wende. Steppe die Halbmonde mit der Mitte auf der Bodenlinie auf die Seitenkanten des Außenteils: Sobald die Bodenecken genäht sind, werden daraus runde rosa Ecken.',
+      },
+      {
+        q: 'Braucht eine Kosmetiktasche Vlieseline?',
+        a: 'Diese hat dünne Bügeleinlage nur auf dem Außenteil: ein Stück von 21 × 29 cm, auf die linke Seite gebügelt, 1 cm von jeder Kante. Das Futter hat keine.',
+      },
+      {
+        q: 'Wo lässt man die Wendeöffnung?',
+        a: 'In der Mitte einer Seitennaht des Futters: Lass 6 cm offen und öffne den Reißverschluss, bevor du die Seitennähte nähst. Wende die Tasche durch die Öffnung und den Reißverschluss auf rechts und schließe die Öffnung dann von Hand.',
+      },
+    ],
+  },
 };

@@ -205,9 +205,9 @@ const board = (id, pts, x, z, fill, extra = {}) =>
 
 const ROW = 41; // the outer and the lining stand on the top row
 const LX = OW + 7; // the lining's x
-const PX = 27, PZ = 18, PSTEP = 1.6; // the four pink pieces, a little fanned
-const SQX = 27; // the interfacing square for the corners
-const ZPX = PX + PW + 9; // the zipper, upright
+const PX = LX + OW + 7, PZ = ROW + 9, PSTEP = 1.6; // the four pink pieces, a little fanned, right of the lining
+const SQX = PX, SQZ = 22; // the interfacing square for the corners, under them
+const ZPX = PX + PW + 6, ZZ = 22; // the zipper, upright, beside the square
 
 function stepCut(t) {
   const a = (i) => span(t, i * 0.08, i * 0.08 + 0.22);
@@ -217,9 +217,9 @@ function stepCut(t) {
     board('cut-lining', rect(OW, OL), LX, ROW + drop(1), LIN, { opacity: a(1) }),
     board('cut-iface', rect(...SPEC.iface), 0, IM + drop(2), IFACE, { opacity: a(2) }),
     ...[3, 2, 1, 0].map((j) => board(`cut-pink-${j}`, rect(PW, PH), PX + j * PSTEP * 0.5, PZ + j * PSTEP + drop(3 + j * 0.3), PINK, { opacity: a(3 + j * 0.3) })),
-    board('cut-square', rect(SPEC.moonIface, SPEC.moonIface), SQX, 0 + drop(5), IFACE, { opacity: a(5) }),
-    board('cut-zip-tape', rect(ZW, Z), ZPX, 2 + drop(6), TAPE, { opacity: a(6) }),
-    board('cut-zip-teeth', rect(0.7, Z), ZPX + (ZW - 0.7) / 2, 2 + drop(6), TEETH, { opacity: a(6), O: [ZPX + (ZW - 0.7) / 2, 0.05, 2 + drop(6)] }),
+    board('cut-square', rect(SPEC.moonIface, SPEC.moonIface), SQX, SQZ + drop(5), IFACE, { opacity: a(5) }),
+    board('cut-zip-tape', rect(ZW, Z), ZPX, ZZ + drop(6), TAPE, { opacity: a(6) }),
+    board('cut-zip-teeth', rect(0.7, Z), ZPX + (ZW - 0.7) / 2, ZZ + drop(6), TEETH, { opacity: a(6), O: [ZPX + (ZW - 0.7) / 2, 0.05, ZZ + drop(6)] }),
   ];
   const o = span(t, 0.7, 0.9);
   const top = PZ + PH + 3 * PSTEP;
@@ -231,15 +231,15 @@ function stepCut(t) {
       { type: 'dim', a: [-3.5, 0, IM], b: [-3.5, 0, IM + SPEC.iface[1]], label: 'cm29', o },
       { type: 'dim', a: [0, 0, -3.5], b: [SPEC.iface[0], 0, -3.5], label: 'cm21', o },
       { type: 'dim', a: [PX + 1.5 * PSTEP, 0, top + 3], b: [PX + 1.5 * PSTEP + PW, 0, top + 3], label: 'cm18', o },
-      { type: 'dim', a: [PX + PW + 4, 0, PZ + 3 * PSTEP], b: [PX + PW + 4, 0, top], label: 'cm10', o },
-      { type: 'dim', a: [SQX, 0, -3.5], b: [SQX + SPEC.moonIface, 0, -3.5], label: 'cm16', o },
-      { type: 'dim', a: [ZPX + ZW + 2.6, 0, 2], b: [ZPX + ZW + 2.6, 0, 2 + Z], label: 'cm20', o, hot: true },
+      { type: 'dim', a: [PX + PW + 6.5, 0, PZ + 3 * PSTEP], b: [PX + PW + 6.5, 0, top], label: 'cm10', o },
+      { type: 'dim', a: [SQX, 0, SQZ - 3.5], b: [SQX + SPEC.moonIface, 0, SQZ - 3.5], label: 'cm16', o },
+      { type: 'dim', a: [ZPX + ZW + 2.6, 0, ZZ], b: [ZPX + ZW + 2.6, 0, ZZ + Z], label: 'cm20', o, hot: true },
       { type: 'label', p: [OW / 2, 0, ROW + OL / 2], label: 'outerCotton', o },
       { type: 'label', p: [LX + OW / 2, 0, ROW + OL / 2], label: 'liningCotton', o },
       { type: 'label', p: [SPEC.iface[0] / 2, 0, IM + SPEC.iface[1] / 2], label: 'ifaceThin', o },
-      { type: 'label', p: [PX + PW / 2 + PSTEP, 0, PZ + PH / 2 + PSTEP * 1.5], label: 'pink4', o, hot: true },
-      { type: 'label', p: [SQX + SPEC.moonIface / 2, 0, SPEC.moonIface / 2], label: 'ifaceCorners', o },
-      { type: 'label', p: [ZPX + ZW / 2, 0, 2 + Z + 3], label: 'zipper', o },
+      { type: 'label', p: [PX + PW / 2 + PSTEP, 0, PZ + PH / 2 + PSTEP * 1.5], label: 'pink4', o, hot: true, dx: -6 },
+      { type: 'label', p: [SQX + SPEC.moonIface / 2, 0, SQZ + 5], label: 'ifaceCorners', o },
+      { type: 'label', p: [ZPX + ZW / 2, 0, ZZ + Z + 8], label: 'zipper', o, dx: -9 },
     ],
   };
 }

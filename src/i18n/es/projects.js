@@ -75,4 +75,41 @@ export default {
       },
     ],
   },
+  'cosmetic-bag': {
+    title: 'Neceser con esquinas redondas',
+    blurb: 'Un neceser con cremallera y forro, cortado de un solo rectángulo de algodón estampado, con una esquina redonda rosa en cada extremo de la base. Mira cómo se arma, paso a paso.',
+    pageTitle: 'Cómo hacer un neceser de tela con cremallera y forro',
+    pageDescription: 'Medidas de corte de un neceser con cremallera y forro: exterior y forro 23 × 31 cm, cuatro piezas rosas 18 × 10 cm, cremallera 20 cm, costuras 0,5 cm. Cada paso, animado.',
+    heading: 'Cómo coser un neceser con cremallera y forro',
+    teaser: 'Un rectángulo de algodón, una cremallera y dos medias lunas rosas que se convierten en esquinas redondas: cada costura, animada.',
+    videoTitle: 'Neceser con cremallera y esquinas redondas',
+    videoIntro: 'Todo el neceser, cosido de principio a fin en el canal.',
+    needsIntro: 'Algodón estampado para el exterior y el forro, algodón rosa para las esquinas, entretela termoadhesiva fina, hilo y las herramientas que recomiendo personalmente para cortar, planchar y coser. También necesitas una cremallera de 20 cm.',
+    faq: [
+      {
+        q: '¿Cuánta tela necesito para un neceser?',
+        a: 'Para este neceser necesitas un trozo de algodón estampado de 23 × 31 cm para el exterior y otro igual para el forro, cuatro piezas de algodón rosa de 18 × 10 cm para las esquinas redondas, entretela termoadhesiva fina (21 × 29 cm y un cuadrado de 16 × 16 cm) y una cremallera de 20 cm. El esquema de corte de abajo lo muestra todo.',
+      },
+      {
+        q: '¿Cómo se cose la cremallera con forro?',
+        a: 'Coloca el exterior con el derecho hacia arriba, la cremallera boca abajo en el centro de un lado corto de 23 cm y encima el forro boca abajo. Cose a través de todas las capas a 0,5 cm del borde. Después dobla por la mitad el exterior y el forro para que sus otros lados cortos lleguen al otro lado de la cremallera, y cóselos igual. No hay pespunte a lo largo de la cremallera.',
+      },
+      {
+        q: '¿Cómo se hacen las esquinas de la base?',
+        a: 'Después de las costuras laterales, recorta de cada esquina de abajo (dos del exterior y dos del forro) un rectángulo de 3,5 × 2,5 cm: 3,5 cm a lo largo de la base, 2,5 cm a lo largo de la costura lateral. Abre cada esquina para que la costura lateral quede sobre el doblez de la base y cose de lado a lado a 0,5 cm del borde.',
+      },
+      {
+        q: '¿Cómo se hacen las esquinas redondas?',
+        a: 'Con una plantilla de papel recorta de un cuadrado de entretela de 16 × 16 cm un círculo de 8 cm de radio y córtalo por la mitad. Plancha cada semicírculo sobre una pieza rosa de 18 × 10 cm, con el lado recto a 1 cm del borde largo, cósela a una segunda pieza rosa por la curva, recorta, haz piquetes y dale la vuelta. Cose las medias lunas en los bordes laterales del exterior, con el centro en la línea de la base: cuando las esquinas de la base están cosidas, se convierten en esquinas redondas rosas.',
+      },
+      {
+        q: '¿Hace falta entretela en un neceser?',
+        a: 'Este lleva entretela termoadhesiva fina solo en el exterior: una pieza de 21 × 29 cm planchada sobre el revés, a 1 cm de cada borde. El forro no lleva.',
+      },
+      {
+        q: '¿Dónde dejar la abertura para dar la vuelta?',
+        a: 'En el centro de una costura lateral del forro: deja 6 cm abiertos y abre la cremallera antes de coser los lados. Da la vuelta al neceser por la abertura y la cremallera, y luego cierra la abertura a mano.',
+      },
+    ],
+  },
 };

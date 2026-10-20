@@ -123,6 +123,65 @@ export const projects = [
       'janome-1522rd',
     ],
   },
+  {
+    // The maker's numbers: Vault «Анатомия изделий — Косметичка с круглыми уголками». The zipper is
+    // named in needsIntro, without a link (no 20 cm zipper in the catalog). Never the finished size,
+    // never a reason for the 3.5 × 2.5 cm corner.
+    slug: 'cosmetic-bag',
+    title: 'A makeup bag with round corners',
+    blurb: 'A lined zipper bag from one rectangle of printed cotton, with a pink round corner at each end of the bottom. Watch it come together step by step.',
+    pageTitle: 'How to Sew a Lined Zipper Makeup Bag: Cutting Sizes',
+    pageDescription: 'Cutting sizes for a lined zipper makeup bag: outer and lining 23 × 31 cm, four pink pieces 18 × 10 cm, a 20 cm zipper, 0.5 cm seams. Every step animated.',
+    heading: 'How to sew a lined makeup bag with a zipper',
+    teaser: 'One rectangle of cotton, a zipper and two pink half-moons that turn into round corners — every seam, animated.',
+    videoTitle: 'A zipper makeup bag with round corners',
+    videoIntro: 'The whole bag, sewn start to finish on the channel.',
+    needsIntro: 'Printed cotton for the outer and the lining, pink cotton for the corners, thin fusible interfacing, thread — and the tools I personally recommend for cutting, pressing and sewing it. You will also need a 20 cm (7⅞ in) zipper.',
+    faq: [
+      {
+        q: 'How much fabric do I need for a makeup bag?',
+        a: 'For this bag you need a 23 × 31 cm (9 × 12¼ in) piece of printed cotton for the outer and one the same size for the lining, four 18 × 10 cm (7⅛ × 3⅞ in) pieces of pink cotton for the round corners, thin fusible interfacing — 21 × 29 cm (8¼ × 11⅜ in) and a 16 × 16 cm (6¼ in) square — and a 20 cm (7⅞ in) zipper. The cutting diagram below shows it all.',
+      },
+      {
+        q: 'How do you sew a zipper into a lined pouch?',
+        a: 'Lay the outer right side up, put the zipper face down along one short 23 cm (9 in) side, in the middle, and the lining face down on top. Sew through all the layers 0.5 cm (³⁄₁₆ in) from the edge. Then fold the outer and the lining in half so their other short sides meet the other side of the zipper, and sew it the same way. There is no topstitching along the zipper.',
+      },
+      {
+        q: 'How do you make the corners of a makeup bag?',
+        a: 'After the side seams, cut a 3.5 × 2.5 cm (1⅜ × 1 in) piece from each bottom corner — two on the outer, two on the lining: 3.5 cm along the bottom, 2.5 cm along the side seam. Open each corner so the side seam meets the bottom fold and sew straight across, 0.5 cm (³⁄₁₆ in) from the edge.',
+      },
+      {
+        q: 'How do you make the round corners?',
+        a: 'Cut a circle of radius 8 cm (3⅛ in) from a 16 × 16 cm (6¼ in) square of interfacing, using a paper template, and cut it in half. Iron each half-circle onto a pink 18 × 10 cm (7⅛ × 3⅞ in) piece, its straight side 1 cm (⅜ in) from the long edge, sew it to a second pink piece along the curve, trim, notch and turn. Stitch the half-moons onto the side edges of the outer, their middle on the bottom line: once the corners are sewn, they turn into round pink corners.',
+      },
+      {
+        q: 'Does a makeup bag need interfacing?',
+        a: 'This one has thin fusible interfacing on the outer only: a 21 × 29 cm (8¼ × 11⅜ in) piece ironed onto the wrong side, 1 cm (⅜ in) from every edge. The lining has none.',
+      },
+      {
+        q: 'Where do you leave the opening to turn it?',
+        a: 'In the middle of one side seam of the lining: leave 6 cm (2⅜ in) unsewn, and open the zipper before you sew the side seams. Turn the bag right side out through the opening and the zipper, then close the opening by hand.',
+      },
+    ],
+    icon: '👛',
+    video: 'aYIwFMz5RO4',
+    // "What you'll need" — fabric first, then tools in the order they are used. The 20 cm zipper:
+    // in needsIntro, no link (decision 11.2 of the spec).
+    needs: [
+      'quilting-fabric-bundles',
+      'solid-cotton-squares',
+      'plantional-lightweight-interfacing',
+      'hagbou-thread-set',
+      'olfa-rotary-cutter',
+      'olfa-cutting-mat',
+      'quilting-rulers-set',
+      'tailor-scissors',
+      'sewline-air-erasable-pen',
+      'rowenta-travel-iron',
+      'soraco-sewing-clips',
+      'janome-1522rd',
+    ],
+  },
 ];
 
 export const projectBySlug = (slug) => {

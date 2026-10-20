@@ -75,4 +75,41 @@ export default {
       },
     ],
   },
+  'cosmetic-bag': {
+    title: 'Pochette con angoli tondi',
+    blurb: "Una pochette con zip foderata, da un solo rettangolo di cotone stampato, con un angolo tondo rosa a ogni estremità del fondo. Guarda come prende forma, passo dopo passo.",
+    pageTitle: 'Come cucire una pochette con zip foderata: misure',
+    pageDescription: 'Misure di taglio di una pochette con zip foderata: esterno e fodera 23 × 31 cm, quattro pezzi rosa 18 × 10 cm, cerniera 20 cm, cuciture 0,5 cm. Ogni passaggio animato.',
+    heading: 'Come cucire una pochette con zip foderata',
+    teaser: 'Un rettangolo di cotone, una cerniera e due mezzelune rosa che diventano angoli tondi: ogni cucitura animata.',
+    videoTitle: 'Pochette con zip e angoli tondi',
+    videoIntro: "Tutta la pochette, cucita dall'inizio alla fine sul canale.",
+    needsIntro: "Cotone stampato per l'esterno e la fodera, cotone rosa per gli angoli, teletta termoadesiva leggera, filo e gli strumenti che consiglio personalmente per tagliare, stirare e cucire. Ti serve anche una cerniera di 20 cm.",
+    faq: [
+      {
+        q: 'Quanta stoffa serve per una pochette?',
+        a: "Per questa pochette ti servono un pezzo di cotone stampato di 23 × 31 cm per l'esterno e uno uguale per la fodera, quattro pezzi di cotone rosa di 18 × 10 cm per gli angoli tondi, teletta termoadesiva leggera (21 × 29 cm e un quadrato di 16 × 16 cm) e una cerniera di 20 cm. Lo schema di taglio qui sotto mostra tutto.",
+      },
+      {
+        q: 'Come si cuce la zip con la fodera?',
+        a: "Appoggia l'esterno con il dritto in su, la cerniera con il dritto in giù al centro di un lato corto di 23 cm e sopra la fodera con il dritto in giù. Cuci attraverso tutti gli strati a 0,5 cm dal bordo. Poi piega a metà l'esterno e la fodera, così i loro altri lati corti arrivano all'altro lato della cerniera, e cucili nello stesso modo. Nessuna impuntura lungo la cerniera.",
+      },
+      {
+        q: 'Come si fanno gli angoli del fondo?',
+        a: "Dopo le cuciture laterali, taglia da ogni angolo in basso (due sull'esterno e due sulla fodera) un rettangolo di 3,5 × 2,5 cm: 3,5 cm lungo il fondo, 2,5 cm lungo la cucitura laterale. Apri ogni angolo in modo che la cucitura laterale cada sulla piega del fondo e cuci di traverso a 0,5 cm dal bordo.",
+      },
+      {
+        q: 'Come si fanno gli angoli tondi?',
+        a: "Con una sagoma di carta ritaglia da un quadrato di teletta di 16 × 16 cm un cerchio di 8 cm di raggio e taglialo a metà. Stira ogni semicerchio su un pezzo rosa di 18 × 10 cm, con il lato dritto a 1 cm dal bordo lungo, cucilo a un secondo pezzo rosa lungo la curva, rifila, fai i taglietti e rivolta. Cuci le mezzelune sui bordi laterali dell'esterno, con il centro sulla linea del fondo: quando gli angoli del fondo sono cuciti, diventano angoli tondi rosa.",
+      },
+      {
+        q: 'Serve la teletta in una pochette?',
+        a: "Questa ha teletta termoadesiva leggera solo sull'esterno: un pezzo di 21 × 29 cm stirato sul rovescio, a 1 cm da ogni bordo. La fodera non ne ha.",
+      },
+      {
+        q: "Dove lasciare l'apertura per rivoltare?",
+        a: "Al centro di una cucitura laterale della fodera: lascia aperti 6 cm e apri la cerniera prima di cucire i lati. Rivolta la pochette sul dritto dall'apertura e dalla cerniera, poi chiudi l'apertura a mano.",
+      },
+    ],
+  },
 };

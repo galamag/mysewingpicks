@@ -76,4 +76,41 @@ export default {
       },
     ],
   },
+  'cosmetic-bag': {
+    title: 'Trousse à coins arrondis',
+    blurb: "Une trousse de toilette doublée zippée, coupée dans un seul rectangle de coton imprimé, avec un coin arrondi rose à chaque bout du fond. Regardez-la prendre forme étape par étape.",
+    pageTitle: 'Tuto trousse de toilette doublée zippée : dimensions',
+    pageDescription: "Dimensions de coupe d'une trousse de toilette doublée zippée : extérieur et doublure 23 × 31 cm, quatre pièces roses 18 × 10 cm, zip 20 cm, coutures 0,5 cm. Chaque étape animée.",
+    heading: 'Coudre une trousse de toilette doublée zippée',
+    teaser: 'Un rectangle de coton, une fermeture éclair et deux demi-lunes roses qui deviennent des coins arrondis — chaque couture animée.',
+    videoTitle: 'Trousse zippée à coins arrondis',
+    videoIntro: 'Toute la trousse, cousue du début à la fin sur la chaîne.',
+    needsIntro: "Du coton imprimé pour l'extérieur et la doublure, du coton rose pour les coins, de l'entoilage thermocollant fin, du fil — et les outils que je recommande personnellement pour couper, repasser et coudre. Il vous faut aussi une fermeture éclair de 20 cm.",
+    faq: [
+      {
+        q: 'Quelle quantité de tissu pour une trousse de toilette ?',
+        a: "Pour cette trousse, il vous faut un morceau de coton imprimé de 23 × 31 cm pour l'extérieur et un autre de la même taille pour la doublure, quatre pièces de coton rose de 18 × 10 cm pour les coins arrondis, de l'entoilage thermocollant fin — 21 × 29 cm et un carré de 16 × 16 cm — et une fermeture éclair de 20 cm. Le plan de coupe ci-dessous montre tout.",
+      },
+      {
+        q: 'Comment coudre une fermeture éclair avec doublure ?',
+        a: "Posez l'extérieur endroit dessus, la fermeture éclair endroit dessous au milieu d'un petit côté de 23 cm, puis la doublure endroit dessous. Cousez à travers toutes les épaisseurs à 0,5 cm du bord. Pliez ensuite l'extérieur et la doublure en deux pour que leurs autres petits côtés rejoignent l'autre côté de la fermeture éclair, et cousez de la même façon. Pas de surpiqûre le long de la fermeture éclair.",
+      },
+      {
+        q: 'Comment faire le fond plat (les coins) ?',
+        a: "Après les coutures de côté, découpez dans chaque coin du bas — deux sur l'extérieur, deux sur la doublure — un rectangle de 3,5 × 2,5 cm : 3,5 cm le long du fond, 2,5 cm le long de la couture de côté. Ouvrez chaque coin pour que la couture de côté tombe sur la pliure du fond et cousez en travers, à 0,5 cm du bord.",
+      },
+      {
+        q: 'Comment faire les coins arrondis ?',
+        a: "Avec un gabarit en papier, découpez un cercle de 8 cm de rayon dans un carré d'entoilage de 16 × 16 cm et coupez-le en deux. Thermocollez chaque demi-cercle sur une pièce rose de 18 × 10 cm, côté droit à 1 cm du grand bord, cousez-la à une deuxième pièce rose le long de l'arrondi, dégarnissez, crantez et retournez. Piquez les demi-lunes sur les bords de côté de l'extérieur, le milieu sur la ligne du fond : une fois les coins du fond cousus, elles deviennent des coins arrondis roses.",
+      },
+      {
+        q: "Faut-il de l'entoilage dans une trousse ?",
+        a: "Celle-ci a un entoilage thermocollant fin sur l'extérieur seulement : une pièce de 21 × 29 cm thermocollée sur l'envers, à 1 cm de chaque bord. La doublure n'en a pas.",
+      },
+      {
+        q: "Où laisser l'ouverture pour retourner ?",
+        a: "Au milieu d'une couture de côté de la doublure : laissez 6 cm ouverts et ouvrez la fermeture éclair avant de coudre les côtés. Retournez la trousse sur l'endroit par l'ouverture et la fermeture éclair, puis fermez l'ouverture à la main.",
+      },
+    ],
+  },
 };
