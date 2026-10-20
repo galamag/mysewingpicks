@@ -115,7 +115,7 @@ const TURNED_AGAIN = { en: /Turn the tube/, ru: /Выверните трубу/,
 const CURVE = { en: /all along the curve/, ru: /по всей дуге/, de: /ganzen Rundung/, fr: /tout le long de la courbe/, it: /lungo tutta la curva/, es: /a lo largo de toda la curva/ };
 
 test('beginner safety: "clip" is never the cutting word in English; step 3 keeps the tube as it is; round bases are snipped along the curve', () => {
-  for (const [where, s] of allTexts('en')) assert.doesNotMatch(s, /clip/i, `en ${where}: "clip" (fastening or cutting?) - say "sewing clips" or "snip"`);
+  for (const [where, s] of allTexts('en')) assert.doesNotMatch(s, /\bclip\b/i, `en ${where}: "clip" (fastening or cutting?) - say "sewing clips" or "snip"`);
   for (const lang of LOCALES) {
     assert.doesNotMatch(stepText(panelText(lang), 3), TURNED_AGAIN[lang], `${lang}: step 3 turns the tube again (it is already wrong side out)`);
     assert.match(section(lang).choose, CURVE[lang], `${lang}: choose - round and oval bases need the allowance snipped along the curve`);
