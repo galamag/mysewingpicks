@@ -37,6 +37,11 @@ export default {
         line: 'Primero se cose la bolsa; luego cada esquina de abajo se aplana en triángulo y se cose de lado a lado.',
         choose: 'Cuando quieres probar primero la profundidad: no se recorta nada antes, así que todavía puedes coser una base más honda. La esquina queda resistente y va bien con telas ligeras.',
       },
+      panel: {
+        title: 'Base aparte',
+        line: 'La base es una pieza aparte, cosida todo alrededor a la parte de abajo de las paredes.',
+        choose: 'Cuando quieres una base plana y estable, una base de otra tela o una base firme con entretela o con una base rígida. Las bases redondas y ovaladas se cosen igual.',
+      },
     },
   },
 };

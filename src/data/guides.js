@@ -106,6 +106,17 @@ export const guides = [
         line: 'The bag is sewn first, then each bottom corner is flattened into a triangle and sewn straight across.',
         choose: 'When you want to try the depth first: nothing is cut beforehand, so you can still sew a deeper bottom. The corner is strong, and it suits light fabrics.',
       },
+      {
+        // A public technique, no maker's project yet (usedIn: [] - no "Where it's used"): the sources of spec 5.2
+        // agree on the method (a rectangular base drawn); NO numbers (spec 3: the sources give none). "When to
+        // choose it": the sources' list (spec 5.2) - a flat stable base, another fabric, a firm base, round or oval.
+        id: 'panel',
+        figure: 'bag-bottom-panel',
+        usedIn: [],
+        title: 'Separate bottom panel',
+        line: 'The base is a piece of its own, sewn into the bottom of the walls all round.',
+        choose: 'When you want a flat, stable base, a base in another fabric, or a firm one with interfacing or an insert. Round and oval bases are sewn in the same way.',
+      },
     ],
   },
 ];

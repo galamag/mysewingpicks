@@ -37,6 +37,11 @@ export default {
         line: "Le sac est d'abord cousu, puis chaque coin du bas est aplati en triangle et cousu en travers.",
         choose: "Quand vous voulez d'abord essayer la profondeur : rien n'est découpé à l'avance, vous pouvez donc encore coudre un fond plus profond. Le coin est solide, et la méthode convient aux tissus légers.",
       },
+      panel: {
+        title: 'Fond rapporté',
+        line: 'Le fond est une pièce à part, cousue tout autour au bas des parois.',
+        choose: 'Quand vous voulez un fond plat et stable, un fond dans un autre tissu, ou un fond rigide avec un entoilage ou une plaque. Les fonds ronds et ovales se cousent de la même façon.',
+      },
     },
   },
 };

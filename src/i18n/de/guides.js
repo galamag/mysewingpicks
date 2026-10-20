@@ -36,6 +36,11 @@ export default {
         line: 'Erst wird die Tasche genäht, dann wird jede untere Ecke zu einem Dreieck flach gelegt und quer abgenäht.',
         choose: 'Wenn du die Tiefe erst ausprobieren möchtest: Vorher wird nichts ausgeschnitten, also kannst du den Boden noch tiefer nähen. Die Ecke ist fest, und die Methode passt gut zu leichten Stoffen.',
       },
+      panel: {
+        title: 'Separater Boden',
+        line: 'Der Boden ist ein eigenes Teil und wird rundherum unten an die Wände genäht.',
+        choose: 'Wenn du einen flachen, stabilen Boden möchtest, einen Boden aus einem anderen Stoff oder einen festen Boden mit Bügeleinlage oder Einlegeboden. Runde und ovale Böden werden genauso eingenäht.',
+      },
     },
   },
 };

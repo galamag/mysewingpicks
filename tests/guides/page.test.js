@@ -91,7 +91,7 @@ test('the cosmetic bag and the basket link their steps to #cut-out of the same l
 });
 
 // "Bag bottoms", section `boxed` on the built pages: its own figure, after cut-out; no project yet, so no
-// "Where it's used" block and no note; three figures on one page, none sharing an id (the duplicate test above).
+// "Where it's used" block and no note.
 test('bag-bottom #boxed: its own figure, third, no "Where it\'s used"', () => {
   for (const [lang, dir] of Object.entries(LANG_DIRS)) {
     const html = readFileSync(join(dist, dir, 'guides', 'bag-bottom.html'), 'utf8');
@@ -101,7 +101,37 @@ test('bag-bottom #boxed: its own figure, third, no "Where it\'s used"', () => {
     assert.doesNotMatch(sec, /data-anatomy="bag-bottom-(?:folded|cut-out)"/, `${lang}: another figure inside boxed`);
     assert.doesNotMatch(sec, /guide-used/, `${lang}: "Where it's used" without a project`);
     assert.ok(html.indexOf('id="cut-out"') < html.indexOf('id="boxed"'), `${lang}: cut-out comes before boxed`);
-    assert.equal((html.match(/data-anatomy="/g) ?? []).length, 3, `${lang}: three figures on the page`);
     assert.match(html, /href="#boxed"/, `${lang}: the contents link to #boxed`);
+  }
+});
+
+// One figure per section of the guide, each in its own <section>, in the order of guides.js (none sharing an id:
+// the duplicate test above).
+test('bag-bottom: one figure per section, in order, each inside its own section', async () => {
+  const { guideBySlug } = await import('../../src/data/guides.js');
+  const sections = guideBySlug('bag-bottom').sections;
+  for (const [lang, dir] of Object.entries(LANG_DIRS)) {
+    const html = readFileSync(join(dist, dir, 'guides', 'bag-bottom.html'), 'utf8');
+    assert.equal((html.match(/data-anatomy="/g) ?? []).length, sections.length, `${lang}: a figure per section`);
+    const at = sections.map((s) => html.search(new RegExp(String.raw`<section[^>]*\sid="${s.id}"`)));
+    assert.ok(at.every((i) => i > 0), `${lang}: a section is missing`);
+    assert.deepEqual([...at].sort((a, b) => a - b), at, `${lang}: the sections are out of order`);
+    for (const s of sections) {
+      const figs = [...sectionHtml(html, s.id).matchAll(/data-anatomy="([^"]+)"/g)].map((m) => m[1]);
+      assert.deepEqual(figs, [s.figure], `${lang} #${s.id}: its own figure only`);
+      assert.match(html, new RegExp(`href="#${s.id}"`), `${lang}: the contents link to #${s.id}`);
+    }
+  }
+});
+
+// "Bag bottoms", section `panel`: a separate base sewn into the tube, no project yet — no "Where it's used", no note.
+test('bag-bottom #panel: its own figure, last, no "Where it\'s used"', () => {
+  for (const [lang, dir] of Object.entries(LANG_DIRS)) {
+    const html = readFileSync(join(dist, dir, 'guides', 'bag-bottom.html'), 'utf8');
+    const sec = sectionHtml(html, 'panel');
+    assert.ok(sec, `${lang}: no <section id="panel">`);
+    assert.match(sec, /data-anatomy="bag-bottom-panel"/, `${lang}: the section's figure`);
+    assert.doesNotMatch(sec, /guide-used/, `${lang}: "Where it's used" without a project`);
+    assert.ok(html.indexOf('id="boxed"') < html.indexOf('id="panel"'), `${lang}: boxed comes before panel`);
   }
 });

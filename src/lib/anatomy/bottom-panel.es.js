@@ -1,0 +1,120 @@
+/* Base aparte (guía «Base de la bolsa», sección `panel`) — textos en español. La misma forma que el inglés
+   (bottom-panel.text.js lo comprueba). Sin números: la sección todavía no tiene un proyecto de la costurera y
+   las fuentes no dan ninguno; el método solo con palabras (centros marcados doblando y marcando el doblez,
+   primero marca sobre marca, piquete en el margen de las paredes en las esquinas sin cortar la costura, un
+   lado cada vez hasta un margen de costura de la esquina). Tuteo, español neutro. */
+export default {
+  ui: {
+    fig: 'Fig. 4',
+    title: 'Base aparte',
+    svgLabel: 'Dibujo isométrico de cómo se cose una base aparte: las paredes cosidas en un tubo, los centros de la base y del tubo marcados con dobleces, el tubo del revés sobre la base, marca sobre marca y sujeto con clips de costura, un piquete en el margen de las paredes en cada esquina, la base cosida un lado cada vez, y la bolsa del derecho, con la base plana.',
+    prev: 'Paso anterior',
+    dot: (i, title) => (i ? `Paso ${i}: ${title}` : title),
+    start: 'Pasos →',
+    next: 'Siguiente →',
+    overview: 'Vista general',
+    stepOf: (k, n) => `Paso ${k} de ${n}`,
+    machine: (stitch) => `Máquina: ${stitch.toLowerCase()}`,
+    inThisStep: 'En este paso',
+    takeApart: 'Ponerla de pie',
+    putTogether: 'Ver la base',
+    replay: '↻ Repetir',
+    parts: 'Piezas',
+    allSteps: 'Instrucciones paso a paso',
+    endView: 'CORTE',
+  },
+  stitches: { straight: 'Puntada recta' },
+  labels: {
+    rightSides: 'derecho con derecho',
+    bothSides: 'coser los dos lados',
+    aTube: 'un tubo abierto en los dos extremos',
+    foldCrease: 'doblar, marcar el doblez',
+    markMiddle: 'una marca en cada centro',
+    seamMark: 'costura lateral = marca',
+    insideOut: 'del revés',
+    markOnMark: 'marca sobre marca',
+    clipBetween: 'luego clips entre',
+    clipCorner: 'piquete en la esquina',
+    notThrough: 'sin cortar la costura',
+    backstitch: 'rematar',
+    oneSide: 'un lado cada vez',
+    stopTurn: 'parar y girar',
+    allRound: 'todo alrededor',
+    turnOut: 'dar la vuelta al derecho',
+    flatBottom: 'una base plana',
+    baseSeam: 'costura alrededor de la base',
+  },
+  steps: [
+    {
+      title: 'Base aparte',
+      text: 'La base de la bolsa, con la bolsa boca abajo: la base es una pieza aparte, aquí de otra tela, cosida a las paredes todo alrededor. Toca la bolsa para ponerla de pie.',
+    },
+    {
+      title: 'Coser las paredes en un tubo',
+      text: 'Pon el delantero sobre la espalda, derecho con derecho, y cose los dos lados: un tubo, abierto en los dos extremos. La base es una pieza aparte.',
+      details: [
+        'Pon el delantero sobre la espalda, derecho con derecho, y sujétalos con clips de costura.',
+        'Cose los dos lados, de arriba abajo.',
+        'Abajo el tubo también queda abierto: la base es una pieza aparte y se cose después.',
+        'Si las paredes están cortadas en una sola pieza, una sola costura cierra el tubo.',
+      ],
+    },
+    {
+      title: 'Marcar los centros',
+      text: 'Dobla la base por la mitad y marca el doblez, luego dóblala por la mitad en el otro sentido: haz una marca en el centro de cada lado. Dobla también el tubo por la mitad y marca el doblez: los dobleces y las costuras laterales marcan sus centros.',
+      details: [
+        'Dobla la base por la mitad y marca el doblez con la plancha o con los dedos.',
+        'Despliégala, dóblala por la mitad en el otro sentido y vuelve a marcar el doblez.',
+        'Haz una marca en el centro de cada lado, en el borde, donde llega un doblez.',
+        'Dobla el tubo por la mitad, costura lateral sobre costura lateral, y marca el doblez: los dobleces marcan el centro del delantero y de la espalda.',
+        'Las costuras laterales también son marcas: el tubo queda dividido en cuatro, como la base.',
+      ],
+    },
+    {
+      title: 'Marca sobre marca',
+      text: 'Pon el tubo del revés y colócalo sobre la base, derecho con derecho, con los bordes parejos. Primero pon marca sobre marca, las costuras laterales y los dobleces sobre los centros de la base, y luego clips de costura entre las marcas.',
+      details: [
+        'El tubo está del revés y la base tiene el derecho hacia arriba: los derechos quedan enfrentados.',
+        'Empareja los bordes del tubo y de la base todo alrededor; el margen de las paredes queda sobre el borde de la base.',
+        'Primero marca sobre marca: cada costura lateral en el centro de un lado corto, cada doblez en el centro de un lado largo.',
+        'Sujeta primero las marcas con clips de costura y luego entre ellas.',
+      ],
+    },
+    {
+      title: 'Piquetes en las esquinas',
+      text: 'En cada esquina de la base, haz un piquete en el margen de las paredes, recto hacia la esquina, hasta casi la línea de costura, sin cortar la costura: así las paredes pueden girar en la esquina.',
+      details: [
+        'Busca dónde se junta cada esquina de la base con las paredes.',
+        'Haz un piquete en el margen de las paredes hacia la esquina, hasta casi la línea de costura: sin cortar la costura.',
+        'El margen se abre y queda plano alrededor de la esquina, y la esquina queda bien marcada.',
+        'Haz lo mismo en todas las esquinas.',
+      ],
+    },
+    {
+      title: 'Coser la base',
+      text: 'Cose un lado cada vez: empieza rematando, para a un margen de costura de la esquina con la aguja abajo, gira en la esquina y cose el lado siguiente.',
+      details: [
+        'Cose con el tubo del revés, sobre la línea de costura.',
+        'Empieza en el centro de un lado y remata.',
+        'Para a un margen de costura de la esquina, con la aguja clavada en la tela.',
+        'Levanta el prensatelas, gira en la esquina, baja el prensatelas y cose el lado siguiente.',
+        'Quita los clips a medida que llegas a ellos y cose todo alrededor; al final, remata otra vez.',
+      ],
+    },
+    {
+      title: 'Dar la vuelta',
+      text: 'Da la vuelta a la bolsa al derecho y saca bien las esquinas: una base plana, cosida a las paredes todo alrededor.',
+      details: [
+        'Da la vuelta a la bolsa al derecho y saca las esquinas.',
+        'La base queda plana y la costura recorre su borde.',
+        'Para una base firme, el refuerzo va en la base: entretela termoadhesiva planchada antes de coserla, o después una base rígida colocada dentro.',
+      ],
+    },
+  ],
+  legend: [
+    { title: 'Base', text: 'una pieza aparte · aquí de otra tela' },
+    { title: 'Costura de la base', text: 'une las paredes a la base, todo alrededor' },
+    { title: 'Esquinas', text: 'piquete en el margen de las paredes, la esquina queda marcada' },
+    { title: 'Costuras laterales', text: 'cada una llega al centro de un lado corto de la base' },
+  ],
+};

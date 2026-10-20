@@ -36,6 +36,11 @@ export default {
         line: 'Prima si cuce la borsa, poi ogni angolo in basso si appiattisce a triangolo e si cuce di traverso.',
         choose: "Quando vuoi provare prima la profondità: non si taglia niente in anticipo, quindi puoi ancora cucire un fondo più profondo. L'angolo è robusto, ed è adatto ai tessuti leggeri.",
       },
+      panel: {
+        title: 'Fondo separato',
+        line: 'Il fondo è un pezzo a sé, cucito tutto intorno alla base delle pareti.',
+        choose: 'Quando vuoi un fondo piatto e stabile, un fondo in un altro tessuto o un fondo rigido con teletta o inserto. I fondi tondi e ovali si cuciono allo stesso modo.',
+      },
     },
   },
 };

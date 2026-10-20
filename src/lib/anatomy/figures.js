@@ -19,6 +19,8 @@ import * as bottomCutout from './bottom-cutout.js';
 import { cutoutText } from './bottom-cutout.text.js';
 import * as bottomBoxed from './bottom-boxed.js';
 import { boxedText } from './bottom-boxed.text.js';
+import * as bottomPanel from './bottom-panel.js';
+import { panelText } from './bottom-panel.text.js';
 
 const FIGURES = {
   'tote-bag': { model: tote, text: toteText },
@@ -28,6 +30,7 @@ const FIGURES = {
   'bag-bottom-folded': { model: bottomFolded, text: foldedText }, // the guide "Bag bottoms", section #folded
   'bag-bottom-cut-out': { model: bottomCutout, text: cutoutText }, // the guide "Bag bottoms", section #cut-out
   'bag-bottom-boxed': { model: bottomBoxed, text: boxedText }, // the guide "Bag bottoms", section #boxed
+  'bag-bottom-panel': { model: bottomPanel, text: panelText }, // the guide "Bag bottoms", section #panel
 };
 
 /** slug → { model, text(lang) } */
