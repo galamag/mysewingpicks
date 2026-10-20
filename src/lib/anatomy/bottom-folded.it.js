@@ -14,8 +14,8 @@ export default {
     stepOf: (k, n) => `Passo ${k} di ${n}`,
     machine: (stitch) => `Macchina: ${stitch.toLowerCase()}`,
     inThisStep: 'In questo passo',
-    takeApart: 'Mostra il fondo',
-    putTogether: 'Rimetti in piedi',
+    takeApart: 'Rimetti in piedi',
+    putTogether: 'Mostra il fondo',
     replay: '↻ Ripeti',
     parts: 'Parti',
     allSteps: 'Istruzioni passo passo',
@@ -42,7 +42,7 @@ export default {
   steps: [
     {
       title: "Il fondo ripiegato all'interno",
-      text: 'Il fondo della tote bag: una base piatta di 12 cm tra due pieghe cucite, e angoli che si formano da soli, senza cuciture agli angoli. Tocca la borsa per vedere il fondo.',
+      text: 'Il fondo della tote bag, con la borsa capovolta: una base piatta di 12 cm tra due pieghe cucite, e angoli che si formano da soli, senza cuciture agli angoli. Tocca la borsa per rimetterla in piedi.',
     },
     {
       title: 'Segna il centro e misura',

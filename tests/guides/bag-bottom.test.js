@@ -9,7 +9,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import * as folded from '../../src/lib/anatomy/bottom-folded.js';
 import { FOLDED_TEXT, foldedText } from '../../src/lib/anatomy/bottom-folded.text.js';
-import { SPEC as TOTE } from '../../src/lib/anatomy/tote.js';
+import * as tote from '../../src/lib/anatomy/tote.js';
+import { toteText } from '../../src/lib/anatomy/tote.text.js';
 import { figure } from '../../src/lib/anatomy/figures.js';
 import { products } from '../../src/data/products.js';
 import { guideBySlug, guidesForStep } from '../../src/data/guides.js';
@@ -17,6 +18,7 @@ import { GUIDE_FIELDS, SECTION_FIELDS, guideText } from '../../src/i18n/content.
 import { LOCALES } from '../../src/i18n/index.js';
 
 const { STEPS, SPEC, DEFS, LABEL_KEYS, renderStep } = folded;
+const TOTE = tote.SPEC;
 const KEY = 'bag-bottom-folded';
 const SLUG = 'bag-bottom';
 const LANGS = Object.keys(FOLDED_TEXT);
@@ -128,6 +130,71 @@ test('chips stay inside the figure (every step, every language)', () => {
           const where = `${lang} step ${k} t=${i / 20}`;
           assert.ok(x0 >= vx - 1e-6 && x0 + w <= vx + vw + 1e-6, `${where}: a chip runs out sideways`);
           assert.ok(y0 >= vy - 1e-6 && y0 + h <= vy + vh + 1e-6, `${where}: a chip runs out at the top or bottom`);
+        }
+      }
+    }
+  }
+});
+
+const CHIP = /<g class="chip[^"]*" transform="translate\(([-\d.e]+) ([-\d.e]+)\)"><rect x="([-\d.e]+)" y="([-\d.e]+)" width="([-\d.e]+)" height="([-\d.e]+)"/g;
+const chipRects = (body) => [...body.matchAll(CHIP)].map((m) => {
+  const [tx, ty, rx, ry, w, h] = m.slice(1).map(Number);
+  return { x0: tx + rx, y0: ty + ry, x1: tx + rx + w, y1: ty + ry + h };
+});
+const pinCount = (body) => (body.match(/<g class="pins"[\s\S]*$/)?.[0].match(/<circle/g) ?? []).length;
+
+test('the first frame (the HTML, no JS needed) is the finished bottom: base up, crease on it, the five pins', () => {
+  const rest = folded.anatomy(0).pieces;
+  const base = rest.find((p) => p.id === 'up-bottom');
+  assert.ok(base, 'no base in the rest state');
+  assert.ok(base.out[2] > 0.99, 'the base does not face up');
+  assert.ok((base.opacity ?? 1) >= 0.999, 'the base is faded');
+  assert.ok(base.lines.filter((l) => l.kind === 'fold').length >= 2, 'the centre crease is not drawn heavier on the base');
+  assert.ok(!rest.some((p) => p.id.startsWith('bag-')), 'the standing bag is drawn in the rest state');
+  for (const lang of LANGS) {
+    const L = foldedText(lang);
+    assert.equal(pinCount(renderStep(0, 0, L).body), L.legend.length, `${lang}: pins in the first frame`);
+    assert.equal(pinCount(renderStep(0, 1, L).body), 0, `${lang}: pins once stood up`);
+  }
+  // tapped: the bag stands up, the upside-down one is gone
+  const up = folded.anatomy(1).pieces;
+  assert.ok(up.some((p) => p.id === 'bag-front') && !up.some((p) => p.id.startsWith('up-')));
+});
+
+test('a fully faded copy is never drawn (step 0, the crossfade)', () => {
+  for (let i = 0; i <= 40; i++) {
+    for (const p of folded.anatomy(i / 40).pieces) assert.ok((p.opacity ?? 1) > 0.01, `e=${i / 40}: ${p.id} at opacity ${p.opacity}`);
+  }
+});
+
+test('the other figures still show their pins when taken apart, not at rest (kit default)', () => {
+  const L = toteText('en');
+  assert.equal(pinCount(tote.renderStep(0, 0, L).body), 0);
+  assert.equal(pinCount(tote.renderStep(0, 1, L).body), L.legend.length);
+});
+
+test('lines are drawn before the chips (a line being drawn never paints over a label)', () => {
+  for (let k = 1; k < STEPS.length; k++) {
+    for (const t of [0, 0.5, 1]) {
+      const kinds = STEPS[k].scene(t).over.map((o) => o.type);
+      const lastLine = kinds.lastIndexOf('line');
+      const firstChip = kinds.findIndex((x) => x === 'label' || x === 'dim');
+      assert.ok(lastLine < firstChip || firstChip < 0, `step ${k}: a line comes after a chip`);
+    }
+  }
+});
+
+test('chips keep a gap between them: 1% of the figure width (every step, every language)', () => {
+  for (const lang of LANGS) {
+    const L = foldedText(lang);
+    for (let k = 1; k < STEPS.length; k++) {
+      for (let i = 0; i <= 20; i++) {
+        const { body, viewBox } = renderStep(k, i / 20, L);
+        const g = viewBox[2] / 200; // half the gap, on each chip
+        const r = chipRects(body).map((c) => ({ x0: c.x0 - g, y0: c.y0 - g, x1: c.x1 + g, y1: c.y1 + g }));
+        for (let a = 0; a < r.length; a++) for (let b = a + 1; b < r.length; b++) {
+          const hit = r[a].x0 < r[b].x1 && r[b].x0 < r[a].x1 && r[a].y0 < r[b].y1 && r[b].y0 < r[a].y1;
+          assert.ok(!hit, `${lang} step ${k} t=${i / 20}: chips ${a} and ${b} touch`);
         }
       }
     }

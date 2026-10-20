@@ -14,8 +14,8 @@ export default {
     stepOf: (k, n) => `Paso ${k} de ${n}`,
     machine: (stitch) => `Máquina: ${stitch.toLowerCase()}`,
     inThisStep: 'En este paso',
-    takeApart: 'Ver la base',
-    putTogether: 'Ponerla de pie',
+    takeApart: 'Ponerla de pie',
+    putTogether: 'Ver la base',
     replay: '↻ Repetir',
     parts: 'Piezas',
     allSteps: 'Instrucciones paso a paso',
@@ -42,7 +42,7 @@ export default {
   steps: [
     {
       title: 'La base plegada hacia dentro',
-      text: 'La base de la tote bag: una base plana de 12 cm entre dos dobleces pespunteados y unas esquinas que se forman solas, sin costuras en las esquinas. Toca la bolsa para ver la base.',
+      text: 'La base de la tote bag, con la bolsa boca abajo: una base plana de 12 cm entre dos dobleces pespunteados y unas esquinas que se forman solas, sin costuras en las esquinas. Toca la bolsa para ponerla de pie.',
     },
     {
       title: 'Marca el centro y mide',

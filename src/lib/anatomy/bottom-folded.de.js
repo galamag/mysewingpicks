@@ -14,8 +14,8 @@ export default {
     stepOf: (k, n) => `Schritt ${k} von ${n}`,
     machine: (stitch) => `Maschine: ${stitch}`,
     inThisStep: 'In diesem Schritt',
-    takeApart: 'Boden zeigen',
-    putTogether: 'Hinstellen',
+    takeApart: 'Hinstellen',
+    putTogether: 'Boden zeigen',
     replay: '↻ Noch einmal',
     parts: 'Teile',
     allSteps: 'Schritt-für-Schritt-Anleitung',
@@ -42,7 +42,7 @@ export default {
   steps: [
     {
       title: 'Der eingefaltete Boden',
-      text: 'Der Boden der Tote Bag: eine flache, 12 cm breite Standfläche zwischen zwei abgesteppten Bruchkanten, und Ecken, die von selbst entstehen – ohne Eckennähte. Tippe auf die Tasche, um den Boden zu sehen.',
+      text: 'Der Boden der Tote Bag, die Tasche steht kopf: eine flache, 12 cm breite Standfläche zwischen zwei abgesteppten Bruchkanten, und Ecken, die von selbst entstehen – ohne Eckennähte. Tippe auf die Tasche, um sie hinzustellen.',
     },
     {
       title: 'Mittelbruch und Linien',

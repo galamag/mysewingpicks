@@ -15,8 +15,8 @@ export default {
     stepOf: (k, n) => `Étape ${k} sur ${n}`,
     machine: (stitch) => `Machine : ${stitch.toLowerCase()}`,
     inThisStep: 'Pour cette étape',
-    takeApart: 'Voir le dessous',
-    putTogether: 'Remettre debout',
+    takeApart: 'Remettre debout',
+    putTogether: 'Voir le dessous',
     replay: '↻ Revoir',
     parts: 'Pièces',
     allSteps: 'Instructions étape par étape',
@@ -43,7 +43,7 @@ export default {
   steps: [
     {
       title: "Le fond replié à l'intérieur",
-      text: "Le fond du tote bag : une base plate de 12 cm entre deux plis piqués, et des coins qui se forment tout seuls — sans couture d'angle. Appuyez sur le sac pour voir le fond.",
+      text: "Le fond du tote bag, sac posé tête en bas : une base plate de 12 cm entre deux plis piqués, et des coins qui se forment tout seuls — sans couture d'angle. Appuyez sur le sac pour le remettre debout.",
     },
     {
       title: 'Marquer le milieu et mesurer',

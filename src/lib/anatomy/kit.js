@@ -182,8 +182,10 @@ export const labelKeys = (steps) => [...new Set(steps.slice(1).flatMap((s) => s.
     shadow   [rx, ry] of the shadow ellipse
     fabrics  fabric name (as in a step's `sew`) → colour under the machine's foot
     aspect   figure width / height, the same for every step (0.8)
+    pinsAt   which end of step 0 shows the pins: 1 = taken apart (default), 0 = at rest, i.e. already in the
+             first frame (a figure whose rest state is the view the legend explains: the folded bag bottom)
 */
-export function makeRenderer({ id, steps, anatomy, pins, floorAt, shadow, fabrics, aspect = 0.8 }) {
+export function makeRenderer({ id, steps, anatomy, pins, floorAt, shadow, fabrics, aspect = 0.8, pinsAt = 1 }) {
   const cams = [];
   const camera = (k) => {
     if (cams[k]) return cams[k];
@@ -219,7 +221,7 @@ export function makeRenderer({ id, steps, anatomy, pins, floorAt, shadow, fabric
       const tt = ease(t);
       const cam = b0.map((v, i) => lerp(v, b1[i], tt));
       const s = anatomy(t);
-      const show = span(t, 0.75, 1);
+      const show = pinsAt ? span(t, 0.75, 1) : 1 - span(t, 0, 0.25);
       const u = cam[2] / 100;
       const pinSvg = show
         ? `<g class="pins" opacity="${show.toFixed(3)}">` +

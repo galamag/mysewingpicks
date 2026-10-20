@@ -20,8 +20,8 @@ export default {
     stepOf: (k, n) => `Step ${k} of ${n}`,
     machine: (stitch) => `Machine: ${stitch.toLowerCase()}`,
     inThisStep: 'In this step',
-    takeApart: 'Show the bottom',
-    putTogether: 'Stand it up',
+    takeApart: 'Stand it up',
+    putTogether: 'Show the bottom',
     replay: '↻ Replay',
     parts: 'Parts',
     allSteps: 'Step-by-step instructions',
@@ -48,7 +48,7 @@ export default {
   steps: [
     {
       title: 'The folded-in bottom',
-      text: 'The tote\'s bottom: a flat 12 cm (4¾ in) base between two stitched folds, and corners that form by themselves — no corner seams. Tap the bag to see the bottom.',
+      text: 'The tote\'s bottom, the bag upside down: a flat 12 cm (4¾ in) base between two stitched folds, and corners that form by themselves — no corner seams. Tap the bag to stand it up.',
     },
     {
       title: 'Crease the centre and measure',

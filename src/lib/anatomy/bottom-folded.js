@@ -12,8 +12,8 @@
   Words (titles, captions, instructions, chips, legend) are NOT here: bottom-folded.<lang>.js,
   picked through bottom-folded.text.js.
 
-  Step 0 is the finished bottom: the bag turned out, standing (tap: it turns upside down, the base on
-  top). Steps 1–5 each animate one move over t = 0…1. Shared parts (shell, camera,
+  Step 0 is the finished bottom: the bag turned out and upside down, its base on top (tap: it stands
+  up). Steps 1–5 each animate one move over t = 0…1. Shared parts (shell, camera,
   inset, machine, renderer) live in kit.js. SVG ids carry the figure's prefix ('bag-bottom-folded-…'),
   so it never collides with another figure on the same page.
 */
@@ -42,6 +42,7 @@ const W = WID - 2 * SPEC.seam - D; // front width of the turned-out bag (drawing
 const HB = Y1; // height of the turned-out bag, the top still raw (drawing only)
 const GAP = 4 * T; // how close the walls come once the piece is folded flat
 const MID = WID / 2;
+const DIM = 5; // how far off the piece's long edge the 6 cm dimensions of step 1 stand
 
 const FILL = { duck: `url(#${ID}-duck)`, duckBack: `url(#${ID}-duckBack)` };
 const DUCK = { fill: FILL.duck, inner: FILL.duckBack }; // right side · wrong side
@@ -107,20 +108,22 @@ function stepCentre(t) {
   const six = p.measure;
   return {
     pieces: bands(centreSection(t), lines, { sort: true }),
+    // lines first, chips after: a line being drawn never paints over a label
     over: [
       // the fold being pressed (the folded edge lies at the centre, z = 0)
       { type: 'line', pts: [[0.4, HALF, z], [WID - 0.4, HALF, z]], t: p.press, kind: 'hot', o: pressing },
-      { type: 'label', p: [MID, HALF, z], label: 'foldPress', o: span(t, 0.06, 0.12) * (1 - span(t, 0.31, 0.34)), dy: -6, hot: true },
-      { type: 'label', p: [MID, HALF, z], label: 'centreCrease', o: span(t, 0.42, 0.48), dy: -4 },
-      { type: 'dim', a: [-2, Y1, 0], b: [-2, HALF, 0], label: 'cm6', o: six, hot: true },
-      { type: 'dim', a: [WID + 2, HALF, 0], b: [WID + 2, Y2, 0], label: 'cm6', o: six, hot: true },
       // the lines drawn across with the pen, then left on the fabric
       { type: 'line', pts: [[0.4, Y1, z], [WID - 0.4, Y1, z]], t: p.draw1, kind: 'hot', o: span(t, 0.58, 0.6) * (1 - span(t, 0.72, 0.74)) },
       { type: 'line', pts: [[0.4, Y2, z], [WID - 0.4, Y2, z]], t: p.draw2, kind: 'hot', o: span(t, 0.74, 0.76) * (1 - span(t, 0.88, 0.9)) },
+      { type: 'label', p: [MID, HALF, z], label: 'foldPress', o: span(t, 0.06, 0.12) * (1 - span(t, 0.31, 0.34)), dy: -6, hot: true },
+      // on the crease, its middle; the 6 cm dimensions stand off the piece's long edges, clear of it
+      { type: 'label', p: [MID, HALF, z], label: 'centreCrease', o: span(t, 0.42, 0.48) },
+      { type: 'dim', a: [-DIM, Y1, 0], b: [-DIM, HALF, 0], label: 'cm6', o: six, hot: true },
+      { type: 'dim', a: [WID + DIM, HALF, 0], b: [WID + DIM, Y2, 0], label: 'cm6', o: six, hot: true },
     ],
     inset: { segs: centreSection(t, 2.5), range: [0, LEN] },
     focus: {
-      pts: [[-2, Y1 - 8, 0], [WID + 2, Y1 - 8, 0], [-2, Y2 + 8, 0], [WID + 2, Y2 + 8, 0]],
+      pts: [[-DIM, Y1 - 8, 0], [WID + DIM, Y1 - 8, 0], [-DIM, Y2 + 8, 0], [WID + DIM, Y2 + 8, 0]],
       k: 0.45 * span(t, 0.46, 0.56),
     },
   };
@@ -256,40 +259,50 @@ function stepTurnOut(t) {
   };
 }
 
-/* ---------- Step 0: the finished bottom — standing (e = 0) or tipped over, base to the viewer (e = 1) ---------- */
+/* ---------- Step 0: the finished bottom — upside down, base on top (e = 0, the first frame) or stood up (e = 1) ---------- */
 
-/** The turned-out bag: a 12 cm base with the centre crease in its middle, the stitched folds along its long edges. */
-function finished() {
-  return shell({ key: 'bag', xa: 0, xb: W, ya: 0, yb: D, h: HB, ...DUCK, vee: 'bottom' }).walls.map((p) => {
-    if (p.id === 'bag-bottom') return { ...p, lines: [{ pts: [[0.4, D / 2], [W - 0.4, D / 2]], kind: 'fold' }] };
-    if (p.id === 'bag-front' || p.id === 'bag-back') return { ...p, lines: [...(p.lines ?? []), { pts: [[0.4, 0.3], [W - 0.4, 0.3]], kind: 'stitch', side: 'out' }] };
+// The centre crease on the base, drawn three times over: one fold line (dashed, half opacity) is faint on the
+// print, and on the base the crease is the point.
+const BASE_CREASE = { pts: [[0.4, D / 2], [W - 0.4, D / 2]], kind: 'fold' };
+
+/** The turned-out bag (walls `<key>-…`): a 12 cm base with the centre crease in its middle, the stitched folds along its long edges. */
+function finished(key) {
+  return shell({ key, xa: 0, xb: W, ya: 0, yb: D, h: HB, ...DUCK, vee: 'bottom' }).walls.map((p) => {
+    if (p.id === `${key}-bottom`) return { ...p, lines: [BASE_CREASE, BASE_CREASE, BASE_CREASE] };
+    if (p.id === `${key}-front` || p.id === `${key}-back`) return { ...p, lines: [...(p.lines ?? []), { pts: [[0.4, 0.3], [W - 0.4, 0.3]], kind: 'stitch', side: 'out' }] };
     return p;
   });
 }
 
+/** Only what can be seen: a piece faded to nothing is dropped, not drawn at opacity ~0. */
+const seen = (ps) => ps.filter((p) => (p.opacity ?? 1) > 0.01);
+
 /*
-  Turned upside down: the base comes up on top, the back wall (with its stitched fold) to the front. A
-  crossfade, not a swing — mid-turn the bag would lie across the frame, outside step 0's camera (which kit.js
-  fits to the two end states only): the standing bag fades out, the upside-down one settles in from above.
+  At rest the bag stands upside down: the base on top, the back wall (with its stitched fold) to the front,
+  the V of the side seams at the top of the right wall — the view the legend's pins explain, so they are on
+  it from the first frame (pinsAt: 0). Tapped, it stands up. A crossfade, not a swing: mid-turn the bag would
+  lie across the frame, outside step 0's camera (which kit.js fits to the two end states only) — the
+  upside-down bag lifts away as it fades, the standing one fades in.
 */
-function anatomy(e = 0) {
-  const up = finished().map((p) => turn(p, [0, D / 2, HB / 2], [1, 0, 0], Math.PI));
-  const drop = 4 * (1 - span(e, 0.4, 0.85));
-  const standing = fadeAll(finished(), 1 - span(e, 0.05, 0.45));
-  const upside = e > 0.001 ? fadeAll(up.map((p) => ({ ...p, O: [p.O[0], p.O[1], p.O[2] + drop] })), span(e, 0.4, 0.8)) : [];
-  // pins() looks pieces up by id: when both bags are there, the upside-down one (later in the list) wins
-  return { pieces: [...inside(standing), ...outside(standing), ...inside(upside), ...outside(upside)], over: [] };
+export function anatomy(e = 0) {
+  const lift = 4 * span(e, 0.05, 0.45);
+  const up = seen(fadeAll(finished('up').map((p) => {
+    const q = turn(p, [0, D / 2, HB / 2], [1, 0, 0], Math.PI);
+    return { ...q, O: [q.O[0], q.O[1], q.O[2] + lift] };
+  }), 1 - span(e, 0.05, 0.45)));
+  const standing = seen(fadeAll(finished('bag'), span(e, 0.4, 0.8)));
+  return { pieces: [...inside(standing), ...outside(standing), ...inside(up), ...outside(up)], over: [] };
 }
 
-/** Numbered pins for the legend (shown upside down): base, stitched fold, centre crease, side seam, corner. */
+/** Numbered pins for the legend, on the upside-down bag (shown at rest): base, stitched fold, centre crease, side seam, corner. */
 function pins(e) {
   const byId = Object.fromEntries(anatomy(e).pieces.map((p) => [p.id, p]));
   return [
-    { n: 1, p: at(byId['bag-bottom'], W * 0.72, D * 0.28) },
-    { n: 2, p: at(byId['bag-back'], W * 0.5, 0.3) },
-    { n: 3, p: at(byId['bag-bottom'], W * 0.28, D / 2) },
-    { n: 4, p: at(byId['bag-right'], D / 2, HB * 0.55) },
-    { n: 5, p: at(byId['bag-right'], D / 2, D / 2) },
+    { n: 1, p: at(byId['up-bottom'], W * 0.72, D * 0.28) },
+    { n: 2, p: at(byId['up-back'], W * 0.5, 0.3) },
+    { n: 3, p: at(byId['up-bottom'], W * 0.28, D / 2) },
+    { n: 4, p: at(byId['up-right'], D / 2, HB * 0.55) },
+    { n: 5, p: at(byId['up-right'], D / 2, D / 2) },
   ];
 }
 
@@ -340,6 +353,7 @@ export const renderStep = makeRenderer({
   floorAt: (k) => (k === 0 ? [W / 2, D / 2, 0] : k === 5 ? [MID, Y1, 0] : k === 4 ? [MID, Y1 / 2, 0] : null),
   shadow: [W * 0.62, D * 0.9],
   fabrics: { duck: '#c08a87' },
+  pinsAt: 0, // the pins are on the rest view (upside down, base on top): already in the first frame
 });
 
 /** Fabric patterns, in each piece's own cm coordinates (the tote's cotton duck). */
