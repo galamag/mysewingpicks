@@ -4,8 +4,13 @@
 import { STEPS, LABEL_KEYS } from './cosmetic.js';
 import { figureTexts } from './texts.js';
 import en from './cosmetic.en.js';
+import ru from './cosmetic.ru.js';
+import de from './cosmetic.de.js';
+import fr from './cosmetic.fr.js';
+import it from './cosmetic.it.js';
+import es from './cosmetic.es.js';
 
-export const COSMETIC_TEXT = { en };
+export const COSMETIC_TEXT = { en, ru, de, fr, it, es };
 
 // Every cosmetic.<xx>.js the browser would bundle: an unregistered one fails the build (texts.js).
 // (The try: plain Node, e.g. the anatomy-sheet skill script, has no import.meta.glob; the real build always does.)

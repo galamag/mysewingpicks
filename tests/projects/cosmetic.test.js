@@ -9,6 +9,7 @@ import * as cosmetic from '../../src/lib/anatomy/cosmetic.js';
 import { COSMETIC_TEXT, cosmeticText } from '../../src/lib/anatomy/cosmetic.text.js';
 import { figure } from '../../src/lib/anatomy/figures.js';
 import { products } from '../../src/data/products.js';
+import { LOCALES } from '../../src/i18n/index.js';
 
 const { STEPS, SPEC, DEFS, LABEL_KEYS, CUT, renderStep } = cosmetic;
 const SLUG = 'cosmetic-bag';
@@ -114,4 +115,27 @@ test('every chip key of the drawing has its text', () => {
 test('the opening is closed by hand: the hand step names no machine stitch', () => {
   const last = STEPS[STEPS.length - 1];
   assert.ok(!(last.sew ?? []).length, 'the last step (turn out, close the opening by hand) has no machine window');
+});
+
+test('every site language has the figure texts', () => {
+  assert.deepEqual([...LANGS].sort(), [...LOCALES].sort());
+});
+
+test('language rules: no-break space before the unit, decimal comma, French punctuation', () => {
+  for (const lang of ['ru', 'de', 'fr', 'it', 'es']) {
+    for (const [where, s] of strings(cosmeticText(lang))) {
+      assert.doesNotMatch(s, /\d\.\d/, `${lang} ${where}: decimal point`);
+      if (lang !== 'ru') assert.doesNotMatch(s, /\d[ \t]*cm\b/, `${lang} ${where}: no no-break space before cm`);
+      if (lang === 'fr') assert.doesNotMatch(s, /(?:^|[^\xa0])[:;!?]/, `fr ${where}: no no-break space before : ; ! ?`);
+      assert.ok(!s.includes(String.fromCharCode(0x2019)), `${lang} ${where}: typographic apostrophe — the site uses '`);
+    }
+  }
+});
+
+test("the maker's words: no hand stitch name she never gave", () => {
+  for (const lang of LANGS) {
+    const L = cosmeticText(lang);
+    const all = strings(L).map(([, s]) => s).join(' ').toLowerCase();
+    assert.doesNotMatch(all, /ladder|лесенк|potayn|потайн|matratzen|invisible|invisibile/, `${lang}: a hand stitch she never named`);
+  }
 });
