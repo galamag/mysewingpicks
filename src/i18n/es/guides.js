@@ -40,7 +40,7 @@ export default {
       panel: {
         title: 'Base aparte',
         line: 'La base es una pieza aparte, cosida todo alrededor a la parte de abajo de las paredes.',
-        choose: 'Cuando quieres una base plana y estable, una base de otra tela o una base firme con entretela o con una base rígida. Las bases redondas y ovaladas se cosen igual.',
+        choose: 'Cuando quieres una base plana y estable, una base de otra tela o una base firme con entretela o con una base rígida. Las bases redondas y ovaladas también se cosen, con piquetes en el margen de las paredes a lo largo de toda la curva.',
       },
     },
   },

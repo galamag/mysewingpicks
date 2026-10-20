@@ -232,6 +232,19 @@ const clipLine = (c) => {
 };
 
 /*
+  Once clipped, the corner opens into a V whose point is where the clip stopped: the bit of allowance between the
+  clip's end and the seam corner stays whole (drawn as a small piece over the strips' meeting point), so the
+  opened corner never reads as cut right into the stitching.
+*/
+const UNCUT = CLIP_STOP * S; // how far out from the seam corner (along x and along y) the clip's end lies
+function uncut() {
+  return VISIBLE_CORNERS.map(([cx, cy, sx, sy], i) => ({
+    id: `uncut-${i}`, pts: [[0, 0], [2 * UNCUT, 0], [UNCUT, UNCUT], [0, 2 * UNCUT]],
+    O: [cx, cy, ZF + 0.01], U: [sx, 0, 0], V: [0, sy, 0], out: [0, 0, 1], fill: BACK, inner: PRINT,
+  }));
+}
+
+/*
   The sewing clips that hold the tube to the base: first at the marks (the middle of each side), then in between
   (along the long sides). On the flange strip at local u, lying across its edge. `o` — [at the marks, in between].
 */
@@ -254,15 +267,18 @@ function clips([oMarks, oBetween], gone = () => 0) {
   return out;
 }
 
-/** The tube on the base, in painter's order: the base, the far strips, the walls, the near strips, the corners, the clips. */
-function work({ lift = 0, wallsO = 1, fold = 1, sewn = 0, pucker = 0, clipO = [0, 0], gone, baseO = 1 } = {}) {
+/**
+  The tube on the base, in painter's order: the base, the far strips, the walls, the near strips, the corners, the
+  clips. `clipped`: the corners are clipped (the uncut point of each V is drawn).
+*/
+function work({ lift = 0, wallsO = 1, fold = 1, sewn = 0, pucker = 0, clipO = [0, 0], gone, clipped = false } = {}) {
   const walls = fadeAll(tubeWalls(lift), wallsO);
   const fl = flanges({ lift, fold, sewn });
   const cl = clips(clipO, gone);
   const f = (ps) => fadeAll(ps, wallsO);
   return seen([
-    base({ opacity: baseO < 0.999 ? baseO : undefined }), ...f(fl.far), ...f(cl.far), ...inside(walls), ...outside(walls),
-    ...f(fl.near), ...f(puckers(pucker)), ...f(cl.near),
+    base(), ...f(fl.far), ...f(cl.far), ...inside(walls), ...outside(walls),
+    ...f(fl.near), ...f(clipped ? uncut() : []), ...f(puckers(pucker)), ...f(cl.near),
   ]);
 }
 
@@ -298,18 +314,23 @@ function stepMatch(t) {
 /* ---------- Step 4: clip the walls' allowance at each corner, up to the stitching, not through it ---------- */
 
 const NEAR_CORNER = [LG, SH, 0];
-const CORNER_FOCUS = [[LG - 5, SH - 3, 0], [LG + S + 3, SH - 3, 0], [LG - 5, SH + S + 3, 0], [LG + S + 3, SH + S + 3, 0], [LG - 2, SH, 5]];
+const CORNER_FOCUS = [[LG - 4, SH - 2.5, 0], [LG + S + 2.5, SH - 2.5, 0], [LG - 4, SH + S + 2.5, 0], [LG + S + 2.5, SH + S + 2.5, 0], [LG - 1.5, SH, 4]];
 
+/*
+  The clip lines carry `clip: true` — a marker for the tests only (iso.js ignores it): the hot line while the
+  scissors cut, then a quiet line that stays to the end, so the rest frame still shows where the cut stopped.
+*/
 function stepClip(t) {
   const cut = span(t, 0.14, 0.4);
   return {
-    pieces: work({ pucker: 1 - span(t, 0.46, 0.6), clipO: [1, 1] }),
+    pieces: work({ pucker: 1 - span(t, 0.46, 0.6), clipO: [1, 1], clipped: t >= 0.4 }),
     over: [
       ...VISIBLE_CORNERS.map((c) => ({ type: 'line', pts: clipLine(c), t: cut, kind: 'hot', o: 1 - span(t, 0.62, 0.7), clip: true })),
-      { type: 'label', p: ridgeEnd(VISIBLE_CORNERS[0]), label: 'clipCorner', o: span(t, 0.08, 0.14) * (1 - span(t, 0.42, 0.48)), dx: 4, dy: 7, hot: true },
-      { type: 'label', p: NEAR_CORNER, label: 'notThrough', o: span(t, 0.62, 0.7), dx: 2, dy: 9, hot: true },
+      ...VISIBLE_CORNERS.map((c) => ({ type: 'line', pts: clipLine(c), t: 1, kind: 'dim', o: 0.85 * span(t, 0.58, 0.66), clip: true })),
+      { type: 'label', p: ridgeEnd(VISIBLE_CORNERS[0]), label: 'clipCorner', o: span(t, 0.08, 0.14) * (1 - span(t, 0.34, 0.38)), dx: 4, dy: 7, hot: true },
+      { type: 'label', p: NEAR_CORNER, label: 'notThrough', o: span(t, 0.4, 0.46), dx: 2, dy: 15, hot: true },
     ],
-    focus: { pts: CORNER_FOCUS, k: 0.7 * span(t, 0.02, 0.1) },
+    focus: { pts: CORNER_FOCUS, k: 0.75 * span(t, 0.02, 0.1) },
   };
 }
 
@@ -341,7 +362,7 @@ function stepSew(t) {
   const live = 1 - span(t, SEW[1], SEW[1] + 0.05);
   const C = [LG, SH, ZS], R = [LG, 0, ZS];
   return {
-    pieces: work({ sewn: t >= SEW[1] ? 1 : 0, clipO: [1, 1], gone: (c) => span(p, clipAt(c), clipAt(c) + 0.03) }),
+    pieces: work({ sewn: t >= SEW[1] ? 1 : 0, clipO: [1, 1], clipped: true, gone: (c) => span(p, clipAt(c), clipAt(c) + 0.03) }),
     over: [
       { type: 'line', pts: seg(0), t: segT(0), kind: 'hot', o: live },
       { type: 'line', pts: seg(1), t: segT(1), kind: 'hot', o: live },
@@ -384,7 +405,7 @@ function stepTurnOut(t) {
   const flip = span(t, 0.12, 0.5);
   const bag = upsideDown(finished('fin'), SH / 2, H);
   return {
-    pieces: seen([...fadeAll(work({ sewn: 1 }), 1 - flip), ...fadeAll([...inside(bag), ...outside(bag)], flip)]),
+    pieces: seen([...fadeAll(work({ sewn: 1, clipped: true }), 1 - flip), ...fadeAll([...inside(bag), ...outside(bag)], flip)]),
     over: [
       { type: 'label', p: [LG / 2, SH / 2, H], label: 'turnOut', o: span(t, 0.02, 0.08) * (1 - span(t, 0.3, 0.36)), dy: -8 },
       { type: 'label', p: [LG * 0.4, SH / 2, H], label: 'flatBottom', o: span(t, 0.6, 0.68), dy: -6, hot: true },

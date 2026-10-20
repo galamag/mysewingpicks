@@ -34,8 +34,8 @@ export default {
     insideOut: "sur l'envers",
     markOnMark: 'repère sur repère',
     clipBetween: 'puis des pinces entre',
-    clipCorner: 'cranter dans le coin',
-    notThrough: 'sans couper la couture',
+    clipCorner: 'cranter aux ciseaux',
+    notThrough: 'avant la ligne de couture',
     backstitch: "point d'arrêt",
     oneSide: 'un côté à la fois',
     stopTurn: "arrêt, pivoter",
@@ -72,7 +72,7 @@ export default {
     },
     {
       title: 'Repère sur repère',
-      text: "Retournez le tube sur l'envers et posez-le sur le fond, endroit contre endroit, bords alignés. Placez d'abord repère sur repère, les coutures de côté et les plis sur les milieux du fond, puis posez des pinces entre les repères.",
+      text: "Gardez le tube sur l'envers et posez-le sur le fond, endroit contre endroit, bords alignés. Placez d'abord repère sur repère, les coutures de côté et les plis sur les milieux du fond, puis posez des pinces entre les repères.",
       details: [
         "Le tube est sur l'envers et le fond endroit dessus : les endroits se font face.",
         'Alignez les bords du tube et du fond tout autour ; la marge des parois repose sur le bord du fond.',
@@ -82,7 +82,7 @@ export default {
     },
     {
       title: 'Cranter les coins',
-      text: "À chaque coin du fond, crantez la marge des parois droit dans le coin, jusqu'à la ligne de couture sans l'atteindre, sans couper la couture : les parois peuvent alors tourner dans l'angle.",
+      text: "À chaque coin du fond, crantez aux ciseaux la marge des parois droit dans le coin, jusqu'à la ligne de couture sans l'atteindre, sans couper la couture : les parois peuvent alors tourner dans l'angle.",
       details: [
         'Repérez où chaque coin du fond rencontre les parois.',
         "Crantez la marge des parois dans le coin, jusqu'à la ligne de couture sans l'atteindre : sans couper la couture.",

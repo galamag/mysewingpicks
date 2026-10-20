@@ -34,8 +34,8 @@ export default {
     insideOut: 'del revés',
     markOnMark: 'marca sobre marca',
     clipBetween: 'luego clips entre',
-    clipCorner: 'piquete en la esquina',
-    notThrough: 'sin cortar la costura',
+    clipCorner: 'piquete con las tijeras',
+    notThrough: 'antes de la línea de costura',
     backstitch: 'rematar',
     oneSide: 'un lado cada vez',
     stopTurn: 'parar y girar',
@@ -72,7 +72,7 @@ export default {
     },
     {
       title: 'Marca sobre marca',
-      text: 'Pon el tubo del revés y colócalo sobre la base, derecho con derecho, con los bordes parejos. Primero pon marca sobre marca, las costuras laterales y los dobleces sobre los centros de la base, y luego clips de costura entre las marcas.',
+      text: 'Deja el tubo del revés y colócalo sobre la base, derecho con derecho, con los bordes parejos. Primero pon marca sobre marca, las costuras laterales y los dobleces sobre los centros de la base, y luego clips de costura entre las marcas.',
       details: [
         'El tubo está del revés y la base tiene el derecho hacia arriba: los derechos quedan enfrentados.',
         'Empareja los bordes del tubo y de la base todo alrededor; el margen de las paredes queda sobre el borde de la base.',
@@ -82,7 +82,7 @@ export default {
     },
     {
       title: 'Piquetes en las esquinas',
-      text: 'En cada esquina de la base, haz un piquete en el margen de las paredes, recto hacia la esquina, hasta casi la línea de costura, sin cortar la costura: así las paredes pueden girar en la esquina.',
+      text: 'En cada esquina de la base, haz con las tijeras un piquete en el margen de las paredes, recto hacia la esquina, hasta casi la línea de costura, sin cortar la costura: así las paredes pueden girar en la esquina.',
       details: [
         'Busca dónde se junta cada esquina de la base con las paredes.',
         'Haz un piquete en el margen de las paredes hacia la esquina, hasta casi la línea de costura: sin cortar la costura.',

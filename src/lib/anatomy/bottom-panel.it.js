@@ -34,8 +34,8 @@ export default {
     insideOut: 'al rovescio',
     markOnMark: 'segno su segno',
     clipBetween: 'poi le clip in mezzo',
-    clipCorner: "taglietto nell'angolo",
-    notThrough: 'senza tagliare la cucitura',
+    clipCorner: 'taglietto con le forbici',
+    notThrough: 'prima della linea di cucitura',
     backstitch: 'fermatura',
     oneSide: 'un lato alla volta',
     stopTurn: 'fermati e gira',
@@ -72,7 +72,7 @@ export default {
     },
     {
       title: 'Segno su segno',
-      text: 'Rivolta il tubo al rovescio e appoggialo sul fondo, dritto contro dritto, bordi pari. Prima metti segno su segno, le cuciture laterali e le pieghe sui centri del fondo, poi le clip in mezzo.',
+      text: 'Lascia il tubo al rovescio e appoggialo sul fondo, dritto contro dritto, bordi pari. Prima metti segno su segno, le cuciture laterali e le pieghe sui centri del fondo, poi le clip in mezzo.',
       details: [
         'Il tubo è al rovescio e il fondo ha il dritto in su: i due dritti sono uno contro l\'altro.',
         'Allinea i bordi del tubo e del fondo tutto intorno; il margine delle pareti appoggia sul bordo del fondo.',
@@ -82,7 +82,7 @@ export default {
     },
     {
       title: 'Taglietti agli angoli',
-      text: "A ogni angolo del fondo fai un taglietto nel margine delle pareti, dritto verso l'angolo, fin quasi alla linea di cucitura, senza tagliare la cucitura: così le pareti girano l'angolo.",
+      text: "A ogni angolo del fondo fai con le forbici un taglietto nel margine delle pareti, dritto verso l'angolo, fin quasi alla linea di cucitura, senza tagliare la cucitura: così le pareti girano l'angolo.",
       details: [
         'Trova dove ogni angolo del fondo incontra le pareti.',
         "Fai un taglietto nel margine delle pareti verso l'angolo, fin quasi alla linea di cucitura: senza tagliare la cucitura.",

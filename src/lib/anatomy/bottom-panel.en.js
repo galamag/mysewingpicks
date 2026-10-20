@@ -12,7 +12,7 @@ export default {
   ui: {
     fig: 'Fig. 4',
     title: 'Separate bottom panel',
-    svgLabel: "An isometric drawing of how a separate bottom panel is sewn in: the walls sewn into a tube, the middles of the base and of the tube marked by folding and creasing, the tube wrong side out on the base with the marks matched and clipped, the walls' seam allowance clipped at the corners, the base sewn in one side at a time, and the bag turned out with a flat base.",
+    svgLabel: "An isometric drawing of how a separate bottom panel is sewn in: the walls sewn into a tube, the middles of the base and of the tube marked by folding and creasing, the tube wrong side out on the base with the marks matched and held with sewing clips, the walls' seam allowance snipped into at the corners with scissors, the base sewn in one side at a time, and the bag turned out with a flat base.",
     prev: 'Previous step',
     dot: (i, title) => (i ? `Step ${i}: ${title}` : title),
     start: 'Steps →',
@@ -38,9 +38,9 @@ export default {
     seamMark: 'side seam = a mark',
     insideOut: 'wrong side out',
     markOnMark: 'mark on mark',
-    clipBetween: 'then clip in between',
-    clipCorner: 'clip into the corner',
-    notThrough: 'not through the stitching',
+    clipBetween: 'then add clips between',
+    clipCorner: 'snip into the corner',
+    notThrough: 'stop short of the seam line',
     backstitch: 'backstitch',
     oneSide: 'one side at a time',
     stopTurn: 'stop and turn',
@@ -58,7 +58,7 @@ export default {
       title: 'Sew the walls into a tube',
       text: 'Lay the front on the back, right sides together, and sew both sides: a tube, open at both ends. The base is a separate piece.',
       details: [
-        'Lay the front on the back, right sides together, and clip them.',
+        'Lay the front on the back, right sides together, and fasten them with sewing clips.',
         'Sew both sides, from top to bottom.',
         'The tube stays open at the bottom too: the base is a separate piece, sewn in later.',
         'If the walls are cut in one piece, a single seam closes the tube.',
@@ -77,22 +77,22 @@ export default {
     },
     {
       title: 'Match the marks',
-      text: 'Turn the tube wrong side out and set it on the base, right sides together, edges even. First match the marks, the side seams and the creases on the middles of the base, then clip in between.',
+      text: 'Keep the tube wrong side out and set it on the base, right sides together, edges even. First match the marks, the side seams and the creases on the middles of the base, then add sewing clips in between.',
       details: [
         'The tube is wrong side out and the base lies right side up, so the right sides face each other.',
         "Line up the edges of the tube and the base all round; the walls' seam allowance lies on the edge of the base.",
         'First match the marks: each side seam on the middle of a short side, each crease on the middle of a long side.',
-        'Clip the marks together first, then clip in between.',
+        'Fasten the marks with sewing clips first, then add more clips in between.',
       ],
     },
     {
-      title: 'Clip the corners',
-      text: "At each corner of the base, clip the walls' seam allowance straight into the corner, to just short of the seam line, not through the stitching: then the walls can turn the corner.",
+      title: 'Snip the corners',
+      text: "At each corner of the base, snip the walls' seam allowance with the scissors, straight into the corner, to just short of the seam line, not through the stitching: then the walls can turn the corner.",
       details: [
         'Find where each corner of the base meets the walls.',
-        "Clip the walls' seam allowance into the corner, to just short of the seam line: not through the stitching.",
+        "With the scissors, snip the walls' seam allowance into the corner, to just short of the seam line: not through the stitching.",
         'The allowance then opens and lies flat round the corner, and the corner stays sharp.',
-        'Clip all the corners the same way.',
+        'Snip all the corners the same way.',
       ],
     },
     {
@@ -119,7 +119,7 @@ export default {
   legend: [
     { title: 'Base', text: 'a separate piece · here in another fabric' },
     { title: 'Base seam', text: 'joins the walls to the base, all round' },
-    { title: 'Corners', text: "the walls' seam allowance clipped, so the corner stays sharp" },
+    { title: 'Corners', text: "the walls' seam allowance snipped into, so the corner stays sharp" },
     { title: 'Side seams', text: 'each meets the middle of a short side of the base' },
   ],
 };

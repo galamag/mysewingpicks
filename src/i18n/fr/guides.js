@@ -40,7 +40,7 @@ export default {
       panel: {
         title: 'Fond rapporté',
         line: 'Le fond est une pièce à part, cousue tout autour au bas des parois.',
-        choose: 'Quand vous voulez un fond plat et stable, un fond dans un autre tissu, ou un fond rigide avec un entoilage ou une plaque. Les fonds ronds et ovales se cousent de la même façon.',
+        choose: 'Quand vous voulez un fond plat et stable, un fond dans un autre tissu, ou un fond rigide avec un entoilage ou une plaque. Les fonds ronds et ovales se cousent aussi, en crantant la marge des parois tout le long de la courbe.',
       },
     },
   },

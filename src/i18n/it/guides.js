@@ -39,7 +39,7 @@ export default {
       panel: {
         title: 'Fondo separato',
         line: 'Il fondo è un pezzo a sé, cucito tutto intorno alla base delle pareti.',
-        choose: 'Quando vuoi un fondo piatto e stabile, un fondo in un altro tessuto o un fondo rigido con teletta o inserto. I fondi tondi e ovali si cuciono allo stesso modo.',
+        choose: 'Quando vuoi un fondo piatto e stabile, un fondo in un altro tessuto o un fondo rigido con teletta o inserto. Anche i fondi tondi e ovali si cuciono così, ma con taglietti nel margine delle pareti lungo tutta la curva.',
       },
     },
   },

@@ -57,32 +57,32 @@ test('no numbers at all: no digit, no fraction, no unit (figure, chips, legend, 
 const WORDS = {
   en: {
     middles: /middle/, marks: /mark/, crease: /crease/, match: /match the marks/, between: /in between/, wrongOut: /wrong side out/,
-    clip: /clip/, notThrough: /not through the stitching/, stopShort: /one seam allowance from the corner/, backstitch: /backstitch/,
+    clip: /snip/, notThrough: /not through the stitching/, shortOf: /short of the seam line/, scissors: /scissors/, stopShort: /one seam allowance from the corner/, backstitch: /backstitch/,
     turn: /turn the corner/, interfacing: /interfacing/, insert: /insert/,
   },
   ru: {
     middles: /середин/, marks: /метк/, crease: /загладь|разгладь|заутюжь/, match: /совмест\p{L}* метк/u, between: /между/, wrongOut: /изнанкой наружу/,
-    clip: /надсе[кч]/, notThrough: /не доходя до строчки/, stopShort: /на ширину припуска от угла/, backstitch: /закрепк/,
+    clip: /надсе[кч]/, notThrough: /не доходя до строчки/, shortOf: /не доходя до линии шва/, scissors: /ножниц/, stopShort: /на ширину припуска от угла/, backstitch: /закрепк/,
     turn: /поверн\p{L}* работу/u, interfacing: /флизелин/, insert: /вставк/,
   },
   de: {
     middles: /Mitte/, marks: /Markierung|markier/, crease: /Bruch|bügel|streich/, match: /Markierung auf Markierung|Markierungen aufeinander/, between: /dazwischen/, wrongOut: /links auf links|auf links|linke Seite außen/,
-    clip: /einschneiden|einknipsen/, notThrough: /nicht in die Naht/, stopShort: /eine Nahtzugabe vor der Ecke/, backstitch: /[Vv]erriegel/,
+    clip: /einschneiden|einknipsen/, notThrough: /nicht in die Naht/, shortOf: /knapp vor (?:die|der) Nahtlinie/, scissors: /Schere/, stopShort: /eine Nahtzugabe vor der Ecke/, backstitch: /[Vv]erriegel/,
     turn: /um die Ecke/, interfacing: /Bügeleinlage/, insert: /Einlegeboden/,
   },
   fr: {
     middles: /milieu/, marks: /repère/, crease: /pli/, match: /repère sur repère|repères l'un sur l'autre/, between: /entre/, wrongOut: /sur l'envers/,
-    clip: /crant/, notThrough: /sans couper la couture/, stopShort: /à une marge de couture du coin/, backstitch: /point d'arrêt/,
+    clip: /crant/, notThrough: /sans couper la couture/, shortOf: /avant la ligne de couture|ligne de couture sans l'atteindre/, scissors: /ciseaux/, stopShort: /à une marge de couture du coin/, backstitch: /point d'arrêt/,
     turn: /tourne\p{L}* (?:dans|à) l'angle|pivote/u, interfacing: /entoilage/, insert: /fond rigide amovible|plaque de fond/,
   },
   it: {
     middles: /centro|metà/, marks: /segn/, crease: /piega/, match: /segno su segno/, between: /in mezzo|fra un segno e l'altro|tra un segno e l'altro/, wrongOut: /al rovescio/,
-    clip: /taglietto|taglietti/, notThrough: /senza tagliare la cucitura/, stopShort: /a un margine di cucitura dall'angolo/, backstitch: /fermatura/,
+    clip: /taglietto|taglietti/, notThrough: /senza tagliare la cucitura/, shortOf: /prima della linea di cucitura|quasi alla linea di cucitura/, scissors: /forbici/, stopShort: /a un margine di cucitura dall'angolo/, backstitch: /fermatura/,
     turn: /gira\p{L}* l'angolo/u, interfacing: /teletta/, insert: /inserto/,
   },
   es: {
     middles: /centro|mitad/, marks: /marca/, crease: /doblez|pliegue/, match: /marca sobre marca/, between: /entre/, wrongOut: /del revés/,
-    clip: /piquete/, notThrough: /sin cortar la costura/, stopShort: /a un margen de costura de la esquina/, backstitch: /remat/,
+    clip: /piquete/, notThrough: /sin cortar la costura/, shortOf: /antes de la línea de costura|casi la línea de costura/, scissors: /tijeras/, stopShort: /a un margen de costura de la esquina/, backstitch: /remat/,
     turn: /gira\p{L}* (?:en )?la esquina/u, interfacing: /entretela/, insert: /base rígida/,
   },
 };
@@ -96,17 +96,49 @@ test('the method is in words, step by step (spec 5.2), in every language', () =>
     for (const r of [w.middles, w.marks, w.crease]) assert.match(s(2), r, `${lang}: step 2 lacks ${r}`);
     // 3: wrong side out, the marks matched first, then clipped in between
     for (const r of [w.wrongOut, w.match, w.between]) assert.match(s(3), r, `${lang}: step 3 lacks ${r}`);
-    // 4: clip the walls' allowance at the corners, up to, not through, the stitching
-    for (const r of [w.clip, w.notThrough]) assert.match(s(4), r, `${lang}: step 4 lacks ${r}`);
+    // 4: snip the walls' allowance at the corners with the scissors, to just short of the seam line, not through the stitching
+    for (const r of [w.clip, w.scissors, w.shortOf, w.notThrough]) assert.match(s(4), r, `${lang}: step 4 lacks ${r}`);
     // 5: one side at a time, stop one seam allowance from the corner, backstitch, turn the corner
     for (const r of [w.stopShort, w.backstitch, w.turn]) assert.match(s(5), r, `${lang}: step 5 lacks ${r}`);
     // the stiffening goes on the base (interfacing or an insert) — said somewhere in the steps
     const all = L.steps.map((_, k) => s(k)).join(' \n ');
     for (const r of [w.interfacing, w.insert]) assert.match(all, r, `${lang}: the steps never say ${r}`);
     // the chips say it too
-    assert.match(L.labels.notThrough, w.notThrough, `${lang}: the chip "not through the stitching"`);
+    assert.match(L.labels.notThrough, w.shortOf, `${lang}: the chip "stop short of the seam line"`);
     assert.match(L.labels.markOnMark, w.marks, `${lang}: the chip "mark on mark"`);
   }
+});
+
+// Beginner safety (review of 4e777ea): fastening and cutting never share a word, the tube is not turned again in
+// step 3, and the round / oval advice says what differs (the allowance snipped all along the curve; spec 5.2).
+const TURNED_AGAIN = { en: /Turn the tube/, ru: /Выверните трубу/, de: /Wende den Schlauch/, fr: /Retournez le tube/, it: /Rivolta il tubo/, es: /Pon el tubo del revés/ };
+const CURVE = { en: /all along the curve/, ru: /по всей дуге/, de: /ganzen Rundung/, fr: /tout le long de la courbe/, it: /lungo tutta la curva/, es: /a lo largo de toda la curva/ };
+
+test('beginner safety: "clip" is never the cutting word in English; step 3 keeps the tube as it is; round bases are snipped along the curve', () => {
+  for (const [where, s] of allTexts('en')) assert.doesNotMatch(s, /clip/i, `en ${where}: "clip" (fastening or cutting?) - say "sewing clips" or "snip"`);
+  for (const lang of LOCALES) {
+    assert.doesNotMatch(stepText(panelText(lang), 3), TURNED_AGAIN[lang], `${lang}: step 3 turns the tube again (it is already wrong side out)`);
+    assert.match(section(lang).choose, CURVE[lang], `${lang}: choose - round and oval bases need the allowance snipped along the curve`);
+  }
+  assert.doesNotMatch(section('en').choose, /same way/, 'en: round bases are not sewn "the same way"');
+});
+
+test('step 4 ends showing where the cut stopped: the clip lines stay, short of the seam corner, and the V keeps its uncut point', () => {
+  const end = STEPS[4].scene(1);
+  const shown = end.over.filter((o) => o.type === 'line' && o.clip && (o.o ?? 1) > 0.01);
+  assert.ok(shown.length >= 3, 'at the end of step 4 the clip lines are gone');
+  for (const c of shown) {
+    const e = c.pts[c.pts.length - 1];
+    const gap = Math.min(...panel.CORNERS.map((q) => Math.hypot(q[0] - e[0], q[1] - e[1])));
+    assert.ok(gap > 0.1 * DRAWING.allowance && gap < DRAWING.allowance, `a clip line ends ${gap} from its corner`);
+  }
+  const rest = end.pieces.filter((p) => p.id.startsWith('uncut-'));
+  assert.equal(rest.length, 3, 'the uncut point of each opened corner');
+  // the chip "stop short of the seam line" comes in while the cut is still being shown in red
+  const chipOn = (t) => STEPS[4].scene(t).over.find((o) => o.label === 'notThrough').o > 0.5;
+  const hotOn = (t) => STEPS[4].scene(t).over.some((o) => o.clip && o.kind === 'hot' && (o.o ?? 1) > 0.5);
+  assert.ok([0.5, 0.55, 0.6].some((t) => chipOn(t) && hotOn(t)), 'the chip and the red cut are never on screen together');
+  for (const k of [5, 6]) assert.ok(STEPS[k].scene(0).pieces.some((p) => p.id.startsWith('uncut-')), `step ${k}: the clipped corners lost their uncut point`);
 });
 
 test('the drawing keeps the method\'s geometry: the tube fits the base round, side seams and creases on the middles', () => {

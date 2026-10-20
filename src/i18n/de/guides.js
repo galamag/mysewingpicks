@@ -39,7 +39,7 @@ export default {
       panel: {
         title: 'Separater Boden',
         line: 'Der Boden ist ein eigenes Teil und wird rundherum unten an die Wände genäht.',
-        choose: 'Wenn du einen flachen, stabilen Boden möchtest, einen Boden aus einem anderen Stoff oder einen festen Boden mit Bügeleinlage oder Einlegeboden. Runde und ovale Böden werden genauso eingenäht.',
+        choose: 'Wenn du einen flachen, stabilen Boden möchtest, einen Boden aus einem anderen Stoff oder einen festen Boden mit Bügeleinlage oder Einlegeboden. Auch runde und ovale Böden werden so eingenäht, nur schneidest du die Nahtzugabe der Wände entlang der ganzen Rundung ein.',
       },
     },
   },

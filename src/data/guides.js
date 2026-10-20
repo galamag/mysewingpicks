@@ -115,7 +115,7 @@ export const guides = [
         usedIn: [],
         title: 'Separate bottom panel',
         line: 'The base is a piece of its own, sewn into the bottom of the walls all round.',
-        choose: 'When you want a flat, stable base, a base in another fabric, or a firm one with interfacing or an insert. Round and oval bases are sewn in the same way.',
+        choose: "When you want a flat, stable base, a base in another fabric, or a firm one with interfacing or an insert. Round and oval bases are sewn in too, with the walls' allowance snipped into all along the curve.",
       },
     ],
   },

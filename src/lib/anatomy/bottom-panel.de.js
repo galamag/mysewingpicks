@@ -34,8 +34,8 @@ export default {
     insideOut: 'auf links gewendet',
     markOnMark: 'Markierung auf Markierung',
     clipBetween: 'dann dazwischen klammern',
-    clipCorner: 'in die Ecke einschneiden',
-    notThrough: 'nicht in die Naht',
+    clipCorner: 'mit der Schere einschneiden',
+    notThrough: 'knapp vor der Nahtlinie',
     backstitch: 'verriegeln',
     oneSide: 'Seite für Seite',
     stopTurn: 'stopp und drehen',
@@ -72,7 +72,7 @@ export default {
     },
     {
       title: 'Markierungen aufeinander',
-      text: 'Wende den Schlauch auf links und setze ihn rechts auf rechts auf den Boden, die Kanten bündig. Lege zuerst Markierung auf Markierung, die Seitennähte und die Brüche auf die Mitten des Bodens, und klammere dann dazwischen.',
+      text: 'Lass den Schlauch auf links gewendet und setze ihn rechts auf rechts auf den Boden, die Kanten bündig. Lege zuerst Markierung auf Markierung, die Seitennähte und die Brüche auf die Mitten des Bodens, und klammere dann dazwischen.',
       details: [
         'Der Schlauch ist auf links gewendet, der Boden liegt mit der rechten Seite nach oben: Die rechten Seiten liegen aufeinander.',
         'Lege die Kanten von Schlauch und Boden rundherum bündig; die Nahtzugabe der Wände liegt auf dem Rand des Bodens.',
@@ -82,7 +82,7 @@ export default {
     },
     {
       title: 'Ecken einschneiden',
-      text: 'Schneide an jeder Ecke des Bodens die Nahtzugabe der Wände gerade in die Ecke ein, bis knapp vor die Nahtlinie, nicht in die Naht: So kommen die Wände um die Ecke.',
+      text: 'Schneide an jeder Ecke des Bodens die Nahtzugabe der Wände mit der Schere gerade in die Ecke ein, bis knapp vor die Nahtlinie, nicht in die Naht: So kommen die Wände um die Ecke.',
       details: [
         'Suche die Stellen, an denen die Ecken des Bodens auf die Wände treffen.',
         'Schneide die Nahtzugabe der Wände in die Ecke ein, bis knapp vor die Nahtlinie: nicht in die Naht.',
