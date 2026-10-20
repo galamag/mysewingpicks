@@ -139,3 +139,38 @@ test("the maker's words: no hand stitch name she never gave", () => {
     assert.doesNotMatch(all, /ladder|лесенк|potayn|потайн|matratzen|invisible|invisibile/, `${lang}: a hand stitch she never named`);
   }
 });
+
+/** The page's texts of the project (src/data/projects.js, src/i18n/<lang>/projects.js), with where they sit. */
+async function pageStrings(lang) {
+  const { projects } = await import('../../src/data/projects.js');
+  const en = projects.find((p) => p.slug === 'cosmetic-bag');
+  const p = lang === 'en' ? en : (await import(`../../src/i18n/${lang}/projects.js`)).default['cosmetic-bag'];
+  const out = Object.entries(p).filter(([k, v]) => typeof v === 'string' && !['slug', 'video', 'icon'].includes(k));
+  p.faq.forEach((f, i) => out.push([`faq[${i}].q`, f.q], [`faq[${i}].a`, f.a]));
+  return out;
+}
+
+test("the page's texts: the maker's cm numbers only, the site's spacing rules", async () => {
+  const allowed = new Set(['23', '31', '21', '29', '16', '8', '18', '10', '20', '0.5', '1', '6', '3.5', '2.5']);
+  for (const lang of LANGS) {
+    for (const [where, s] of await pageStrings(lang)) {
+      for (const m of s.matchAll(/(\d+(?:[.,]\d+)?)[\s\xa0]*(?:cm|см)/g)) {
+        assert.ok(allowed.has(m[1].replace(',', '.')), `${lang} ${where}: "${m[0]}" is not one of the maker's numbers`);
+      }
+      if (lang !== 'en') assert.doesNotMatch(s, /\d\.\d/, `${lang} ${where}: decimal point`);
+      // ru writes a plain space before «см», like the tote's and the basket's Russian texts
+      if (!['en', 'ru'].includes(lang)) assert.doesNotMatch(s, /\d[ \t]*cm\b/, `${lang} ${where}: no no-break space before cm`);
+    }
+  }
+});
+
+test('wording traps: no claim that the cut edges meet, no "right side" for the straight side, no "top right"', async () => {
+  const traps = {
+    en: /line up/i, ru: /срезы совпад/i, de: /Schnittkanten treffen|rechts oben/, fr: /bords coupés se rejoignent|côté droit/,
+    it: /bordi tagliati combaciano|lato dritto/, es: /bordes cortados coinciden/,
+  };
+  for (const lang of LANGS) {
+    const all = [...strings(cosmeticText(lang)), ...(await pageStrings(lang))].map(([, s]) => s).join(' ');
+    assert.doesNotMatch(all, traps[lang], lang);
+  }
+});

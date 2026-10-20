@@ -49,7 +49,7 @@ export default {
     rightSideUp: 'endroit dessus',
     onBottomLine: 'sur la ligne du fond',
     stitchRound: 'piquer tout autour',
-    straight05: 'côté droit : 0,5 cm',
+    straight05: 'côté plat : 0,5 cm',
     outerUp: 'extérieur, endroit dessus',
     zipperDown: 'zip endroit dessous',
     liningDown: 'doublure endroit dessous',
@@ -93,9 +93,9 @@ export default {
     },
     {
       title: 'Coudre les demi-lunes',
-      text: "Thermocollez un demi-cercle sur l'envers d'une pièce rose, au milieu, son côté droit à 1 cm du grand bord. Posez dessous une deuxième pièce rose, endroit contre endroit, et cousez le long du bord arrondi de l'entoilage.",
+      text: "Thermocollez un demi-cercle sur l'envers d'une pièce rose, au milieu, son côté plat à 1 cm du grand bord. Posez dessous une deuxième pièce rose, endroit contre endroit, et cousez le long du bord arrondi de l'entoilage.",
       details: [
-        "Posez un demi-cercle d'entoilage, côté colle dessous, sur l'envers d'une pièce rose : au milieu, son côté droit à 1 cm d'un grand bord. Thermocollez-le.",
+        "Posez un demi-cercle d'entoilage, côté colle dessous, sur l'envers d'une pièce rose : au milieu, son côté plat à 1 cm d'un grand bord. Thermocollez-le.",
         'Posez-la sur une deuxième pièce rose, endroit contre endroit.',
         "Cousez le long de l'arrondi, exactement au bord de l'entoilage.",
         'Faites la deuxième de la même façon.',
@@ -107,7 +107,7 @@ export default {
       details: [
         "Coupez le tissu en trop autour de l'arrondi en laissant une marge étroite.",
         "Crantez la marge le long de l'arrondi pour qu'elle reste à plat.",
-        "Retournez les deux demi-lunes sur l'endroit par le côté droit et repassez-les. Le côté droit reste ouvert.",
+        "Retournez les deux demi-lunes sur l'endroit par le côté plat et repassez-les. Le côté plat reste ouvert.",
       ],
     },
     {
@@ -121,11 +121,11 @@ export default {
     },
     {
       title: 'Poser les demi-lunes',
-      text: "Sur l'endroit de l'extérieur, posez une demi-lune sur chaque bord de côté — le milieu sur la ligne du fond, le bord droit au ras du côté — et piquez-la tout autour.",
+      text: "Sur l'endroit de l'extérieur, posez une demi-lune sur chaque bord de côté — le milieu sur la ligne du fond, le bord rectiligne au ras du côté — et piquez-la tout autour.",
       details: [
         "Retournez l'extérieur, endroit dessus.",
-        "Posez une demi-lune sur chaque bord de côté : son bord droit ouvert au ras du bord de l'extérieur, son milieu sur les crans — la ligne du fond.",
-        "Piquez chacune tout autour : le long de l'arrondi, exactement au bord ; le long du côté droit, à 0,5 cm du bord. Le côté droit sera pris dans la couture de côté.",
+        "Posez une demi-lune sur chaque bord de côté : son bord rectiligne ouvert au ras du bord de l'extérieur, son milieu sur les crans — la ligne du fond.",
+        "Piquez chacune tout autour : le long de l'arrondi, exactement au bord ; le long du côté plat, à 0,5 cm du bord. Le côté plat sera pris dans la couture de côté.",
       ],
     },
     {
@@ -164,7 +164,7 @@ export default {
       details: [
         'Tracez dans chacun des quatre coins du bas un rectangle de 3,5 × 2,5 cm : 3,5 cm le long du fond, 2,5 cm le long de la couture de côté.',
         'Découpez-les.',
-        "Ouvrez chaque coin et aplatissez-le pour que la couture de côté tombe sur la pliure du fond ; les bords coupés se rejoignent.",
+        "Ouvrez chaque coin et aplatissez-le pour que la couture de côté tombe sur la pliure du fond.",
         "Cousez en travers, à 0,5 cm du bord. Faites les quatre coins.",
       ],
     },

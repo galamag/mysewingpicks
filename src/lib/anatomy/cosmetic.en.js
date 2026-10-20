@@ -90,7 +90,7 @@ export default {
     },
     {
       title: 'Make the corner template',
-      text: 'Draw a circle of radius 8 cm (3⅛ in) on paper and cut it out. Trace it on the 16 cm square of interfacing, cut the circle out and cut it in half.',
+      text: 'Draw a circle of radius 8 cm (3⅛ in) on paper and cut it out. Trace it on the 16 × 16 cm (6¼ in) square of interfacing, cut the circle out and cut it in half.',
       details: [
         'Make a paper template: a circle with a radius of 8 cm (3⅛ in).',
         'Trace the circle on the 16 × 16 cm (6¼ in) square of interfacing and cut it out.',
@@ -170,7 +170,7 @@ export default {
       details: [
         'Mark a 3.5 × 2.5 cm (1⅜ × 1 in) rectangle in each of the four bottom corners: 3.5 cm along the bottom, 2.5 cm along the side seam.',
         'Cut them out.',
-        'Open each corner and pinch it so that the side seam meets the bottom fold; the cut edges line up.',
+        'Open each corner and pinch it so that the side seam meets the bottom fold.',
         'Sew straight across, 0.5 cm (³⁄₁₆ in) from the edge. Do all four corners.',
       ],
     },

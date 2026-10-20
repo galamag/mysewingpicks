@@ -100,7 +100,7 @@ export default {
       },
       {
         q: 'Come si fanno gli angoli tondi?',
-        a: "Con una sagoma di carta ritaglia da un quadrato di teletta di 16 × 16 cm un cerchio di 8 cm di raggio e taglialo a metà. Stira ogni semicerchio su un pezzo rosa di 18 × 10 cm, con il lato dritto a 1 cm dal bordo lungo, cucilo a un secondo pezzo rosa lungo la curva, rifila, fai i taglietti e rivolta. Cuci le mezzelune sui bordi laterali dell'esterno, con il centro sulla linea del fondo: quando gli angoli del fondo sono cuciti, diventano angoli tondi rosa.",
+        a: "Con una sagoma di carta ritaglia da un quadrato di teletta di 16 × 16 cm un cerchio di 8 cm di raggio e taglialo a metà. Stira ogni semicerchio su un pezzo rosa di 18 × 10 cm, con il lato piatto a 1 cm dal bordo lungo, cucilo a un secondo pezzo rosa lungo la curva, rifila, fai i taglietti e rivolta. Cuci le mezzelune sui bordi laterali dell'esterno, con il centro sulla linea del fondo: quando gli angoli del fondo sono cuciti, diventano angoli tondi rosa.",
       },
       {
         q: 'Serve la teletta in una pochette?',

@@ -164,7 +164,7 @@ export default {
       details: [
         'Marca en cada una de las cuatro esquinas de abajo un rectángulo de 3,5 × 2,5 cm: 3,5 cm a lo largo de la base, 2,5 cm a lo largo de la costura lateral.',
         'Recórtalos.',
-        'Abre cada esquina y aplánala para que la costura lateral quede sobre el doblez de la base; los bordes cortados coinciden.',
+        'Abre cada esquina y aplánala para que la costura lateral quede sobre el doblez de la base.',
         'Cose de lado a lado a 0,5 cm del borde. Haz las cuatro esquinas.',
       ],
     },

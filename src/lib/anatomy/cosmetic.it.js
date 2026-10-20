@@ -49,7 +49,7 @@ export default {
     rightSideUp: 'dritto sopra',
     onBottomLine: 'sulla linea del fondo',
     stitchRound: 'cuci tutto intorno',
-    straight05: 'lato dritto: 0,5 cm',
+    straight05: 'lato piatto: 0,5 cm',
     outerUp: 'esterno, dritto sopra',
     zipperDown: 'zip dritto sotto',
     liningDown: 'fodera dritto sotto',
@@ -93,9 +93,9 @@ export default {
     },
     {
       title: 'Cuci le mezzelune',
-      text: 'Stira un semicerchio sul rovescio di un pezzo rosa, al centro, con il lato dritto a 1 cm dal bordo lungo. Mettici sotto un secondo pezzo rosa, dritto contro dritto, e cuci lungo il bordo curvo della teletta.',
+      text: 'Stira un semicerchio sul rovescio di un pezzo rosa, al centro, con il lato piatto a 1 cm dal bordo lungo. Mettici sotto un secondo pezzo rosa, dritto contro dritto, e cuci lungo il bordo curvo della teletta.',
       details: [
-        'Appoggia un semicerchio di teletta, lato colla in giù, sul rovescio di un pezzo rosa: al centro, con il lato dritto a 1 cm da un bordo lungo. Stiralo.',
+        'Appoggia un semicerchio di teletta, lato colla in giù, sul rovescio di un pezzo rosa: al centro, con il lato piatto a 1 cm da un bordo lungo. Stiralo.',
         'Mettilo su un secondo pezzo rosa, dritto contro dritto.',
         'Cuci lungo la curva, proprio sul bordo della teletta.',
         'Fai la seconda nello stesso modo.',
@@ -107,7 +107,7 @@ export default {
       details: [
         'Taglia la stoffa in eccesso intorno alla curva, lasciando un margine stretto.',
         'Fai dei taglietti nel margine lungo la curva, così resta piatto.',
-        'Rivolta entrambe le mezzelune sul dritto dal lato dritto e stirale. Il lato dritto resta aperto.',
+        'Rivolta entrambe le mezzelune sul dritto dal lato piatto e stirale. Il lato piatto resta aperto.',
       ],
     },
     {
@@ -121,11 +121,11 @@ export default {
     },
     {
       title: 'Applica le mezzelune',
-      text: "Sul dritto dell'esterno metti una mezzaluna su ogni bordo laterale, con il centro sulla linea del fondo e il bordo dritto a filo del lato, e cucila tutto intorno.",
+      text: "Sul dritto dell'esterno metti una mezzaluna su ogni bordo laterale, con il centro sulla linea del fondo e il bordo rettilineo a filo del lato, e cucila tutto intorno.",
       details: [
         "Gira l'esterno con il dritto in su.",
-        "Metti una mezzaluna su ogni bordo laterale: il bordo dritto aperto a filo del bordo dell'esterno, il centro sui taglietti, cioè sulla linea del fondo.",
-        'Cuci ognuna tutto intorno: lungo la curva proprio sul bordo, lungo il lato dritto a 0,5 cm dal bordo. Il lato dritto finirà nella cucitura laterale.',
+        "Metti una mezzaluna su ogni bordo laterale: il bordo rettilineo aperto a filo del bordo dell'esterno, il centro sui taglietti, cioè sulla linea del fondo.",
+        'Cuci ognuna tutto intorno: lungo la curva proprio sul bordo, lungo il lato piatto a 0,5 cm dal bordo. Il lato piatto finirà nella cucitura laterale.',
       ],
     },
     {
@@ -164,7 +164,7 @@ export default {
       details: [
         'Disegna in ognuno dei quattro angoli in basso un rettangolo di 3,5 × 2,5 cm: 3,5 cm lungo il fondo, 2,5 cm lungo la cucitura laterale.',
         'Ritagliali.',
-        'Apri ogni angolo e appiattiscilo in modo che la cucitura laterale cada sulla piega del fondo; i bordi tagliati combaciano.',
+        'Apri ogni angolo e appiattiscilo in modo che la cucitura laterale cada sulla piega del fondo.',
         'Cuci di traverso a 0,5 cm dal bordo. Fai tutti e quattro gli angoli.',
       ],
     },

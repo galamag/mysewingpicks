@@ -101,7 +101,7 @@ export default {
       },
       {
         q: 'Comment faire les coins arrondis ?',
-        a: "Avec un gabarit en papier, découpez un cercle de 8 cm de rayon dans un carré d'entoilage de 16 × 16 cm et coupez-le en deux. Thermocollez chaque demi-cercle sur une pièce rose de 18 × 10 cm, côté droit à 1 cm du grand bord, cousez-la à une deuxième pièce rose le long de l'arrondi, dégarnissez, crantez et retournez. Piquez les demi-lunes sur les bords de côté de l'extérieur, le milieu sur la ligne du fond : une fois les coins du fond cousus, elles deviennent des coins arrondis roses.",
+        a: "Avec un gabarit en papier, découpez un cercle de 8 cm de rayon dans un carré d'entoilage de 16 × 16 cm et coupez-le en deux. Thermocollez chaque demi-cercle sur une pièce rose de 18 × 10 cm, côté plat à 1 cm du grand bord, cousez-la à une deuxième pièce rose le long de l'arrondi, dégarnissez, crantez et retournez. Piquez les demi-lunes sur les bords de côté de l'extérieur, le milieu sur la ligne du fond : une fois les coins du fond cousus, elles deviennent des coins arrondis roses.",
       },
       {
         q: "Faut-il de l'entoilage dans une trousse ?",

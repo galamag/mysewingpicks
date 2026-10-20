@@ -50,7 +50,7 @@ export default {
     onBottomLine: 'auf der Bodenlinie',
     stitchRound: 'rundum feststeppen',
     straight05: 'gerade Seite: 0,5 cm',
-    outerUp: 'außen, rechts oben',
+    outerUp: 'außen, rechts nach oben',
     zipperDown: 'RV rechts nach unten',
     liningDown: 'Futter rechts nach unten',
     seam05: 'Naht 0,5 cm',
@@ -130,7 +130,7 @@ export default {
     },
     {
       title: 'Reißverschluss: erste Seite',
-      text: 'Außenteil rechts oben, darauf mittig an einer kurzen Seite den Reißverschluss mit der rechten Seite nach unten, darüber das Futter mit der rechten Seite nach unten. Nähe 0,5 cm von der Kante.',
+      text: 'Außenteil mit der rechten Seite nach oben, darauf mittig an einer kurzen Seite den Reißverschluss mit der rechten Seite nach unten, darüber das Futter mit der rechten Seite nach unten. Nähe 0,5 cm von der Kante.',
       details: [
         'Leg das Außenteil mit der rechten Seite nach oben.',
         'Leg den Reißverschluss mit der rechten Seite nach unten mittig an eine Seite von 23 cm: Seine Enden reichen nicht bis an die Seitenkanten, damit sie nicht in die Seitennähte kommen.',
@@ -164,7 +164,7 @@ export default {
       details: [
         'Zeichne in jede der vier unteren Ecken ein Rechteck von 3,5 × 2,5 cm: 3,5 cm entlang des Bodens, 2,5 cm entlang der Seitennaht.',
         'Schneide sie aus.',
-        'Falte jede Ecke so auf, dass die Seitennaht auf dem Bodenbruch liegt; die Schnittkanten treffen sich.',
+        'Falte jede Ecke so auf, dass die Seitennaht auf dem Bodenbruch liegt.',
         'Nähe quer darüber, 0,5 cm von der Kante. So alle vier Ecken.',
       ],
     },
