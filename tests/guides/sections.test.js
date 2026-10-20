@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { guideBySlug, guideSections, guidesForStep, validateGuides } from '../../src/data/guides.js';
-import { coverGuides, guideText, SECTION_FIELDS } from '../../src/i18n/content.js';
+import { coverGuides, guideText, SECTION_FIELDS, SECTION_OPTIONAL } from '../../src/i18n/content.js';
 
 const sec = (id, figure, usedIn) => ({ id, figure, usedIn, title: `T ${id}`, line: `L ${id}`, choose: `C ${id}` });
 const multi = (slug, sections, extra = {}) => ({ slug, group: 'construction', sections, ...extra });
@@ -86,6 +86,22 @@ test('coverGuides fails on a missing, extra or empty section translation', () =>
   assert.throws(() => coverGuides('xx', en, tr({ sections: { a: { title: 'a', line: 'a', choose: ' ' }, b: tr().one.sections.b } }), GF), /choose/);
   assert.throws(() => coverGuides('xx', en, tr({ sections: { a: { ...tr().one.sections.a, extra: 'z' }, b: tr().one.sections.b } }), GF), /extra/);
   assert.throws(() => coverGuides('xx', en, { one: { t: 'x' } }, GF), /sections/);
+});
+
+// The optional section text `note`: in a translation exactly when English has it, never empty.
+test('SECTION_OPTIONAL: note', () => {
+  assert.deepEqual(SECTION_OPTIONAL, ['note']);
+});
+
+test('coverGuides: a note in English needs one in every language, and only then', () => {
+  const withNote = [multi('one', [{ ...sec('a', 'x', []), note: 'N a' }, sec('b', 'y', [])], { t: 'x' })];
+  const full = { one: { t: 'x', sections: { a: { title: 'a', line: 'a', choose: 'a', note: 'n' }, b: { title: 'b', line: 'b', choose: 'b' } } } };
+  assert.doesNotThrow(() => coverGuides('xx', withNote, full, GF));
+  // English has a note, the translation does not / has an empty one
+  assert.throws(() => coverGuides('xx', withNote, tr(), GF), /"a"\.note is missing/);
+  assert.throws(() => coverGuides('xx', withNote, { one: { ...full.one, sections: { ...full.one.sections, a: { ...full.one.sections.a, note: ' ' } } } }, GF), /note/);
+  // the translation has a note, English does not
+  assert.throws(() => coverGuides('xx', en, { one: { ...tr().one, sections: { ...tr().one.sections, b: { ...tr().one.sections.b, note: 'n' } } } }, GF), /"b"\.note exists, but the English section has no note/);
 });
 
 test('coverGuides: sections in a translation of a plain guide fail', () => {

@@ -17,9 +17,10 @@ import * as basket from '../../src/lib/anatomy/basket.js';
 import { figure } from '../../src/lib/anatomy/figures.js';
 import { products } from '../../src/data/products.js';
 import { guideBySlug, guidesForStep } from '../../src/data/guides.js';
-import { SECTION_FIELDS, guideText } from '../../src/i18n/content.js';
+import { SECTION_FIELDS, SECTION_OPTIONAL, guideText } from '../../src/i18n/content.js';
 import { LOCALES, t as dict } from '../../src/i18n/index.js';
 import { howItsDoneLink } from '../../src/lib/guidePage.js';
+import { strings, cmNumbers, chipRects, pinCount, touchingChips } from './helpers.js';
 
 const { STEPS, SPEC, DEFS, LABEL_KEYS, renderStep } = cutout;
 const SLUG = 'bag-bottom';
@@ -28,45 +29,26 @@ const LANGS = Object.keys(CUTOUT_TEXT);
 const MAKER = new Set(['3.5', '2.5', '0.5', '23', '31']);
 const BASKET_NUMS = ['60', '20'];
 const section = (lang) => guideText(guideBySlug(SLUG), lang).sections.find((s) => s.id === 'cut-out');
+const TEXT_FIELDS = [...SECTION_FIELDS, ...SECTION_OPTIONAL];
+/** The section's texts in a language: [field, text] for every field it has (note is optional). */
+const sectionTexts = (lang) => TEXT_FIELDS.filter((f) => section(lang)[f] !== undefined).map((f) => [f, section(lang)[f]]);
 
-/** Every string of a language's figure texts (functions skipped), with where it sits. */
-function strings(L) {
-  const out = [];
-  const add = (where, v) => { if (typeof v === 'string') out.push([where, v]); };
-  for (const [k, v] of Object.entries(L.ui)) add(`ui.${k}`, v);
-  for (const [k, v] of Object.entries(L.stitches)) add(`stitches.${k}`, v);
-  for (const [k, v] of Object.entries(L.labels)) add(`labels.${k}`, v);
-  L.steps.forEach((s, i) => {
-    add(`steps[${i}].title`, s.title);
-    add(`steps[${i}].text`, s.text);
-    (s.details ?? []).forEach((d, j) => add(`steps[${i}].details[${j}]`, d));
-  });
-  L.legend.forEach((l, i) => { add(`legend[${i}].title`, l.title); add(`legend[${i}].text`, l.text); });
-  return out;
-}
-const cmNumbers = (s) => [...s.matchAll(/(\d+(?:[.,]\d+)?)[\s\xa0]*(?:cm|см)/g)].map((m) => [m[0], m[1].replace(',', '.')]);
-const CHIP = /<g class="chip[^"]*" transform="translate\(([-\d.e]+) ([-\d.e]+)\)"><rect x="([-\d.e]+)" y="([-\d.e]+)" width="([-\d.e]+)" height="([-\d.e]+)"/g;
-const chipRects = (body) => [...body.matchAll(CHIP)].map((m) => {
-  const [tx, ty, rx, ry, w, h] = m.slice(1).map(Number);
-  return { x0: tx + rx, y0: ty + ry, x1: tx + rx + w, y1: ty + ry + h };
-});
-const pinCount = (body) => (body.match(/<g class="pins"[\s\S]*$/)?.[0].match(/<circle/g) ?? []).length;
 
 test('every site language has the figure texts', () => {
   assert.deepEqual([...LANGS].sort(), [...LOCALES].sort());
 });
 
-test("cm numbers are the maker's: figure 3.5, 2.5, 0.5, 23, 31; the section's texts also the basket's 60 and 20", () => {
+test("cm numbers are the maker's: figure 3.5, 2.5, 0.5, 23, 31; the section's line the same; its note also the basket's 60 and 20", () => {
   for (const lang of LANGS) {
     for (const [where, s] of strings(cutoutText(lang))) {
       for (const [m, n] of cmNumbers(s)) assert.ok(MAKER.has(n), `${lang} figure ${where}: "${m}"`);
       assert.doesNotMatch(s, /\d[\s\xa0]*(?:mm|мм)(?!\p{L})/u, `${lang} figure ${where}: millimetres`);
     }
-    const sec = section(lang);
-    for (const f of SECTION_FIELDS) {
-      for (const [m, n] of cmNumbers(sec[f])) assert.ok(MAKER.has(n) || BASKET_NUMS.includes(n), `${lang} section ${f}: "${m}"`);
-      assert.doesNotMatch(sec[f], /\d[\s\xa0]*(?:mm|мм)(?!\p{L})/u, `${lang} section ${f}: millimetres`);
+    for (const [f, s] of sectionTexts(lang)) {
+      for (const [m, n] of cmNumbers(s)) assert.ok(MAKER.has(n) || (f === 'note' && BASKET_NUMS.includes(n)), `${lang} section ${f}: "${m}"`);
+      assert.doesNotMatch(s, /\d[\s\xa0]*(?:mm|мм)(?!\p{L})/u, `${lang} section ${f}: millimetres`);
     }
+    assert.doesNotMatch(section(lang).choose, /\d/, `${lang}: "When to choose it" has a number`);
   }
 });
 
@@ -79,17 +61,17 @@ test("the numbers are the cosmetic bag's, and the basket sentence's are the bask
   assert.deepEqual(BASKET_NUMS, [basket.SPEC.square, basket.SPEC.corner].map(String));
 });
 
-test('the basket: one sentence of "When to choose it" with its 60 and 20 cm, in every language; no inline link', () => {
+test("the basket: one sentence, the section's note, with its 60 and 20 cm, in every language; no link in it", () => {
   for (const lang of LOCALES) {
-    const { choose } = section(lang);
-    const nums = cmNumbers(choose).map(([, n]) => n);
-    for (const n of BASKET_NUMS) assert.ok(nums.includes(n), `${lang}: choose has no ${n} cm`);
-    const withBasket = choose.split(/(?<=[.!?])\s+/).filter((x) => /60/.test(x));
-    assert.equal(withBasket.length, 1, `${lang}: the basket is in exactly one sentence`);
-    assert.match(withBasket[0], /20/, `${lang}: 60 and 20 are in the same sentence`);
-    assert.doesNotMatch(choose, /<a\b|href/, `${lang}: choose holds a link`);
+    const { note, choose } = section(lang);
+    assert.ok(typeof note === 'string' && note.trim(), `${lang}: no note`);
+    const nums = cmNumbers(note).map(([, n]) => n);
+    for (const n of BASKET_NUMS) assert.ok(nums.includes(n), `${lang}: the note has no ${n} cm`);
+    assert.equal(note.split(/(?<=[.!?])\s+/).length, 1, `${lang}: the note is one sentence`);
+    assert.doesNotMatch(note, /<a\b|href/, `${lang}: the note holds a link`);
+    assert.doesNotMatch(choose, /60|20/, `${lang}: the basket is still in "When to choose it"`);
   }
-  assert.ok(guideBySlug(SLUG).sections[1].usedIn.some((u) => u.project === 'fabric-basket'), 'the link to the basket: "Where it\'s used"');
+  assert.ok(guideBySlug(SLUG).sections[1].usedIn.some((u) => u.project === 'fabric-basket'), "the link to the basket: Where it's used");
 });
 
 // The sources' formula for a bag cut from a rectangle ("the square = half the base width") is not this section's:
@@ -99,7 +81,7 @@ const FORMULA = [/half (?:of )?the (?:base|bottom|width)/i, /половин\p{L}
 
 test('no formula, no reason for 3.5 × 2.5 (figure and section texts)', () => {
   for (const lang of LOCALES) {
-    const all = [...strings(cutoutText(lang)), ...SECTION_FIELDS.map((f) => [`section.${f}`, section(lang)[f]])];
+    const all = [...strings(cutoutText(lang)), ...sectionTexts(lang).map(([f, t]) => [`section.${f}`, t])];
     for (const [where, s] of all) {
       for (const re of FORMULA) assert.doesNotMatch(s, re, `${lang} ${where}`);
       assert.doesNotMatch(s, /because|потому что|weil|parce que|perché|porque/i, `${lang} ${where}: a reason`);
@@ -155,19 +137,14 @@ test('chips stay inside the figure and keep a 1% gap between them (every step, t
     const L = cutoutText(lang);
     for (let k = 1; k < STEPS.length; k++) {
       for (let i = 0; i <= 20; i++) {
-        const { body, viewBox: [vx, vy, vw, vh] } = renderStep(k, i / 20, L);
+        const { body, viewBox } = renderStep(k, i / 20, L);
+        const [vx, vy, vw, vh] = viewBox;
         const where = `${lang} step ${k} t=${i / 20}`;
-        const rects = chipRects(body);
-        for (const c of rects) {
+        for (const c of chipRects(body)) {
           assert.ok(c.x0 >= vx - 1e-6 && c.x1 <= vx + vw + 1e-6, `${where}: a chip runs out sideways`);
           assert.ok(c.y0 >= vy - 1e-6 && c.y1 <= vy + vh + 1e-6, `${where}: a chip runs out at the top or bottom`);
         }
-        const g = vw / 200; // half the gap, on each chip
-        const r = rects.map((c) => ({ x0: c.x0 - g, y0: c.y0 - g, x1: c.x1 + g, y1: c.y1 + g }));
-        for (let a = 0; a < r.length; a++) for (let b = a + 1; b < r.length; b++) {
-          const hit = r[a].x0 < r[b].x1 && r[b].x0 < r[a].x1 && r[a].y0 < r[b].y1 && r[b].y0 < r[a].y1;
-          assert.ok(!hit, `${where}: chips ${a} and ${b} touch`);
-        }
+        for (const [a, b] of touchingChips(body, viewBox)) assert.fail(`${where}: chips ${a} and ${b} touch`);
       }
     }
   }
@@ -221,7 +198,7 @@ test('a fully faded copy is never drawn (every step)', () => {
 
 test("language rules: no-break space before the unit, decimal comma, French punctuation, straight apostrophe", () => {
   for (const lang of ['ru', 'de', 'fr', 'it', 'es']) {
-    const all = [...strings(cutoutText(lang)), ...SECTION_FIELDS.map((f) => [`section.${f}`, section(lang)[f]])];
+    const all = [...strings(cutoutText(lang)), ...sectionTexts(lang).map(([f, t]) => [`section.${f}`, t])];
     for (const [where, s] of all) {
       assert.doesNotMatch(s, /\d\.\d/, `${lang} ${where}: decimal point`);
       if (lang !== 'ru') assert.doesNotMatch(s, /\d[ \t]*cm\b/, `${lang} ${where}: no no-break space before cm`);

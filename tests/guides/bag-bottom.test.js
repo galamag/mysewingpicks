@@ -16,6 +16,7 @@ import { products } from '../../src/data/products.js';
 import { guideBySlug, guidesForStep } from '../../src/data/guides.js';
 import { GUIDE_FIELDS, SECTION_FIELDS, guideText } from '../../src/i18n/content.js';
 import { LOCALES } from '../../src/i18n/index.js';
+import { strings, cmNumbers, chipRects, pinCount, touchingChips } from './helpers.js';
 
 const { STEPS, SPEC, DEFS, LABEL_KEYS, renderStep } = folded;
 const TOTE = tote.SPEC;
@@ -23,22 +24,6 @@ const KEY = 'bag-bottom-folded';
 const SLUG = 'bag-bottom';
 const LANGS = Object.keys(FOLDED_TEXT);
 const MAKER = new Set(['6', '12', '0.5']);
-
-/** Every string of a language's figure texts (functions skipped), with where it sits. */
-function strings(L) {
-  const out = [];
-  const add = (where, v) => { if (typeof v === 'string') out.push([where, v]); };
-  for (const [k, v] of Object.entries(L.ui)) add(`ui.${k}`, v);
-  for (const [k, v] of Object.entries(L.stitches)) add(`stitches.${k}`, v);
-  for (const [k, v] of Object.entries(L.labels)) add(`labels.${k}`, v);
-  L.steps.forEach((s, i) => {
-    add(`steps[${i}].title`, s.title);
-    add(`steps[${i}].text`, s.text);
-    (s.details ?? []).forEach((d, j) => add(`steps[${i}].details[${j}]`, d));
-  });
-  L.legend.forEach((l, i) => { add(`legend[${i}].title`, l.title); add(`legend[${i}].text`, l.text); });
-  return out;
-}
 
 /** The guide's own texts and its `folded` section's texts in a language. */
 function guideStrings(lang) {
@@ -49,8 +34,6 @@ function guideStrings(lang) {
     ...SECTION_FIELDS.map((f) => [`sections.folded.${f}`, s[f]]),
   ];
 }
-
-const cmNumbers = (s) => [...s.matchAll(/(\d+(?:[.,]\d+)?)[\s\xa0]*(?:cm|см)/g)].map((m) => [m[0], m[1].replace(',', '.')]);
 
 test('every site language has the figure texts', () => {
   assert.deepEqual([...LANGS].sort(), [...LOCALES].sort());
@@ -118,30 +101,20 @@ test('every step renders in every language, its ids carry the figure prefix', ()
 });
 
 test('chips stay inside the figure (every step, every language)', () => {
-  const chip = /<g class="chip[^"]*" transform="translate\(([-\d.e]+) ([-\d.e]+)\)"><rect x="([-\d.e]+)" y="([-\d.e]+)" width="([-\d.e]+)" height="([-\d.e]+)"/g;
   for (const lang of LANGS) {
     const L = foldedText(lang);
     for (let k = 1; k < STEPS.length; k++) {
       for (let i = 0; i <= 20; i++) {
         const { body, viewBox: [vx, vy, vw, vh] } = renderStep(k, i / 20, L);
-        for (const m of body.matchAll(chip)) {
-          const [tx, ty, rx, ry, w, h] = m.slice(1).map(Number);
-          const x0 = tx + rx, y0 = ty + ry;
-          const where = `${lang} step ${k} t=${i / 20}`;
-          assert.ok(x0 >= vx - 1e-6 && x0 + w <= vx + vw + 1e-6, `${where}: a chip runs out sideways`);
-          assert.ok(y0 >= vy - 1e-6 && y0 + h <= vy + vh + 1e-6, `${where}: a chip runs out at the top or bottom`);
+        const where = `${lang} step ${k} t=${i / 20}`;
+        for (const c of chipRects(body)) {
+          assert.ok(c.x0 >= vx - 1e-6 && c.x1 <= vx + vw + 1e-6, `${where}: a chip runs out sideways`);
+          assert.ok(c.y0 >= vy - 1e-6 && c.y1 <= vy + vh + 1e-6, `${where}: a chip runs out at the top or bottom`);
         }
       }
     }
   }
 });
-
-const CHIP = /<g class="chip[^"]*" transform="translate\(([-\d.e]+) ([-\d.e]+)\)"><rect x="([-\d.e]+)" y="([-\d.e]+)" width="([-\d.e]+)" height="([-\d.e]+)"/g;
-const chipRects = (body) => [...body.matchAll(CHIP)].map((m) => {
-  const [tx, ty, rx, ry, w, h] = m.slice(1).map(Number);
-  return { x0: tx + rx, y0: ty + ry, x1: tx + rx + w, y1: ty + ry + h };
-});
-const pinCount = (body) => (body.match(/<g class="pins"[\s\S]*$/)?.[0].match(/<circle/g) ?? []).length;
 
 test('the first frame (the HTML, no JS needed) is the finished bottom: base up, crease on it, the five pins', () => {
   const rest = folded.anatomy(0).pieces;
@@ -190,12 +163,7 @@ test('chips keep a gap between them: 1% of the figure width (every step, every l
     for (let k = 1; k < STEPS.length; k++) {
       for (let i = 0; i <= 20; i++) {
         const { body, viewBox } = renderStep(k, i / 20, L);
-        const g = viewBox[2] / 200; // half the gap, on each chip
-        const r = chipRects(body).map((c) => ({ x0: c.x0 - g, y0: c.y0 - g, x1: c.x1 + g, y1: c.y1 + g }));
-        for (let a = 0; a < r.length; a++) for (let b = a + 1; b < r.length; b++) {
-          const hit = r[a].x0 < r[b].x1 && r[b].x0 < r[a].x1 && r[a].y0 < r[b].y1 && r[b].y0 < r[a].y1;
-          assert.ok(!hit, `${lang} step ${k} t=${i / 20}: chips ${a} and ${b} touch`);
-        }
+        for (const [a, b] of touchingChips(body, viewBox)) assert.fail(`${lang} step ${k} t=${i / 20}: chips ${a} and ${b} touch`);
       }
     }
   }
@@ -246,10 +214,9 @@ test('the guide: construction, sections `folded` (tote steps 3–7) then `cut-ou
   assert.ok(typeof g.icon === 'string' && g.icon.trim());
 });
 
-test('"When to choose it" has no numbers', () => {
+test('"When to choose it" has no numbers — every section, every language (numbers go in `note`)', () => {
   for (const lang of LOCALES) {
-    const s = guideText(guideBySlug(SLUG), lang).sections[0];
-    assert.doesNotMatch(s.choose, /\d/, `${lang}: choose`);
+    for (const s of guideText(guideBySlug(SLUG), lang).sections) assert.doesNotMatch(s.choose, /\d/, `${lang} ${s.id}: choose`);
   }
 });
 

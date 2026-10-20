@@ -5,8 +5,9 @@
   figures.js and models.js) shows it step by step with the maker's numbers from the projects.
   A guide may instead hold several `sections` (one figure each, with its own usedIn): then it has no
   figure / usedIn of its own. Section: { id (the #anchor, [a-z-]+, same in every language), figure,
-  usedIn, title, line, choose } - texts English here, translated in src/i18n/<lang>/guides.js under
-  [slug].sections[id] (SECTION_FIELDS in content.js).
+  usedIn, title, line, choose, note? } - texts English here, translated in src/i18n/<lang>/guides.js under
+  [slug].sections[id] (SECTION_FIELDS + the optional SECTION_OPTIONAL in content.js). `choose` ("When to
+  choose it") has no numbers; `note` (optional) is a plain paragraph by "Where it's used" and may have them.
   Texts here are English; other languages: src/i18n/<lang>/guides.js (same fields, GUIDE_FIELDS in
   src/i18n/content.js — a missing or extra one fails the build). Spec: Vault «Гайды — спецификация».
   Plain data, no imports: src/i18n/index.js builds PAGES from this list.
@@ -83,14 +84,15 @@ export const guides = [
       {
         // The makeup bag: 10 Box the corners (a 23 x 31 cm piece folded in half, 0.5 cm seams, 3.5 x 2.5 cm cut from each
         // bottom corner). The basket: 1 Cut the pieces (a 60 x 60 cm square, 20 x 20 cm cut from each corner) and
-        // 3 Sew the outer (the corner seams) - one sentence in `choose`; its link is "Where it's used". Never the sources'
+        // 3 Sew the outer (the corner seams) - one sentence in `note`; its link is "Where it's used". Never the sources'
         // formula, never why 3.5 x 2.5 (spec 3). "When to choose it": the sources' general advice (spec 5.2), no numbers.
         id: 'cut-out',
         figure: 'bag-bottom-cut-out',
         usedIn: [{ project: 'cosmetic-bag', steps: [10] }, { project: 'fabric-basket', steps: [1, 3] }],
         title: 'Cut-out corners',
         line: 'A small piece cut from each bottom corner, then the corner opened and sewn straight across.',
-        choose: 'When the bag is folded at the bottom, its sides are sewn first and you want a flat bottom: with the corners cut out, the seams meet neatly, and it suits thicker fabrics too. On the fabric basket the corners are cut out right at cutting time: a 60 × 60 cm square with a 20 × 20 cm square cut from each corner.',
+        choose: 'When the bag is folded at the bottom, its sides are sewn first and you want a flat bottom: with the corners cut out, the seams meet neatly, and it suits thicker fabrics too.',
+        note: 'On the fabric basket the corners are cut out right at cutting time: a 60 × 60 cm square with a 20 × 20 cm square cut from each corner.',
       },
     ],
   },

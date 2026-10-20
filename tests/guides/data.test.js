@@ -7,7 +7,7 @@ import { projects, projectBySlug } from '../../src/data/projects.js';
 import { products } from '../../src/data/products.js';
 import { figure } from '../../src/lib/anatomy/figures.js';
 import { LOCALES, PAGES, pageUrl, t } from '../../src/i18n/index.js';
-import { GUIDE_FIELDS, SECTION_FIELDS, guideText } from '../../src/i18n/content.js';
+import { GUIDE_FIELDS, SECTION_FIELDS, SECTION_OPTIONAL, guideText } from '../../src/i18n/content.js';
 
 const SLUG = 'line-a-bag';
 const OTHER = LOCALES.filter((l) => l !== 'en');
@@ -118,7 +118,7 @@ const texts = () => guides.flatMap((g) => LOCALES.flatMap((lang) => {
   const tr = guideText(g, lang);
   return [
     ...GUIDE_FIELDS.map((f) => [lang, `${g.slug}.${f}`, tr[f], g.slug]),
-    ...(tr.sections ?? []).flatMap((s) => SECTION_FIELDS.map((f) => [lang, `${g.slug}#${s.id}.${f}`, s[f], g.slug])),
+    ...(tr.sections ?? []).flatMap((s) => [...SECTION_FIELDS, ...SECTION_OPTIONAL].filter((f) => s[f] !== undefined).map((f) => [lang, `${g.slug}#${s.id}.${f}`, s[f], g.slug])),
   ];
 }));
 

@@ -35,6 +35,9 @@ export const PROJECT_LISTS = { faq: ['q', 'a'] };
 export const GUIDE_FIELDS = ['title', 'blurb', 'pageTitle', 'pageDescription', 'heading', 'teaser', 'needsIntro'];
 /** Translatable texts of a guide section (src/data/guides.js `sections`); translations: [slug].sections[id]. */
 export const SECTION_FIELDS = ['title', 'line', 'choose'];
+/** Optional texts of a guide section: when English has one, every language has it, and the other way round.
+    note — a plain paragraph by the section's "Where it's used" (numbers allowed; `choose` has none). */
+export const SECTION_OPTIONAL = ['note'];
 
 /** Translation sets by language: { products, groups, projects, guides }. */
 const SETS = {
@@ -98,12 +101,15 @@ for (const g of guides) {
     for (const f of SECTION_FIELDS) {
       if (typeof s[f] !== 'string' || !s[f].trim()) throw new Error(`data/guides.js: guide "${g.slug}" section "${s.id}" has no "${f}" text`);
     }
+    for (const f of SECTION_OPTIONAL) {
+      if (s[f] !== undefined && (typeof s[f] !== 'string' || !s[f].trim())) throw new Error(`data/guides.js: guide "${g.slug}" section "${s.id}" has an empty "${f}"`);
+    }
   }
 }
 
 /**
  * A language's guide translations match the English list: every guide has its fields, and a guide with
- * sections has [slug].sections[id] = { title, line, choose } for every section and nothing extra (a guide
+ * sections has [slug].sections[id] = { title, line, choose, + note when English has one } for every section and nothing extra (a guide
  * without sections has no `sections`). Takes the list, the table and the field names so tests can feed stubs.
  */
 export function coverGuides(lang, list, table, fields = GUIDE_FIELDS) {
@@ -121,7 +127,12 @@ export function coverGuides(lang, list, table, fields = GUIDE_FIELDS) {
       for (const f of SECTION_FIELDS) {
         if (typeof tr[s.id][f] !== 'string' || !tr[s.id][f].trim()) throw new Error(`${where}: "${s.id}".${f} is missing`);
       }
-      for (const f of Object.keys(tr[s.id])) if (!SECTION_FIELDS.includes(f)) throw new Error(`${where}: "${s.id}".${f} is not a translatable field`);
+      for (const f of SECTION_OPTIONAL) {
+        const has = tr[s.id][f] !== undefined;
+        if (s[f] === undefined && has) throw new Error(`${where}: "${s.id}".${f} exists, but the English section has no ${f}`);
+        if (s[f] !== undefined && (typeof tr[s.id][f] !== 'string' || !tr[s.id][f].trim())) throw new Error(`${where}: "${s.id}".${f} is missing`);
+      }
+      for (const f of Object.keys(tr[s.id])) if (!SECTION_FIELDS.includes(f) && !SECTION_OPTIONAL.includes(f)) throw new Error(`${where}: "${s.id}".${f} is not a translatable field`);
     }
     for (const id of Object.keys(tr)) if (!g.sections.some((s) => s.id === id)) throw new Error(`${where}: section "${id}" is not in src/data (typo or removed?)`);
   }

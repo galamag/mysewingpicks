@@ -28,7 +28,8 @@ export default {
       'cut-out': {
         title: 'Angoli tagliati',
         line: "Da ogni angolo in basso si taglia un pezzetto, poi l'angolo si apre e si cuce di traverso.",
-        choose: "Quando la borsa è piegata sul fondo, cuci prima i lati e vuoi un fondo piatto: con gli angoli tagliati le cuciture si incontrano con precisione, e va bene anche per i tessuti spessi. Nel cestino di stoffa gli angoli si tagliano già al momento del taglio: da un quadrato di 60 × 60 cm, un quadrato di 20 × 20 cm da ogni angolo.",
+        choose: 'Quando la borsa è piegata sul fondo, cuci prima i lati e vuoi un fondo piatto: con gli angoli tagliati le cuciture si incontrano con precisione, e va bene anche per i tessuti spessi.',
+        note: 'Nel cestino di stoffa gli angoli si tagliano già al momento del taglio: da un quadrato di 60 × 60 cm, un quadrato di 20 × 20 cm da ogni angolo.',
       },
     },
   },

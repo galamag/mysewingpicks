@@ -29,7 +29,8 @@ export default {
       'cut-out': {
         title: 'Esquinas recortadas',
         line: 'De cada esquina de abajo se recorta un trocito; luego la esquina se abre y se cose de lado a lado.',
-        choose: 'Cuando la bolsa va doblada en la base, coses primero los lados y quieres una base plana: con las esquinas recortadas, las costuras coinciden con limpieza, y sirve también para telas gruesas. En la cesta de tela las esquinas se recortan ya al cortar: de un cuadrado de 60 × 60 cm, un cuadrado de 20 × 20 cm en cada esquina.',
+        choose: 'Cuando la bolsa va doblada en la base, coses primero los lados y quieres una base plana: con las esquinas recortadas, las costuras coinciden con limpieza, y sirve también para telas gruesas.',
+        note: 'En la cesta de tela las esquinas se recortan ya al cortar: de un cuadrado de 60 × 60 cm, un cuadrado de 20 × 20 cm en cada esquina.',
       },
     },
   },

@@ -65,6 +65,15 @@ test('bag-bottom #cut-out: its own figure, "Where it\'s used" step 10 and steps 
       assert.equal(decode(m[1]), text, `${lang}: ${slug}`);
     }
     assert.ok(html.indexOf('id="folded"') < html.indexOf('id="cut-out"'), `${lang}: folded comes before cut-out`);
+    // the section's note (the basket in one sentence, with its numbers): under the "Where it's used" links
+    const { guideText } = await import('../../src/i18n/content.js');
+    const { guideBySlug } = await import('../../src/data/guides.js');
+    const note = guideText(guideBySlug('bag-bottom'), lang).sections.find((x) => x.id === 'cut-out').note;
+    const p = sec.match(/<p class="guide-used__note"[^>]*>([^<]*)<\/p>/);
+    assert.ok(p, `${lang}: the note is not rendered`);
+    assert.equal(decode(p[1]), note, `${lang}: note text`);
+    assert.ok(sec.indexOf('guide-used__list') < sec.indexOf('guide-used__note'), `${lang}: the note comes after the links`);
+    assert.doesNotMatch(sectionHtml(html, 'folded'), /guide-used__note/, `${lang}: folded has no note`);
   }
 });
 

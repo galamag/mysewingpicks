@@ -9,7 +9,7 @@
   (the same pairs the project figures link back from with "How it's done ->"; not affiliate links).
   A guide with `sections` (several ways to do one thing, one figure each) is laid out by them: h1 + blurb →
   contents (a link #id + line per section) → page-disclosure → a <section id> each (h2 = title, "When to
-  choose it", its figure, its "Where it's used") → videos → "What you'll need" → back to the list. The
+  choose it", its figure, its "Where it's used" with the section's optional note under the links) → videos → "What you'll need" → back to the list. The
   "How it's done" links in the projects point at these #ids (src/lib/guidePage.js).
   A wrong product id, project or project step in guides.js fails the build.
   Spec: Vault «Гайды — спецификация», 5–6.
@@ -96,15 +96,18 @@ const videos = (guide.video ?? []).map((v) => {
             <p>{s.choose}</p>
           </div>
           <AnatomyFigure model={s.figure} lang={lang} />
-          {s.usedIn.length > 0 && (
+          {(s.usedIn.length > 0 || s.note) && (
             <div class="guide-used">
               <div class="section-head">
                 <span class="eyebrow">{text.usedInEyebrow}</span>
                 <h3>{text.usedInHeading}</h3>
               </div>
-              <ul class="guide-used__list">
-                {s.usedIn.map((u) => <li><a class="btn btn--ghost" href={u.url}>{u.text}</a></li>)}
-              </ul>
+              {s.usedIn.length > 0 && (
+                <ul class="guide-used__list">
+                  {s.usedIn.map((u) => <li><a class="btn btn--ghost" href={u.url}>{u.text}</a></li>)}
+                </ul>
+              )}
+              {s.note && <p class="guide-used__note">{s.note}</p>}
             </div>
           )}
         </div>
@@ -171,6 +174,7 @@ const videos = (guide.video ?? []).map((v) => {
   .guide-section .guide-used { margin-top: 28px; }
   .guide-used__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
   .guide-used .section-head { margin-bottom: 24px; }
+  .guide-used__note { max-width: 760px; margin: 18px auto 0; text-align: center; color: var(--ink-soft); } /* a section's note, under its projects */
   .guide-video { max-width: 760px; }
   .guide-video__item + .guide-video__item { margin-top: 36px; }
   .guide-video__intro { margin: 0 0 12px; text-align: center; color: var(--ink-soft); }

@@ -153,8 +153,8 @@ function stepCut(t) {
   A pinched corner, drawn as a small flap rising out of the cut corner: from the cut's inner corner it
   runs out past the piece's corner, tilted up off the work, its cut edge — one straight line, across —
   at the outer end, the side seam lying on the fold along its middle. Both corners' flaps face the
-  viewer. The END VIEW looks at it end-on: the opened cut is a triangle (the side seam at its tip, the
-  fold in the middle of its base) that flattens into one line.
+  viewer. No END VIEW here: unlabelled, the flattened triangle read as a bare "+", and the chip on
+  the flap ("side seam on the fold") says it.
 */
 const RISE = 0.15; // how much the flap rises off the work: nearly flat, the corner opened out on the table (drawing)
 function fin(c, i, h, z, sewn) {
@@ -175,20 +175,6 @@ function fin(c, i, h, z, sewn) {
   };
 }
 
-/** The END VIEW of a corner: the opened cut — a triangle whose tip (the side seam) comes down onto the fold. */
-function cornerInset(pinch) {
-  const b = FIN_H / 2, tip = Math.sqrt(NX ** 2 - b ** 2) * (1 - pinch);
-  return {
-    segs: [
-      { a: [-b, 0], b: [b, 0] }, // the cut across the fold
-      { a: [-b, 0], b: [0, tip] }, { a: [b, 0], b: [0, tip] }, // the cuts along the side seam, front and back
-      { a: [0, 0], b: [0, -0.7] }, // the fold
-      { a: [0, tip], b: [0, tip + 0.7] }, // the side seam
-    ],
-    range: [-3.6, 3.6],
-  };
-}
-
 const ZF = Z2 + 0.06; // the fins stand on the top layer
 const CORNER_FOCUS = [[OW - 9, HALF - 6, 0], [OW + 4, HALF - 6, 0], [OW - 9, HALF + 4, FIN_H + 1], [OW + 4, HALF + 4, FIN_H + 1]];
 
@@ -201,8 +187,7 @@ function stepPinch(t) {
     over: [
       { type: 'label', p: near.mid, label: 'seamOnFold', o: span(t, 0.4, 0.48), dx: 14, dy: -10, hot: true },
     ],
-    inset: cornerInset(pinch),
-    focus: { pts: CORNER_FOCUS, k: 0.5 * span(t, 0.02, 0.1) },
+    focus: { pts: CORNER_FOCUS, k: 0.3 * span(t, 0.02, 0.1) },
   };
 }
 
@@ -249,21 +234,21 @@ function stepTurnOut(t) {
 /* ---------- Step 0: the finished bottom — upside down, base on top (e = 0, the first frame) or stood up (e = 1) ---------- */
 
 // On the base: the bottom fold along its middle, and the corner seams across its ends, where it meets the end walls.
-// On each end wall: the side seam up its middle meets the corner seam along its bottom — a T. Every line is drawn
-// twice over (one thin seam or dashed fold line is faint on the print).
+// On each end wall: the side seam up its middle meets the corner seam along its bottom — a T. The lines are drawn
+// more than once (one thin seam or dashed fold line is faint on the print): the fold twice, the corner seams three times.
 const BASE_FOLD = { pts: [[0.4, BD / 2], [BL - 0.4, BD / 2]], kind: 'fold' };
 const BASE_SEAMS = [
-  { pts: [[0.25, 0.3], [0.25, BD - 0.3]], kind: 'seam', side: 'out' },
-  { pts: [[BL - 0.25, 0.3], [BL - 0.25, BD - 0.3]], kind: 'seam', side: 'out' },
+  { pts: [[0.45, 0.3], [0.45, BD - 0.3]], kind: 'seam', side: 'out' },
+  { pts: [[BL - 0.45, 0.3], [BL - 0.45, BD - 0.3]], kind: 'seam', side: 'out' },
 ];
-const END_SEAM = { pts: [[0.3, 0.25], [BD - 0.3, 0.25]], kind: 'seam', side: 'out' };
-const END_SIDE = { pts: [[BD / 2, 0.25], [BD / 2, BH]], kind: 'seam', side: 'out' }; // the side seam once more, over the shell's
+const END_SEAM = { pts: [[0.3, 0.45], [BD - 0.3, 0.45]], kind: 'seam', side: 'out' };
+const END_SIDE = { pts: [[BD / 2, 0.45], [BD / 2, BH]], kind: 'seam', side: 'out' }; // the side seam once more, over the shell's
 
 /** The turned-out bag (walls `<key>-…`) on [x0, x0 + BL] × [y0, y0 + BD]: an open box with its boxed corners. */
 function finished(key, x0 = 0, y0 = 0) {
   return shell({ key, xa: x0, xb: x0 + BL, ya: y0, yb: y0 + BD, h: BH, fill: PRINT, inner: BACK }).walls.map((p) => {
-    if (p.id === `${key}-bottom`) return { ...p, lines: [BASE_FOLD, BASE_FOLD, ...BASE_SEAMS, ...BASE_SEAMS] };
-    if (p.id === `${key}-left` || p.id === `${key}-right`) return { ...p, lines: [...(p.lines ?? []), END_SIDE, END_SEAM, END_SEAM] };
+    if (p.id === `${key}-bottom`) return { ...p, lines: [BASE_FOLD, BASE_FOLD, ...BASE_SEAMS, ...BASE_SEAMS, ...BASE_SEAMS] };
+    if (p.id === `${key}-left` || p.id === `${key}-right`) return { ...p, lines: [...(p.lines ?? []), END_SIDE, END_SEAM, END_SEAM, END_SEAM] };
     return p;
   });
 }
@@ -290,7 +275,7 @@ function pins(e) {
   return [
     { n: 1, p: at(byId['up-bottom'], BL * 0.32, BD * 0.27) },
     { n: 2, p: at(byId['up-bottom'], BL * 0.68, BD / 2) },
-    { n: 3, p: at(byId['up-right'], BD * 0.25, 0.25) },
+    { n: 3, p: at(byId['up-right'], BD * 0.25, 0.45) },
     { n: 4, p: at(byId['up-right'], BD / 2, BH * 0.6) },
   ];
 }
@@ -316,7 +301,7 @@ export const STEPS = [
     scene: stepCut, duration: 6.5,
     uses: ['quilting-rulers-set', 'sewline-air-erasable-pen', 'tailor-scissors'],
   },
-  { scene: stepPinch, duration: 5.5, pad: 0.22 },
+  { scene: stepPinch, duration: 5.5 },
   {
     scene: stepSew, duration: 5.5, stitch: 'straight', sew: [[0.14, 0.8, 'print']],
     uses: ['janome-hd2200'],
