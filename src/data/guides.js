@@ -3,6 +3,10 @@
   /guides.html, in groups (GUIDE_GROUPS, in this order; a group with no guide is not shown).
   A guide is a technique, not a make: its animated figure (src/lib/anatomy/<figure>.js, registered in
   figures.js and models.js) shows it step by step with the maker's numbers from the projects.
+  A guide may instead hold several `sections` (one figure each, with its own usedIn): then it has no
+  figure / usedIn of its own. Section: { id (the #anchor, [a-z-]+, same in every language), figure,
+  usedIn, title, line, choose } - texts English here, translated in src/i18n/<lang>/guides.js under
+  [slug].sections[id] (SECTION_FIELDS in content.js).
   Texts here are English; other languages: src/i18n/<lang>/guides.js (same fields, GUIDE_FIELDS in
   src/i18n/content.js — a missing or extra one fails the build). Spec: Vault «Гайды — спецификация».
   Plain data, no imports: src/i18n/index.js builds PAGES from this list.
@@ -49,21 +53,47 @@ export const guides = [
   },
 ];
 
-for (const g of guides) {
-  if (!GUIDE_GROUPS.includes(g.group)) throw new Error(`guides.js: "${g.slug}" has an unknown group "${g.group}" (${GUIDE_GROUPS.join(', ')})`);
+/** Checks a guide list (run on `guides` at load; takes a list so tests can feed it a stub). */
+export function validateGuides(list) {
+  for (const g of list) {
+    if (!GUIDE_GROUPS.includes(g.group)) throw new Error(`guides.js: "${g.slug}" has an unknown group "${g.group}" (${GUIDE_GROUPS.join(', ')})`);
+    const own = g.figure !== undefined || g.usedIn !== undefined;
+    if (g.sections !== undefined) {
+      if (own) throw new Error(`guides.js: "${g.slug}" has both sections and its own figure / usedIn - either one or the other`);
+      if (!Array.isArray(g.sections) || !g.sections.length) throw new Error(`guides.js: "${g.slug}".sections must be a non-empty list`);
+      const seen = new Set();
+      for (const s of g.sections) {
+        if (typeof s.id !== 'string' || !/^[a-z]+(?:-[a-z]+)*$/.test(s.id)) throw new Error(`guides.js: "${g.slug}" has a section id "${s.id}" that is not [a-z-]+`);
+        if (seen.has(s.id)) throw new Error(`guides.js: "${g.slug}" has the section id "${s.id}" twice`);
+        seen.add(s.id);
+      }
+    } else if (!g.figure || !g.usedIn) {
+      throw new Error(`guides.js: "${g.slug}" needs either figure + usedIn or sections`);
+    }
+  }
+  if (new Set(list.map((g) => g.slug)).size !== list.length) throw new Error('guides.js: two guides share a slug');
 }
-if (new Set(guides.map((g) => g.slug)).size !== guides.length) throw new Error('guides.js: two guides share a slug');
+validateGuides(guides);
+
+/**
+ * The sections of a guide: its `sections`, or, for a guide without them, one section with no id that
+ * carries the guide's own figure and usedIn (so callers treat both kinds the same).
+ */
+export const guideSections = (guide) => guide.sections ?? [{ id: null, figure: guide.figure, usedIn: guide.usedIn }];
 
 /** The groups that have at least one guide, in GUIDE_GROUPS order — the list page shows only these. */
 export const liveGroups = (list = guides) => GUIDE_GROUPS.filter((id) => list.some((g) => g.group === id));
 
 /**
- * The guides a project's figure links to from step `step` ("How it's done ->" under the step): those whose
- * `usedIn` has this figure with that step. A project's figure has the project's slug (tote-bag,
- * fabric-basket). A guide's own figure is no project, so it gets no links (no self-links).
+ * Where a project's figure links to from step `step` ("How it's done ->" under the step): a { guide, section }
+ * pair for every guide section whose `usedIn` has this figure with that step (section.id is the #anchor, or
+ * null for a guide without sections). A project's figure has the project's slug (tote-bag, fabric-basket).
+ * A guide's own figure is no project, so it gets no links (no self-links).
  */
 export const guidesForStep = (figureSlug, step, list = guides) =>
-  list.filter((g) => g.usedIn.some((u) => u.project === figureSlug && u.steps.includes(step)));
+  list.flatMap((guide) => guideSections(guide)
+    .filter((section) => section.usedIn.some((u) => u.project === figureSlug && u.steps.includes(step)))
+    .map((section) => ({ guide, section })));
 
 export const guideBySlug = (slug) => {
   const g = guides.find((x) => x.slug === slug);

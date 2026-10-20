@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { guides, guideBySlug, guidesForStep } from '../../src/data/guides.js';
 
 const SLUG = 'line-a-bag';
-const slugs = (list) => list.map((g) => g.slug);
+const slugs = (list) => list.map((x) => x.guide.slug);
 
 test('tote steps 7, 8, 9 link to the lining guide, the others do not', () => {
   for (const k of [7, 8, 9]) assert.deepEqual(slugs(guidesForStep('tote-bag', k)), [SLUG], `tote step ${k}`);
@@ -31,7 +31,7 @@ test("a guide's own figure never links to itself", () => {
 });
 
 test('guidesForStep returns the guide entries themselves', () => {
-  assert.equal(guidesForStep('tote-bag', 7)[0], guideBySlug(SLUG));
+  assert.equal(guidesForStep('tote-bag', 7)[0].guide, guideBySlug(SLUG));
 });
 
 test('every usedIn step is linked, and only those', () => {

@@ -40,7 +40,7 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
 // "How it's done ->": the guides this step's technique is explained in (none on most steps, and none on
 // a guide's own figure). Rendered "How it's done — <title> →": a dash, because the titles hold a colon; the
 // arrow is decoration (aria-hidden), so a screen reader does not read it out.
-const guideLinks = STEPS.map((_, k) => guidesForStep(slug, k).map((g) => ({
+const guideLinks = STEPS.map((_, k) => guidesForStep(slug, k).map(({ guide: g }) => ({
   text: `${ui.howItsDone} — ${guideText(g, lang).title}`,
   url: pageUrl(`guide/${g.slug}`, lang),
 })));

@@ -33,6 +33,8 @@ export const PROJECT_FIELDS = ['title', 'blurb', 'pageTitle', 'pageDescription',
 export const PROJECT_LISTS = { faq: ['q', 'a'] };
 /** Translatable texts of a guide (src/data/guides.js). */
 export const GUIDE_FIELDS = ['title', 'blurb', 'pageTitle', 'pageDescription', 'heading', 'teaser', 'needsIntro'];
+/** Translatable texts of a guide section (src/data/guides.js `sections`); translations: [slug].sections[id]. */
+export const SECTION_FIELDS = ['title', 'line', 'choose'];
 
 /** Translation sets by language: { products, groups, projects, guides }. */
 const SETS = {
@@ -92,6 +94,37 @@ for (const g of guides) {
   for (const f of GUIDE_FIELDS) {
     if (typeof g[f] !== 'string' || !g[f].trim()) throw new Error(`data/guides.js: guide "${g.slug}" has no "${f}" text`);
   }
+  for (const s of g.sections ?? []) {
+    for (const f of SECTION_FIELDS) {
+      if (typeof s[f] !== 'string' || !s[f].trim()) throw new Error(`data/guides.js: guide "${g.slug}" section "${s.id}" has no "${f}" text`);
+    }
+  }
+}
+
+/**
+ * A language's guide translations match the English list: every guide has its fields, and a guide with
+ * sections has [slug].sections[id] = { title, line, choose } for every section and nothing extra (a guide
+ * without sections has no `sections`). Takes the list, the table and the field names so tests can feed stubs.
+ */
+export function coverGuides(lang, list, table, fields = GUIDE_FIELDS) {
+  cover(lang, 'guides', list.map((g) => g.slug), table, fields, { sections: true });
+  for (const g of list) {
+    const where = `i18n/${lang}/guides: "${g.slug}".sections`;
+    const tr = table[g.slug].sections;
+    if (!g.sections) {
+      if (tr !== undefined) throw new Error(`${where} exists, but the English guide has no sections`);
+      continue;
+    }
+    if (!tr || typeof tr !== 'object') throw new Error(`${where} is missing`);
+    for (const s of g.sections) {
+      if (!tr[s.id]) throw new Error(`${where}: section "${s.id}" has no translation`);
+      for (const f of SECTION_FIELDS) {
+        if (typeof tr[s.id][f] !== 'string' || !tr[s.id][f].trim()) throw new Error(`${where}: "${s.id}".${f} is missing`);
+      }
+      for (const f of Object.keys(tr[s.id])) if (!SECTION_FIELDS.includes(f)) throw new Error(`${where}: "${s.id}".${f} is not a translatable field`);
+    }
+    for (const id of Object.keys(tr)) if (!g.sections.some((s) => s.id === id)) throw new Error(`${where}: section "${id}" is not in src/data (typo or removed?)`);
+  }
 }
 
 const groupKeys = Object.entries(categories).flatMap(([c, cfg]) => cfg.groups.map((g) => `${c}/${g.id}`));
@@ -100,7 +133,7 @@ for (const [lang, translations] of Object.entries(SETS)) {
   cover(lang, 'categories', groupKeys, translations.groups, ['title']);
   cover(lang, 'projects', projects.map((p) => p.slug), translations.projects, PROJECT_FIELDS, PROJECT_LISTS);
   coverLists(lang, translations.projects);
-  cover(lang, 'guides', guides.map((g) => g.slug), translations.guides, GUIDE_FIELDS);
+  coverGuides(lang, guides, translations.guides);
 }
 
 function set(lang) {
@@ -122,5 +155,11 @@ export function groupTitle(category, groupId, lang) {
 export const projectText = (project, lang) =>
   lang === DEFAULT_LOCALE ? project : { ...project, ...set(lang).projects[project.slug] };
 
-export const guideText = (guide, lang) =>
-  lang === DEFAULT_LOCALE ? guide : { ...guide, ...set(lang).guides[guide.slug] };
+/** A guide's texts in a language; its sections (if any) get their texts too, in the English order. */
+export function guideText(guide, lang) {
+  if (lang === DEFAULT_LOCALE) return guide;
+  const tr = set(lang).guides[guide.slug];
+  const out = { ...guide, ...tr };
+  if (guide.sections) out.sections = guide.sections.map((s) => ({ ...s, ...tr.sections[s.id] }));
+  return out;
+}
