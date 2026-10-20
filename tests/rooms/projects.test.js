@@ -61,7 +61,7 @@ test('every real project with an item links to its page', () => {
   // the room of the build: the last six real projects that have an item (a new project with an
   // item joins it, one without stays out — neither breaks this test)
   const real = projects.filter((p) => ITEMS[p.slug]).slice(-SLOTS.length);
-  assert.ok(['tote-bag', 'fabric-basket'].every((slug) => ITEMS[slug]), 'both projects of today have an item');
+  assert.ok(['tote-bag', 'fabric-basket', 'cosmetic-bag'].every((slug) => ITEMS[slug]), 'every project of today has an item');
   assert.deepEqual(shown(projectsModel).sort(), real.map((p) => p.slug).sort());
   // the newest real project stands in front on the table
   const first = projectsModel.parts.find((part) => part.slot === 0);

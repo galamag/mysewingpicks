@@ -61,7 +61,7 @@ export default {
       sewAlong: {
         eyebrow: 'Neu · zum Mitnähen',
         heading: 'Sieh zu, wie Nähprojekte entstehen',
-        intro: 'Schritt-für-Schritt-Projekte mit animierten Anleitungen und echten Zuschnittmaßen – eine gefütterte Tote Bag und ein Stoffkorb für Weihnachten.',
+        intro: 'Schritt-für-Schritt-Projekte mit animierten Anleitungen und echten Zuschnittmaßen – eine gefütterte Tote Bag, ein Stoffkorb für Weihnachten und eine Kosmetiktasche mit Reißverschluss.',
         more: 'Schritt für Schritt ansehen →',
       },
       guides: {

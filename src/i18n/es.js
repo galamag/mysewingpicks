@@ -63,7 +63,7 @@ export default {
       sewAlong: {
         eyebrow: 'Novedad · cose conmigo',
         heading: 'Mira cómo toma forma',
-        intro: 'Proyectos paso a paso con guías animadas y las medidas de corte reales: una tote bag forrada y una cesta de tela para Navidad.',
+        intro: 'Proyectos paso a paso con guías animadas y las medidas de corte reales: una tote bag forrada, una cesta de tela para Navidad y un neceser con cremallera.',
         more: 'Míralo paso a paso →',
       },
       guides: {

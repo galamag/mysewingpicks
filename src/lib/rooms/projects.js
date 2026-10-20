@@ -120,6 +120,41 @@ function basket(p) {
   return s;
 }
 
+const POUCH = { w: 10.5, d: 4.2, h: 7.4, end: 1.6 }; // `end`: how far in the bottom stops from the top's ends (the boxed corners)
+
+/**
+  The cosmetic bag: a zipper along the top ridge, front and back walls slanting out to the bottom,
+  triangular ends — and a pink round corner at each end of the bottom, as in its anatomy.
+*/
+function cosmeticBag(p) {
+  const { w, d, h, end } = POUCH;
+  const [a, b, c] = [w / 2, w / 2 - end, d / 2];
+  const PINK = '#e2a9a4';
+  const print = shade(C.rose, 0.55);
+  let s = p.shadow(0.6, 0.6, w * 0.62, 2);
+  // the front wall (+y) and the right end (+x) — the two faces turned to the room
+  s += p.plane([[-a, 0, h], [a, 0, h], [b, c, 0], [-b, c, 0]], print, { stroke: shade(print, -0.2) });
+  s += p.plane([[b, -c, 0], [b, c, 0], [a, 0, h]], shade(print, -0.14), { stroke: shade(print, -0.3) });
+  // the round corners: pink at both ends of the front's bottom and on the lower part of the end
+  const along = (q, r, t) => q.map((v, i) => v + (r[i] - v) * t);
+  const frontCorner = (x0, sx) => {
+    const foot = [x0, c, 0];
+    const up = along(foot, [sx * a, 0, h], 0.5);
+    const out = [x0 - sx * 3.2, c, 0];
+    const bulge = along(along(up, out, 0.5), [x0 - sx * 2.2, c * 0.55, h * 0.36], 0.6);
+    return p.plane([foot, up, bulge, out], PINK, { stroke: shade(PINK, -0.15) });
+  };
+  s += frontCorner(-b, -1) + frontCorner(b, 1);
+  s += p.plane([[b, -c, 0], [b, c, 0], along([b, c, 0], [a, 0, h], 0.42), along([b, 0, 0], [a, 0, h], 0.5), along([b, -c, 0], [a, 0, h], 0.42)], shade(PINK, -0.1), { stroke: shade(PINK, -0.25) });
+  // the print: a few rose dots on the front
+  s += [[-2.6, 0.55], [0.4, 0.4], [2.8, 0.62], [-1.1, 0.78], [1.7, 0.85]].map(([x, t]) => dot(along([x, 0, h], [x * (b / a), c, 0], t), 0.32, C.roseDeep)).join('');
+  // the zipper along the ridge, its pull at the right end
+  s += p.line([-a + 0.4, 0, h], [a - 0.4, 0, h], C.roseDeep, 0.7);
+  s += p.line([-a + 0.4, 0, h + 0.02], [a - 0.4, 0, h + 0.02], C.cream, 0.18);
+  s += p.plane([[a - 1.4, -0.3, h + 0.1], [a - 0.4, -0.3, h + 0.1], [a - 0.4, 0.3, h + 0.1], [a - 1.4, 0.3, h + 0.1]], C.metal, { stroke: shade(C.metal, -0.3) });
+  return s;
+}
+
 /**
   One item per project slug. A new project gets its item here (a mini version of the finished
   thing, in the room's colours, no lettering); see the skill building-sewing-anatomy.
@@ -127,6 +162,7 @@ function basket(p) {
 export const ITEMS = {
   'tote-bag': item([TOTE.w, TOTE.d, TOTE.h + TOTE.rise], tote),
   'fabric-basket': item([BASKET.w, BASKET.w, BASKET.h], basket),
+  'cosmetic-bag': item([POUCH.w, POUCH.d, POUCH.h], cosmeticBag),
 };
 
 /* ---------- the furniture ---------- */

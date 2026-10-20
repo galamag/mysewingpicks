@@ -64,7 +64,7 @@ export default {
       sewAlong: {
         eyebrow: 'Nouveau · cousez avec moi',
         heading: 'Regardez chaque projet prendre forme',
-        intro: 'Des projets étape par étape, avec des guides animés et les vraies dimensions de coupe — un tote bag doublé et une panière en tissu pour Noël.',
+        intro: 'Des projets étape par étape, avec des guides animés et les vraies dimensions de coupe — un tote bag doublé, une panière en tissu pour Noël et une trousse de toilette zippée.',
         more: 'Voir étape par étape →',
       },
       guides: {

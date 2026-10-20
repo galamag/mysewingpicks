@@ -62,7 +62,7 @@ export default {
       sewAlong: {
         eyebrow: 'Novità · cuci con me',
         heading: 'Guarda come prendono forma',
-        intro: 'Progetti passo passo con guide animate e le vere misure di taglio — una tote bag foderata e un cestino di stoffa per Natale.',
+        intro: 'Progetti passo passo con guide animate e le vere misure di taglio — una tote bag foderata, un cestino di stoffa per Natale e una pochette con zip.',
         more: 'Guarda passo passo →',
       },
       guides: {
