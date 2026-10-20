@@ -11,11 +11,14 @@ import * as basket from './basket.js';
 import { basketText } from './basket.text.js';
 import * as lining from './lining.js';
 import { liningText } from './lining.text.js';
+import * as cosmetic from './cosmetic.js';
+import { cosmeticText } from './cosmetic.text.js';
 
 const FIGURES = {
   'tote-bag': { model: tote, text: toteText },
   'fabric-basket': { model: basket, text: basketText },
   'line-a-bag': { model: lining, text: liningText }, // the guide "Lining a bag" (/guides/line-a-bag)
+  'cosmetic-bag': { model: cosmetic, text: cosmeticText },
 };
 
 /** slug → { model, text(lang) } */
