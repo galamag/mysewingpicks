@@ -70,26 +70,29 @@ const videos = (guide.video ?? []).map((v) => {
           <span class="eyebrow">{text.eyebrow}</span>
           <h1>{guide.heading}</h1>
           <p>{guide.blurb}</p>
-        </div>{sectioned && (
-          <nav class="guide-kinds" aria-labelledby="guide-kinds-title">
-            <h2 id="guide-kinds-title">{text.kindsHeading}</h2>
-            <ol class="guide-kinds__list">
-              {sections.map((s) => <li><a href={`#${s.id}`}>{s.title}</a> <span>{s.line}</span></li>)}
-            </ol>
-          </nav>
-        )}
+        </div>
+        {sectioned && (
+        <nav class="section-chips guide-chips" aria-label={text.kindsHeading}>
+          <p class="guide-chips__label">{text.kindsHeading}</p>
+          <div class="section-chips__track">
+            {sections.map((s, i) => (
+              <a class="section-chip" href={`#${s.id}`}><span class="section-chip__count">{i + 1}</span>{s.title}</a>
+            ))}
+          </div>
+        </nav>
+    )}
         <!-- Page-level affiliate disclosure, shown before any affiliate link. -->
         <p class="page-disclosure">{ui.pageDisclosureSome}</p>
 
         {!sectioned && <AnatomyFigure model={sections[0].figure} lang={lang} />}
       </div>
     </section>
-
     {sectioned && sections.map((s) => (
       <section class="section guide-section" id={s.id}>
         <div class="container">
           <div class="section-head">
             <h2>{s.title}</h2>
+            <p>{s.line}</p>
           </div>
           <div class="guide-choose">
             <h3>{text.chooseHeading}</h3>
@@ -159,15 +162,23 @@ const videos = (guide.video ?? []).map((v) => {
   </main>
 </BaseLayout>
 
+{sectioned && (
+  <script>
+    // Highlight the chip of the way on screen (the same chips as the catalog pages).
+    import { watchSectionChips } from '../../../lib/sectionChips.js';
+    watchSectionChips('.guide-section');
+  </script>
+)}
+
 <style>
   /* A section is reached by its #id (contents, "How it's done" in the projects): keep its heading clear of the sticky header. */
-  .guide-section { scroll-margin-top: calc(var(--header-h) + 16px); }
-  .guide-kinds { max-width: 760px; margin: 0 auto 28px; }
-  .guide-kinds h2 { font-size: 1.15rem; margin: 0 0 10px; }
-  .guide-kinds__list { margin: 0; padding-left: 1.4em; }
-  .guide-kinds__list li { margin: 6px 0; }
-  .guide-kinds__list a { font-weight: 700; }
-  .guide-kinds__list span { display: block; color: var(--ink-soft); } /* the one-line "what it is" under the name */
+  /* The ways as the catalog pages' chips, numbered, right under the intro: all four seen at once. Not sticky —
+     the long names wrap to several rows on a phone, too tall to stay under the header. */
+  .guide-chips { position: static; margin: 0 auto 24px; padding: 0; background: none; backdrop-filter: none; border-bottom: 0; }
+  .guide-chips .section-chips__track { flex-wrap: wrap; justify-content: center; overflow-x: visible; padding-inline: 0; }
+  .guide-chips .section-chip { margin: 0; }
+  .guide-chips__label { margin: 0 0 10px; text-align: center; font-weight: 700; }
+  .guide-section { scroll-margin-top: calc(var(--header-h) + 12px); }
   .guide-choose { max-width: 760px; margin: 0 auto 24px; text-align: center; }
   .guide-choose h3 { font-size: 1rem; margin: 0 0 6px; }
   .guide-choose p { margin: 0; }

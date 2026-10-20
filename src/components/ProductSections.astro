@@ -53,32 +53,8 @@ const showNav = sections.length > 1;
 
 {showNav && (
   <script>
-    // Highlight the chip of the section currently on screen and keep it
-    // centred in the chip row (phones show only a few chips). Only the chip
-    // row is scrolled — never the page (scrollIntoView can break iOS momentum).
-    const track = document.querySelector<HTMLElement>('.section-chips__track');
-    const chips = new Map(
-      [...document.querySelectorAll<HTMLAnchorElement>('.section-chip')]
-        .map((chip) => [chip.hash.slice(1), chip])
-    );
-    const setActive = (id: string) => {
-      chips.forEach((chip, key) => {
-        const active = key === id;
-        if (active) chip.setAttribute('aria-current', 'true');
-        else chip.removeAttribute('aria-current');
-        if (active && track) {
-          const left = chip.offsetLeft - (track.clientWidth - chip.offsetWidth) / 2;
-          track.scrollTo({ left, behavior: 'smooth' });
-        }
-      });
-    };
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting);
-        if (visible.length) setActive(visible[0].target.id);
-      },
-      { rootMargin: '-35% 0px -60% 0px' } // the band just below the sticky bars
-    );
-    document.querySelectorAll('.product-section').forEach((s) => observer.observe(s));
+    // Highlight the chip of the section on screen (shared with the guide page).
+    import { watchSectionChips } from '../lib/sectionChips.js';
+    watchSectionChips('.product-section');
   </script>
 )}
