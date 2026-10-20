@@ -59,6 +59,13 @@ test('validateGuides: section ids are unique, lower-case words, and a guide has 
   assert.throws(() => validateGuides([multi('d', [])]), /sections/i);
 });
 
+test('validateGuides: every usedIn entry names its steps (an empty list links nothing)', () => {
+  assert.throws(() => validateGuides([multi('d', [sec('a', 'x', [{ project: 'tote-bag', steps: [] }])])]), /steps/);
+  assert.throws(() => validateGuides([multi('d', [sec('a', 'x', [{ project: 'tote-bag' }])])]), /steps/);
+  assert.throws(() => validateGuides([{ slug: 'p', group: 'construction', figure: 'x', usedIn: [{ project: 'tote-bag', steps: [] }] }]), /steps/);
+  assert.doesNotThrow(() => validateGuides([multi('d', [sec('a', 'x', [{ project: 'tote-bag', steps: [3] }])])]));
+});
+
 // Translations: [slug].sections[id] = { title, line, choose } — every section, nothing extra.
 const GF = ['t'];
 const en = [multi('one', [sec('a', 'x', []), sec('b', 'y', [])], { t: 'x' })];

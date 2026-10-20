@@ -6,15 +6,17 @@ import { guides, guideBySlug, guideSections, guidesForStep } from '../../src/dat
 
 const SLUG = 'line-a-bag';
 const slugs = (list) => list.map((x) => x.guide.slug);
+const lining = (list) => slugs(list).filter((s) => s === SLUG); // other guides link to these steps too (bag-bottom: tote 3–7)
 
 test('tote steps 7, 8, 9 link to the lining guide, the others do not', () => {
-  for (const k of [7, 8, 9]) assert.deepEqual(slugs(guidesForStep('tote-bag', k)), [SLUG], `tote step ${k}`);
-  for (const k of [0, 1, 6, 10]) assert.deepEqual(guidesForStep('tote-bag', k), [], `tote step ${k}`);
+  for (const k of [7, 8, 9]) assert.deepEqual(lining(guidesForStep('tote-bag', k)), [SLUG], `tote step ${k}`);
+  for (const k of [0, 1, 6, 10]) assert.deepEqual(lining(guidesForStep('tote-bag', k)), [], `tote step ${k}`);
+  for (const k of [0, 1, 2, 10]) assert.deepEqual(guidesForStep('tote-bag', k), [], `tote step ${k}: no guide at all`);
 });
 
 test('basket steps 4, 5, 6, 7 link to the lining guide, the others do not', () => {
-  for (const k of [4, 5, 6, 7]) assert.deepEqual(slugs(guidesForStep('fabric-basket', k)), [SLUG], `basket step ${k}`);
-  for (const k of [0, 1, 3, 8]) assert.deepEqual(guidesForStep('fabric-basket', k), [], `basket step ${k}`);
+  for (const k of [4, 5, 6, 7]) assert.deepEqual(lining(guidesForStep('fabric-basket', k)), [SLUG], `basket step ${k}`);
+  for (const k of [0, 1, 3, 8]) assert.deepEqual(lining(guidesForStep('fabric-basket', k)), [], `basket step ${k}`);
 });
 
 test('an unknown figure has no guides', () => {
@@ -36,10 +38,12 @@ test('guidesForStep returns the guide entries themselves', () => {
 
 test('every usedIn step is linked, and only those', () => {
   for (const g of guides) {
-    for (const u of g.usedIn) {
-      for (let k = 0; k <= 20; k++) {
-        const linked = slugs(guidesForStep(u.project, k)).includes(g.slug);
-        assert.equal(linked, u.steps.includes(k), `${g.slug} -> ${u.project} step ${k}`);
+    for (const s of guideSections(g)) {
+      for (const u of s.usedIn) {
+        for (let k = 0; k <= 20; k++) {
+          const linked = guidesForStep(u.project, k).some((x) => x.guide === g && x.section.id === s.id);
+          assert.equal(linked, u.steps.includes(k), `${g.slug}${s.id ? `#${s.id}` : ''} -> ${u.project} step ${k}`);
+        }
       }
     }
   }

@@ -12,4 +12,20 @@ export default {
     teaser: 'Coser el forro, darle la vuelta a la bolsa por la abertura, cerrarla y pespuntear: cada paso, animado.',
     needsIntro: 'Hilo, clips de costura, cortahilos, una plancha y la máquina de coser: las herramientas que recomiendo personalmente para estos pasos. Para cerrar la abertura a mano, también necesitarás una aguja de coser.',
   },
+  'bag-bottom': {
+    title: 'Base de la bolsa: cuatro formas',
+    blurb: 'Cómo darle a una bolsa una base sobre la que se sostenga. Primero, la base plegada hacia dentro de la tote bag: dos dobleces cosidos a 6 cm del centro y metidos hacia dentro, y las esquinas se forman solas.',
+    pageTitle: 'Cómo coser la base de una bolsa de tela: 4 formas',
+    pageDescription: 'Cómo coser la base de una bolsa de tela: la base plegada de la tote bag (dos dobleces cosidos a 6 cm del doblez central, metidos hacia dentro, costuras laterales de 0,5 cm) se vuelve una base plana de 12 cm. Cada paso animado.',
+    heading: 'Cómo hacer la base de una bolsa de tela: cuatro formas',
+    teaser: 'Una base plana para tu bolsa, con esquinas que se forman solas: cada paso animado.',
+    needsIntro: 'Plancha, regla de patchwork, marcador borrable al aire, hilo, clips de costura y la máquina de coser: las herramientas que recomiendo personalmente para estos pasos.',
+    sections: {
+      folded: {
+        title: 'Base plegada hacia dentro',
+        line: 'Dos dobleces cosidos, metidos hacia dentro antes de las costuras laterales: las esquinas se forman solas.',
+        choose: 'Cuando la bolsa se corta en una sola pieza, doblada por la mitad a lo ancho, y quieres una base plana sin costuras en las esquinas: las esquinas se forman solas al darle la vuelta.',
+      },
+    },
+  },
 };

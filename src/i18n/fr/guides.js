@@ -12,4 +12,20 @@ export default {
     teaser: "Coudre la doublure, retourner le sac par l'ouverture, la fermer et surpiquer — chaque étape en animation.",
     needsIntro: "Du fil, des pinces à tissu, un coupe-fil, un fer à repasser et la machine à coudre — les outils que je recommande personnellement pour ces étapes. Pour fermer l'ouverture à la main, il vous faudra aussi une aiguille à coudre.",
   },
+  'bag-bottom': {
+    title: 'Fond de sac : quatre méthodes',
+    blurb: "Comment donner à un sac un fond sur lequel il tient debout. D'abord, le fond replié à l'intérieur du tote bag : deux plis piqués à 6 cm du milieu, rentrés à l'intérieur — et les coins se forment tout seuls.",
+    pageTitle: 'Tuto fond de sac couture : angles, fond carré et plus',
+    pageDescription: 'Tuto fond de sac couture : le fond replié du tote bag (deux plis piqués à 6 cm du pli central, rentrés, coutures de côté à 0,5 cm) se retourne en une base plate de 12 cm. Chaque étape animée.',
+    heading: "Faire le fond d'un sac en tissu : quatre méthodes",
+    teaser: 'Un fond de sac plat, avec des coins qui se forment tout seuls — chaque étape animée.',
+    needsIntro: "Un fer à repasser, une règle de patchwork, un stylo effaçable à l'air, du fil, des pinces à tissu et la machine à coudre — les outils que je recommande personnellement pour ces étapes.",
+    sections: {
+      folded: {
+        title: "Fond replié à l'intérieur",
+        line: 'Deux plis piqués, rentrés avant les coutures de côté : les coins se forment tout seuls.',
+        choose: "Quand le sac est coupé d'une seule pièce, pliée en deux en travers, et que vous voulez un fond plat sans couture d'angle : les coins se forment tout seuls quand on retourne le sac.",
+      },
+    },
+  },
 };

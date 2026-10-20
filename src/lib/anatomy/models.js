@@ -10,4 +10,5 @@ export const MODELS = {
   'fabric-basket': { model: () => import('./basket.js'), texts: import.meta.glob('./basket.??.js') },
   'line-a-bag': { model: () => import('./lining.js'), texts: import.meta.glob('./lining.??.js') },
   'cosmetic-bag': { model: () => import('./cosmetic.js'), texts: import.meta.glob('./cosmetic.??.js') },
+  'bag-bottom-folded': { model: () => import('./bottom-folded.js'), texts: import.meta.glob('./bottom-folded.??.js') },
 };

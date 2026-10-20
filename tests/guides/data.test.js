@@ -7,7 +7,7 @@ import { projects, projectBySlug } from '../../src/data/projects.js';
 import { products } from '../../src/data/products.js';
 import { figure } from '../../src/lib/anatomy/figures.js';
 import { LOCALES, PAGES, pageUrl, t } from '../../src/i18n/index.js';
-import { GUIDE_FIELDS, guideText } from '../../src/i18n/content.js';
+import { GUIDE_FIELDS, SECTION_FIELDS, guideText } from '../../src/i18n/content.js';
 
 const SLUG = 'line-a-bag';
 const OTHER = LOCALES.filter((l) => l !== 'en');
@@ -86,6 +86,8 @@ test('every language has the guide', () => {
       assert.notEqual(tr.heading, g.heading, `${lang} ${g.slug}: heading is the English one`);
       // data that is not text stays the English entry's
       assert.deepEqual([tr.needs, tr.usedIn, tr.video, tr.group], [g.needs, g.usedIn, g.video, g.group]);
+      // a section keeps its id, figure and usedIn; only its texts are translated
+      assert.deepEqual((tr.sections ?? []).map((s) => [s.id, s.figure, s.usedIn]), (g.sections ?? []).map((s) => [s.id, s.figure, s.usedIn]));
     }
   }
   assert.ok(guideText(guideBySlug(SLUG), 'de').heading.trim());
@@ -108,15 +110,21 @@ test('empty groups are not rendered', () => {
   assert.deepEqual(liveGroups([{ group: 'patchwork' }, { group: 'machine' }, { group: 'patchwork' }]), ['machine', 'patchwork']);
 });
 
-// Numbers: only the maker's (spec 3.2, 6) — 8, 15, 0.5, 1 and 6 cm; no finished size.
+// Numbers: only the maker's (spec 3.2), per guide; no finished size. line-a-bag (spec 6): the tote's and the
+// basket's 8, 15, 0.5, 1 and 6 cm; bag-bottom (its own spec, 3): so far the tote's 6, 12 and 0.5 cm.
+const MAKER = { 'line-a-bag': ['8', '15', '0.5', '1', '6'], 'bag-bottom': ['6', '12', '0.5'] };
 const texts = () => guides.flatMap((g) => LOCALES.flatMap((lang) => {
   const tr = guideText(g, lang);
-  return GUIDE_FIELDS.map((f) => [lang, `${g.slug}.${f}`, tr[f]]);
+  return [
+    ...GUIDE_FIELDS.map((f) => [lang, `${g.slug}.${f}`, tr[f], g.slug]),
+    ...(tr.sections ?? []).flatMap((s) => SECTION_FIELDS.map((f) => [lang, `${g.slug}#${s.id}.${f}`, s[f], g.slug])),
+  ];
 }));
 
 test("cm numbers are the maker's", () => {
-  const allowed = new Set(['8', '15', '0.5', '1', '6']);
-  for (const [lang, where, s] of texts()) {
+  for (const g of guides) assert.ok(MAKER[g.slug], `${g.slug}: list its maker's numbers in MAKER`);
+  for (const [lang, where, s, slug] of texts()) {
+    const allowed = new Set(MAKER[slug]);
     for (const m of s.matchAll(/(\d+(?:[.,]\d+)?)[\s\xa0]*(?:cm|см)/g)) {
       assert.ok(allowed.has(m[1].replace(',', '.')), `${lang} ${where}: "${m[0]}"`);
     }
