@@ -61,6 +61,8 @@ export default {
     opening6: '6 cm Wendeöffnung',
     outerHalf: 'außen',
     liningHalf: 'Futter',
+    insideOut: 'noch auf links',
+    cornersSewn: 'Ecken genäht',
     cutCorners: 'Ecken ausschneiden',
     pinchSew: 'auffalten, quer nähen',
     seamOnFold: 'Naht auf den Bruch',
@@ -167,6 +169,14 @@ export default {
         'Schneide sie aus.',
         'Falte jede Ecke so auf, dass die Seitennaht auf dem Bodenbruch liegt und die Schnittkanten eine gerade Linie bilden.',
         'Nähe quer darüber, 0,5 cm von der Kante. So alle vier Ecken.',
+      ],
+    },
+    {
+      title: 'In Form bringen',
+      text: 'Falte die Tasche auf: Mit den genähten Ecken sind Außenstoff und Futter jeweils eine Form mit flachem Boden geworden. Sie ist noch auf links, beide Teile hängen am offenen Reißverschluss.',
+      details: [
+        'Breite Außenstoff und Futter aus: Boden und Ecken stellen sich auf, und du hast zwei Formen.',
+        'Die Nähte liegen außen, dazwischen sitzt der offene Reißverschluss: Die Tasche ist noch auf links.',
       ],
     },
     {

@@ -61,6 +61,8 @@ export default {
     opening6: 'ouverture 6 cm',
     outerHalf: 'extérieur',
     liningHalf: 'doublure',
+    insideOut: "encore sur l'envers",
+    cornersSewn: 'coins cousus',
     cutCorners: 'découper les coins',
     pinchSew: 'ouvrir, coudre en travers',
     seamOnFold: 'couture sur la pliure',
@@ -167,6 +169,14 @@ export default {
         'Découpez-les.',
         "Ouvrez chaque coin et aplatissez-le pour que la couture de côté tombe sur la pliure du fond et que les bords coupés forment une ligne droite.",
         "Cousez en travers, à 0,5 cm du bord. Faites les quatre coins.",
+      ],
+    },
+    {
+      title: 'Mettre en forme',
+      text: "Dépliez la trousse. Une fois les coins cousus, l'extérieur et la doublure ont chacun pris forme, avec un fond plat. Elle est encore sur l'envers, les deux reliés par la fermeture ouverte.",
+      details: [
+        "Écartez l'extérieur et la doublure. Le fond et les coins se redressent, vous obtenez deux formes.",
+        "Les coutures sont à l'extérieur, la fermeture ouverte entre les deux. La trousse est encore sur l'envers.",
       ],
     },
     {

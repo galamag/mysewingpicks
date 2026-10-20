@@ -61,6 +61,8 @@ export default {
     opening6: 'abertura 6 cm',
     outerHalf: 'exterior',
     liningHalf: 'forro',
+    insideOut: 'aún del revés',
+    cornersSewn: 'esquinas cosidas',
     cutCorners: 'recortar las esquinas',
     pinchSew: 'abrir, coser de lado a lado',
     seamOnFold: 'costura sobre el doblez',
@@ -167,6 +169,14 @@ export default {
         'Recórtalos.',
         'Abre cada esquina y aplánala para que la costura lateral quede sobre el doblez de la base y los bordes cortados formen una línea recta.',
         'Cose de lado a lado a 0,5 cm del borde. Haz las cuatro esquinas.',
+      ],
+    },
+    {
+      title: 'Dale forma',
+      text: 'Abre el neceser: con las esquinas cosidas, el exterior y el forro se han convertido cada uno en una forma con base plana. Todavía está del revés, unidos por la cremallera abierta.',
+      details: [
+        'Extiende el exterior y el forro: la base y las esquinas se levantan y tienes dos formas.',
+        'Las costuras quedan por fuera y entre las dos formas está la cremallera abierta: el neceser sigue del revés.',
       ],
     },
     {

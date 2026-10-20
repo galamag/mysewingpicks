@@ -51,10 +51,10 @@ test("cm numbers in the texts are the maker's", () => {
   }
 });
 
-test('twelve steps: the finished bag + eleven', () => {
-  assert.equal(STEPS.length, 12);
+test('thirteen steps: the finished bag + twelve', () => {
+  assert.equal(STEPS.length, 13);
   STEPS.slice(1).forEach((s, i) => assert.equal(typeof s.scene, 'function', `step ${i + 1} has no scene`));
-  for (const lang of LANGS) assert.equal(cosmeticText(lang).steps.length, 12, lang);
+  for (const lang of LANGS) assert.equal(cosmeticText(lang).steps.length, 13, lang);
   assert.equal(CUT.step, 1);
 });
 

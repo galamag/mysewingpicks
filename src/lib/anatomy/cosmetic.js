@@ -12,13 +12,13 @@
   the zipper, then the side seams (an opening in the lining), then the four corners; the bag is
   turned through the opening, which is closed by hand.
 
-  Step 0 is the finished bag (tap to take it apart); steps 1–11 each animate one stage over
+  Step 0 is the finished bag (tap to take it apart); steps 1–12 each animate one stage over
   t = 0…1. Flat work lies on the table (x → right-down, y → left-down); the cut pieces and the
   half-moons stand on a board facing the viewer. Shared parts (camera, inset, machine,
   renderer): kit.js.
 */
 import { at, lerp, turn } from './iso.js';
-import { fadeAll, labelKeys, makeRenderer, rect, rot2, shell, span } from './kit.js';
+import { fadeAll, labelKeys, makeRenderer, rect, rot2, span } from './kit.js';
 
 const ID = 'cosmetic-bag'; // prefix of every SVG id of this figure (fills, clip, floor)
 
@@ -605,36 +605,114 @@ function stepCorners(t) {
   };
 }
 
-/* Step 11: turn it out through the opening, close it by hand, push the lining in, close the zipper. */
+/*
+  Steps 11–12: the bag in volume. With the corners sewn, outer and lining are two boxed shapes
+  joined by the (open) zipper: the outer standing, the lining upside down on top of it, both
+  still inside out, seams outside. Step 11 opens the flat work up into them; step 12 turns them
+  right side out through the opening, closes it by hand, pushes the lining in, closes the zipper.
+*/
 
-/** The lining out of the zipper above the bag: a box, its bottom up, the opening in its right side seam. */
-const tube = (ext, close) => shell({
-  key: 'tube', xa: -Z / 2 + 0.6, xb: Z / 2 - 0.6, ya: -BD / 2 + 0.4, yb: BD / 2 - 0.4, z0: TOPZ, h: Math.max(ext, 0.01),
-  fill: LIN, inner: LIN_BACK, seams: true, lid: true,
-  opening: close < 0.999 ? [ext / 2 - SPEC.opening / 2, ext / 2 + SPEC.opening / 2] : null,
-}).walls.filter(facingOut);
+const X0 = OW / 2; // the shapes stand where the flat work lay (its middle)
 
-function stepTurn(t) {
-  const turned = span(t, 0.08, 0.3), close = span(t, 0.36, 0.62), push = span(t, 0.7, 0.86), zipUp = span(t, 0.88, 0.97);
-  const ext = 12 * (1 - push);
-  const flat = fadeAll([...FLAT(true), ...NOTCHES.map((n, i) => cornerFin(n, i, FIN_H, 7.5 * T).fin)], 1 - turned);
-  const bag = fadeAll(bagPieces({ open: 1 - zipUp, zip: false }), turned);
-  const lining = fadeAll(tube(ext, close), turned * (1 - span(t, 0.8, 0.86)));
-  const zip = fadeAll(zipperOnTop(TOPZ, (1 - zipUp) * 0.85), turned);
-  const gx = Z / 2 - 0.6 + 0.12;
-  const gap = [[gx, 0, TOPZ + ext / 2 + SPEC.opening / 2], [gx, 0, TOPZ + ext / 2 - SPEC.opening / 2]];
+/** A piece upside down about the plane z = zc (the lining stands on the zipper, bottom up). */
+const mirrorZ = (p, zc) => ({
+  ...p, O: [p.O[0], p.O[1], 2 * zc - p.O[2]], U: [p.U[0], p.U[1], -p.U[2]], V: [p.V[0], p.V[1], -p.V[2]], out: [p.out[0], p.out[1], -p.out[2]],
+});
+/** Pieces squashed towards the plane z = z0 by s (0…1): the shapes rising, the lining going in. */
+const squashZ = (ps, s, z0 = 0) => ps.map((p) => ({ ...p, O: [p.O[0], p.O[1], z0 + (p.O[2] - z0) * s], U: [p.U[0], p.U[1], p.U[2] * s], V: [p.V[0], p.V[1], p.V[2] * s] }));
+const sq = (q, s, z0 = 0) => [q[0], q[1], z0 + (q[2] - z0) * s];
+const moveX = (q) => [q[0] + X0, q[1], q[2]];
+
+/*
+  One half in volume: the outer, or the lining (`lining`) upside down on top of it; `rightOut` —
+  turned right side out (else inside out). Its end triangles carry the corner seam (their base)
+  and the side seam (base middle → zipper end); the lining's right side seam has the opening.
+  → { faces (seen ones), gap: [two world points of the opening], corner: [the right corner seam] }
+*/
+function form({ lining = false, rightOut = false } = {}) {
+  const [fill, inner] = lining ? [LIN, LIN_BACK] : [PRINT, BACK];
+  const f = bagFaces(lining ? 'lf' : 'of', 1, rightOut ? fill : inner, rightOut ? inner : fill);
+  let gap = null;
+  for (const s of ['left', 'right']) {
+    const [b0, b1, tip] = f[s].pts;
+    const m = [(b0[0] + b1[0]) / 2, (b0[1] + b1[1]) / 2];
+    const len = Math.hypot(tip[0] - m[0], tip[1] - m[1]);
+    const on = (k) => [lerp(m[0], tip[0], k), lerp(m[1], tip[1], k)];
+    const lines = [{ pts: [b0, b1], kind: 'seam' }];
+    if (lining && s === 'right') {
+      const g0 = on(0.5 - SPEC.opening / 2 / len), g1 = on(0.5 + SPEC.opening / 2 / len);
+      lines.push({ pts: [m, g0], kind: 'seam' }, { pts: [g1, tip], kind: 'seam' });
+      gap = [g0, g1];
+    } else lines.push({ pts: [m, tip], kind: 'seam' });
+    f[s] = { ...f[s], lines };
+  }
+  const flip = (p) => (lining ? mirrorZ(p, TOPZ) : p);
+  const right = flip(f.right);
+  const world = (q) => moveX(at(right, q[0], q[1]));
+  // inside out, the corner seams' allowances stand out from the bottom's ends
+  const allowance = (s, sx) => {
+    const p = flip(f[s]), a = at(p, ...p.pts[0]), b = at(p, ...p.pts[1]);
+    const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    const id = `${lining ? 'lf' : 'of'}-${s}-allow`;
+    return { id, pts: rect(len, 0.7), O: a, U: [(b[0] - a[0]) / len, (b[1] - a[1]) / len, 0], V: [sx, 0, 0], out: [0, 0, 1], fill: inner, inner };
+  };
+  const faces = ['back', 'left', 'bottom', 'front', 'right'].map((s) => flip(f[s])).filter(facingOut);
   return {
-    pieces: [...flat, ...bag, ...zip, ...lining],
+    faces: shift(rightOut ? faces : [allowance('left', -1), ...faces, allowance('right', 1)], [X0, 0, 0]),
+    gap: gap && gap.map(world),
+    corner: [world(f.right.pts[0]), world(f.right.pts[1])],
+  };
+}
+
+/** The flat work at the end of step 10: the corners cut and sewn. */
+const flatSewn = () => [...FLAT(true), ...NOTCHES.map((n, i) => cornerFin(n, i, FIN_H, 7.5 * T).fin)];
+
+/* Step 11: the flat work opens up into two shapes — outer and lining, inside out, joined by the zipper. */
+function stepShape(t) {
+  const flat = 1 - span(t, 0.1, 0.22), show = span(t, 0.12, 0.2), grow = span(t, 0.12, 0.5);
+  const s = 0.15 + 0.85 * grow;
+  const outer = form(), lin = form({ lining: true });
+  const zip = shift(zipperOnTop(TOPZ, 1), [X0, 0, 0]);
+  const hot = span(t, 0.72, 0.78) * (1 - span(t, 0.94, 1));
+  const onWall = (z) => [X0, (BD / 2) * (1 - Math.abs(z - TOPZ) / TOPZ), z * s];
+  return {
+    pieces: [...fadeAll(flatSewn(), flat), ...fadeAll(squashZ([...outer.faces, ...zip, ...lin.faces], s), show)],
     over: [
-      { type: 'arrow', pts: [[OW, -HALF / 2, 1], [OW + 6, -HALF / 2, 6], [OW + 9, -HALF / 2 + 4, 12]], t: span(t, 0.02, 0.12), o: 1 - turned },
-      { type: 'label', p: [OW + 9, -HALF / 2 + 4, 12], label: 'turnThrough', o: span(t, 0.02, 0.08) * (1 - turned), dx: -18, dy: -4 },
-      { type: 'line', pts: gap, kind: 'open', o: turned * (1 - close) },
-      { type: 'line', pts: gap, t: close, kind: 'hotstitch', o: turned * (1 - push) },
-      { type: 'label', p: gap[0], label: 'byHand', o: span(t, 0.36, 0.42) * (1 - span(t, 0.66, 0.7)), dx: 12, hot: true },
-      { type: 'arrow', pts: [[0, 0, TOPZ + 16], [0, 0, TOPZ + 6]], o: span(t, 0.68, 0.72) * (1 - span(t, 0.84, 0.88)) },
-      { type: 'label', p: [0, 0, TOPZ + 18], label: 'pushLining', o: span(t, 0.68, 0.72) * (1 - span(t, 0.84, 0.88)) },
-      { type: 'label', p: [0, 0, TOPZ], label: 'closeZip', o: span(t, 0.9, 0.95), dy: -8 },
+      { type: 'label', p: onWall(TOPZ * 0.4), label: 'outerHalf', o: span(t, 0.52, 0.58) },
+      { type: 'label', p: onWall(TOPZ * 1.6), label: 'liningHalf', o: span(t, 0.52, 0.58) },
+      { type: 'label', p: [X0 - Z / 2, 0, TOPZ * s], label: 'insideOut', o: span(t, 0.6, 0.66), dx: -14, hot: true },
+      { type: 'line', pts: outer.corner.map((q) => sq(q, s)), kind: 'hot', o: hot },
+      { type: 'line', pts: lin.corner.map((q) => sq(q, s)), kind: 'hot', o: hot },
+      { type: 'label', p: sq(outer.corner[1], s), label: 'cornersSewn', o: hot, dx: 14, dy: -4, hot: true },
     ],
+  };
+}
+
+/* Step 12: turn it out through the opening, close it by hand, push the lining in, close the zipper. */
+function stepTurn(t) {
+  const turned = span(t, 0.1, 0.3), close = span(t, 0.36, 0.6), push = span(t, 0.68, 0.86), zipUp = span(t, 0.88, 0.97);
+  const keep = Math.max(1 - push, 0.02); // the lining goes down into the bag
+  const lin0 = form({ lining: true }), lin1 = form({ lining: true, rightOut: true });
+  const outer = [...fadeAll(form().faces, 1 - turned), ...fadeAll(shift(bagPieces({ zip: false }), [X0, 0, 0]), turned)];
+  const lining = fadeAll(squashZ([...fadeAll(lin0.faces, 1 - turned), ...fadeAll(lin1.faces, turned)], keep, TOPZ), 1 - span(t, 0.82, 0.88));
+  const zip = shift(zipperOnTop(TOPZ, (1 - zipUp) * 0.85), [X0, 0, 0]);
+  const gap = lin0.gap.map((q) => sq(q, keep, TOPZ));
+  const out = [gap[1][0] + 5, gap[1][1], gap[1][2] + 3];
+  const top = [X0, 0, TOPZ * 2 + 4];
+  return {
+    pieces: [...outer, ...zip, ...lining],
+    over: [
+      { type: 'arrow', pts: [gap[1], out], t: span(t, 0.02, 0.1), o: 1 - turned },
+      { type: 'label', p: gap[0], label: 'turnThrough', o: span(t, 0.02, 0.08) * (1 - turned), dx: -20, dy: -6 },
+      { type: 'line', pts: gap, kind: 'open', o: 1 - close },
+      { type: 'line', pts: gap, t: close, kind: 'hotstitch', o: turned * (1 - push) },
+      { type: 'label', p: gap[0], label: 'byHand', o: span(t, 0.36, 0.42) * (1 - span(t, 0.62, 0.66)), dx: 12, hot: true },
+      { type: 'arrow', pts: [top, [X0, 0, TOPZ + 4]], o: span(t, 0.66, 0.7) * (1 - span(t, 0.84, 0.88)) },
+      { type: 'label', p: top, label: 'pushLining', o: span(t, 0.66, 0.7) * (1 - span(t, 0.84, 0.88)) },
+      { type: 'label', p: [X0, 0, TOPZ], label: 'closeZip', o: span(t, 0.9, 0.95), dy: -8 },
+    ],
+    // close on the opening while it is turned through and sewn up
+    focus: { pts: [...gap, out, [gap[0][0] - 8, 0, gap[0][2]]], k: 0.3 * span(t, 0, 0.04) * (1 - span(t, 0.62, 0.68)) },
   };
 }
 
@@ -661,7 +739,8 @@ export const STEPS = [
   { scene: stepZip2, duration: 7, stitch: 'straight', sew: [[0.7, 0.94, 'lining']], pad: 0.22, uses: ['janome-1522rd'] },
   { scene: stepSides, duration: 6, stitch: 'straight', sew: [[0.3, 0.88, 'lining']], uses: ['soraco-sewing-clips', 'janome-1522rd'] },
   { scene: stepCorners, duration: 7.5, stitch: 'straight', sew: [[0.7, 0.92, 'print']], uses: ['quilting-rulers-set', 'sewline-air-erasable-pen', 'tailor-scissors', 'janome-1522rd'] },
-  { scene: stepTurn, duration: 7, uses: [] },
+  { scene: stepShape, duration: 6, uses: [] },
+  { scene: stepTurn, duration: 7.5, uses: [] },
 ];
 
 /**
@@ -679,7 +758,7 @@ export const renderStep = makeRenderer({
   steps: STEPS,
   anatomy,
   pins,
-  floorAt: (k) => (k === 0 || k === 11 ? [0, 0, 0] : null),
+  floorAt: (k) => (k === 0 ? [0, 0, 0] : k === 11 || k === 12 ? [X0, 0, 0] : null),
   shadow: [BW * 0.62, BW * 0.36],
   fabrics: { print: '#efd9d2', pink: '#e2a9a4', lining: '#b9615d' },
 });

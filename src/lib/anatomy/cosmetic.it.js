@@ -61,6 +61,8 @@ export default {
     opening6: 'apertura 6 cm',
     outerHalf: 'esterno',
     liningHalf: 'fodera',
+    insideOut: 'ancora al rovescio',
+    cornersSewn: 'angoli cuciti',
     cutCorners: 'taglia gli angoli',
     pinchSew: 'apri, cuci di traverso',
     seamOnFold: 'cucitura sulla piega',
@@ -167,6 +169,14 @@ export default {
         'Ritagliali.',
         'Apri ogni angolo e appiattiscilo in modo che la cucitura laterale cada sulla piega del fondo e i bordi tagliati formino una linea retta.',
         'Cuci di traverso a 0,5 cm dal bordo. Fai tutti e quattro gli angoli.',
+      ],
+    },
+    {
+      title: 'Dai forma',
+      text: "Apri la pochette: con gli angoli cuciti, l'esterno e la fodera sono diventati ciascuno una forma con il fondo piatto. È ancora al rovescio, i due pezzi uniti dalla cerniera aperta.",
+      details: [
+        "Allarga l'esterno e la fodera: il fondo e gli angoli si alzano, ed ecco due forme.",
+        "Le cuciture sono fuori e tra le due forme c'è la cerniera aperta: la pochette è ancora al rovescio.",
       ],
     },
     {

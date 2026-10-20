@@ -67,6 +67,8 @@ export default {
     opening6: '6 cm opening',
     outerHalf: 'outer',
     liningHalf: 'lining',
+    insideOut: 'still inside out',
+    cornersSewn: 'corners sewn',
     cutCorners: 'cut the corners',
     pinchSew: 'pinch, sew across',
     seamOnFold: 'side seam on the fold',
@@ -173,6 +175,14 @@ export default {
         'Cut them out.',
         'Open each corner and flatten it so that the side seam lies on the bottom fold and the cut edges form one straight line.',
         'Sew straight across, 0.5 cm (³⁄₁₆ in) from the edge. Do all four corners.',
+      ],
+    },
+    {
+      title: 'Give it shape',
+      text: 'Open the bag out: with the corners sewn, the outer and the lining have each become a shape with a flat bottom. It is still inside out, the two joined by the open zipper.',
+      details: [
+        'Spread out the outer and the lining: the bottom and the corners stand up, and you have two shapes.',
+        'The seams are on the outside and the open zipper sits between the two: the bag is still inside out.',
       ],
     },
     {
