@@ -14,11 +14,11 @@ export default {
   },
   'bag-bottom': {
     title: 'Base de la bolsa: cuatro formas',
-    blurb: 'Cómo darle a una bolsa una base sobre la que se sostenga. Primero, la base plegada hacia dentro de la tote bag: dos dobleces cosidos a 6 cm del centro y metidos hacia dentro, y las esquinas se forman solas.',
+    blurb: 'Cómo darle a una bolsa una base sobre la que se sostenga, de cuatro formas: la base plegada hacia dentro de la tote bag (dos dobleces cosidos a 6 cm del centro, las esquinas se forman solas), las esquinas recortadas, las esquinas en triángulo y la base aparte. Cada forma está animada, con un consejo para saber cuándo elegirla.',
     pageTitle: 'Cómo coser la base de una bolsa de tela: 4 formas',
-    pageDescription: 'Cómo coser la base de una bolsa de tela: la base plegada de la tote bag (dos dobleces cosidos a 6 cm del doblez central, metidos hacia dentro, costuras laterales de 0,5 cm) se vuelve una base plana de 12 cm. Cada paso animado.',
+    pageDescription: 'Cómo coser la base de una bolsa de tela de cuatro formas: base plegada (dobleces cosidos a 6 cm del centro, base plana de 12 cm), esquinas recortadas, esquinas en triángulo y base aparte. Cada paso animado.',
     heading: 'Cómo hacer la base de una bolsa de tela: cuatro formas',
-    teaser: 'Una base plana para tu bolsa, con esquinas que se forman solas: cada paso animado.',
+    teaser: 'Cuatro formas de dar una base plana a tu bolsa (plegada hacia dentro, esquinas recortadas, esquinas en triángulo y base aparte): cada paso animado.',
     needsIntro: 'Plancha, regla de patchwork, marcador borrable al aire, hilo, clips de costura, la máquina de coser y tijeras de costura: las herramientas que recomiendo personalmente para estos pasos.',
     sections: {
       folded: {

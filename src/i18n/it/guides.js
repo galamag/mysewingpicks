@@ -13,11 +13,11 @@ export default {
   },
   'bag-bottom': {
     title: 'Fondo della borsa: quattro modi',
-    blurb: "Come dare a una borsa un fondo su cui stare in piedi. Prima, il fondo ripiegato all'interno della tote bag: due pieghe cucite a 6 cm dal centro e ripiegate dentro, e gli angoli si formano da soli.",
+    blurb: "Come dare a una borsa un fondo su cui stare in piedi, in quattro modi: il fondo ripiegato all'interno della tote bag (due pieghe cucite a 6 cm dal centro, gli angoli si formano da soli), gli angoli tagliati, gli angoli a triangolo e il fondo separato. Ogni modo è animato, con un consiglio su quando sceglierlo.",
     pageTitle: 'Come cucire il fondo di una borsa di stoffa: 4 modi',
-    pageDescription: 'Come cucire il fondo di una borsa di stoffa: il fondo ripiegato della tote bag (due pieghe cucite a 6 cm dalla piega centrale, ripiegate dentro, cuciture laterali a 0,5 cm) si rivolta in una base piatta di 12 cm. Ogni passo animato.',
+    pageDescription: 'Come cucire il fondo di una borsa di stoffa in quattro modi: fondo ripiegato (pieghe cucite a 6 cm dal centro, base di 12 cm), angoli tagliati, angoli a triangolo e fondo separato. Ogni passo animato.',
     heading: 'Come fare il fondo di una borsa di stoffa: quattro modi',
-    teaser: 'Un fondo piatto per la borsa, con angoli che si formano da soli — ogni passo animato.',
+    teaser: 'Quattro modi per dare un fondo piatto alla borsa — fondo ripiegato, angoli tagliati, angoli a triangolo, fondo separato — ogni passo animato.',
     needsIntro: 'Ferro da stiro, righello da patchwork, penna evanescente, filo, clip per cucito, macchina da cucire e forbici da sarta — gli strumenti che consiglio personalmente per questi passaggi.',
     sections: {
       folded: {

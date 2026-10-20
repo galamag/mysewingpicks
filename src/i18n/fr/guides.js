@@ -14,11 +14,11 @@ export default {
   },
   'bag-bottom': {
     title: 'Fond de sac : quatre méthodes',
-    blurb: "Comment donner à un sac un fond sur lequel il tient debout. D'abord, le fond replié à l'intérieur du tote bag : deux plis piqués à 6 cm du milieu, rentrés à l'intérieur — et les coins se forment tout seuls.",
+    blurb: "Comment donner à un sac un fond sur lequel il tient debout, de quatre façons : le fond replié à l'intérieur du tote bag (deux plis piqués à 6 cm du milieu, les coins se forment tout seuls), les coins découpés, les coins carrés (en triangle) et le fond rapporté. Chaque méthode est animée, avec un conseil pour savoir quand la choisir.",
     pageTitle: 'Tuto fond de sac couture : angles, fond carré et plus',
-    pageDescription: 'Tuto fond de sac couture : le fond replié du tote bag (deux plis piqués à 6 cm du pli central, rentrés, coutures de côté à 0,5 cm) se retourne en une base plate de 12 cm. Chaque étape animée.',
+    pageDescription: 'Tuto fond de sac couture : quatre méthodes — fond replié (plis piqués à 6 cm du milieu, base de 12 cm), coins découpés, coins carrés et fond rapporté. Chaque étape animée.',
     heading: "Faire le fond d'un sac en tissu : quatre méthodes",
-    teaser: 'Un fond de sac plat, avec des coins qui se forment tout seuls — chaque étape animée.',
+    teaser: 'Quatre façons de donner un fond plat à un sac — fond replié, coins découpés, coins carrés, fond rapporté — chaque étape animée.',
     needsIntro: "Un fer à repasser, une règle de patchwork, un stylo effaçable à l'air, du fil, des pinces à tissu, la machine à coudre et des ciseaux de couture — les outils que je recommande personnellement pour ces étapes.",
     sections: {
       folded: {

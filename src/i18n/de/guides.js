@@ -13,11 +13,11 @@ export default {
   },
   'bag-bottom': {
     title: 'Taschenboden: Ecken abnähen und mehr',
-    blurb: 'Wie eine Tasche einen Boden bekommt, auf dem sie steht. Zuerst der eingefaltete Boden der Tote Bag: zwei Bruchkanten, 6 cm neben der Mitte abgesteppt und nach innen eingeschlagen – die Ecken entstehen von selbst.',
+    blurb: 'Wie eine Tasche einen Boden bekommt, auf dem sie steht – auf vier Wegen: der eingefaltete Boden der Tote Bag (zwei Bruchkanten 6 cm neben der Mitte abgesteppt, die Ecken entstehen von selbst), ausgeschnittene Ecken, Ecken abnähen und ein separater Boden. Jeder Weg ist animiert, mit einem Rat, wann du ihn wählst.',
     pageTitle: 'Taschenboden nähen: Ecken abnähen, Boden einnähen & mehr',
-    pageDescription: 'Taschenboden nähen: Der eingefaltete Boden der Tote Bag (zwei Bruchkanten 6 cm neben dem Mittelbruch, eingeschlagen, Seitennähte 0,5 cm) wird gewendet zur flachen, 12 cm breiten Standfläche. Jeder Schritt animiert.',
+    pageDescription: 'Taschenboden nähen auf vier Wegen: eingefalteter Boden (Bruchkanten 6 cm neben der Mitte, 12 cm breite Standfläche), ausgeschnittene Ecken, Ecken abnähen und separater Boden. Jeder Schritt animiert.',
     heading: 'Taschenboden nähen: Ecken abnähen und drei andere Wege',
-    teaser: 'Ein flacher Taschenboden mit Ecken, die von selbst entstehen – jeder Schritt animiert.',
+    teaser: 'Vier Wege zu einem flachen Taschenboden – eingefaltet, ausgeschnittene Ecken, Ecken abnähen, separater Boden – jeder Schritt animiert.',
     needsIntro: 'Bügeleisen, Patchwork-Lineal, selbstlöschender Markierstift, Garn, Stoffklammern, Nähmaschine und Stoffschere – die Werkzeuge, die ich persönlich für diese Schritte empfehle.',
     sections: {
       folded: {

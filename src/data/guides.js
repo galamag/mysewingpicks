@@ -54,19 +54,19 @@ export const guides = [
   },
   {
     // One page, one section per kind of bottom (Vault «Гайды — Дно сумки (спецификация)»), in this order:
-    // folded (the maker's, the tote), cut-out (the maker's, the makeup bag), boxed (public, no numbers), then - still to come - panel.
+    // folded (the maker's, the tote), cut-out (the maker's, the makeup bag), boxed (public, no numbers), panel (public, no numbers).
     // Section numbers: only the maker's (spec 3); `folded` - the tote's 6, 12, 0.5 cm; `cut-out` - the makeup bag's
-    // 23 x 31, 0.5, 3.5 x 2.5 cm and the basket's 60, 20 cm; `boxed` - none at all. Title, h1 and page title: spec 5.1 as approved.
+    // 23 x 31, 0.5, 3.5 x 2.5 cm and the basket's 60, 20 cm; `boxed` and `panel` - none at all. Title, h1 and page title: spec 5.1 as approved.
     // No video (spec 6): "Where it's used" links to the projects instead.
     slug: 'bag-bottom',
     group: 'construction',
     icon: '👜',
     title: 'Bag bottoms: boxed corners and more',
-    blurb: "How to give a bag a bottom it can stand on. First, the tote's folded-in bottom: two folds stitched 6 cm from the centre and tucked in, so the corners form by themselves.",
+    blurb: "How to give a bag a bottom it can stand on, four ways: the tote's folded-in bottom (two folds stitched 6 cm from the centre, so the corners form by themselves), cut-out corners, boxed corners and a separate bottom panel. Each one is animated, with advice on when to choose it.",
     pageTitle: 'How to Sew a Bag Bottom: Boxed Corners and 3 More Ways',
-    pageDescription: "How to sew a bag bottom: the tote's folded-in bottom (two folds stitched 6 cm from the centre crease, tucked in, 0.5 cm side seams) turns out into a flat 12 cm base. Every step animated.",
+    pageDescription: 'How to sew a bag bottom four ways: folded-in (folds stitched 6 cm from the centre, a 12 cm base), cut-out corners, boxed corners and a separate bottom panel. Every step animated.',
     heading: 'How to sew a bag bottom: boxed corners and 3 more ways',
-    teaser: 'A flat bag bottom with corners that form by themselves — every step animated.',
+    teaser: 'Four ways to give a bag a flat bottom — folded in, cut-out corners, boxed corners, a separate panel — every step animated.',
     needsIntro: 'An iron, a quilting ruler, an air-erasable pen, thread, sewing clips, the sewing machine and fabric scissors — the tools I personally recommend for these steps.',
     // "What you'll need" - only what the sections' steps use, in the order they are used.
     needs: ['rowenta-travel-iron', 'quilting-rulers-set', 'sewline-air-erasable-pen', 'hagbou-thread-set', 'soraco-sewing-clips', 'janome-hd2200', 'tailor-scissors'],
