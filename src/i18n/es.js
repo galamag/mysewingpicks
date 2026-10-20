@@ -6,6 +6,8 @@
    decimal comma («0,5 cm»); brands in Latin; «recomiendo personalmente» — never
    «uso / tengo». Amazon phrases (disclosure, content notice) — official translations,
    word for word. */
+import { stepsText } from './steps.js';
+
 export default {
   brand: 'My Sewing Picks',
   ui: {
@@ -133,7 +135,9 @@ export default {
       eyebrow: 'Técnicas de costura · tutorial',
       usedInEyebrow: 'En los proyectos',
       usedInHeading: 'Dónde te sirve',
-      usedInSteps: (projectTitle, from, to) => `${projectTitle}: ${from === to ? `paso ${from}` : `pasos ${from}–${to}`}`,
+      usedInSteps: (projectTitle, steps) => `${projectTitle}: ${stepsText(steps, { one: 'paso', many: 'pasos' })}`,
+      kindsHeading: 'Formas de hacerlo',
+      chooseHeading: 'Cuándo elegirla',
       needsEyebrow: 'Para este tutorial',
       needsHeading: 'Lo que necesitarás',
       videoEyebrow: 'En video',

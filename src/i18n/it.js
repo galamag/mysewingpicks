@@ -5,6 +5,8 @@
    centimetres only, decimal comma («0,5 cm»); brands in Latin; «consiglio
    personalmente» — never «uso». Amazon phrases (ui.disclosure, ui.amazonContentNotice,
    the second sentence of ui.pageDisclosure*) — the official Italian wording, verbatim. */
+import { stepsText } from './steps.js';
+
 export default {
   brand: 'My Sewing Picks',
   ui: {
@@ -132,7 +134,9 @@ export default {
       eyebrow: 'Tecniche di cucito · tutorial',
       usedInEyebrow: 'Nei progetti',
       usedInHeading: 'Dove ti serve',
-      usedInSteps: (projectTitle, from, to) => `${projectTitle}: ${from === to ? `passo ${from}` : `passi ${from}–${to}`}`,
+      usedInSteps: (projectTitle, steps) => `${projectTitle}: ${stepsText(steps, { one: 'passo', many: 'passi' })}`,
+      kindsHeading: 'I modi per farlo',
+      chooseHeading: 'Quando sceglierlo',
       needsEyebrow: 'Per questo tutorial',
       needsHeading: 'Cosa ti serve',
       videoEyebrow: 'Nel video',

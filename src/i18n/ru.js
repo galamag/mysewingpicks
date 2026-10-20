@@ -3,6 +3,8 @@
    the key ends in "Html". Function values keep their parameters ((title) =>, (links) =>).
    Rules: warm first person, «вы»; centimetres only, decimal comma («0,5 см»);
    brands in Latin; «я лично рекомендую» — never «я пользуюсь». */
+import { stepsText } from './steps.js';
+
 export default {
   brand: 'My Sewing Picks',
   ui: {
@@ -130,7 +132,9 @@ export default {
       eyebrow: 'Основы шитья · урок',
       usedInEyebrow: 'В проектах',
       usedInHeading: 'Где пригодится',
-      usedInSteps: (projectTitle, from, to) => `${projectTitle}: ${from === to ? `шаг ${from}` : `шаги ${from}–${to}`}`,
+      usedInSteps: (projectTitle, steps) => `${projectTitle}: ${stepsText(steps, { one: 'шаг', many: 'шаги' })}`,
+      kindsHeading: 'Способы',
+      chooseHeading: 'Когда выбирать',
       needsEyebrow: 'Для этого урока',
       needsHeading: 'Что понадобится',
       videoEyebrow: 'Смотрите, как это делается',

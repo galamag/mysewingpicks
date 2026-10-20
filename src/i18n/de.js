@@ -4,6 +4,8 @@
    Rules: warm first person (the maker is a woman), «du»; centimetres only, decimal
    comma («0,5 cm»); brands in Latin; «ich persönlich empfehle» — never «ich benutze».
    Amazon phrases word for word (spec wave 1, 5.1); per-link marker «(Anzeige)» (5.2). */
+import { stepsText } from './steps.js';
+
 export default {
   brand: 'My Sewing Picks',
   ui: {
@@ -131,7 +133,9 @@ export default {
       eyebrow: 'Nähgrundlagen · Anleitung',
       usedInEyebrow: 'In den Projekten',
       usedInHeading: 'Wo du es brauchst',
-      usedInSteps: (projectTitle, from, to) => `${projectTitle}: ${from === to ? `Schritt ${from}` : `Schritte ${from}–${to}`}`,
+      usedInSteps: (projectTitle, steps) => `${projectTitle}: ${stepsText(steps, { one: 'Schritt', many: 'Schritte' })}`,
+      kindsHeading: 'Die Varianten',
+      chooseHeading: 'Wann du sie wählst',
       needsEyebrow: 'Für diese Anleitung',
       needsHeading: 'Das brauchst du',
       videoEyebrow: 'Im Video',

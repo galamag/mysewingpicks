@@ -2,6 +2,8 @@
    same keys (src/i18n/<lang>.js); a missing or extra key fails the build.
    Values are plain text (Astro escapes them) unless the key ends in "Html".
    Function values keep their parameters in every language ((title) =>, (links) =>). */
+import { stepsText } from './steps.js';
+
 export default {
   brand: 'My Sewing Picks',
   ui: {
@@ -131,14 +133,16 @@ export default {
         patchwork: { title: 'Patchwork & quilting', intro: 'Ways to cut and join fabric into patterns: half-square triangles, flying geese, blocks and quilting.' },
       },
     },
-    // A guide's page (src/pages/[...lang]/guides/[slug].astro). usedInSteps(projectTitle, from, to) — a link to a
-    // project with the steps where the technique is used; videoIntro(projectTitle) — under each project video,
+    // A guide's page (src/pages/[...lang]/guides/[slug].astro). usedInSteps(projectTitle, steps) — a link to a
+    // project with the steps where the technique is used (a run 3–7, a gap 1, 3, one step 10); videoIntro(projectTitle) — under each project video,
     // which starts where the technique does.
     guide: {
       eyebrow: 'Sewing basics · guide',
       usedInEyebrow: 'In the projects',
       usedInHeading: "Where it's used",
-      usedInSteps: (projectTitle, from, to) => `${projectTitle}: ${from === to ? `step ${from}` : `steps ${from}–${to}`}`,
+      usedInSteps: (projectTitle, steps) => `${projectTitle}: ${stepsText(steps, { one: 'step', many: 'steps' })}`,
+      kindsHeading: 'Ways to make it',
+      chooseHeading: 'When to choose it',
       needsEyebrow: 'For this guide',
       needsHeading: "What you'll need",
       videoEyebrow: 'Watch it done',

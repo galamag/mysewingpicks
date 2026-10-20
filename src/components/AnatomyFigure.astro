@@ -22,8 +22,9 @@ import { figure } from '../lib/anatomy/figures.js';
 import { products } from '../data/products.js';
 import { amazonUrl } from '../data/amazon.js';
 import { guidesForStep } from '../data/guides.js';
-import { t, pageUrl } from '../i18n/index.js';
-import { productText, guideText } from '../i18n/content.js';
+import { t } from '../i18n/index.js';
+import { productText } from '../i18n/content.js';
+import { howItsDoneLink } from '../lib/guidePage.js';
 
 const { model: slug, lang } = Astro.props;
 const { model, text } = figure(slug);
@@ -40,10 +41,7 @@ const uses = STEPS.map((s, k) => (s.uses ?? []).map((id) => {
 // "How it's done ->": the guides this step's technique is explained in (none on most steps, and none on
 // a guide's own figure). Rendered "How it's done — <title> →": a dash, because the titles hold a colon; the
 // arrow is decoration (aria-hidden), so a screen reader does not read it out.
-const guideLinks = STEPS.map((_, k) => guidesForStep(slug, k).map(({ guide: g }) => ({
-  text: `${ui.howItsDone} — ${guideText(g, lang).title}`,
-  url: pageUrl(`guide/${g.slug}`, lang),
-})));
+const guideLinks = STEPS.map((_, k) => guidesForStep(slug, k).map((pair) => howItsDoneLink(pair, lang)));
 const allTitleId = `${slug}-all-title`;
 ---
 <div class="anatomy" data-anatomy={slug} data-lang={lang}>

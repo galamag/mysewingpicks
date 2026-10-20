@@ -2,7 +2,7 @@
 // from each guide's `usedIn` (src/data/guides.js); the guide page lists the same pairs ("Where it's used").
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { guides, guideBySlug, guidesForStep } from '../../src/data/guides.js';
+import { guides, guideBySlug, guideSections, guidesForStep } from '../../src/data/guides.js';
 
 const SLUG = 'line-a-bag';
 const slugs = (list) => list.map((x) => x.guide.slug);
@@ -24,7 +24,7 @@ test('an unknown figure has no guides', () => {
 test("a guide's own figure never links to itself", () => {
   for (const g of guides) {
     for (let k = 0; k <= 20; k++) {
-      assert.ok(!slugs(guidesForStep(g.figure, k)).includes(g.slug), `${g.slug}: self-link at step ${k}`);
+      for (const s of guideSections(g)) assert.ok(!slugs(guidesForStep(s.figure, k)).includes(g.slug), `${g.slug}: self-link at step ${k}`);
     }
   }
   assert.deepEqual(guidesForStep(SLUG, 1), []);

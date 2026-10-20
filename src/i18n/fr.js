@@ -7,6 +7,8 @@
    Typography: straight apostrophes (as in Amazon's official phrases); a NON-BREAKING
    space (U+00A0, looks like a plain space here) before : ; ! ? and », after «, and
    between a number and its unit (« 0,5 cm »). Keep it when editing a phrase. */
+import { stepsText } from './steps.js';
+
 export default {
   brand: 'My Sewing Picks',
   ui: {
@@ -134,7 +136,9 @@ export default {
       eyebrow: 'Techniques de couture · tuto',
       usedInEyebrow: 'Dans les projets',
       usedInHeading: "Où l'utiliser",
-      usedInSteps: (projectTitle, from, to) => `${projectTitle} : ${from === to ? `étape ${from}` : `étapes ${from} à ${to}`}`,
+      usedInSteps: (projectTitle, steps) => `${projectTitle} : ${stepsText(steps, { one: 'étape', many: 'étapes', range: ' à ' })}`,
+      kindsHeading: 'Les façons de le faire',
+      chooseHeading: 'Quand la choisir',
       needsEyebrow: 'Pour ce tuto',
       needsHeading: "Ce qu'il vous faut",
       videoEyebrow: 'En vidéo',

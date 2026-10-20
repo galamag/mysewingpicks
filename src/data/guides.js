@@ -66,6 +66,8 @@ export function validateGuides(list) {
         if (typeof s.id !== 'string' || !/^[a-z]+(?:-[a-z]+)*$/.test(s.id)) throw new Error(`guides.js: "${g.slug}" has a section id "${s.id}" that is not [a-z-]+`);
         if (seen.has(s.id)) throw new Error(`guides.js: "${g.slug}" has the section id "${s.id}" twice`);
         seen.add(s.id);
+        if (typeof s.figure !== 'string' || !s.figure) throw new Error(`guides.js: "${g.slug}" section "${s.id}" needs a figure (a slug in figures.js)`);
+        if (!Array.isArray(s.usedIn)) throw new Error(`guides.js: "${g.slug}" section "${s.id}" needs a usedIn list`);
       }
     } else if (!g.figure || !g.usedIn) {
       throw new Error(`guides.js: "${g.slug}" needs either figure + usedIn or sections`);

@@ -90,3 +90,69 @@ test('guideText gives the sections on the language, keeping the English data', (
   assert.equal(guideText(g, 'en'), g);
   assert.equal(guideText(g, 'de').sections, undefined);
 });
+
+// validateGuides also checks each section's own figure and usedIn.
+test('validateGuides: a section needs a figure (non-empty string) and a usedIn list', () => {
+  assert.throws(() => validateGuides([multi('d', [{ id: 'a', usedIn: [] }])]), /"a".*figure|figure.*"a"/);
+  assert.throws(() => validateGuides([multi('d', [sec('a', '', [])])]), /figure/);
+  assert.throws(() => validateGuides([multi('d', [sec('a', 7, [])])]), /figure/);
+  assert.throws(() => validateGuides([multi('d', [{ id: 'a', figure: 'x' }])]), /usedIn/);
+  assert.throws(() => validateGuides([multi('d', [sec('a', 'x', 'nope')])]), /usedIn/);
+});
+
+// "Where it's used" wording: usedInSteps(projectTitle, steps) in every language.
+import { t } from '../../src/i18n/index.js';
+import { howItsDoneLink, sectionUrl } from '../../src/lib/guidePage.js';
+
+const steps = (lang, list) => t(lang).pages.guide.usedInSteps('P', list);
+
+test('usedInSteps: a run is a range, a gap is a list, one step is singular (en, ru)', () => {
+  assert.equal(steps('en', [3, 4, 5, 6, 7]), 'P: steps 3–7');
+  assert.equal(steps('en', [1, 3]), 'P: steps 1, 3');
+  assert.equal(steps('en', [10]), 'P: step 10');
+  assert.equal(steps('ru', [3, 4, 5, 6, 7]), 'P: шаги 3–7');
+  assert.equal(steps('ru', [1, 3]), 'P: шаги 1, 3');
+  assert.equal(steps('ru', [10]), 'P: шаг 10');
+});
+
+test('usedInSteps: every language gives the same three shapes, and order / repeats do not matter', () => {
+  for (const lang of ['en', 'ru', 'de', 'fr', 'it', 'es']) {
+    assert.equal(steps(lang, [7, 5, 6]), steps(lang, [5, 6, 7]), lang);
+    assert.equal(steps(lang, [3, 3, 4]), steps(lang, [3, 4]), lang);
+    const single = steps(lang, [10]);
+    assert.match(single, /^P[\s ]?: \S+ 10$/, lang);
+    assert.match(steps(lang, [1, 3]), /1, 3$/, lang);
+    assert.ok(!/1[–-]3|1 à 3/.test(steps(lang, [1, 3])), `${lang}: 1 and 3 are not a range`);
+    assert.match(steps(lang, [2, 3, 4]), /2(–| à )4$/, lang);
+    assert.notEqual(single.replace(' 10', ''), steps(lang, [1, 3]).replace(' 1, 3', ''), `${lang}: singular differs from plural`);
+  }
+});
+
+test('the other new page words exist in every language', () => {
+  for (const lang of ['en', 'ru', 'de', 'fr', 'it', 'es']) {
+    const g = t(lang).pages.guide;
+    for (const k of ['kindsHeading', 'chooseHeading']) assert.ok(typeof g[k] === 'string' && g[k].trim(), `${lang}.${k}`);
+  }
+});
+
+// "How it's done" link: the section's anchor on the same language's guide page.
+const cut = { id: 'cut-out', title: 'Cut-out corners' };
+const guideStub = { slug: 'line-a-bag', title: 'Lining' };
+const guideTr = { slug: 'line-a-bag', title: 'Подкладка', sections: [{ id: 'cut-out', title: 'Вырезанные уголки' }] };
+
+test('sectionUrl: language prefix and #anchor, none for a guide without sections', () => {
+  assert.equal(sectionUrl('line-a-bag', 'cut-out', 'ru'), '/ru/guides/line-a-bag.html#cut-out');
+  assert.equal(sectionUrl('line-a-bag', 'cut-out', 'en'), '/guides/line-a-bag.html#cut-out');
+  assert.equal(sectionUrl('line-a-bag', null, 'de'), '/de/guides/line-a-bag.html');
+});
+
+test("howItsDoneLink: section title and anchor; guide title and no # without a section", () => {
+  const withSection = howItsDoneLink({ guide: guideStub, section: { ...cut } }, 'ru', guideTr);
+  assert.equal(withSection.url, '/ru/guides/line-a-bag.html#cut-out');
+  assert.equal(withSection.text, `${t('ru').ui.howItsDone} — Вырезанные уголки`);
+  const plain = howItsDoneLink({ guide: guideStub, section: { id: null } }, 'ru', guideTr);
+  assert.equal(plain.url, '/ru/guides/line-a-bag.html');
+  assert.equal(plain.text, `${t('ru').ui.howItsDone} — Подкладка`);
+  const en = howItsDoneLink({ guide: guideStub, section: { id: null } }, 'en', guideStub);
+  assert.equal(en.url, '/guides/line-a-bag.html');
+});

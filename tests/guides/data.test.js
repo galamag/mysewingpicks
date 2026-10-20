@@ -2,7 +2,7 @@
 // content.js), addresses (PAGES in src/i18n/index.js). Spec: Vault «Гайды — спецификация», 3.1, 4–6, 10.1.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { guides, GUIDE_GROUPS, liveGroups, guideBySlug } from '../../src/data/guides.js';
+import { guides, GUIDE_GROUPS, liveGroups, guideBySlug, guideSections } from '../../src/data/guides.js';
 import { projects, projectBySlug } from '../../src/data/projects.js';
 import { products } from '../../src/data/products.js';
 import { figure } from '../../src/lib/anatomy/figures.js';
@@ -38,7 +38,7 @@ test('needs are catalog products', () => {
 
 test('usedIn points at real project steps', () => {
   for (const g of guides) {
-    for (const u of g.usedIn) {
+    for (const u of guideSections(g).flatMap((s) => s.usedIn)) {
       assert.ok(projects.some((p) => p.slug === u.project), `${g.slug}: unknown project "${u.project}"`);
       const last = figure(u.project).model.STEPS.length - 1;
       assert.ok(u.steps.length > 0, `${g.slug} → ${u.project}: no steps`);
