@@ -18,12 +18,17 @@ export default {
     pageDescription: 'Come cucire il fondo di una borsa di stoffa: il fondo ripiegato della tote bag (due pieghe cucite a 6 cm dalla piega centrale, ripiegate dentro, cuciture laterali a 0,5 cm) si rivolta in una base piatta di 12 cm. Ogni passo animato.',
     heading: 'Come fare il fondo di una borsa di stoffa: quattro modi',
     teaser: 'Un fondo piatto per la borsa, con angoli che si formano da soli — ogni passo animato.',
-    needsIntro: 'Ferro da stiro, righello da patchwork, penna evanescente, filo, clip per cucito e macchina da cucire — gli strumenti che consiglio personalmente per questi passaggi.',
+    needsIntro: 'Ferro da stiro, righello da patchwork, penna evanescente, filo, clip per cucito, macchina da cucire e forbici da sarta — gli strumenti che consiglio personalmente per questi passaggi.',
     sections: {
       folded: {
         title: "Fondo ripiegato all'interno",
         line: 'Due pieghe cucite, ripiegate dentro prima delle cuciture laterali: gli angoli si formano da soli.',
         choose: 'Quando la borsa si taglia in un solo pezzo, piegato a metà per il largo, e vuoi un fondo piatto senza cuciture agli angoli: gli angoli si formano da soli quando rivolti la borsa.',
+      },
+      'cut-out': {
+        title: 'Angoli tagliati',
+        line: "Da ogni angolo in basso si taglia un pezzetto, poi l'angolo si apre e si cuce di traverso.",
+        choose: "Quando la borsa è piegata sul fondo, cuci prima i lati e vuoi un fondo piatto: con gli angoli tagliati le cuciture si incontrano con precisione, e va bene anche per i tessuti spessi. Nel cestino di stoffa gli angoli si tagliano già al momento del taglio: da un quadrato di 60 × 60 cm, un quadrato di 20 × 20 cm da ogni angolo.",
       },
     },
   },

@@ -15,6 +15,8 @@ import * as cosmetic from './cosmetic.js';
 import { cosmeticText } from './cosmetic.text.js';
 import * as bottomFolded from './bottom-folded.js';
 import { foldedText } from './bottom-folded.text.js';
+import * as bottomCutout from './bottom-cutout.js';
+import { cutoutText } from './bottom-cutout.text.js';
 
 const FIGURES = {
   'tote-bag': { model: tote, text: toteText },
@@ -22,6 +24,7 @@ const FIGURES = {
   'line-a-bag': { model: lining, text: liningText }, // the guide "Lining a bag" (/guides/line-a-bag)
   'cosmetic-bag': { model: cosmetic, text: cosmeticText },
   'bag-bottom-folded': { model: bottomFolded, text: foldedText }, // the guide "Bag bottoms", section #folded
+  'bag-bottom-cut-out': { model: bottomCutout, text: cutoutText }, // the guide "Bag bottoms", section #cut-out
 };
 
 /** slug → { model, text(lang) } */

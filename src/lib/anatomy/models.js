@@ -11,4 +11,5 @@ export const MODELS = {
   'line-a-bag': { model: () => import('./lining.js'), texts: import.meta.glob('./lining.??.js') },
   'cosmetic-bag': { model: () => import('./cosmetic.js'), texts: import.meta.glob('./cosmetic.??.js') },
   'bag-bottom-folded': { model: () => import('./bottom-folded.js'), texts: import.meta.glob('./bottom-folded.??.js') },
+  'bag-bottom-cut-out': { model: () => import('./bottom-cutout.js'), texts: import.meta.glob('./bottom-cutout.??.js') },
 };

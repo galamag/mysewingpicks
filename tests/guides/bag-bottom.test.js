@@ -235,13 +235,13 @@ test('title, h1, page title and section name are the approved strings (spec 5.1)
   }
 });
 
-test('the guide: construction, one section `folded` on the tote steps 3–7, no video', () => {
+test('the guide: construction, sections `folded` (tote steps 3–7) then `cut-out`, no video', () => {
   const g = guideBySlug(SLUG);
   assert.equal(g.group, 'construction');
   assert.equal(g.figure, undefined);
   assert.equal(g.usedIn, undefined);
   assert.equal(g.video, undefined);
-  assert.deepEqual(g.sections.map((s) => [s.id, s.figure]), [['folded', KEY]]);
+  assert.deepEqual(g.sections.slice(0, 2).map((s) => [s.id, s.figure]), [['folded', KEY], ['cut-out', 'bag-bottom-cut-out']]);
   assert.deepEqual(g.sections[0].usedIn, [{ project: 'tote-bag', steps: [3, 4, 5, 6, 7] }]);
   assert.ok(typeof g.icon === 'string' && g.icon.trim());
 });

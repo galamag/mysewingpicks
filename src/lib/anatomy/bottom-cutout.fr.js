@@ -1,0 +1,106 @@
+/* Coins découpés (tuto « Fond de sac », section `cut-out`) — textes français. Même forme que
+   l'anglais (bottom-cutout.text.js le vérifie). Centimètres seulement, virgule décimale, espace
+   insécable avant l'unité et avant : ; ! ? ; seulement les chiffres de la couturière — 23 × 31, 0,5 et
+   3,5 × 2,5 cm (la trousse). Vouvoiement. */
+export default {
+  ui: {
+    fig: 'Fig. 2',
+    title: 'Coins découpés',
+    svgLabel: "Un dessin isométrique pour faire des coins découpés : la pièce pliée en deux et cousue sur les côtés, un morceau de 3,5 × 2,5 cm découpé dans chaque coin du bas, chaque coin ouvert pour que la couture de côté tombe sur la pliure du fond et cousu en travers, le sac retourné, avec un fond plat.",
+    prev: 'Étape précédente',
+    dot: (i, title) => (i ? `Étape ${i} : ${title}` : title),
+    start: 'Étapes →',
+    next: 'Suivant →',
+    overview: "Vue d'ensemble",
+    stepOf: (k, n) => `Étape ${k} sur ${n}`,
+    machine: (stitch) => `Machine : ${stitch.toLowerCase()}`,
+    inThisStep: 'Pour cette étape',
+    takeApart: 'Remettre debout',
+    putTogether: 'Voir le dessous',
+    replay: '↻ Revoir',
+    parts: 'Pièces',
+    allSteps: 'Instructions étape par étape',
+    endView: 'VUE EN COUPE',
+  },
+  stitches: { straight: 'Point droit' },
+  labels: {
+    cm23: '23 cm',
+    cm31: '31 cm',
+    rightSides: 'endroit contre endroit',
+    foldBottom: 'la pliure, c\'est le fond',
+    seam05: 'couture 0,5 cm',
+    cm35: '3,5 cm',
+    cm25: '2,5 cm',
+    cutBoth: 'couper les deux épaisseurs',
+    seamOnFold: 'couture sur la pliure',
+    sewAcross: 'coudre en travers',
+    bothCorners: 'les deux coins',
+    turnOut: "retourner sur l'endroit",
+    flatBottom: 'un fond plat',
+    cornerSeam: 'couture du coin',
+  },
+  steps: [
+    {
+      title: 'Coins découpés',
+      text: "Le fond de la trousse, le sac à l'envers : un fond plat, avec une courte couture en travers à chaque bout, là où la couture de côté rejoint la pliure du fond. Touchez le sac pour le remettre debout.",
+    },
+    {
+      title: 'Plier en deux',
+      text: "La trousse, c'est une seule pièce de 23 × 31 cm. Pliez-la en deux dans la largeur, endroit contre endroit : la pliure, c'est le fond.",
+      details: [
+        "Posez la pièce de 23 × 31 cm, l'endroit dessus.",
+        "Pliez-la en deux dans la largeur, endroit contre endroit. La pliure est le fond du sac : il n'y a pas de couture à cet endroit.",
+        'La doublure de la trousse est la même pièce de 23 × 31 cm et se coud de la même façon.',
+      ],
+    },
+    {
+      title: 'Coudre les côtés',
+      text: "Cousez les deux côtés à 0,5 cm, du haut jusqu'à la pliure.",
+      details: [
+        'Maintenez les côtés avec des pinces.',
+        "Cousez les deux coutures de côté à 0,5 cm du bord, jusqu'à la pliure.",
+        "Sur la trousse, la fermeture éclair est cousue avant, et une couture de côté de la doublure garde une ouverture pour retourner ; les coins se font de la même façon.",
+      ],
+    },
+    {
+      title: 'Découper les coins',
+      text: 'Dans chaque coin du bas, découpez un morceau de 3,5 × 2,5 cm : 3,5 cm le long du fond, 2,5 cm le long de la couture de côté.',
+      details: [
+        'Tracez dans chaque coin du bas un rectangle de 3,5 × 2,5 cm : 3,5 cm le long de la pliure du fond, 2,5 cm en remontant la couture de côté.',
+        'Découpez-le dans les deux épaisseurs.',
+        "Sur la trousse, cela fait quatre coins : deux sur l'extérieur, deux sur la doublure.",
+      ],
+    },
+    {
+      title: 'Ouvrir le coin',
+      text: 'Ouvrez chaque coin découpé et aplatissez-le pour que la couture de côté tombe sur la pliure du fond : les bords coupés forment une seule ligne droite.',
+      details: [
+        "Ouvrez le coin découpé en écartant le devant et le dos.",
+        'Aplatissez-le pour que la couture de côté tombe pile sur la pliure du fond.',
+        'Les bords coupés forment maintenant une seule ligne droite en travers du coin.',
+      ],
+    },
+    {
+      title: 'Coudre en travers',
+      text: 'Cousez chaque coin en travers, à 0,5 cm du bord coupé.',
+      details: [
+        'Cousez en travers du coin, à 0,5 cm du bord.',
+        "Faites l'autre coin de la même façon — et, sur la trousse, les deux coins de la doublure aussi.",
+      ],
+    },
+    {
+      title: 'Retourner',
+      text: "Retournez le sac sur l'endroit : il a un fond plat, avec une courte couture de coin à chaque bout.",
+      details: [
+        "Retournez le sac sur l'endroit (la trousse se retourne par l'ouverture de la doublure) et faites bien sortir les coins.",
+        'Le fond est plat. À chaque bout, la couture de côté arrive au milieu de la couture du coin.',
+      ],
+    },
+  ],
+  legend: [
+    { title: 'Fond', text: 'plat · entre les deux coutures de coin' },
+    { title: 'Pliure du fond', text: 'la pièce de 23 × 31 cm pliée en deux · pas de couture sur le fond' },
+    { title: 'Coutures de coin', text: 'cousues en travers à 0,5 cm du bord, après avoir découpé un morceau de 3,5 × 2,5 cm dans le coin' },
+    { title: 'Coutures de côté', text: '0,5 cm · chacune arrive au milieu d\'une couture de coin' },
+  ],
+};

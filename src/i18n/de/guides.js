@@ -18,12 +18,17 @@ export default {
     pageDescription: 'Taschenboden nähen: Der eingefaltete Boden der Tote Bag (zwei Bruchkanten 6 cm neben dem Mittelbruch, eingeschlagen, Seitennähte 0,5 cm) wird gewendet zur flachen, 12 cm breiten Standfläche. Jeder Schritt animiert.',
     heading: 'Taschenboden nähen: Ecken abnähen und drei andere Wege',
     teaser: 'Ein flacher Taschenboden mit Ecken, die von selbst entstehen – jeder Schritt animiert.',
-    needsIntro: 'Bügeleisen, Patchwork-Lineal, selbstlöschender Markierstift, Garn, Stoffklammern und Nähmaschine – die Werkzeuge, die ich persönlich für diese Schritte empfehle.',
+    needsIntro: 'Bügeleisen, Patchwork-Lineal, selbstlöschender Markierstift, Garn, Stoffklammern, Nähmaschine und Stoffschere – die Werkzeuge, die ich persönlich für diese Schritte empfehle.',
     sections: {
       folded: {
         title: 'Eingefalteter Boden',
         line: 'Zwei abgesteppte Bruchkanten, vor den Seitennähten nach innen eingeschlagen – die Ecken entstehen von selbst.',
         choose: 'Wenn die Tasche aus einem Stück zugeschnitten und quer in der Mitte gefaltet wird und du einen flachen Boden ohne Eckennähte möchtest: Die Ecken entstehen beim Wenden von selbst.',
+      },
+      'cut-out': {
+        title: 'Ausgeschnittene Ecken',
+        line: 'Aus jeder unteren Ecke wird ein kleines Stück ausgeschnitten, dann wird die Ecke aufgefaltet und quer abgenäht.',
+        choose: 'Wenn die Tasche unten gefaltet ist, zuerst die Seiten genäht werden und du einen flachen Boden möchtest: Mit ausgeschnittenen Ecken treffen die Nähte sauber aufeinander, und es eignet sich auch für dickere Stoffe. Beim Stoffkorb werden die Ecken gleich beim Zuschneiden ausgeschnitten: aus einem Quadrat von 60 × 60 cm an jeder Ecke ein Quadrat von 20 × 20 cm.',
       },
     },
   },

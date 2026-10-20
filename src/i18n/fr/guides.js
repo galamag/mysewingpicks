@@ -19,12 +19,17 @@ export default {
     pageDescription: 'Tuto fond de sac couture : le fond replié du tote bag (deux plis piqués à 6 cm du pli central, rentrés, coutures de côté à 0,5 cm) se retourne en une base plate de 12 cm. Chaque étape animée.',
     heading: "Faire le fond d'un sac en tissu : quatre méthodes",
     teaser: 'Un fond de sac plat, avec des coins qui se forment tout seuls — chaque étape animée.',
-    needsIntro: "Un fer à repasser, une règle de patchwork, un stylo effaçable à l'air, du fil, des pinces à tissu et la machine à coudre — les outils que je recommande personnellement pour ces étapes.",
+    needsIntro: "Un fer à repasser, une règle de patchwork, un stylo effaçable à l'air, du fil, des pinces à tissu, la machine à coudre et des ciseaux de couture — les outils que je recommande personnellement pour ces étapes.",
     sections: {
       folded: {
         title: "Fond replié à l'intérieur",
         line: 'Deux plis piqués, rentrés avant les coutures de côté : les coins se forment tout seuls.',
         choose: "Quand le sac est coupé d'une seule pièce, pliée en deux en travers, et que vous voulez un fond plat sans couture d'angle : les coins se forment tout seuls quand on retourne le sac.",
+      },
+      'cut-out': {
+        title: 'Coins découpés',
+        line: 'Un petit morceau découpé dans chaque coin du bas, puis le coin ouvert et cousu en travers.',
+        choose: "Quand le sac est plié au fond, que vous cousez d'abord les côtés et que vous voulez un fond plat : avec les coins découpés, les coutures se rejoignent proprement, et la méthode convient aussi aux tissus épais. Sur la panière en tissu, les coins sont découpés dès la coupe : dans un carré de 60 × 60 cm, un carré de 20 × 20 cm à chaque coin.",
       },
     },
   },
