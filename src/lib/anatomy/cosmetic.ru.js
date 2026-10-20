@@ -37,7 +37,7 @@ export default {
     paperTemplate: 'шаблон из бумаги',
     cutInHalf: 'разрезать пополам',
     twoHalves: 'два полукруга',
-    ironOn: 'приутюжить',
+    ironOn: 'приклеить утюгом',
     rightSides: 'лицом к лицу',
     alongEdge: 'шить по краю',
     makeTwo: 'сделать два',

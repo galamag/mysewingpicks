@@ -320,7 +320,7 @@ p { margin: 0 0 1em; }
 .category-card--tools .category-card__icon { background: rgba(156, 175, 136, 0.25); }
 .category-card--fabrics .category-card__icon { background: rgba(192, 138, 135, 0.25); }
 .category-card--setup .category-card__icon { background: rgba(212, 160, 90, 0.18); }
-.category-card h3 { font-size: 1.4rem; }
+.category-card h3 { font-size: clamp(1.2rem, 2.4vw, 1.4rem); hyphens: auto; } /* three narrow columns at 761–1024: a long word (de «Kosmetiktasche») still fits */
 .category-card p { color: var(--ink-soft); margin-bottom: 0.8em; }
 .category-card__more { font-weight: 700; color: var(--rose-deep); }
 
