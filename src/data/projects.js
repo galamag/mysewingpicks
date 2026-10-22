@@ -182,6 +182,66 @@ export const projects = [
       'janome-1522rd',
     ],
   },
+  {
+    // The maker's numbers: Vault «Анатомия изделий — Мини-сумочка для телефона». The video is on her
+    // channel Cozy Scraps. The printed cotton for the outer and the chain are named in needsIntro,
+    // without a link (Galamat, 2026-10-23); there is no chain in the video. Never the finished size.
+    slug: 'phone-pouch',
+    title: 'A phone pouch with a flap',
+    blurb: 'A small lined pouch for a phone, money and cards: one T of two pieces folds into three pockets, a flap with a snap and two little ears. Watch it come together step by step.',
+    pageTitle: 'How to Sew a Lined Phone Pouch with Flap: Cutting Sizes',
+    pageDescription: 'Cutting sizes for a phone pouch with a flap: outer and lining 57 × 19 cm and 31 × 13 cm, two 5 × 5 cm squares for the ears, 0.5 cm seams. Every step animated.',
+    heading: 'How to sew a small phone bag with a flap and inner pockets',
+    teaser: 'Two pieces sewn into a T, two lines of stitching — and they fold into three pockets: every fold, animated.',
+    videoTitle: 'A phone pouch with three pockets',
+    videoIntro: 'The whole pouch, sewn start to finish on my channel Cozy Scraps.',
+    needsIntro: 'Printed cotton for the outer, cotton for the lining, light fusible interfacing, thread, a plastic snap — and the tools I personally recommend for cutting, pressing and sewing it. For carrying it, any chain or strap with clasps fits the ears; there is none in the video.',
+    faq: [
+      {
+        q: 'What size should I cut the fabric for a phone pouch?',
+        a: 'For this pouch you cut two pieces of printed cotton — a long piece 57 × 19 cm (22½ × 7½ in) and a flap piece 31 × 13 cm (12¼ × 5⅛ in) — the same two of lining, the same two of fusible interfacing for the outer, and two 5 × 5 cm (2 in) squares for the ears. Every seam is 0.5 cm (³⁄₁₆ in). The cutting diagram below shows it all.',
+      },
+      {
+        q: 'Do I need interfacing for a phone pouch?',
+        a: 'This one has light fusible interfacing on the two outer pieces only, cut the same sizes — 57 × 19 cm and 31 × 13 cm — and ironed onto the wrong side. The lining has none.',
+      },
+      {
+        q: 'How do you make the pockets inside?',
+        a: 'Fold the topstitched T in half across the long piece, lining inside, and sew two lines through both halves, 11 cm (4⅜ in) and 22 cm (8⅝ in) from the fold. Open it out: the seams go to the middle and the long piece folds like an accordion into three pockets — the phone next to the back, money in the middle, cards at the front. The flap piece goes round the bottom, so its fold closes every pocket.',
+      },
+      {
+        q: 'Where do you leave the opening to turn it?',
+        a: "In the middle of the long piece's long edge, opposite the flap piece: leave 6 cm (2⅜ in) unsewn when you sew the two Ts together. Turn it right side out through the opening; the topstitching 0.5 cm (³⁄₁₆ in) from the edge all round closes it.",
+      },
+      {
+        q: 'How do you put a plastic snap on the flap?',
+        a: "Set one half in the middle of the flap's round end, on the line of topstitching. Fold the flap down, mark where the snap lands on the front and set the other half there.",
+      },
+      {
+        q: 'How do you make loops for a strap or chain?',
+        a: 'From two 5 × 5 cm (2 in) squares: fold each like a tote strap — in half, both edges to the fold, in half again — and then in half into a loop. Slip them into the sides near the top, between the back and the pockets, and stitch the sides right on the edge. There is no strap in the video; a chain or a strap with clasps fits the ears.',
+      },
+    ],
+    icon: '📱',
+    video: 'H4oTNTlq6bg',
+    // "What you'll need" — fabric first, then tools in the order they are used. The printed outer
+    // cotton and a chain: in needsIntro, no link (decision 11.3–11.4 of the spec).
+    needs: [
+      'barcelonetta-broadcloth',
+      'plantional-lightweight-interfacing',
+      'hagbou-thread-set',
+      'olfa-rotary-cutter',
+      'olfa-cutting-mat',
+      'quilting-rulers-set',
+      'ibayam-tape-measures',
+      'tailor-scissors',
+      'sewline-air-erasable-pen',
+      'rowenta-travel-iron',
+      'soraco-sewing-clips',
+      'kamtop-snap-pliers-kit',
+      'janome-1522rd',
+    ],
+  },
 ];
 
 export const projectBySlug = (slug) => {

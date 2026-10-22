@@ -27,7 +27,7 @@ const items = projects.map((p) => projectText(p, lang));
         <!-- The project room: a finished item opens its project page (no JS needed). -->
         <Room room="projects" lang={lang} />
 
-        <div class={`category-grid${items.length === 1 ? ' category-grid--single' : items.length === 2 ? ' category-grid--pair' : ''}`}>
+        <div class={`category-grid${items.length === 1 ? ' category-grid--single' : items.length === 2 || items.length === 4 ? ' category-grid--pair' : ''}`}>
           {items.map((p) => (
             <a class="category-card category-card--fabrics" href={pageUrl(`project/${p.slug}`, lang)}>
               <div class="category-card__icon" aria-hidden="true">{p.icon}</div>

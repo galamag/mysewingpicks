@@ -13,7 +13,7 @@ const lang = langOf(Astro.params);
 const { brand, ui, pages: { home: text } } = t(lang);
 const sewAlong = projects.map((p) => projectText(p, lang));
 const guideCards = guides.map((g) => guideText(g, lang));
-const gridClass = (n) => `category-grid${n === 1 ? ' category-grid--single' : n === 2 ? ' category-grid--pair' : ''}`;
+const gridClass = (n) => `category-grid${n === 1 ? ' category-grid--single' : n === 2 || n === 4 ? ' category-grid--pair' : ''}`;
 
 const youtube = 'https://www.youtube.com/channel/UCbsWzrIcuaQQSdWRqh3FTmg';
 ---

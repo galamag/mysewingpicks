@@ -112,4 +112,41 @@ export default {
       },
     ],
   },
+  'phone-pouch': {
+    title: 'Handytasche mit Klappe',
+    blurb: 'Eine kleine gefütterte Tasche für Handy, Geld und Karten: Ein T aus zwei Teilen faltet sich zu drei Fächern, dazu eine Klappe mit Druckknopf und zwei kleine Schlaufen. Sieh Schritt für Schritt zu, wie sie entsteht.',
+    pageTitle: 'Handytasche nähen mit Klappe und Fächern – Zuschnittmaße',
+    pageDescription: 'Zuschnittmaße für eine Handytasche mit Klappe: Außenstoff und Futter 57 × 19 cm und 31 × 13 cm, zwei Quadrate 5 × 5 cm für die Schlaufen, Nähte 0,5 cm. Jeder Schritt animiert.',
+    heading: 'Kleine Handytasche mit Klappe und Fächern nähen',
+    teaser: 'Zwei Teile zu einem T genäht, zwei Nähte – und sie falten sich zu drei Fächern: jede Falte animiert.',
+    videoTitle: 'Handytasche mit drei Fächern',
+    videoIntro: 'Die ganze Tasche, von Anfang bis Ende genäht – auf meinem Kanal Cozy Scraps.',
+    needsIntro: 'Bedruckte Baumwolle für außen, Baumwolle für das Futter, leichte Bügeleinlage, Garn, ein Kunststoff-Druckknopf – und die Werkzeuge, die ich persönlich zum Zuschneiden, Bügeln und Nähen empfehle. Zum Tragen passt jede Kette oder jeder Riemen mit Karabinern an die Schlaufen; im Video gibt es keinen.',
+    faq: [
+      {
+        q: 'Welche Zuschnittmaße brauche ich für eine Handytasche?',
+        a: 'Für diese Tasche schneidest du aus bedruckter Baumwolle zwei Teile zu – ein langes Teil 57 × 19 cm und ein Klappenteil 31 × 13 cm –, dieselben zwei aus Futterstoff und dieselben zwei aus Bügeleinlage für außen, dazu zwei Quadrate 5 × 5 cm für die Schlaufen. Alle Nähte sind 0,5 cm. Der Zuschnittplan unten zeigt alles.',
+      },
+      {
+        q: 'Braucht eine Handytasche Bügeleinlage?',
+        a: 'Diese hat leichte Bügeleinlage nur auf den beiden Außenteilen, in denselben Maßen – 57 × 19 cm und 31 × 13 cm – auf die linke Seite gebügelt. Das Futter hat keine.',
+      },
+      {
+        q: 'Wie nähe ich die Fächer innen?',
+        a: 'Falte das abgesteppte T quer über das lange Teil zur Hälfte, Futter innen, und nähe zwei Linien durch beide Hälften, 11 cm und 22 cm vom Bruch. Klapp es auf: Die Nähte rutschen in die Mitte, und das lange Teil faltet sich wie eine Ziehharmonika zu drei Fächern – das Handy an der Rückseite, Geld in der Mitte, Karten vorn. Das Klappenteil führt um den Boden, sein Bruch schließt jedes Fach unten.',
+      },
+      {
+        q: 'Wo lasse ich die Wendeöffnung?',
+        a: 'In der Mitte der langen Kante des langen Teils, gegenüber dem Klappenteil: Lass beim Zusammennähen der beiden T 6 cm offen. Wende durch die Öffnung auf rechts; die Steppnaht 0,5 cm von der Kante ringsum schließt sie.',
+      },
+      {
+        q: 'Wie setze ich einen Kunststoff-Druckknopf an die Klappe?',
+        a: 'Setze eine Hälfte mittig an das runde Ende der Klappe, auf die Steppnaht. Klapp die Klappe herunter, markiere, wo der Knopf vorn trifft, und setze dort die andere Hälfte.',
+      },
+      {
+        q: 'Wie mache ich Schlaufen für einen Riemen oder eine Kette?',
+        a: 'Aus zwei Quadraten 5 × 5 cm: Falte jedes wie einen Henkel der Tote Bag – zur Hälfte, beide Kanten zum Bruch, noch einmal zur Hälfte – und dann zur Hälfte zu einer Schlaufe. Steck sie oben in die Seiten, zwischen Rückseite und Fächer, und nähe die Seiten knapp an der Kante. Im Video gibt es keinen Riemen; an die Schlaufen passt eine Kette oder ein Riemen mit Karabinern.',
+      },
+    ],
+  },
 };

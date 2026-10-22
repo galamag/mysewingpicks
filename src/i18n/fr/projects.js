@@ -113,4 +113,41 @@ export default {
       },
     ],
   },
+  'phone-pouch': {
+    title: 'Pochette téléphone',
+    blurb: "Une petite pochette doublée pour le téléphone, l'argent et les cartes : un T de deux pièces se plie en trois compartiments, avec un rabat à pression et deux petits passants. Regardez-la prendre forme étape par étape.",
+    pageTitle: 'Tuto pochette téléphone doublée à rabat : dimensions',
+    pageDescription: "Dimensions de coupe d'une pochette téléphone à rabat : extérieur et doublure 57 × 19 cm et 31 × 13 cm, deux carrés de 5 × 5 cm pour les passants, coutures 0,5 cm. Chaque étape animée.",
+    heading: 'Coudre une pochette pour téléphone à rabat avec compartiments',
+    teaser: 'Deux pièces cousues en T, deux coutures — et elles se plient en trois compartiments : chaque pli animé.',
+    videoTitle: 'Pochette téléphone à trois compartiments',
+    videoIntro: 'Toute la pochette, cousue du début à la fin sur ma chaîne Cozy Scraps.',
+    needsIntro: "Du coton imprimé pour l'extérieur, du coton pour la doublure, de l'entoilage thermocollant léger, du fil, une pression en plastique — et les outils que je recommande personnellement pour couper, repasser et coudre. Pour la porter, toute chaîne ou bandoulière à mousquetons s'accroche aux passants ; il n'y en a pas dans la vidéo.",
+    faq: [
+      {
+        q: 'Quelles dimensions couper pour une pochette téléphone ?',
+        a: "Pour cette pochette, coupez deux pièces dans le coton imprimé — une longue pièce de 57 × 19 cm et une pièce de rabat de 31 × 13 cm —, les deux mêmes dans la doublure et les deux mêmes dans l'entoilage thermocollant pour l'extérieur, plus deux carrés de 5 × 5 cm pour les passants. Toutes les coutures sont à 0,5 cm. Le plan de coupe ci-dessous montre tout.",
+      },
+      {
+        q: "Faut-il de l'entoilage dans une pochette téléphone ?",
+        a: "Celle-ci a de l'entoilage thermocollant léger sur les deux pièces extérieures seulement, aux mêmes tailles — 57 × 19 cm et 31 × 13 cm —, collé sur l'envers. La doublure n'en a pas.",
+      },
+      {
+        q: "Comment faire les compartiments à l'intérieur ?",
+        a: "Pliez le T surpiqué en deux sur la longue pièce, doublure à l'intérieur, et cousez deux lignes à travers les deux moitiés, à 11 cm et 22 cm de la pliure. Dépliez : les coutures viennent au milieu et la longue pièce se plie en accordéon en trois compartiments — le téléphone près du dos, l'argent au milieu, les cartes devant. La pièce de rabat passe sous le fond, et sa pliure ferme chaque compartiment.",
+      },
+      {
+        q: "Où laisser l'ouverture pour retourner ?",
+        a: "Au milieu du grand bord de la longue pièce, en face de la pièce de rabat : laissez 6 cm sans couture quand vous assemblez les deux T. Retournez par l'ouverture ; la surpiqûre à 0,5 cm du bord tout autour la ferme.",
+      },
+      {
+        q: 'Comment poser une pression en plastique sur le rabat ?',
+        a: "Posez une moitié au milieu du bout arrondi du rabat, sur la ligne de surpiqûre. Rabattez le rabat, marquez l'endroit où la pression tombe sur le devant et posez-y l'autre moitié.",
+      },
+      {
+        q: 'Comment faire des passants pour une bandoulière ou une chaîne ?',
+        a: "Avec deux carrés de 5 × 5 cm : pliez chacun comme une anse de tote bag — en deux, les deux bords vers la pliure, encore en deux — puis en deux en boucle. Glissez-les dans les côtés en haut, entre le dos et les compartiments, et cousez les côtés au ras du bord. Il n'y a pas de bandoulière dans la vidéo ; une chaîne ou une bandoulière à mousquetons s'accroche aux passants.",
+      },
+    ],
+  },
 };

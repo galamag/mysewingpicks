@@ -102,7 +102,7 @@ export default {
     },
     projects: {
       title: 'Projets à coudre avec moi — My Sewing Picks',
-      description: 'Des projets de couture étape par étape, avec des guides animés, les vraies dimensions de coupe et la vidéo de la chaîne SEWING DIY PATCHWORK.',
+      description: 'Des projets de couture étape par étape, avec des guides animés, les vraies dimensions de coupe et la vidéo de mes chaînes YouTube.',
       eyebrow: 'Cousez avec moi',
       heading: 'Projets',
       intro: 'Choisissez un projet et regardez-le prendre forme, étape par étape — chaque pièce avec ses vraies dimensions, chaque couture animée, avec en plus la vidéo et le matériel nécessaire.',

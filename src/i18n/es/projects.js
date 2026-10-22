@@ -112,4 +112,41 @@ export default {
       },
     ],
   },
+  'phone-pouch': {
+    title: 'Bolso para el teléfono',
+    blurb: 'Un bolsito forrado para el teléfono, el dinero y las tarjetas: una T de dos piezas se dobla en tres compartimentos, con una solapa con broche y dos presillas pequeñas. Mira cómo se arma, paso a paso.',
+    pageTitle: 'Cómo hacer un bolso para el celular o móvil con solapa',
+    pageDescription: 'Medidas de corte de un bolso para el teléfono con solapa: exterior y forro 57 × 19 cm y 31 × 13 cm, dos cuadrados de 5 × 5 cm para las presillas, costuras 0,5 cm. Cada paso, animado.',
+    heading: 'Cómo coser un bolso pequeño para el teléfono con solapa y bolsillos',
+    teaser: 'Dos piezas cosidas en T, dos costuras — y se doblan en tres compartimentos: cada doblez, animado.',
+    videoTitle: 'Bolso para el teléfono con tres compartimentos',
+    videoIntro: 'Todo el bolso, cosido de principio a fin en mi canal Cozy Scraps.',
+    needsIntro: 'Algodón estampado para el exterior, algodón para el forro, entretela termoadhesiva ligera, hilo, un broche de presión de plástico y las herramientas que recomiendo personalmente para cortar, planchar y coser. Para llevarlo, a las presillas se engancha cualquier cadena o correa con mosquetones; en el video no hay.',
+    faq: [
+      {
+        q: '¿Qué medidas hay que cortar para un bolso para el teléfono?',
+        a: 'Para este bolso se cortan dos piezas de algodón estampado — una pieza larga de 57 × 19 cm y una pieza de solapa de 31 × 13 cm —, las mismas dos de forro y las mismas dos de entretela termoadhesiva para el exterior, más dos cuadrados de 5 × 5 cm para las presillas. Todas las costuras son de 0,5 cm. El esquema de corte de abajo lo muestra todo.',
+      },
+      {
+        q: '¿Hace falta entretela en un bolso para el teléfono?',
+        a: 'Este lleva entretela termoadhesiva ligera solo en las dos piezas exteriores, de las mismas medidas — 57 × 19 cm y 31 × 13 cm —, planchada en el revés. El forro no lleva.',
+      },
+      {
+        q: '¿Cómo se hacen los compartimentos por dentro?',
+        a: 'Dobla por la mitad la T pespunteada a lo largo de la pieza larga, con el forro por dentro, y cose dos líneas por las dos mitades, a 11 cm y 22 cm del doblez. Ábrela: las costuras van al centro y la pieza larga se dobla en acordeón en tres compartimentos — el teléfono junto a la espalda, el dinero en el medio, las tarjetas delante. La pieza de solapa pasa por debajo del fondo y su doblez cierra cada compartimento.',
+      },
+      {
+        q: '¿Dónde se deja la abertura para dar la vuelta?',
+        a: 'En el centro del lado largo de la pieza larga, frente a la pieza de solapa: al coser las dos T deja 6 cm sin coser. Da la vuelta por la abertura; el pespunte a 0,5 cm del borde en todo el contorno la cierra.',
+      },
+      {
+        q: '¿Cómo se pone un broche de presión de plástico en la solapa?',
+        a: 'Pon una mitad en el centro del extremo redondo de la solapa, sobre la línea del pespunte. Baja la solapa, marca dónde cae el broche en el frente y pon allí la otra mitad.',
+      },
+      {
+        q: '¿Cómo se hacen presillas para una correa o una cadena?',
+        a: 'Con dos cuadrados de 5 × 5 cm: dobla cada uno como un asa de la bolsa tote — por la mitad, los dos bordes hacia el doblez, otra vez por la mitad — y luego por la mitad en presilla. Mételas en los lados, arriba, entre la espalda y los compartimentos, y cose los lados al ras del borde. En el video no hay correa; a las presillas se engancha una cadena o una correa con mosquetones.',
+      },
+    ],
+  },
 };

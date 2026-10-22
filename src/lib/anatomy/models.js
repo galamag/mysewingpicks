@@ -10,6 +10,7 @@ export const MODELS = {
   'fabric-basket': { model: () => import('./basket.js'), texts: import.meta.glob('./basket.??.js') },
   'line-a-bag': { model: () => import('./lining.js'), texts: import.meta.glob('./lining.??.js') },
   'cosmetic-bag': { model: () => import('./cosmetic.js'), texts: import.meta.glob('./cosmetic.??.js') },
+  'phone-pouch': { model: () => import('./pouch.js'), texts: import.meta.glob('./pouch.??.js') },
   'bag-bottom-folded': { model: () => import('./bottom-folded.js'), texts: import.meta.glob('./bottom-folded.??.js') },
   'bag-bottom-cut-out': { model: () => import('./bottom-cutout.js'), texts: import.meta.glob('./bottom-cutout.??.js') },
   'bag-bottom-boxed': { model: () => import('./bottom-boxed.js'), texts: import.meta.glob('./bottom-boxed.??.js') },

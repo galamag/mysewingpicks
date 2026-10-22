@@ -101,7 +101,7 @@ export default {
     },
     projects: {
       title: 'Proyectos para coser conmigo — My Sewing Picks',
-      description: 'Proyectos de costura paso a paso con guías animadas, medidas de corte reales y el video del canal SEWING DIY PATCHWORK.',
+      description: 'Proyectos de costura paso a paso con guías animadas, medidas de corte reales y el video de mis canales de YouTube.',
       eyebrow: 'Cose conmigo',
       heading: 'Proyectos',
       intro: 'Elige un proyecto y mira cómo toma forma, paso a paso: cada pieza con sus medidas reales, cada costura animada, además del video y todo lo que necesitarás.',

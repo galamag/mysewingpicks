@@ -100,7 +100,7 @@ export default {
     },
     projects: {
       title: 'Progetti da cucire con me — My Sewing Picks',
-      description: 'Progetti di cucito passo passo con guide animate, le vere misure di taglio e il video del canale SEWING DIY PATCHWORK.',
+      description: 'Progetti di cucito passo passo con guide animate, le vere misure di taglio e il video dei miei canali YouTube.',
       eyebrow: 'Cuci con me',
       heading: 'Progetti',
       intro: 'Scegli un progetto e guardalo prendere forma, passo dopo passo — ogni pezzo con le sue misure reali, ogni cucitura animata, e in più il video e tutto quello che ti serve.',

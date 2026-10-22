@@ -112,4 +112,41 @@ export default {
       },
     ],
   },
+  'phone-pouch': {
+    title: 'Pochette porta cellulare',
+    blurb: 'Una piccola pochette foderata per il cellulare, i soldi e le carte: una T di due pezzi si piega in tre scomparti, con una patta a bottone e due piccoli passanti. Guarda come prende forma, passo dopo passo.',
+    pageTitle: 'Come cucire una pochette porta cellulare con patta: misure',
+    pageDescription: 'Misure di taglio di una pochette porta cellulare con patta: esterno e fodera 57 × 19 cm e 31 × 13 cm, due quadrati 5 × 5 cm per i passanti, cuciture 0,5 cm. Ogni passaggio animato.',
+    heading: 'Come cucire una pochette porta cellulare con patta e scomparti',
+    teaser: 'Due pezzi cuciti a T, due cuciture — e si piegano in tre scomparti: ogni piega animata.',
+    videoTitle: 'Pochette porta cellulare con tre scomparti',
+    videoIntro: "Tutta la pochette, cucita dall'inizio alla fine sul mio canale Cozy Scraps.",
+    needsIntro: "Cotone stampato per l'esterno, cotone per la fodera, teletta termoadesiva leggera, filo, un bottone a pressione di plastica e gli strumenti che consiglio personalmente per tagliare, stirare e cucire. Per portarla, ai passanti si aggancia qualsiasi catena o tracolla con moschettoni; nel video non c'è.",
+    faq: [
+      {
+        q: 'Che misure tagliare per una pochette porta cellulare?',
+        a: "Per questa pochette tagli due pezzi di cotone stampato — un pezzo lungo di 57 × 19 cm e un pezzo per la patta di 31 × 13 cm —, gli stessi due di fodera e gli stessi due di teletta termoadesiva per l'esterno, più due quadrati di 5 × 5 cm per i passanti. Tutte le cuciture sono a 0,5 cm. Lo schema di taglio qui sotto mostra tutto.",
+      },
+      {
+        q: 'Serve la teletta per una pochette porta cellulare?',
+        a: 'Questa ha la teletta termoadesiva leggera solo sui due pezzi esterni, nelle stesse misure — 57 × 19 cm e 31 × 13 cm —, stirata sul rovescio. La fodera non ne ha.',
+      },
+      {
+        q: 'Come si fanno gli scomparti interni?',
+        a: "Piega a metà la T impunturata lungo il pezzo lungo, fodera all'interno, e cuci due linee su entrambe le metà, a 11 cm e 22 cm dalla piega. Apri: le cuciture vanno al centro e il pezzo lungo si piega a fisarmonica in tre scomparti — il cellulare vicino al retro, i soldi al centro, le carte davanti. Il pezzo della patta passa sotto il fondo e la sua piega chiude ogni scomparto.",
+      },
+      {
+        q: "Dove lasciare l'apertura per rivoltare?",
+        a: "Al centro del lato lungo del pezzo lungo, di fronte al pezzo della patta: quando unisci le due T lascia 6 cm aperti. Rivolta dall'apertura; l'impuntura a 0,5 cm dal bordo tutto intorno la chiude.",
+      },
+      {
+        q: 'Come si mette un bottone a pressione di plastica sulla patta?',
+        a: "Applica una metà al centro della punta arrotondata della patta, sulla linea dell'impuntura. Abbassa la patta, segna dove arriva il bottone sul davanti e applica lì l'altra metà.",
+      },
+      {
+        q: 'Come si fanno i passanti per una tracolla o una catena?',
+        a: "Con due quadrati di 5 × 5 cm: piega ognuno come un manico della borsa shopper — a metà, i due bordi verso la piega, di nuovo a metà — e poi a metà ad anello. Infilali nei lati in alto, tra il retro e gli scomparti, e cuci i lati a filo del bordo. Nel video non c'è la tracolla; ai passanti si aggancia una catena o una tracolla con moschettoni.",
+      },
+    ],
+  },
 };

@@ -155,6 +155,45 @@ function cosmeticBag(p) {
   return s;
 }
 
+const PHONE = { w: 7.4, d: 2.6, h: 11, flap: 4.6, r: 1.1, rise: 4.6 }; // `rise`: the chain over the top
+
+/**
+  The phone pouch: a slim upright bag, the flap with round corners down its front and a snap,
+  two little ears at the top of the sides and a chain between them (the chain is not in the
+  video — Galamat's choice for the finished pouch, as in its anatomy).
+*/
+function phonePouch(p) {
+  const { w, d, h, flap, r, rise } = PHONE;
+  const [a, b] = [w / 2, d / 2];
+  const print = shade(C.rose, 0.6);
+  const fy = b + 0.02;
+  const earZ = h - 1.6;
+  const ear = (sx) => p.plane([[sx * a, -b + 0.4, earZ], [sx * (a + 1.1), -b + 0.4, earZ + 0.25], [sx * (a + 1.1), -b + 0.4, earZ + 0.85], [sx * a, -b + 0.4, earZ + 1.1]], C.rose, { stroke: shade(C.rose, -0.25) });
+  // the chain: from ear to ear, rising over the top, in the plane of the back
+  const n = 16;
+  const chain = Array.from({ length: n + 1 }, (_, i) => {
+    const s = i / n;
+    return project([-(a + 1) + 2 * (a + 1) * s, -b + 0.4, earZ + 0.6 + rise * (1 - (2 * s - 1) ** 2)]);
+  });
+  const chainD = chain.map((q, i) => `${i ? 'L' : 'M'}${xy(q)}`).join('');
+  let s = p.shadow(0.6, 0.6, w * 0.6, 1.8);
+  s += ear(-1);
+  s += `<path d="${chainD}" fill="none" stroke="${shade(C.gold, -0.25)}" stroke-width="0.55" stroke-linecap="round" stroke-dasharray=".7 .35"/>`;
+  s += p.box(-a, -b, 0, w, d, h, print, { l: print, r: shade(print, -0.14) });
+  // the flap down the front, its round corners at the bottom
+  const arc = (cx, cz, a0, a1) => Array.from({ length: 7 }, (_, i) => {
+    const t = a0 + ((a1 - a0) * i) / 6;
+    return [cx + r * Math.cos(t), fy, cz + r * Math.sin(t)];
+  });
+  const z0 = h - flap;
+  s += p.plane([[-a + 0.15, fy, h], [a - 0.15, fy, h], ...arc(a - 0.15 - r, z0 + r, 0, -Math.PI / 2), ...arc(-a + 0.15 + r, z0 + r, -Math.PI / 2, -Math.PI)], shade(print, -0.06), { stroke: shade(C.rose, -0.1) });
+  // the print: rose dots on the front and on the flap
+  s += [[-2, 2.2], [1.6, 1.2], [-0.4, 4.4], [2.2, 5.2], [-2.4, 8.4], [1.2, 9.4]].map(([x, z]) => dot([x, fy + 0.01, z], 0.36, C.roseDeep)).join('');
+  // the snap at the bottom of the flap
+  s += dot([0, fy + 0.02, z0 + 0.7], 0.42, C.light) + dot([0, fy + 0.03, z0 + 0.7], 0.18, C.beige);
+  return s + ear(1);
+}
+
 /**
   One item per project slug. A new project gets its item here (a mini version of the finished
   thing, in the room's colours, no lettering); see the skill building-sewing-anatomy.
@@ -163,6 +202,7 @@ export const ITEMS = {
   'tote-bag': item([TOTE.w, TOTE.d, TOTE.h + TOTE.rise], tote),
   'fabric-basket': item([BASKET.w, BASKET.w, BASKET.h], basket),
   'cosmetic-bag': item([POUCH.w, POUCH.d, POUCH.h], cosmeticBag),
+  'phone-pouch': item([PHONE.w + 2.2, PHONE.d, PHONE.h + PHONE.rise], phonePouch),
 };
 
 /* ---------- the furniture ---------- */

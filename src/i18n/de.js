@@ -99,7 +99,7 @@ export default {
     },
     projects: {
       title: 'Projekte zum Mitnähen — My Sewing Picks',
-      description: 'Schritt-für-Schritt-Nähprojekte mit animierten Anleitungen, echten Zuschnittmaßen und dem Video vom Kanal SEWING DIY PATCHWORK.',
+      description: 'Schritt-für-Schritt-Nähprojekte mit animierten Anleitungen, echten Zuschnittmaßen und dem Video von meinen YouTube-Kanälen.',
       eyebrow: 'Zum Mitnähen',
       heading: 'Projekte',
       intro: 'Such dir ein Projekt aus und sieh zu, wie es Schritt für Schritt entsteht – jedes Teil mit seinen echten Maßen, jede Naht animiert, dazu das Video und alles, was du brauchst.',

@@ -100,7 +100,7 @@ export default {
     },
     projects: {
       title: 'Sew-Along Projects — My Sewing Picks',
-      description: 'Step-by-step sewing projects with animated guides, real cutting sizes and the video from the SEWING DIY PATCHWORK channel.',
+      description: 'Step-by-step sewing projects with animated guides, real cutting sizes and the video from my YouTube channels.',
       eyebrow: 'Sew along',
       heading: 'Projects',
       intro: "Pick a project and watch it come together, step by step — every piece with its real size, every seam animated, plus the video and what you'll need.",

@@ -13,6 +13,8 @@ import * as lining from './lining.js';
 import { liningText } from './lining.text.js';
 import * as cosmetic from './cosmetic.js';
 import { cosmeticText } from './cosmetic.text.js';
+import * as pouch from './pouch.js';
+import { pouchText } from './pouch.text.js';
 import * as bottomFolded from './bottom-folded.js';
 import { foldedText } from './bottom-folded.text.js';
 import * as bottomCutout from './bottom-cutout.js';
@@ -27,6 +29,7 @@ const FIGURES = {
   'fabric-basket': { model: basket, text: basketText },
   'line-a-bag': { model: lining, text: liningText }, // the guide "Lining a bag" (/guides/line-a-bag)
   'cosmetic-bag': { model: cosmetic, text: cosmeticText },
+  'phone-pouch': { model: pouch, text: pouchText },
   'bag-bottom-folded': { model: bottomFolded, text: foldedText }, // the guide "Bag bottoms", section #folded
   'bag-bottom-cut-out': { model: bottomCutout, text: cutoutText }, // the guide "Bag bottoms", section #cut-out
   'bag-bottom-boxed': { model: bottomBoxed, text: boxedText }, // the guide "Bag bottoms", section #boxed
