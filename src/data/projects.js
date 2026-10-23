@@ -207,7 +207,7 @@ export const projects = [
       },
       {
         q: 'How do you make the pockets inside?',
-        a: 'Fold the topstitched T in half across the long piece, lining inside, and sew two lines through both halves, 11 cm (4⅜ in) and 22 cm (8⅝ in) from the fold. Open it out: the seams go to the middle and the long piece folds like an accordion into three pockets — the phone next to the back, money in the middle, cards at the front. The flap piece goes round the bottom, so its fold closes every pocket.',
+        a: 'Fold the topstitched T in half across the long piece, lining inside, and sew two lines through both halves, 11 cm (4⅜ in) and 22 cm (8⅝ in) from the fold. Open it out: the seams go to the middle and the long piece folds like an accordion into two pockets. The flap piece then goes round the bottom and up the back: between it and the accordion is the third pocket, and its fold closes every pocket at the bottom. The phone goes next to the back, money in the middle, cards at the front.',
       },
       {
         q: 'Where do you leave the opening to turn it?',
@@ -219,7 +219,7 @@ export const projects = [
       },
       {
         q: 'How do you make loops for a strap or chain?',
-        a: 'From two 5 × 5 cm (2 in) squares: fold each like a tote strap — in half, both edges to the fold, in half again — and then in half into a loop. Slip them into the sides near the top, between the back and the pockets, and stitch the sides right on the edge. There is no strap in the video; a chain or a strap with clasps fits the ears.',
+        a: 'From two 5 × 5 cm (2 in) squares: fold each into a narrow strip — in half, both edges to the fold, in half again — and then in half into a loop. Slip them into the sides near the top, between the back and the pockets, and stitch the sides right on the edge. There is no strap in the video; a chain or a strap with clasps fits the ears.',
       },
     ],
     icon: '📱',

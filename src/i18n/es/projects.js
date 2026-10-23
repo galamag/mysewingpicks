@@ -133,7 +133,7 @@ export default {
       },
       {
         q: '¿Cómo se hacen los compartimentos por dentro?',
-        a: 'Dobla por la mitad la T pespunteada a lo largo de la pieza larga, con el forro por dentro, y cose dos líneas por las dos mitades, a 11 cm y 22 cm del doblez. Ábrela: las costuras van al centro y la pieza larga se dobla en acordeón en tres compartimentos — el teléfono junto a la espalda, el dinero en el medio, las tarjetas delante. La pieza de solapa pasa por debajo del fondo y su doblez cierra cada compartimento.',
+        a: 'Dobla por la mitad la T pespunteada a lo largo de la pieza larga, con el forro por dentro, y cose dos líneas por las dos mitades, a 11 cm y 22 cm del doblez. Ábrela: las costuras van al centro y la pieza larga se dobla en acordeón en dos compartimentos. Luego la pieza de solapa pasa por debajo del fondo y sube por la espalda: entre ella y el acordeón se forma el tercer compartimento, y su doblez cierra cada compartimento por abajo. El teléfono va junto a la espalda, el dinero en el medio, las tarjetas delante.',
       },
       {
         q: '¿Dónde se deja la abertura para dar la vuelta?',
@@ -145,7 +145,7 @@ export default {
       },
       {
         q: '¿Cómo se hacen presillas para una correa o una cadena?',
-        a: 'Con dos cuadrados de 5 × 5 cm: dobla cada uno como un asa de la bolsa tote — por la mitad, los dos bordes hacia el doblez, otra vez por la mitad — y luego por la mitad en presilla. Mételas en los lados, arriba, entre la espalda y los compartimentos, y cose los lados al ras del borde. En el video no hay correa; a las presillas se engancha una cadena o una correa con mosquetones.',
+        a: 'Con dos cuadrados de 5 × 5 cm: dobla cada uno en una tira estrecha — por la mitad, los dos bordes hacia el doblez, otra vez por la mitad — y luego por la mitad en presilla. Mételas en los lados, arriba, entre la espalda y los compartimentos, y cose los lados al ras del borde. En el video no hay correa; a las presillas se engancha una cadena o una correa con mosquetones.',
       },
     ],
   },

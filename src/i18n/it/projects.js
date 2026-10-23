@@ -133,7 +133,7 @@ export default {
       },
       {
         q: 'Come si fanno gli scomparti interni?',
-        a: "Piega a metà la T impunturata lungo il pezzo lungo, fodera all'interno, e cuci due linee su entrambe le metà, a 11 cm e 22 cm dalla piega. Apri: le cuciture vanno al centro e il pezzo lungo si piega a fisarmonica in tre scomparti — il cellulare vicino al retro, i soldi al centro, le carte davanti. Il pezzo della patta passa sotto il fondo e la sua piega chiude ogni scomparto.",
+        a: "Piega a metà la T impunturata lungo il pezzo lungo, fodera all'interno, e cuci due linee su entrambe le metà, a 11 cm e 22 cm dalla piega. Apri: le cuciture vanno al centro e il pezzo lungo si piega a fisarmonica in due scomparti. Poi il pezzo della patta passa sotto il fondo e risale lungo il retro: tra questo e la fisarmonica si forma il terzo scomparto, e la sua piega chiude in basso ogni scomparto. Il cellulare va vicino al retro, i soldi al centro, le carte davanti.",
       },
       {
         q: "Dove lasciare l'apertura per rivoltare?",
@@ -145,7 +145,7 @@ export default {
       },
       {
         q: 'Come si fanno i passanti per una tracolla o una catena?',
-        a: "Con due quadrati di 5 × 5 cm: piega ognuno come un manico della borsa shopper — a metà, i due bordi verso la piega, di nuovo a metà — e poi a metà ad anello. Infilali nei lati in alto, tra il retro e gli scomparti, e cuci i lati a filo del bordo. Nel video non c'è la tracolla; ai passanti si aggancia una catena o una tracolla con moschettoni.",
+        a: "Con due quadrati di 5 × 5 cm: piega ognuno in una striscia stretta — a metà, i due bordi verso la piega, di nuovo a metà — e poi a metà ad anello. Infilali nei lati in alto, tra il retro e gli scomparti, e cuci i lati a filo del bordo. Nel video non c'è la tracolla; ai passanti si aggancia una catena o una tracolla con moschettoni.",
       },
     ],
   },

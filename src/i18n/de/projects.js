@@ -133,7 +133,7 @@ export default {
       },
       {
         q: 'Wie nähe ich die Fächer innen?',
-        a: 'Falte das abgesteppte T quer über das lange Teil zur Hälfte, Futter innen, und nähe zwei Linien durch beide Hälften, 11 cm und 22 cm vom Bruch. Klapp es auf: Die Nähte rutschen in die Mitte, und das lange Teil faltet sich wie eine Ziehharmonika zu drei Fächern – das Handy an der Rückseite, Geld in der Mitte, Karten vorn. Das Klappenteil führt um den Boden, sein Bruch schließt jedes Fach unten.',
+        a: 'Falte das abgesteppte T quer über das lange Teil zur Hälfte, Futter innen, und nähe zwei Linien durch beide Hälften, 11 cm und 22 cm vom Bruch. Klapp es auf: Die Nähte rutschen in die Mitte, und das lange Teil faltet sich wie eine Ziehharmonika zu zwei Fächern. Dann führt das Klappenteil um den Boden und an der Rückseite hoch: Zwischen ihm und der Ziehharmonika liegt das dritte Fach, und sein Bruch schließt jedes Fach unten. Das Handy kommt an die Rückseite, Geld in die Mitte, Karten nach vorn.',
       },
       {
         q: 'Wo lasse ich die Wendeöffnung?',
@@ -145,7 +145,7 @@ export default {
       },
       {
         q: 'Wie mache ich Schlaufen für einen Riemen oder eine Kette?',
-        a: 'Aus zwei Quadraten 5 × 5 cm: Falte jedes wie einen Henkel der Tote Bag – zur Hälfte, beide Kanten zum Bruch, noch einmal zur Hälfte – und dann zur Hälfte zu einer Schlaufe. Steck sie oben in die Seiten, zwischen Rückseite und Fächer, und nähe die Seiten knapp an der Kante. Im Video gibt es keinen Riemen; an die Schlaufen passt eine Kette oder ein Riemen mit Karabinern.',
+        a: 'Aus zwei Quadraten 5 × 5 cm: Falte jedes zu einem schmalen Streifen – zur Hälfte, beide Kanten zum Bruch, noch einmal zur Hälfte – und dann zur Hälfte zu einer Schlaufe. Steck sie oben in die Seiten, zwischen Rückseite und Fächer, und nähe die Seiten knapp an der Kante. Im Video gibt es keinen Riemen; an die Schlaufen passt eine Kette oder ein Riemen mit Karabinern.',
       },
     ],
   },

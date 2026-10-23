@@ -69,17 +69,17 @@ test("the page's texts: the maker's cm numbers only, the site's spacing rules", 
   }
 });
 
-test('fifteen steps: the finished pouch + fourteen; the cutting diagram is step 1', () => {
-  assert.equal(STEPS.length, 15);
+test('sixteen steps: the finished pouch + fifteen (the last one fills it); the cutting diagram is step 1', () => {
+  assert.equal(STEPS.length, 16);
   STEPS.slice(1).forEach((s, i) => assert.equal(typeof s.scene, 'function', `step ${i + 1} has no scene`));
-  for (const lang of LANGS) assert.equal(pouchText(lang).steps.length, 15, lang);
+  for (const lang of LANGS) assert.equal(pouchText(lang).steps.length, 16, lang);
   assert.equal(CUT.step, 1);
 });
 
 test('uses are catalog products; the snap step names the snap pliers', () => {
   const ids = new Set(products.map((p) => p.id));
   STEPS.forEach((s, k) => (s.uses ?? []).forEach((id) => assert.ok(ids.has(id), `step ${k}: unknown product "${id}"`)));
-  assert.ok(STEPS[STEPS.length - 1].uses.includes('kamtop-snap-pliers-kit'));
+  assert.ok(STEPS[14].uses.includes('kamtop-snap-pliers-kit'));
 });
 
 test('figure is registered', () => {
@@ -159,4 +159,36 @@ test("the video's title is not the site's claim; the chain is said to be absent 
     const page = Object.fromEntries(await pageStrings(lang));
     assert.match(page.needsIntro, noChain[lang], `${lang}: needsIntro says the chain is not in the video`);
   }
+});
+
+test('taking it apart works from the very first frame (step 0, every 1/400 of the way)', () => {
+  const L = pouchText('en');
+  for (let i = 0; i <= 400; i++) {
+    const r = renderStep(0, i / 400, L);
+    assert.ok(r.viewBox.every(Number.isFinite) && !r.body.includes('NaN'), `t=${i / 400}`);
+  }
+});
+
+test("Galamat's review: the accordion makes two pockets, the flap piece the third; the ears need no tote; the side seam is not through all the layers", async () => {
+  const L = pouchText('en');
+  const step10 = renderStep(10, 1, L).body, step12 = renderStep(12, 0.55, L).body, step13 = renderStep(13, 1, L).body;
+  assert.ok(step10.includes(L.labels.pockets2) && !step10.includes(L.labels.pocket3), 'step 10 ends with two pockets');
+  assert.ok(step12.includes(L.labels.pocket3), 'step 12 shows the third pocket');
+  assert.ok(step13.includes(L.labels.backAndNext), 'step 13: back + the next layer');
+  for (const lang of LANGS) {
+    const all = [...strings(pouchText(lang)), ...(await pageStrings(lang))].map(([, s]) => s).join(' ');
+    assert.doesNotMatch(all, /tote|шоппер|Tote Bag|shopper/i, `${lang}: no tote straps`);
+    assert.doesNotMatch(all, /through all the layers|через все слои|durch alle Lagen|toutes les couches|tutti gli strati|todas las capas/, `${lang}: the side seam is not through all the layers`);
+  }
+});
+
+test('the last step: phone, money and card go in, then a chain (not in the video, the step says so)', () => {
+  const L = pouchText('en');
+  const mid = (t) => renderStep(15, t, L).body;
+  assert.ok(mid(0.2).includes('url(#phone-pouch-screen)'), 'the phone');
+  assert.ok(mid(0.42).includes('url(#phone-pouch-note)'), 'the banknote');
+  assert.ok(mid(0.62).includes('#5f7fa3'), 'the card');
+  assert.ok(mid(1).includes(L.labels.chainOn), 'the chain');
+  const noChain = { en: /none in the video/, ru: /в видео её нет/, de: /im Video gibt es keine/, fr: /pas dans la vidéo/, it: /nel video non c'è/i, es: /en el video no hay/i };
+  for (const lang of LANGS) assert.match(pouchText(lang).steps[15].text, noChain[lang], lang);
 });

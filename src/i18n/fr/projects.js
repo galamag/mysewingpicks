@@ -134,7 +134,7 @@ export default {
       },
       {
         q: "Comment faire les compartiments à l'intérieur ?",
-        a: "Pliez le T surpiqué en deux sur la longue pièce, doublure à l'intérieur, et cousez deux lignes à travers les deux moitiés, à 11 cm et 22 cm de la pliure. Dépliez : les coutures viennent au milieu et la longue pièce se plie en accordéon en trois compartiments — le téléphone près du dos, l'argent au milieu, les cartes devant. La pièce de rabat passe sous le fond, et sa pliure ferme chaque compartiment.",
+        a: "Pliez le T surpiqué en deux sur la longue pièce, doublure à l'intérieur, et cousez deux lignes à travers les deux moitiés, à 11 cm et 22 cm de la pliure. Dépliez : les coutures viennent au milieu et la longue pièce se plie en accordéon en deux compartiments. Puis la pièce de rabat passe sous le fond et remonte le long du dos : entre elle et l'accordéon se forme le troisième compartiment, et sa pliure ferme chaque compartiment en bas. Le téléphone va près du dos, l'argent au milieu, les cartes devant.",
       },
       {
         q: "Où laisser l'ouverture pour retourner ?",
@@ -146,7 +146,7 @@ export default {
       },
       {
         q: 'Comment faire des passants pour une bandoulière ou une chaîne ?',
-        a: "Avec deux carrés de 5 × 5 cm : pliez chacun comme une anse de tote bag — en deux, les deux bords vers la pliure, encore en deux — puis en deux en boucle. Glissez-les dans les côtés en haut, entre le dos et les compartiments, et cousez les côtés au ras du bord. Il n'y a pas de bandoulière dans la vidéo ; une chaîne ou une bandoulière à mousquetons s'accroche aux passants.",
+        a: "Avec deux carrés de 5 × 5 cm : pliez chacun en une bande étroite — en deux, les deux bords vers la pliure, encore en deux — puis en deux en boucle. Glissez-les dans les côtés en haut, entre le dos et les compartiments, et cousez les côtés au ras du bord. Il n'y a pas de bandoulière dans la vidéo ; une chaîne ou une bandoulière à mousquetons s'accroche aux passants.",
       },
     ],
   },
