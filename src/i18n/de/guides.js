@@ -45,12 +45,12 @@ export default {
   },
   'sew-a-zipper': {
     title: 'Reißverschluss einnähen',
-    blurb: 'Reißverschluss einnähen, Schritt für Schritt: in eine gefütterte Kosmetiktasche, eine Tasche, einen Kissenbezug, einen Rock oder ein Kleid. Jede Methode als Animation, mit einem Tipp, wann sie passt.',
+    blurb: 'Sechs Arten, einen Reißverschluss einzunähen: mit Futter, mit eingefassten Enden und mit Blende für Kosmetiktaschen und Taschen; mittig, mit Übertritt und nahtverdeckt für Kissen, Rock und Kleid. Jede Art ist animiert, mit einem Tipp, wann sie passt. Den Reißverschlussfuß brauchst du für die Enden, die Blende, den mittigen Reißverschluss und den mit Übertritt, für den nahtverdeckten einen Nähfuß für nahtverdeckte Reißverschlüsse.',
     pageTitle: 'Reißverschluss einnähen: Tasche, Kissen, Rock & Kleid',
-    pageDescription: 'Reißverschluss einnähen in Kosmetiktasche, Tasche, Kissen, Rock oder Kleid: der Reißverschluss zwischen Außenteil und Futter und weitere Methoden. Jeder Schritt animiert.',
+    pageDescription: 'Reißverschluss einnähen in Tasche, Kissen, Rock oder Kleid: sechs Arten, jeder Schritt animiert. Meist mit Reißverschlussfuß, nahtverdeckt mit eigenem Fuß.',
     heading: 'Reißverschluss einnähen: Kosmetiktasche, Tasche, Kissen, Rock und Kleid',
-    teaser: 'Einen Reißverschluss in Kosmetiktasche, Tasche, Kissen, Rock oder Kleid einnähen – jeder Schritt animiert.',
-    needsIntro: 'Stoffklammern und die Nähmaschine – die Werkzeuge, die ich persönlich für diese Schritte empfehle.',
+    teaser: 'Sechs Arten, einen Reißverschluss in Kosmetiktasche, Tasche, Kissen, Rock oder Kleid einzunähen – jeder Schritt animiert.',
+    needsIntro: 'Reißverschlüsse (auch als Meterware), Stoffklammern, Stecknadeln, ein selbstlöschender Markierstift, Schneiderschere, Bügeleisen, Nähmaschine und ein Nähfuß-Set mit Reißverschlussfuß – die Werkzeuge, die ich persönlich für diese Schritte empfehle. Für den nahtverdeckten Reißverschluss brauchst du außerdem einen nahtverdeckten Reißverschluss und den passenden Nähfuß.',
     sections: {
       lined: {
         title: 'Reißverschluss mit Futter',

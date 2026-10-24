@@ -45,12 +45,12 @@ export default {
   },
   'sew-a-zipper': {
     title: 'Come cucire una cerniera',
-    blurb: 'Come cucire una cerniera passo passo: in una pochette foderata, in una borsa, in una federa, in una gonna o in un abito. Ogni metodo è animato, con un consiglio su quando sceglierlo.',
+    blurb: 'Sei modi per cucire una cerniera: con fodera, con estremità rifinite e incassata nella borsa per pochette e borse; centrata, con patta e invisibile nella cucitura di una federa, di una gonna o di un abito. Ogni metodo è animato, con un consiglio su quando sceglierlo. Per cucire le estremità rifinite, la cerniera incassata, la centrata e quella con patta si usa il piedino per cerniere; per cucire la cerniera invisibile serve il piedino per cerniera invisibile.',
     pageTitle: 'Come cucire una cerniera: pochette, borsa, cuscino, gonna',
-    pageDescription: 'Come cucire una cerniera in una pochette, una borsa, un cuscino, una gonna o un abito: la cerniera cucita tra esterno e fodera e altri metodi. Ogni passaggio animato.',
+    pageDescription: "Come cucire una cerniera in una pochette, una borsa, un cuscino, una gonna o un abito: sei metodi, ogni passaggio animato. Piedino per cerniere; uno speciale per quella invisibile.",
     heading: 'Come cucire una cerniera: pochette, borsa, cuscino, gonna e abito',
-    teaser: 'Cucire una cerniera in una pochette, una borsa, un cuscino, una gonna o un abito: ogni passaggio animato.',
-    needsIntro: 'Le clip per cucito e la macchina da cucire: gli strumenti che consiglio personalmente per questi passaggi.',
+    teaser: 'Sei modi per cucire una cerniera in una pochette, una borsa, un cuscino, una gonna o un abito: ogni passaggio animato.',
+    needsIntro: 'Cerniere (anche a metraggio), clip per cucito, spilli, penna evanescente, forbici da sarta, ferro da stiro, macchina da cucire e un set di piedini con il piedino per cerniere: gli strumenti che consiglio personalmente per questi passaggi. Per cucire la cerniera invisibile ti serviranno anche una cerniera invisibile e il piedino per cerniera invisibile.',
     sections: {
       lined: {
         title: 'Cerniera con fodera',

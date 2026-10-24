@@ -127,17 +127,18 @@ export const guides = [
     // Numbers: `lined` - only the makeup bag's 20, 23 and 0.5 cm; the other sections none at all (spec 3). Title, h1, page
     // title and section names: spec 5.2 as approved. No video (spec 6). No presser foot named in `lined` until the maker
     // says which one she used (spec 3.2). The guide-level texts (blurb, pageDescription, teaser, needsIntro) are written for
-    // the whole guide's promise, without numbers; they are rewritten once all six sections are in.
+    // the whole guide's promise, without numbers, and say which foot each way needs: the zipper foot for tabs, recessed, centered and
+    // lapped, the invisible zipper foot for invisible, none for lined (Task 7, all six sections in; the maker's answer is still open).
     slug: 'sew-a-zipper',
     group: 'construction',
     icon: '👝',
     title: 'How to sew a zipper',
-    blurb: 'How to sew a zipper in, step by step: into a lined makeup bag, a bag, a pillow cover, a skirt or a dress. Each way is animated, with advice on when to choose it.',
+    blurb: 'Six ways to sew a zipper in, step by step: the lined zipper pouch, end tabs and the recessed zipper for pouches and bags; the centered, the lapped and the invisible zipper for a seam in a pillow cover, a skirt or a dress. Each way is animated, with advice on when to choose it. Use a zipper foot for the tabs, recessed, centered and lapped zippers, and an invisible zipper foot for the invisible one.',
     pageTitle: 'How to Sew a Zipper: Pouch, Bag, Pillow, Skirt & Dress',
-    pageDescription: 'How to sew a zipper into a makeup bag, a bag, a pillow cover, a skirt or a dress: the zipper between the outer and the lining, and more ways. Every step animated.',
+    pageDescription: 'How to sew a zipper into a pouch, bag, pillow, skirt or dress: six ways, every step animated. A zipper foot for most, a special foot for the invisible zipper.',
     heading: 'How to sew a zipper: pouch, bag, pillow, skirt and dress',
-    teaser: 'Sewing a zipper into a makeup bag, a bag, a pillow, a skirt or a dress — every step animated.',
-    needsIntro: 'Sewing clips and the sewing machine — the tools I personally recommend for these steps.',
+    teaser: 'Six ways to sew a zipper into a pouch, a bag, a pillow, a skirt or a dress — every step animated.',
+    needsIntro: 'Zippers (also by the yard), sewing clips, pins, an air-erasable pen, fabric scissors, an iron, the sewing machine and a set of presser feet with a zipper foot — the tools I personally recommend for these steps. For the invisible zipper you will also need an invisible zipper and an invisible zipper foot.',
     // "What you'll need" - only what the sections' steps use, in the order they are used.
     needs: ['soraco-sewing-clips', 'janome-1522rd', 'mandala-crafts-zippers', 'tailor-scissors', 'rowenta-travel-iron', 'windman-presser-feet-set', 'mebuzip-zipper-by-the-yard', 'sewline-air-erasable-pen', 'beaditive-magnetic-pin-holder'],
     sections: [

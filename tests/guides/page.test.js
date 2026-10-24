@@ -135,3 +135,117 @@ test('bag-bottom #panel: its own figure, last, no "Where it\'s used"', () => {
     assert.ok(html.indexOf('id="boxed"') < html.indexOf('id="panel"'), `${lang}: boxed comes before panel`);
   }
 });
+
+// "How to sew a zipper" (sew-a-zipper): six sections, six figures on one page (Vault «Гайды — Молния (спецификация)», 4, 10).
+const ZIP = 'sew-a-zipper';
+const zipHtml = (dir) => readFileSync(join(dist, dir, 'guides', `${ZIP}.html`), 'utf8');
+
+test('sew-a-zipper: one figure per section, in order, each inside its own section (6 languages)', async () => {
+  const { guideBySlug } = await import('../../src/data/guides.js');
+  const sections = guideBySlug(ZIP).sections;
+  assert.deepEqual(sections.map((s) => s.id), ['lined', 'tabs', 'recessed', 'centered', 'lapped', 'invisible']);
+  for (const [lang, dir] of Object.entries(LANG_DIRS)) {
+    const html = zipHtml(dir);
+    assert.equal((html.match(/data-anatomy="/g) ?? []).length, sections.length, `${lang}: a figure per section`);
+    const at = sections.map((s) => html.search(new RegExp(String.raw`<section[^>]*\sid="${s.id}"`)));
+    assert.ok(at.every((i) => i > 0), `${lang}: a section is missing`);
+    assert.deepEqual([...at].sort((a, b) => a - b), at, `${lang}: the sections are out of order`);
+    for (const s of sections) {
+      const figs = [...sectionHtml(html, s.id).matchAll(/data-anatomy="([^"]+)"/g)].map((m) => m[1]);
+      assert.deepEqual(figs, [s.figure], `${lang} #${s.id}: its own figure only`);
+      assert.match(html, new RegExp(`href="#${s.id}"`), `${lang}: the contents link to #${s.id}`);
+    }
+  }
+});
+
+test('sew-a-zipper: no id twice on the page (six figures, each with its own prefix)', () => {
+  for (const [lang, dir] of Object.entries(LANG_DIRS)) {
+    const html = zipHtml(dir);
+    assert.deepEqual(duplicateIds(html), [], `${lang}: an id twice`);
+    for (const key of ['zipper-lined', 'zipper-tabs', 'zipper-recessed', 'zipper-centered', 'zipper-lapped', 'zipper-invisible']) {
+      assert.match(html, new RegExp(`id="${key}-`), `${lang}: no id with the prefix ${key}-`);
+    }
+  }
+});
+
+test('sew-a-zipper: page-disclosure before the first figure and the first Amazon link; a "paid link" mark by every Amazon link', async () => {
+  const { t } = await import('../../src/i18n/index.js');
+  for (const [lang, dir] of Object.entries(LANG_DIRS)) {
+    const html = zipHtml(dir);
+    const disclosure = html.indexOf('page-disclosure');
+    assert.ok(disclosure > 0, `${lang}: no page-disclosure`);
+    assert.ok(disclosure < html.indexOf('data-anatomy="'), `${lang}: page-disclosure after the first figure`);
+    assert.ok(disclosure < html.indexOf('href="https://www.amazon.'), `${lang}: page-disclosure after the first Amazon link`);
+    const mark = t(lang).ui.paidLink;
+    // a link in a figure step: the mark right after it; a card: the mark in its own disclosure line
+    const cards = [...html.matchAll(/<article class="card"[\s\S]*?<\/article>/g)].map((m) => m[0]);
+    const outside = cards.reduce((h, c) => h.replace(c, ''), html);
+    const links = [...outside.matchAll(/<a [^>]*href="https:\/\/www\.amazon\.[^"]*"[^>]*>[^<]*<\/a>(\s*<span class="paid-link"[^>]*>([^<]*)<\/span>)?/g)];
+    assert.ok(links.length > 20, `${lang}: no links in the figure steps`);
+    assert.equal(links.filter((m) => !m[1]).length, 0, `${lang}: Amazon links without a mark outside the cards`);
+    assert.equal((outside.match(/href="https:\/\/www\.amazon\./g) ?? []).length, links.length, `${lang}: an Amazon link of another shape outside the cards`);
+    for (const m of links) assert.equal(decode(m[2]), mark, `${lang}: the mark`);
+    assert.equal(cards.length, 9, `${lang}: a card for each of the 9 products`);
+    for (const c of cards) assert.equal(decode(c.match(/<p class="card__disclosure"[^>]*>([^<]*)<\/p>/)?.[1]), mark, `${lang}: a card without the mark`);
+    for (const m of html.matchAll(/<a [^>]*href="https:\/\/www\.amazon\.[^"]*"[^>]*>/g)) {
+      assert.match(m[0], /rel="nofollow sponsored noopener"/, `${lang}: rel`);
+      assert.doesNotMatch(m[0], /noreferrer/, `${lang}: noreferrer`);
+    }
+  }
+});
+
+test('sew-a-zipper #lined: "Where it\'s used" — the makeup bag, steps 7–8, in the page language', async () => {
+  const { t } = await import('../../src/i18n/index.js');
+  const { projectText, guideText } = await import('../../src/i18n/content.js');
+  const { projectBySlug } = await import('../../src/data/projects.js');
+  const { guideBySlug } = await import('../../src/data/guides.js');
+  for (const [lang, dir] of Object.entries(LANG_DIRS)) {
+    const sec = sectionHtml(zipHtml(dir), 'lined');
+    const pre = dir ? `/${dir}` : '';
+    const text = t(lang).pages.guide.usedInSteps(projectText(projectBySlug('cosmetic-bag'), lang).title, [7, 8]);
+    const m = sec.match(new RegExp(String.raw`<a[^>]*href="${pre}/projects/cosmetic-bag\.html"[^>]*>([^<]*)</a>`));
+    assert.ok(m, `${lang}: no "Where it's used" link to the makeup bag`);
+    assert.equal(decode(m[1]), text, `${lang}: the link text`);
+    assert.equal((sec.match(/href="[^"]*\/projects\//g) ?? []).length, 1, `${lang}: one project`);
+    const note = guideText(guideBySlug(ZIP), lang).sections.find((x) => x.id === 'lined').note;
+    const p = sec.match(/<p class="guide-used__note"[^>]*>([^<]*)<\/p>/);
+    assert.ok(p, `${lang}: the note is not rendered`);
+    assert.equal(decode(p[1]), note, `${lang}: note text`);
+  }
+});
+
+test('sew-a-zipper #tabs … #invisible: no "Where it\'s used" and no note — no project of their own yet', () => {
+  for (const [lang, dir] of Object.entries(LANG_DIRS)) {
+    const html = zipHtml(dir);
+    for (const id of ['tabs', 'recessed', 'centered', 'lapped', 'invisible']) {
+      const sec = sectionHtml(html, id);
+      assert.ok(sec, `${lang}: no <section id="${id}">`);
+      assert.doesNotMatch(sec, /guide-used/, `${lang} #${id}: "Where it's used" without a project`);
+      assert.doesNotMatch(sec, /\/projects\//, `${lang} #${id}: a link to a project`);
+    }
+  }
+});
+
+test('the makeup bag links its steps 7 and 8 to sew-a-zipper #lined of the same language', () => {
+  for (const [lang, dir] of Object.entries(LANG_DIRS)) {
+    const html = readFileSync(join(dist, dir, 'projects', 'cosmetic-bag.html'), 'utf8');
+    const pre = dir ? `/${dir}` : '';
+    const hrefs = [...html.matchAll(/href="([^"]*sew-a-zipper\.html#lined)"/g)].map((m) => m[1]);
+    // each step's link shows twice: under the step's caption and in "All steps" (steps 7 and 8)
+    assert.equal(hrefs.length, 4, `${lang}: links to #lined`);
+    for (const h of hrefs) assert.equal(h, `${pre}/guides/sew-a-zipper.html#lined`, `${lang}: a link to another language`);
+  }
+});
+
+test('the home page and the guides list show a card for each of the three guides', () => {
+  for (const [lang, dir] of Object.entries(LANG_DIRS)) {
+    const pre = dir ? `/${dir}` : '';
+    const home = readFileSync(join(dist, dir ? `${dir}.html` : 'index.html'), 'utf8');
+    const list = readFileSync(join(dist, dir, 'guides.html'), 'utf8');
+    for (const [where, html] of [['home', home], ['guides list', list]]) {
+      for (const slug of ['line-a-bag', 'bag-bottom', ZIP]) {
+        assert.equal((html.match(new RegExp(`href="${pre}/guides/${slug}\\.html"`, 'g')) ?? []).length, 1, `${lang} ${where}: the card of ${slug}`);
+      }
+    }
+  }
+});

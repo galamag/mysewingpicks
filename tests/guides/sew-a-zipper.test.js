@@ -192,9 +192,17 @@ test("no search traps in the guide's texts (spec 5.1)", () => {
   }
 });
 
+const LEAD_FIELDS = ['blurb', 'pageDescription', 'teaser', 'needsIntro'];
 test('the lined section names no presser foot (the maker has not said which — spec 3.2)', () => {
   const FOOT = /\bfoot\b|\bfeet\b|лапк|Fuß|Füß|\bpied\b|piedin|prensatelas/iu;
-  for (const lang of LOCALES) for (const [where, s] of linedStrings(lang)) assert.doesNotMatch(s, FOOT, `${lang} ${where}`);
+  // the figure's texts and the section's own texts; the guide-level texts (blurb …) name the feet of the OTHER ways
+  // (tabs … invisible) and are checked by 'guide texts: the zipper foot for …' below
+  for (const lang of LOCALES) {
+    for (const [where, s] of linedStrings(lang)) {
+      if (LEAD_FIELDS.includes(where)) continue;
+      assert.doesNotMatch(s, FOOT, `${lang} ${where}`);
+    }
+  }
   assert.ok(!STEPS.some((s) => (s.uses ?? []).includes('windman-presser-feet-set')), 'the presser feet set in a step');
   // the guide's "What you'll need" has the presser feet set only because a later section (tabs …) sews with the zipper foot
   const footIn = guideBySlug(SLUG).sections.filter((s) => figure(s.figure).model.STEPS.some((st) => (st.uses ?? []).includes('windman-presser-feet-set')));
@@ -538,7 +546,7 @@ test('tabs: the stitching steps say what NOT to do — never over the stop (chip
 });
 
 // The zipper foot: spec 3 «Лапка» — sections 2–5 sew with the zipper foot (the Windman set).
-const ZIPPER_FOOT = { en: /zipper foot/, ru: /лапк\p{L}* для молнии/u, de: /Reißverschlussfuß/, fr: /pied fermeture éclair/, it: /piedino per cerniere/, es: /prensatelas para cremalleras/ };
+const ZIPPER_FOOT = { en: /zipper foot/, ru: /лапк\p{L}* для молнии/iu, de: /Reißverschlussfuß/, fr: /pied fermeture éclair/, it: /piedino per cerniere/, es: /prensatelas para cremalleras/ };
 
 test('tabs: sewn with the zipper foot — named in the stitching steps, linked there (Windman set)', () => {
   tabs.STEPS.forEach((s, k) => {
@@ -2149,7 +2157,7 @@ const BACKSTITCH_ANY = { en: /backstitch/i, ru: /закрепк/iu, de: /verrieg
 
 // The invisible zipper foot (named, never linked) and the regular zipper foot (the seam below; the Windman set).
 const INVISIBLE_FOOT = { en: /invisible zipper foot/, ru: /лапк\p{L}* для потайной молнии/u, de: /Nähfuß für nahtverdeckte Reißverschlüsse/, fr: /pied pour fermeture invisible/, it: /piedino per cerniera invisibile/, es: /prensatelas para cremalleras invisibles/ };
-const REGULAR_FOOT = { en: /(?<!invisible )zipper foot/, ru: /лапк\p{L}* для молнии/u, de: /Reißverschlussfuß/, fr: /pied fermeture éclair/, it: /piedino per cerniere(?! invisibili)/, es: /prensatelas para cremalleras(?! invisibles)/ };
+const REGULAR_FOOT = { en: /(?<!invisible )zipper foot/, ru: /лапк\p{L}* для молнии/iu, de: /Reißverschlussfuß/, fr: /pied fermeture éclair/, it: /piedino per cerniere(?! invisibili)/, es: /prensatelas para cremalleras(?! invisibles)/ };
 
 test('invisible: every site language has the figure texts', () => {
   assert.deepEqual([...INV_LANGS].sort(), [...LOCALES].sort());
@@ -2638,5 +2646,159 @@ test('invisible: on the built page — its own <section id="invisible"> after la
     const sec = html.slice(from, next < 0 ? undefined : next);
     assert.match(sec, /zipper-invisible-print/, `${lang}: no invisible figure in the section`);
     assert.doesNotMatch(sec, /href="#(?:lined|tabs|recessed|centered|lapped)"/, `${lang}: a link to another section`);
+  }
+});
+
+// ── The guide as a whole (Task 7): blurb, pageDescription, teaser, needsIntro say what the six sections do (spec 4, 3.2) ──
+const LEAD = ['blurb', 'pageDescription', 'teaser', 'needsIntro'];
+const leadStrings = (lang) => {
+  const g = guideText(guideBySlug(SLUG), lang);
+  return LEAD.map((f) => [f, g[f]]);
+};
+
+// The foot named in the blurb: the zipper foot for the ways with end tabs, a recessed, a centered and a lapped zipper;
+// the invisible zipper foot for the invisible zipper; none for the lined pouch (the maker has not said — spec 3.2).
+const ZIP_FOOT = {
+  en: /zipper foot/, ru: /лапк\p{L}* для молнии/iu, de: /Reißverschlussfuß/, fr: /pied fermeture éclair/,
+  it: /piedino per cerniere/, es: /prensatelas para cremalleras(?! invisibles)/,
+};
+const GUIDE_INV_FOOT = {
+  en: /invisible zipper foot/, ru: /лапк\p{L}* для потайной молнии/u, de: /Nähfuß für nahtverdeckte Reißverschlüsse/,
+  fr: /pied pour fermeture invisible/, it: /piedino per cerniera invisibile/, es: /prensatelas para cremalleras invisibles/,
+};
+const GUIDE_LINED = {
+  en: /lined/i, ru: /подкладк/i, de: /Futter/i, fr: /doubl|sandwich/i, it: /fodera/i, es: /forro/i,
+};
+const ITEMS = {
+  en: [/pouch/, /\bbag/, /pillow/, /skirt/, /dress/],
+  ru: [/косметич/, /сумк/, /наволочк/, /юбк/, /плать/],
+  de: [/Kosmetiktasche/, /Tasche/, /Kissen/, /Rock/, /Kleid/],
+  fr: [/trousse/, /sac/, /coussin/, /jupe/, /robe/],
+  it: [/pochette/, /bors/, /federa|cuscin/, /gonna/, /abito/],
+  es: [/neceser/, /bolso/, /cojín/, /falda/, /vestido/],
+};
+const NAMES = {
+  en: [/lined zipper pouch/, /end tabs/, /recessed zipper/, /centered/, /lapped/, /invisible/],
+  ru: [/молния с подкладкой/i, /закрытые концы/i, /на планке в сумку/, /центральн/, /с перекрытием/, /потайн/],
+  de: [/mit Futter/, /Enden/, /Blende/, /mittig/, /Übertritt/, /nahtverdeckt/],
+  fr: [/sandwich/, /extrémités finies/, /encastrée/, /centrée/, /sous patte/, /invisible/],
+  it: [/con fodera/, /estremità rifinite/, /incassata/, /centrata/, /con patta/, /invisibile/],
+  es: [/con forro/, /extremos rematados/, /en el borde del bolso/, /centrada/, /con solapa/, /invisible/],
+};
+const SIX = { en: /six ways/i, ru: /шесть способов/i, de: /sechs Arten/i, fr: /six façons/i, it: /sei modi/i, es: /seis formas/i };
+const PROMISE = {
+  en: /by hand|hand.?sew|without (?:a )?(?:zipper )?foot|no zipper foot|beginner/i,
+  ru: /вручную|без лапки|без лапк|для начинающих|новичк/i,
+  de: /von Hand|ohne (?:Reißverschluss)?fuß|Anfänger/i,
+  fr: /à la main|sans pied|débutant/i,
+  it: /a mano|senza piedino|principiant/i,
+  es: /a mano|sin prensatelas|principiante/i,
+};
+const FIRST_PERSON_USE = /\bI use\b|я пользуюсь|ich benutze|j'utilise|j’utilise|utilizo|\buso\b/i;
+const RECOMMEND = {
+  en: /I personally recommend/, ru: /я лично рекомендую/, de: /ich persönlich[^.]*empfehle/, fr: /je recommande personnellement/,
+  it: /consiglio personalmente/, es: /recomiendo personalmente/,
+};
+
+test('guide texts: no digit at all in the blurb, description, teaser and needs line (spec 3, 4)', () => {
+  for (const lang of LOCALES) {
+    for (const [where, s] of leadStrings(lang)) {
+      assert.doesNotMatch(s, /\d/, `${lang} ${where}: a digit`);
+      assert.doesNotMatch(s, UNIT, `${lang} ${where}: a unit`);
+    }
+  }
+});
+
+test('guide texts: the blurb says which way is for what — the pouch and bag ways, the seam ways, the items people search for', () => {
+  const sections = guideBySlug(SLUG).sections;
+  assert.equal(sections.length, 6);
+  for (const lang of LOCALES) {
+    const { blurb } = guideText(guideBySlug(SLUG), lang);
+    assert.match(blurb, SIX[lang], `${lang}: "six ways"`);
+    for (const re of ITEMS[lang]) assert.match(blurb, re, `${lang}: ${re}`);
+    // all six ways are named, in the order of the sections
+    const at = NAMES[lang].map((re) => blurb.search(re));
+    assert.ok(at.every((i) => i >= 0), `${lang}: a way is not named: ${at}`);
+    assert.deepEqual([...at].sort((x, y) => x - y), at, `${lang}: the ways are named out of order`);
+  }
+});
+
+test('guide texts: the zipper foot for tabs, recessed, centered and lapped; the invisible zipper foot for the invisible; no foot for the lined pouch', () => {
+  for (const lang of LOCALES) {
+    const { blurb } = guideText(guideBySlug(SLUG), lang);
+    const sents = sentences(blurb);
+    const zip = sents.filter((x) => ZIP_FOOT[lang].test(x));
+    const inv = sents.filter((x) => GUIDE_INV_FOOT[lang].test(x));
+    assert.ok(zip.length >= 1, `${lang}: the zipper foot is not named in the blurb`);
+    assert.ok(inv.length >= 1, `${lang}: the invisible zipper foot is not named in the blurb`);
+    for (const x of [...zip, ...inv]) assert.doesNotMatch(x, GUIDE_LINED[lang], `${lang}: the lined pouch gets a foot: «${x}»`);
+  }
+});
+
+test('guide texts: no promise of sewing by hand, without a zipper foot, for beginners; never "I use"; "I personally recommend" in the needs line', () => {
+  for (const lang of LOCALES) {
+    for (const [where, s] of leadStrings(lang)) {
+      assert.doesNotMatch(s, PROMISE[lang], `${lang} ${where}: a promise the guide does not make`);
+      assert.doesNotMatch(s, FIRST_PERSON_USE, `${lang} ${where}: "I use"`);
+    }
+    assert.match(guideText(guideBySlug(SLUG), lang).needsIntro, RECOMMEND[lang], `${lang}: needsIntro`);
+  }
+});
+
+test('guide texts: the needs line names exactly the products "What you\'ll need" shows, nothing else the catalog lacks as a link', () => {
+  const KEY = {
+    'soraco-sewing-clips': { en: /sewing clips/, ru: /зажим\p{L}* для шитья/u, de: /Stoffklammern/, fr: /pinces à tissu/, it: /clip per cucito/, es: /pinzas para coser/ },
+    'janome-1522rd': { en: /sewing machine/, ru: /швейная машина/, de: /Nähmaschine/, fr: /machine à coudre/, it: /macchina da cucire/, es: /máquina de coser/ },
+    'mandala-crafts-zippers': { en: /\bZippers/, ru: /Молнии/, de: /Reißverschlüsse/, fr: /fermetures éclair/i, it: /Cerniere/, es: /Cremalleras/ },
+    'mebuzip-zipper-by-the-yard': { en: /by the yard/, ru: /рулонн/, de: /Meterware/, fr: /au mètre/, it: /a metraggio/, es: /por metro/ },
+    'tailor-scissors': { en: /scissors/, ru: /ножницы/, de: /[Ss]chere/, fr: /ciseaux/, it: /forbici/, es: /tijeras/ },
+    'rowenta-travel-iron': { en: /\biron\b/, ru: /утюг/, de: /Bügeleisen/, fr: /fer à repasser/, it: /ferro da stiro/, es: /plancha/ },
+    'windman-presser-feet-set': { en: /presser feet/, ru: /набор лапок/, de: /Nähfuß-Set/, fr: /lot de pieds/, it: /set di piedini/, es: /juego de prensatelas/ },
+    'sewline-air-erasable-pen': { en: /air-erasable pen/, ru: /маркер/, de: /Markierstift/, fr: /stylo effaçable/, it: /penna evanescente/, es: /marcador borrable/ },
+    'beaditive-magnetic-pin-holder': { en: /\bpins\b/, ru: /булавк/, de: /Stecknadeln/, fr: /épingles/, it: /spilli/, es: /alfileres/ },
+  };
+  const needs = guideBySlug(SLUG).needs;
+  assert.deepEqual([...needs].sort(), Object.keys(KEY).sort(), 'the products in needs and the products this test knows');
+  for (const lang of LOCALES) {
+    const { needsIntro } = guideText(guideBySlug(SLUG), lang);
+    for (const id of needs) assert.match(needsIntro, KEY[id][lang], `${lang}: the needs line does not name ${id}`);
+  }
+});
+
+test('guide texts: the needs line says the invisible zipper and its foot are bought separately — never linked, never claimed as the maker\'s', () => {
+  const INVISIBLE = {
+    en: /invisible zipper and an invisible zipper foot/, ru: /потайная молния и лапка для потайной молнии/, de: /nahtverdeckten Reißverschluss/,
+    fr: /fermeture invisible et un pied/, it: /cerniera invisibile e il suo piedino|cerniera invisibile e il piedino/, es: /cremallera invisible y su prensatelas/,
+  };
+  for (const lang of LOCALES) assert.match(guideText(guideBySlug(SLUG), lang).needsIntro, INVISIBLE[lang], lang);
+  // and no product of the catalog is such a zipper or foot (it would have to be linked)
+  const names = products.filter((p) => guideBySlug(SLUG).needs.includes(p.id)).map((p) => p.name);
+  assert.ok(!names.some((n) => /invisible/i.test(n)), 'an invisible zipper product in needs');
+});
+
+test('guide texts: the description is short enough to show (200 characters) and the title and h1 do not promise a number of ways', () => {
+  for (const lang of LOCALES) {
+    const g = guideText(guideBySlug(SLUG), lang);
+    assert.ok(g.pageDescription.length <= 200, `${lang}: pageDescription is ${g.pageDescription.length} characters`);
+    for (const f of ['title', 'heading', 'pageTitle']) assert.doesNotMatch(g[f], SIX[lang], `${lang} ${f}`);
+  }
+});
+
+test('guide texts: no search traps in the blurb, description, teaser and needs line (spec 5.1)', () => {
+  for (const lang of LOCALES) {
+    for (const [where, s] of leadStrings(lang)) {
+      if (lang === 'en') assert.doesNotMatch(s, /zipper sandwich/i, `en ${where}`);
+      if (lang === 'ru') {
+        assert.doesNotMatch(s, /замо?к|ушк|молни\p{L}* с планкой/iu, `ru ${where}`);
+      }
+      if (lang === 'de') assert.doesNotMatch(s, /(?<!naht)verdeckt/iu, `de ${where}`);
+      if (lang === 'it') {
+        assert.doesNotMatch(s, /centrale|nascost/iu, `it ${where}`);
+        for (const x of sentences(s).filter((y) => /cerniera/i.test(y))) {
+          assert.match(x, /cuci|pochette|borsa|cuscin|federa|gonna|abito|vestito|astuccio/i, `it ${where}: «${x}» — «cerniera» with no sewing word`);
+        }
+      }
+      if (lang === 'es') assert.doesNotMatch(s, /cierre invisible/iu, `es ${where}`);
+    }
   }
 });
