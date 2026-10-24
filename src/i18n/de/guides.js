@@ -75,6 +75,11 @@ export default {
         line: 'Die beiden Stoffkanten der Naht treffen sich über den Zähnen des Reißverschlusses, an jeder Seite eine Steppnaht.',
         choose: 'Wenn du den einfachsten Weg suchst, einen Reißverschluss in eine Naht einzunähen: in einen Kissenbezug oder eine Kissenhülle, in einen Rock, in die hintere Mittelnaht eines Kleids. Der Reißverschluss ist an beiden Seiten ein wenig zu sehen.',
       },
+      lapped: {
+        title: 'Reißverschluss mit Übertritt',
+        line: 'Eine Seite der Naht legt sich über den Reißverschluss und deckt ihn ab, daneben eine Steppnaht.',
+        choose: 'Wenn du einen Reißverschluss in die Seitennaht von Rock, Kleid oder Hose einnähst und er nicht zu sehen sein soll: Der Übertritt deckt ihn ab – praktisch, wenn der Reißverschluss farblich nicht zum Stoff passt –, und nur eine Steppnaht ist zu sehen.',
+      },
     },
   },
 };

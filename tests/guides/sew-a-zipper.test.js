@@ -1555,3 +1555,480 @@ test('centered: on the built page — its own <section id="centered"> after rece
     assert.doesNotMatch(sec, /href="#(?:lined|tabs|recessed|lapped|invisible)"/, `${lang}: a link to another section`);
   }
 });
+
+/* ===================================================================================================================
+   Section 5, `lapped` — the lapped zipper (spec 3 row 5, 3.1, 4, 5.2, 5.3 «Раздел 5 — молния с перекрытием»): a public
+   technique, NO numbers and no units. A piece of the seam, not a garment: the seam sewn up to the mark at the bottom stop
+   with a backstitch; the opening basted with the longest stitch; the seam pressed open; the overlap folded back out of
+   the way; on the underlap side the seam allowance folded a little narrower, its fold just past the seam line, beside
+   the teeth of the zipper (face up under it), stitched along the fold through the allowance and the tape only; the
+   overlap back over the zipper, covering that stitching; from the right side with the zipper foot, across the bottom
+   below the stop and along the overlap side, clear of the teeth and the pull (which way and from where: never said);
+   the basting unpicked. One line of stitching shows.
+   Figure src/lib/anatomy/zipper-lapped.js (key zipper-lapped), texts zipper-lapped.<lang>.js, checks
+   zipper-lapped.text.js.
+   =================================================================================================================== */
+import * as lapped from '../../src/lib/anatomy/zipper-lapped.js';
+import { LAPPED_TEXT, lappedText } from '../../src/lib/anatomy/zipper-lapped.text.js';
+import { dot as dot3 } from '../../src/lib/anatomy/iso.js';
+
+const LAP = 'zipper-lapped';
+const LAP_LANGS = Object.keys(LAPPED_TEXT);
+/** The section's own texts in a language: [where, text]. */
+const lapSection = (lang) => guideStrings(lang, 'lapped').filter(([where]) => where.startsWith('sections.lapped.'));
+/** Every text of the section: the figure's (its number `ui.fig` aside) and the section's. */
+const lapStrings = (lang) => [...strings(lappedText(lang)).filter(([where]) => where !== 'ui.fig'), ...lapSection(lang)];
+
+/** Is the world point (x, y) inside a flat (horizontal) piece's outline? */
+function covers(p, [x, y]) {
+  const poly = p.pts.map(([u, v]) => at(p, u, v));
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i], [xj, yj] = poly[j];
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+/** Sample points along a line drawn on a piece (world). */
+const along = (p, l) => l.pts.flatMap((q, i) => (i ? [0.2, 0.5, 0.8].map((k) => {
+  const [u0, v0] = l.pts[i - 1];
+  return at(p, u0 + (q[0] - u0) * k, v0 + (q[1] - v0) * k);
+}) : []));
+const VIEW3 = [1, 1, 1];
+/** The stitching that shows on a set of pieces: lines on the face turned to the viewer, not under a later opaque piece. */
+function shownStitching(pieces) {
+  const out = [];
+  pieces.forEach((p, i) => {
+    const front = dot3(p.out, VIEW3) >= 0;
+    for (const l of p.lines ?? []) {
+      if (l.kind !== 'stitch' || (l.side && (l.side === 'out') !== front)) continue;
+      const pts = along(p, l);
+      const hidden = pts.every((w) => pieces.slice(i + 1).some((q) => (q.opacity ?? 1) > 0.99 && Math.abs(q.out[2]) > 0.99 && at(q, 0, 0)[2] > w[2] && covers(q, w)));
+      if (!hidden) out.push({ id: p.id, l });
+    }
+  });
+  return out;
+}
+
+test('lapped: every site language has the figure texts', () => {
+  assert.deepEqual([...LAP_LANGS].sort(), [...LOCALES].sort());
+});
+
+test('lapped: no units — no digit, no fraction, no unit (figure, chips, legend, section texts; every language)', () => {
+  const WORDS = /(?<!\p{L})(?:centimet\p{L}*|millimet\p{L}*|сантиметр\p{L}*|миллиметр\p{L}*|Zentimeter|Millimeter|centimètres?|millimètres?|centimetri|millimetri|centímetros?|milímetros?)(?!\p{L})/iu;
+  for (const lang of LAP_LANGS) {
+    for (const [where, s] of lapStrings(lang)) {
+      assert.doesNotMatch(s, /\d/, `${lang} ${where}: a digit`);
+      assert.doesNotMatch(s, /[¼½¾⅓⅔⅛⅜⅝⅞″%]|⁄/, `${lang} ${where}: a fraction or a unit sign`);
+      assert.doesNotMatch(s, UNIT, `${lang} ${where}: a unit`);
+      assert.doesNotMatch(s, WORDS, `${lang} ${where}: a unit in words`);
+    }
+    assert.match(lappedText(lang).ui.fig, /^\S+\.? 5$/u, `${lang}: ui.fig`);
+  }
+  assert.deepEqual(lapped.SPEC, {}, 'the model has no maker\'s numbers');
+});
+
+test('lapped: the lap hides the underlap\'s stitching — in the first frame the overlap lies over it (model)', () => {
+  const rest = lapped.anatomy(0).pieces;
+  const b = rest.find((p) => p.id === 'piece-b'), a = rest.find((p) => p.id === 'piece-a');
+  const under = (b.lines ?? []).filter((l) => l.under);
+  assert.equal(under.length, 1, 'the underlap carries its stitching along the fold');
+  assert.ok(rest.indexOf(a) > rest.indexOf(b), 'the overlap is not drawn over the underlap');
+  assert.ok((a.opacity ?? 1) > 0.999 && a.out[2] > 0.99, 'the overlap is not opaque, right side up');
+  for (const w of along(b, under[0])) {
+    assert.ok(covers(a, w), `the overlap does not cover the underlap's stitching at ${w.map((n) => n.toFixed(2))}`);
+    assert.ok(at(a, 0, 0)[2] > w[2], 'the overlap is not over the underlap');
+  }
+  // the same stitching on the zipper tape, under the underlap's fold
+  const tape = rest.find((p) => p.id === 'zip-tape-b');
+  assert.equal((tape.lines ?? []).filter((l) => l.under).length, 1, 'the stitching along the fold is not through the zipper tape');
+  // while the underlap is stitched, the overlap is folded back, out of the way: it covers none of that stitching
+  const k = lapped.STEPS.findIndex((s, i) => i > 0 && s.scene(0).over.some((o) => o.label === 'alongFold'));
+  assert.ok(k > 0, 'no step stitches along the fold');
+  const done = lapped.STEPS[k].scene(1).pieces;
+  const bb = done.find((p) => p.id === 'piece-b');
+  const st = (bb.lines ?? []).find((l) => l.under);
+  assert.ok(st, 'the stitching along the fold is not on the underlap once sewn');
+  for (const id of ['piece-a', 'allowance-a']) {
+    const p = done.find((x) => x.id === id);
+    for (const w of along(bb, st)) assert.ok(!covers(p, w), `step ${k}: ${id} is under the needle — not folded out of the way`);
+  }
+  assert.deepEqual(lapped.STEPS[k].scene(0).pieces.filter((p) => (p.lines ?? []).some((l) => l.under)).map((p) => p.id), [], `step ${k}: the stitching is there before it is sewn`);
+});
+
+test('lapped: one visible stitching line outside — along the overlap side and across the bottom (model)', () => {
+  const shown = shownStitching(lapped.anatomy(0).pieces);
+  assert.deepEqual(shown.map((s) => s.id), ['piece-a'], `stitching that shows: ${JSON.stringify(shown.map((s) => s.id))}`);
+  assert.ok(shown[0].l.topstitch, 'the stitching that shows is not the overlap\'s');
+  assert.deepEqual(shown[0].l.pts, lapped.DRAWING.top, 'not across the bottom and along the side');
+  // seen through the fabric (tapped), the hidden stitching on the underlap and the zipper shows too
+  const ghost = lapped.anatomy(1).pieces;
+  assert.ok(ghost.some((p) => (p.lines ?? []).some((l) => l.under)), 'tapped: the underlap\'s stitching is gone');
+});
+
+test('lapped: the underlap\'s fold is a little narrower than the allowance, just past the seam line, beside the teeth (model + words)', () => {
+  const D = lapped.DRAWING;
+  assert.ok(D.lap > 0 && D.lap < D.allowance / 3, 'the fold is not just past the seam line');
+  // the allowance folded under: a little narrower than the allowance
+  const rest = lapped.anatomy(0).pieces;
+  const al = rest.find((p) => p.id === 'allowance-b');
+  const r = [];
+  for (const [u, v] of al.pts) if (u < D.opening - 1e-6) r.push(v);
+  const width = Math.max(...r) - Math.min(...r);
+  assert.ok(width < D.allowance && width > D.allowance / 2, `the folded allowance is ${width}, the allowance ${D.allowance}`);
+  // the teeth right beside the fold, past it; the zipper face up under the fabric; the stitching on the fold, on the tape
+  assert.ok(D.zipper - D.teethBand / 2 > D.lap && D.zipper - D.teethBand / 2 - D.lap < D.teethBand / 4, 'the teeth are not right beside the fold');
+  assert.ok(D.under > 0 && D.under < D.lap && D.under > D.zipper - D.tape, 'the stitching is not along the fold, on the tape');
+  for (const id of ['zip-tape-a', 'zip-tape-b', 'zip-teeth']) assert.ok(rest.find((p) => p.id === id).out[2] > 0.99, `${id}: not face up`);
+  const NARROWER = { en: /a little narrower than the (?:seam )?allowance/i, ru: /чуть уже припуска/iu, de: /etwas schmaler als die Nahtzugabe/i, fr: /un peu plus étroite? que la valeur/i, it: /un po' più stretto del margine/i, es: /un poco más estrecho que el margen/i };
+  const BESIDE = { en: /beside the teeth/i, ru: /у самых зубчиков|зубчики — у самого сгиба/iu, de: /neben den Zähnen|an den Zähnen/i, fr: /contre les dents/i, it: /accanto ai denti/i, es: /junto a los dientes/i };
+  const k = lapped.STEPS.findIndex((s, i) => i > 0 && s.scene(0).over.some((o) => o.label === 'narrower'));
+  for (const lang of LOCALES) {
+    const L = lappedText(lang);
+    assert.match(L.labels.narrower, NARROWER[lang], `${lang}: chip narrower`);
+    assert.match(stepWords(L, k), NARROWER[lang], `${lang} step ${k}: "a little narrower than the seam allowance"`);
+    assert.match(stepWords(L, k), BESIDE[lang], `${lang} step ${k}: the fold beside the teeth`);
+    assert.match(L.labels.besideTeeth, BESIDE[lang], `${lang}: chip besideTeeth`);
+  }
+});
+
+test('lapped: the overlap\'s stitching clears the teeth and the pull, through the tape; across below the stop (model + words)', () => {
+  const D = lapped.DRAWING;
+  assert.ok(D.stitch > D.zipper + D.teethBand / 2 && D.stitch > D.zipper + D.pullHalf, 'the stitching runs over the teeth or the pull');
+  assert.ok(D.stitch < D.zipper + D.tape, 'the stitching misses the zipper tape');
+  assert.ok(D.across > D.stops[1][1] && D.across < D.opening + 1, 'the stitching across is not just below the bottom stop');
+  // the stitching being sewn (the overlay of the zipper-foot step that sews it) runs where the finished line is drawn
+  const k = lapped.STEPS.findIndex((s, i) => i > 0 && s.scene(0).over.some((o) => o.label === 'clearTeeth'));
+  const o = lapped.STEPS[k].scene(0.5).over.find((x) => x.type === 'line');
+  const a = lapped.anatomy(0).pieces.find((p) => p.id === 'piece-a');
+  const drawn = a.lines.find((l) => l.topstitch).pts.map(([u, v]) => at(a, u, v));
+  o.pts.forEach((w, i) => assert.ok(Math.hypot(w[0] - drawn[i][0], w[1] - drawn[i][1]) < 1e-6, `step ${k}: the stitching sewn is not the one drawn`));
+  const CLEAR = { en: /clear the teeth and the pull/i, ru: /обойти зубчики и бегунок/iu, de: /Zähne und Schieber nicht zu treffen/i, fr: /éviter les dents et le curseur/i, it: /evitare i denti e il cursore/i, es: /no tocar los dientes ni el tirador/i };
+  const CHIP_CLEAR = { en: /teeth and the pull/i, ru: /зубчиков и бегунка/iu, de: /Zähnen und Schieber/i, fr: /dents et du curseur/i, it: /denti e cursore/i, es: /dientes y tirador/i };
+  for (const lang of LOCALES) {
+    const L = lappedText(lang);
+    assert.match(stepWords(L, k), CLEAR[lang], `${lang} step ${k}: "wide enough to clear the teeth and the pull"`);
+    assert.match(L.labels.clearTeeth, CHIP_CLEAR[lang], `${lang}: chip clearTeeth`);
+    assert.match(stepWords(L, k), STOP_WORD[lang], `${lang} step ${k}: the stop`);
+    assert.match(stepWords(L, k), NOT_WORD[lang], `${lang} step ${k}: "never over the stop"`);
+  }
+});
+
+test('lapped: no stitching direction, no starting point, no order of travel (texts and chips, every language)', () => {
+  const DIRECTION = /from the (?:bottom|top)|(?:bottom|top) to (?:top|bottom)|\bupwards?\b|\bdownwards?\b|\bup the side|снизу|сверху|von unten|von oben|de bas en haut|de haut en bas|depuis le (?:bas|haut)|en remontant|en descendant|dal basso|dall'alto|verso l'alto|verso il basso|de abajo hacia arriba|de arriba hacia abajo|desde (?:abajo|arriba)/iu;
+  const ORIGIN = {
+    en: /\bstart(?:ing)?\b|\bbegin|from the seam line|\bfirst (?:across|along|stitch)|\bthen (?:up|down|along|across)\b/i,
+    ru: /начн\p{L}*|начина\p{L}*|от (?:линии )?шва|сначала поперёк|сначала вдоль|затем вдоль|потом вдоль|затем поперёк|потом поперёк/iu,
+    de: /\bfang\p{L}*|\bbeginn\p{L}*|von der Nahtlinie|zuerst (?:quer|entlang)|dann (?:an|entlang|quer)/iu,
+    fr: /commencez|recommencez|commen[cç]\p{L}*|depuis la ligne|d'abord en travers|puis le long|puis en travers/iu,
+    it: /comincia|ricomincia|inizia|partendo dalla|prima di traverso|poi lungo|poi di traverso/iu,
+    es: /empieza|comienza|empezando|desde la línea|primero de lado|luego a lo largo|luego de lado/iu,
+  };
+  for (const lang of LOCALES) {
+    for (const [where, s] of lapStrings(lang)) {
+      assert.doesNotMatch(s, DIRECTION, `${lang} ${where}: the stitching direction is said`);
+      assert.doesNotMatch(s, ORIGIN[lang], `${lang} ${where}: a starting point or an order of travel for the stitching`);
+    }
+  }
+  assert.match('Start on the seam line and stitch across, then up the side', ORIGIN.en); // the check catches such wording
+  assert.match('Начните на линии шва', ORIGIN.ru);
+});
+
+test('lapped: the basting comes out — none in the first frame, in the steps from the basting on, unpicked in the last step', () => {
+  for (const e of [0, 0.5, 1]) assert.deepEqual(bastings(lapped.anatomy(e).pieces), [], `e=${e}: basting in the finished seam`);
+  const k = lapped.STEPS.findIndex((s) => s.stitch === 'basting');
+  assert.ok(k > 1, 'no step bastes with the longest stitch');
+  assert.ok(seamSewing(lapped.STEPS[k]) && seamSewing(lapped.STEPS[k - 1]) && lapped.STEPS[k - 1].stitch === 'straight', 'the seam, then the basting');
+  assert.deepEqual(bastings(lapped.STEPS[k].scene(0).pieces), [], 'basting before it is sewn');
+  const b = bastings(lapped.STEPS[k].scene(1).pieces);
+  assert.ok(b.length > 0, 'no basting once sewn');
+  for (const { p, l } of b) {
+    const xs = l.pts.map((q) => at(p, ...q)[0]);
+    assert.ok(Math.min(...xs) < 0.5 && Math.abs(Math.max(...xs) - lapped.DRAWING.opening) < 1e-6, `${p.id}: the basting is not over the opening`);
+  }
+  assert.equal(lapped.DRAWING.stops[1][1], lapped.DRAWING.opening, 'the opening does not end at the bottom stop');
+  const last = lapped.STEPS.length - 1;
+  for (let s = k + 1; s < last; s++) for (const t of [0, 0.5, 1]) assert.ok(bastings(lapped.STEPS[s].scene(t).pieces).length > 0, `step ${s} t=${t}: the basting is gone too early`);
+  assert.ok(bastings(lapped.STEPS[last].scene(0).pieces).length > 0, 'the last step does not start with the basting');
+  assert.deepEqual(bastings(lapped.STEPS[last].scene(1).pieces), [], 'the basting is not unpicked in the last step');
+  const LONGEST = { en: /longest stitch/i, ru: /сам\p{L}* длинн\p{L}* строчк/iu, de: /längste\p{L}* Stich/iu, fr: /point le plus long/i, it: /punto più lungo/i, es: /puntada más larga/i };
+  const UNPICK = { en: /unpick/i, ru: /распор/iu, de: /auftrenn|trenn[^.]*\sauf\b/i, fr: /découd|décous/i, it: /scuci/i, es: /descos/i };
+  for (const lang of LOCALES) {
+    const L = lappedText(lang);
+    assert.match(L.stitches.basting, LONGEST[lang], `${lang}: the machine's stitch`);
+    assert.match(stepWords(L, k), LONGEST[lang], `${lang} step ${k}: the longest stitch`);
+    assert.match(stepWords(L, last), UNPICK[lang], `${lang} step ${last}: unpick`);
+    assert.match(L.labels.unpick, UNPICK[lang], `${lang}: chip unpick`);
+  }
+});
+
+test('lapped: the seam up to the mark with a backstitch; pressed open, wrong side up, each allowance on its own side', () => {
+  const D = lapped.DRAWING;
+  const BACKSTITCH = { en: /backstitch/i, ru: /закрепк/iu, de: /verriegel|verriegl/i, fr: /point d'arrêt/i, it: /fermatura/i, es: /remat/i };
+  const seamStep = lapped.STEPS.findIndex((s, k) => k > 0 && s.stitch === 'straight' && seamSewing(s));
+  assert.ok(seamStep > 0, 'no seam step');
+  const press = lapped.STEPS.findIndex((s, k) => k > 0 && s.scene(0).over.some((o) => o.label === 'pressOpen'));
+  assert.ok(press > seamStep + 1, 'not pressed open after the basting');
+  const end = lapped.STEPS[press].scene(1).pieces;
+  for (const s of ['a', 'b']) {
+    const body = end.find((p) => p.id === `piece-${s}`), al = end.find((p) => p.id === `allowance-${s}`);
+    assert.ok(body.out[2] < -0.99 && al.out[2] > 0.99, `${s}: not pressed open, wrong side up`);
+    const [, by] = box3(body), [, ay] = box3(al);
+    assert.equal(Math.sign(by[0] + by[1]), Math.sign(ay[0] + ay[1]), `${s}: the allowance is not on its own side`);
+    assert.ok(Math.abs(ay[1] - ay[0] - D.allowance) < 1e-6, `${s}: the allowance is not flat`);
+  }
+  for (const lang of LOCALES) {
+    const L = lappedText(lang);
+    assert.match(stepWords(L, seamStep), BACKSTITCH[lang], `${lang} step ${seamStep}: the backstitch`);
+    assert.match(L.labels.backstitch, BACKSTITCH[lang], `${lang}: chip backstitch`);
+  }
+});
+
+test('lapped: the zipper foot where it sews next to the zipper (Windman set); "only" through the allowance and the tape', () => {
+  lapped.STEPS.forEach((s, k) => {
+    const foot = (s.uses ?? []).includes('windman-presser-feet-set');
+    assert.equal(foot, zipSewing(s), `step ${k}: the presser feet set ${foot ? 'where it does not sew next to the zipper' : 'missing where it sews next to the zipper'}`);
+    if (s.stitch) assert.ok((s.uses ?? []).includes('janome-1522rd'), `step ${k}: sews without the machine`);
+    assert.equal(Boolean(s.stitch), Boolean(s.sew), `step ${k}: stitch and sew go together`);
+  });
+  assert.equal(lapped.STEPS.filter(zipSewing).length, 2, 'the fold and the overlap, with the zipper foot');
+  const ONLY = { en: /\bonly\b/, ru: /только/u, de: /\bnur\b/, fr: /seulement|uniquement/, it: /\bsolo\b|soltanto/, es: /\bsolo\b|solamente/ };
+  const fold = lapped.STEPS.findIndex(zipSewing);
+  for (const lang of LOCALES) {
+    const L = lappedText(lang);
+    lapped.STEPS.forEach((s, k) => { if (zipSewing(s)) assert.match(stepWords(L, k), ZIPPER_FOOT[lang], `${lang} step ${k}: no zipper foot`); });
+    assert.match(stepWords(L, fold), ONLY[lang], `${lang} step ${fold}: through the allowance and the tape only`);
+    assert.match(L.labels.allowanceOnly, ONLY[lang], `${lang}: chip allowanceOnly`);
+    assert.match(stepWords(L, fold), STOP_WORD[lang], `${lang} step ${fold}: the stop`);
+    assert.match(stepWords(L, fold), NOT_WORD[lang], `${lang} step ${fold}: "never over the stop"`);
+  }
+});
+
+test('lapped: a piece of the seam, not a garment — two pieces, their allowances and the zipper (every step and the first frame)', () => {
+  const OK = /^(piece-[ab]|allowance-[ab]|zip-(?:tape-[ab]|teeth|stop-top|stop-bottom|pull))$/;
+  for (let i = 0; i <= 10; i++) {
+    for (const p of lapped.anatomy(i / 10).pieces) assert.match(p.id, OK, `e=${i / 10}: ${p.id}`);
+    for (let k = 1; k < lapped.STEPS.length; k++) for (const p of lapped.STEPS[k].scene(i / 10).pieces) assert.match(p.id, OK, `step ${k}: ${p.id}`);
+  }
+});
+
+test('lapped: the first frame (the HTML, no JS) is the finished seam, right side up, the zipper under the overlap, and the pins; tapped, it shows through', () => {
+  const rest = lapped.anatomy(0).pieces;
+  for (const s of ['a', 'b']) {
+    const body = rest.find((p) => p.id === `piece-${s}`);
+    assert.ok(body.out[2] > 0.99 && (body.opacity ?? 1) > 0.999, `${s}: not right side up and opaque`);
+  }
+  // the overlap's folded edge on the seam line, over the opening and below it
+  const a = rest.find((p) => p.id === 'piece-a');
+  assert.ok(a.pts.map(([u, v]) => at(a, u, v)[1]).some((y) => Math.abs(y) < 1e-6), 'the overlap\'s folded edge is not on the seam line');
+  // the zipper face up under the fabric, the teeth all under the overlap (it does not show)
+  const teeth = rest.find((p) => p.id === 'zip-teeth');
+  assert.ok(rest.indexOf(teeth) < rest.indexOf(a) && box3(teeth)[2][1] < box3(a)[2][0], 'the zipper is not under the overlap');
+  for (const [u, v] of teeth.pts) assert.ok(covers(a, at(teeth, u, v)), 'a tooth shows past the overlap');
+  for (const lang of LAP_LANGS) {
+    const L = lappedText(lang);
+    assert.equal(pinCount(lapped.renderStep(0, 0, L).body), L.legend.length, `${lang}: pins in the first frame`);
+    assert.equal(pinCount(lapped.renderStep(0, 1, L).body), 0, `${lang}: pins once tapped`);
+  }
+  for (const p of lapped.anatomy(1).pieces.filter((x) => /^(piece|allowance)/.test(x.id))) assert.ok(p.opacity > 0.2 && p.opacity < 0.6, `${p.id}: not see-through`);
+  for (let i = 0; i <= 40; i++) {
+    for (const p of lapped.anatomy(i / 40).pieces) assert.ok((p.opacity ?? 1) > 0.01, `e=${i / 40}: ${p.id}`);
+    for (let k = 1; k < lapped.STEPS.length; k++) {
+      for (const p of lapped.STEPS[k].scene(i / 40).pieces) assert.ok((p.opacity ?? 1) > 0.01, `step ${k} t=${i / 40}: ${p.id}`);
+    }
+  }
+});
+
+test('lapped: no first person, no maker — a general recommendation', () => {
+  const W = (words) => new RegExp(`(?<!\\p{L})(?:${words})(?!\\p{L})`, 'u');
+  const MINE = {
+    en: W('I|my|me|mom|maker'), ru: W('я|мой|моя|моё|мои|мам\\p{L}*'), de: W('ich|mein\\p{L}*|Mama'),
+    fr: W("je|j'|mon|ma|mes|maman"), it: W('io|mio|mia|miei|mie|mamma'), es: W('yo|mi|mis|mamá'),
+  };
+  for (const lang of LOCALES) for (const [where, s] of lapStrings(lang)) assert.doesNotMatch(s, MINE[lang], `${lang} ${where}: a first-person or maker claim`);
+});
+
+const LAP_NAME = { en: 'Lapped zipper', ru: 'Молния с перекрытием', de: 'Reißverschluss mit Übertritt', fr: 'Fermeture éclair sous patte', it: 'Cerniera con patta', es: 'Cremallera con solapa' };
+const FIG5 = { en: 'Fig. 5', ru: 'Рис. 5', de: 'Abb. 5', fr: 'Fig. 5', it: 'Fig. 5', es: 'Fig. 5' };
+
+test('lapped: the section name is the approved one (spec 5.2); the figure is Fig. 5 under it', () => {
+  for (const lang of LOCALES) {
+    const g = guideText(guideBySlug(SLUG), lang);
+    assert.equal(g.sections[4].title, LAP_NAME[lang], lang);
+    assert.equal(lappedText(lang).ui.title, LAP_NAME[lang], `${lang}: ui.title`);
+    assert.equal(lappedText(lang).ui.fig, FIG5[lang], `${lang}: ui.fig`);
+  }
+});
+
+test('lapped: fifth, after centered; no project yet, so no "Where it\'s used" and no note; "When to choose it" names the items people search', () => {
+  const g = guideBySlug(SLUG);
+  assert.deepEqual(g.sections.slice(0, 5).map((s) => [s.id, s.figure]), [['lined', KEY], ['tabs', TABS], ['recessed', REC], ['centered', CEN], ['lapped', LAP]]);
+  const s = g.sections[4];
+  assert.deepEqual(s.usedIn, []);
+  assert.equal(s.restIn, undefined, 'lapped stands on its own');
+  const ITEMS = {
+    en: [/side seam/, /skirt/, /dress/, /trousers/], ru: [/боков\p{L}* шов/u, /юбк/u, /плать/u, /брюк/u],
+    de: [/Seitennaht/, /Rock/, /Kleid/, /Hose/], fr: [/couture de côté/, /jupe/, /robe/, /pantalon/],
+    it: [/cucitura laterale/, /gonna/, /abito/, /pantaloni/], es: [/costura lateral/, /falda/, /vestido/, /pantal[oó]n/],
+  };
+  // it hides the zipper (good when its colour does not match) and one line of stitching shows
+  const HIDES = { en: /colou?r/, ru: /цвет/u, de: /farblich|Farbe/, fr: /couleur|assortie/, it: /colore/, es: /color|combina/ };
+  const ONE = { en: /one line of stitching/, ru: /одн\p{L}* строчк/u, de: /eine Steppnaht/, fr: /une seule piqûre/, it: /una sola cucitura/, es: /un solo pespunte/ };
+  for (const lang of LOCALES) {
+    const tr = guideText(g, lang).sections[4];
+    assert.equal(tr.note, undefined, `${lang}: a note`);
+    assert.equal(tr.rest, undefined, `${lang}: a rest sentence`);
+    for (const f of SECTION_FIELDS) assert.ok(tr[f].trim(), `${lang}: ${f}`);
+    if (lang !== 'en') for (const f of ['line', 'choose']) assert.notEqual(tr[f], s[f], `${lang}: ${f} not translated`);
+    for (const re of ITEMS[lang]) assert.match(tr.choose, re, `${lang}: "When to choose it" does not name ${re}`);
+    assert.match(tr.choose, HIDES[lang], `${lang}: "When to choose it" — the zipper hidden, its colour`);
+    assert.match(tr.choose, ONE[lang], `${lang}: "When to choose it" — one line of stitching`);
+  }
+  for (const p of projects) {
+    const n = figure(p.slug).model.STEPS.length;
+    for (let k = 0; k < n; k++) assert.ok(!guidesForStep(p.slug, k).some((x) => x.section.id === 'lapped'), `${p.slug} step ${k} links to #lapped`);
+  }
+});
+
+test('lapped: no search traps (spec 5.1) — figure and section texts; never another section by its number or the page layout', () => {
+  const ORDINAL = /\b(?:first|second|third|fourth|fifth|sixth) way\b|(?:перв|втор|трет|четв[её]рт|пят|шест)\p{L}* способ|(?:erste|zweite|dritte|vierte|fünfte)n? (?:Art|Methode|Weg)|(?:première|deuxième|troisième|quatrième|cinquième) (?:méthode|façon)|(?:primo|secondo|terzo|quarto|quinto) (?:modo|metodo)|(?:primera|segunda|tercera|cuarta|quinta) (?:forma|manera)/iu;
+  const LAYOUT = /under th\w+ figure|below th\w+ figure|под рисунком|unter der Abbildung|sous (?:la|cette) figure|sotto (?:la|questa) figura|debajo de (?:la|esta) figura|bajo (?:la|esta) figura/iu;
+  for (const lang of LOCALES) {
+    for (const [where, s] of lapStrings(lang)) {
+      if (lang === 'en') assert.doesNotMatch(s, /sandwich/i, `en ${where}: "sandwich"`);
+      if (lang === 'ru') {
+        assert.doesNotMatch(s, /замо?к/iu, `ru ${where}: «замок»`);
+        assert.doesNotMatch(s, /(?<!\p{L})ушк/iu, `ru ${where}: «ушки»`);
+        assert.doesNotMatch(s, /планк/iu, `ru ${where}: «планка» («молния с планкой» — a jacket's flap)`);
+      }
+      if (lang === 'de') {
+        assert.doesNotMatch(s, /(?<!naht)verdeckt/iu, `de ${where}: «verdeckt»`);
+        assert.doesNotMatch(s, /\bRV\b/, `de ${where}: the abbreviation «RV» — the full word`);
+      }
+      if (lang === 'it') assert.doesNotMatch(s, /centrale|nascost/iu, `it ${where}: «centrale» / «nascosta»`);
+      if (lang === 'es') assert.doesNotMatch(s, /cierre/iu, `es ${where}: «cierre» (once, in the h1, only)`);
+      assert.doesNotMatch(s, ORDINAL, `${lang} ${where}: another section by its number`);
+      assert.doesNotMatch(s, LAYOUT, `${lang} ${where}: text tied to the page layout`);
+    }
+    if (lang === 'it') {
+      for (const [where, s] of lapSection(lang).filter(([w]) => w !== 'sections.lapped.title')) {
+        for (const x of sentences(s).filter((y) => /cerniera/i.test(y))) {
+          assert.match(x, /cuci|pochette|borsa|cuscin|federa|gonna|abito|vestito|astuccio|pantalon/i, `it ${where}: «${x}» — «cerniera» with no sewing word`);
+        }
+      }
+    }
+  }
+});
+
+test('lapped: language rules — French punctuation, straight apostrophe', () => {
+  for (const lang of ['ru', 'de', 'fr', 'it', 'es']) {
+    for (const [where, s] of lapStrings(lang)) {
+      if (lang === 'fr') assert.doesNotMatch(s, /(?:^|[^\xa0])[:;!?»]/, `fr ${where}: no no-break space before : ; ! ? »`);
+      if (lang === 'fr') assert.doesNotMatch(s, /«(?!\xa0)/, `fr ${where}: no no-break space after «`);
+      assert.ok(!s.includes(String.fromCharCode(0x2019)), `${lang} ${where}: typographic apostrophe — the site uses '`);
+    }
+  }
+});
+
+test('lapped: steps — the finished seam, then mark, seam, baste, press open, overlap back, the underlap and the zipper, along the fold, the overlap over, its stitching, unpick', () => {
+  assert.equal(lapped.STEPS.length, 11);
+  lapped.STEPS.slice(1).forEach((s, i) => assert.equal(typeof s.scene, 'function', `step ${i + 1} has no scene`));
+  for (const lang of LAP_LANGS) assert.equal(lappedText(lang).steps.length, 11, lang);
+  assert.deepEqual(lapped.STEPS.map((s) => s.stitch ?? null), [null, null, 'straight', 'basting', null, null, null, 'straight', null, 'straight', null]);
+  assert.deepEqual(lapped.STEPS.map((s) => (s.sew ?? []).map(([, , f]) => f)), [[], [], ['seam'], ['seam'], [], [], [], ['zipper'], [], ['zipper'], []]);
+});
+
+test('lapped: uses are catalog products', () => {
+  const ids = new Set(products.map((p) => p.id));
+  lapped.STEPS.forEach((s, k) => (s.uses ?? []).forEach((id) => assert.ok(ids.has(id), `step ${k}: unknown product "${id}"`)));
+  const FOOT = ['windman-presser-feet-set', 'janome-1522rd'];
+  assert.deepEqual(lapped.STEPS.map((s) => s.uses ?? []), [
+    [],
+    ['soraco-sewing-clips', 'sewline-air-erasable-pen'],
+    ['janome-1522rd'],
+    ['janome-1522rd'],
+    ['rowenta-travel-iron'],
+    [],
+    ['rowenta-travel-iron', 'beaditive-magnetic-pin-holder'],
+    FOOT,
+    ['beaditive-magnetic-pin-holder'],
+    FOOT,
+    ['rowenta-travel-iron'],
+  ]);
+  assert.ok(!lapped.STEPS.some((s) => (s.uses ?? []).some((id) => /zipper/.test(id))), 'a zipper product in a step');
+});
+
+test('lapped: figure is registered (build and browser)', () => {
+  const f = figure(LAP);
+  assert.equal(f.model.STEPS, lapped.STEPS);
+  assert.equal(f.text('it'), lappedText('it'));
+  const src = readFileSync(new URL('../../src/lib/anatomy/models.js', import.meta.url), 'utf8');
+  assert.match(src, /'zipper-lapped':\s*\{\s*model:\s*\(\)\s*=>\s*import\('\.\/zipper-lapped\.js'\),\s*texts:\s*import\.meta\.glob\('\.\/zipper-lapped\.\?\?\.js'\)\s*\}/);
+});
+
+test('lapped: every step renders in every language, its ids carry the figure prefix', () => {
+  for (const lang of LAP_LANGS) {
+    const L = lappedText(lang);
+    for (let k = 0; k < lapped.STEPS.length; k++) {
+      for (let i = 0; i <= 10; i++) {
+        const r = lapped.renderStep(k, i / 10, L);
+        assert.ok(r.viewBox.every(Number.isFinite), `${lang} step ${k} t=${i / 10}: viewBox`);
+        assert.ok(!r.body.includes('NaN') && !r.body.includes('undefined'), `${lang} step ${k} t=${i / 10}: body`);
+        for (const m of r.body.matchAll(/url\(#([^)]+)\)/g)) assert.ok(m[1].startsWith(`${LAP}-`), `${lang} step ${k}: #${m[1]}`);
+      }
+    }
+  }
+  for (const m of lapped.DEFS.matchAll(/id="([^"]+)"/g)) assert.ok(m[1].startsWith(`${LAP}-`), `DEFS: #${m[1]}`);
+});
+
+test('lapped: chips stay inside the figure and keep a 1% gap between them (every step, t = 0…1, every language)', () => {
+  for (const lang of LAP_LANGS) {
+    const L = lappedText(lang);
+    for (let k = 1; k < lapped.STEPS.length; k++) {
+      for (let i = 0; i <= 20; i++) {
+        const { body, viewBox } = lapped.renderStep(k, i / 20, L);
+        const [vx, vy, vw, vh] = viewBox;
+        const where = `${lang} step ${k} t=${i / 20}`;
+        for (const c of chipRects(body)) {
+          assert.ok(c.x0 >= vx - 1e-6 && c.x1 <= vx + vw + 1e-6, `${where}: a chip runs out sideways`);
+          assert.ok(c.y0 >= vy - 1e-6 && c.y1 <= vy + vh + 1e-6, `${where}: a chip runs out at the top or bottom`);
+        }
+        for (const [a, b] of touchingChips(body, viewBox)) assert.fail(`${where}: chips ${a} and ${b} touch`);
+      }
+    }
+  }
+});
+
+test('lapped: lines are drawn before the chips', () => {
+  for (let k = 1; k < lapped.STEPS.length; k++) {
+    for (const t of [0, 0.25, 0.5, 0.75, 1]) {
+      const kinds = lapped.STEPS[k].scene(t).over.map((o) => o.type);
+      const lastLine = kinds.lastIndexOf('line');
+      const firstChip = kinds.findIndex((x) => x === 'label' || x === 'dim');
+      assert.ok(lastLine < firstChip || firstChip < 0, `step ${k} t=${t}: a line comes after a chip`);
+    }
+  }
+});
+
+test('lapped: every chip key of the drawing has its text', () => {
+  for (const lang of LAP_LANGS) assert.deepEqual(Object.keys(lappedText(lang).labels).sort(), [...lapped.LABEL_KEYS].sort(), lang);
+});
+
+test('lapped: the model loads no other model', () => {
+  const src = readFileSync(new URL('../../src/lib/anatomy/zipper-lapped.js', import.meta.url), 'utf8');
+  for (const m of src.matchAll(/from\s+'\.\/([^']+)'/g)) assert.ok(['iso.js', 'kit.js'].includes(m[1]), `imports ${m[1]}`);
+});
+
+test('lapped: on the built page — its own <section id="lapped"> after centered, with its figure, no link to another section', () => {
+  for (const lang of LOCALES) {
+    const file = new URL(`../../dist/${lang === 'en' ? '' : `${lang}/`}guides/sew-a-zipper.html`, import.meta.url);
+    assert.ok(existsSync(file), `${lang}: run npm run build first`);
+    const html = readFileSync(file, 'utf8');
+    const from = html.search(/<section[^>]*id="lapped"/);
+    assert.ok(from > html.search(/<section[^>]*id="centered"/), `${lang}: no <section id="lapped"> after centered`);
+    const next = html.indexOf('<section class="section', from + 1);
+    const sec = html.slice(from, next < 0 ? undefined : next);
+    assert.match(sec, /zipper-lapped-print/, `${lang}: no lapped figure in the section`);
+    assert.doesNotMatch(sec, /href="#(?:lined|tabs|recessed|centered|invisible)"/, `${lang}: a link to another section`);
+  }
+});

@@ -76,6 +76,11 @@ export default {
         line: 'Los dos bordes doblados de la costura se juntan sobre los dientes de la cremallera, con un pespunte a cada lado.',
         choose: 'Cuando quieres la forma más sencilla de coser una cremallera en una costura: en una funda de almohada o de cojín, en una falda, en la costura central de la espalda de un vestido. La cremallera se ve un poco por los dos lados.',
       },
+      lapped: {
+        title: 'Cremallera con solapa',
+        line: 'Un lado de la costura se dobla sobre la cremallera y la tapa, con un solo pespunte al lado.',
+        choose: 'Cuando coses una cremallera en la costura lateral de una falda, un vestido o un pantalón y no quieres que se vea: la solapa tapa la cremallera, útil cuando su color no combina con la tela, y se ve un solo pespunte.',
+      },
     },
   },
 };

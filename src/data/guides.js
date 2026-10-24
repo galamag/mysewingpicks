@@ -199,6 +199,22 @@ export const guides = [
         line: 'The two folded edges of the seam meet over the zipper teeth, with a line of stitching on each side.',
         choose: 'When you want the simplest way to put a zipper into a seam: a pillow cover or a pillowcase, a skirt, the center back seam of a dress. The zipper shows just a little on both sides.',
       },
+      {
+        // The lapped zipper in a seam (the side seam of skirts, dresses, trousers) - a public technique (spec 3 row 5,
+        // 5.3 «Раздел 5»): the seam sewn up to the mark with a backstitch, the opening basted with the longest stitch,
+        // pressed open; the underlap's allowance folded a little narrower than the seam allowance, its fold beside the
+        // teeth, stitched along the fold through the allowance and the tape only (the overlap folded back); the overlap
+        // back over the zipper, covering that stitching; with the zipper foot across the bottom and along the overlap
+        // side, wide enough to clear the teeth and the pull (which way and from where: not said - the sources differ);
+        // the basting unpicked. NO numbers (spec 3.1: the sources' 3 mm is not given). A piece of the seam, not a garment
+        // (spec 4). No project yet: usedIn []. "When to choose it" names the items people search for (spec 3, 5.1).
+        id: 'lapped',
+        figure: 'zipper-lapped',
+        usedIn: [],
+        title: 'Lapped zipper',
+        line: 'One side of the seam folds over the zipper and hides it, with one line of stitching beside it.',
+        choose: 'When you sew a zipper into the side seam of a skirt, a dress or trousers and want it out of sight: the overlap hides the zipper, which helps when its color does not match the fabric, and only one line of stitching shows.',
+      },
     ],
   },
 ];

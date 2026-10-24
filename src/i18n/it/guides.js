@@ -75,6 +75,11 @@ export default {
         line: 'Si cuce la cerniera in una cucitura: i due bordi piegati si incontrano sopra i denti, con una cucitura su ogni lato.',
         choose: 'Quando vuoi il modo più semplice per cucire una cerniera in una cucitura: in una federa o in un cuscino, in una gonna, nella cucitura del centro dietro di un abito. La zip si vede appena da entrambi i lati.',
       },
+      lapped: {
+        title: 'Cerniera con patta',
+        line: 'Si cuce la cerniera sotto un lato della cucitura che la copre, con una sola cucitura a vista.',
+        choose: 'Quando cuci una cerniera nella cucitura laterale di una gonna, di un abito o dei pantaloni e non vuoi che si veda: la patta copre la zip, comodo quando il colore della zip non è uguale al tessuto, e si vede una sola cucitura.',
+      },
     },
   },
 };

@@ -76,6 +76,11 @@ export default {
         line: 'Les deux bords pliés de la couture se rejoignent sur les dents de la fermeture éclair, avec une piqûre de chaque côté.',
         choose: "Quand vous voulez la façon la plus simple de coudre une fermeture éclair dans une couture : une housse de coussin ou une taie d'oreiller, une jupe, la couture milieu dos d'une robe. La fermeture se voit un peu des deux côtés.",
       },
+      lapped: {
+        title: 'Fermeture éclair sous patte',
+        line: 'Un côté de la couture se rabat sur la fermeture éclair et la cache, avec une seule piqûre à côté.',
+        choose: "Quand vous cousez une fermeture éclair dans la couture de côté d'une jupe, d'une robe ou d'un pantalon et voulez qu'elle ne se voie pas : la patte cache la fermeture, pratique quand sa couleur n'est pas assortie au tissu, et une seule piqûre se voit.",
+      },
     },
   },
 };
