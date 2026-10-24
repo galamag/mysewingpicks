@@ -33,6 +33,8 @@ import * as zipperCentered from './zipper-centered.js';
 import { centeredText } from './zipper-centered.text.js';
 import * as zipperLapped from './zipper-lapped.js';
 import { lappedText } from './zipper-lapped.text.js';
+import * as zipperInvisible from './zipper-invisible.js';
+import { invisibleText } from './zipper-invisible.text.js';
 
 const FIGURES = {
   'tote-bag': { model: tote, text: toteText },
@@ -49,6 +51,7 @@ const FIGURES = {
   'zipper-recessed': { model: zipperRecessed, text: recessedText }, // the guide "How to sew a zipper", section #recessed
   'zipper-centered': { model: zipperCentered, text: centeredText }, // the guide "How to sew a zipper", section #centered
   'zipper-lapped': { model: zipperLapped, text: lappedText }, // the guide "How to sew a zipper", section #lapped
+  'zipper-invisible': { model: zipperInvisible, text: invisibleText }, // the guide "How to sew a zipper", section #invisible
 };
 
 /** slug → { model, text(lang) } */

@@ -20,4 +20,5 @@ export const MODELS = {
   'zipper-recessed': { model: () => import('./zipper-recessed.js'), texts: import.meta.glob('./zipper-recessed.??.js') },
   'zipper-centered': { model: () => import('./zipper-centered.js'), texts: import.meta.glob('./zipper-centered.??.js') },
   'zipper-lapped': { model: () => import('./zipper-lapped.js'), texts: import.meta.glob('./zipper-lapped.??.js') },
+  'zipper-invisible': { model: () => import('./zipper-invisible.js'), texts: import.meta.glob('./zipper-invisible.??.js') },
 };

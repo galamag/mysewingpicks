@@ -80,6 +80,11 @@ export default {
         line: 'Eine Seite der Naht legt sich über den Reißverschluss und deckt ihn ab, daneben eine Steppnaht.',
         choose: 'Wenn du einen Reißverschluss in die Seitennaht von Rock, Kleid oder Hose einnähst und er nicht zu sehen sein soll: Der Übertritt deckt ihn ab – praktisch, wenn der Reißverschluss farblich nicht zum Stoff passt –, und nur eine Steppnaht ist zu sehen.',
       },
+      invisible: {
+        title: 'Nahtverdeckter Reißverschluss',
+        line: 'Von außen sieht man nur die Nahtlinie und den Schieber: Der Reißverschluss wird mit einem speziellen Nähfuß für nahtverdeckte Reißverschlüsse eingenäht.',
+        choose: 'Wenn du ein Kleid, einen Rock oder einen Kissenbezug nähst und der Reißverschluss nicht zu sehen sein soll, nur der Schieber: passt zu Satin und festlicher Kleidung. Mit dem normalen Reißverschlussfuß geht es auch, aber weniger gut. Nicht für dicke Stoffe oder stark beanspruchte Nähte.',
+      },
     },
   },
 };

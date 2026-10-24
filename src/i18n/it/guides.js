@@ -80,6 +80,11 @@ export default {
         line: 'Si cuce la cerniera sotto un lato della cucitura che la copre, con una sola cucitura a vista.',
         choose: 'Quando cuci una cerniera nella cucitura laterale di una gonna, di un abito o dei pantaloni e non vuoi che si veda: la patta copre la zip, comodo quando il colore della zip non è uguale al tessuto, e si vede una sola cucitura.',
       },
+      invisible: {
+        title: 'Cerniera invisibile',
+        line: 'Da fuori si vedono solo la linea di cucitura e il cursore: la cerniera si cuce con un piedino speciale, il piedino per cerniera invisibile.',
+        choose: 'Quando cuci un abito, una gonna o una federa e vuoi che la cerniera non si veda, solo il cursore: è adatta al raso e ai capi eleganti. Va bene anche il piedino per cerniere normale, ma meno. Non per tessuti spessi né per cuciture molto sollecitate.',
+      },
     },
   },
 };

@@ -81,6 +81,11 @@ export default {
         line: 'Un côté de la couture se rabat sur la fermeture éclair et la cache, avec une seule piqûre à côté.',
         choose: "Quand vous cousez une fermeture éclair dans la couture de côté d'une jupe, d'une robe ou d'un pantalon et voulez qu'elle ne se voie pas : la patte cache la fermeture, pratique quand sa couleur n'est pas assortie au tissu, et une seule piqûre se voit.",
       },
+      invisible: {
+        title: 'Fermeture invisible',
+        line: "De l'extérieur, on ne voit que la ligne de couture et le curseur : la fermeture se coud avec un pied spécial, le pied pour fermeture invisible.",
+        choose: "Pour une robe, une jupe ou une taie d'oreiller, quand la fermeture ne doit pas se voir, seulement son curseur : elle convient au satin et aux tenues habillées. Le pied fermeture éclair classique convient aussi, mais moins bien. Pas pour les tissus épais ni une couture très sollicitée.",
+      },
     },
   },
 };

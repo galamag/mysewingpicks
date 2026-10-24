@@ -1,0 +1,150 @@
+/* Fermeture invisible (tuto « Coudre une fermeture éclair », section `invisible`) — textes en français. Même forme
+   que l'anglais (zipper-invisible.text.js le vérifie). Sans chiffres ni unités. « De haut en bas » est dit : toutes les
+   sources sont d'accord. Le pied pour fermeture invisible est nommé, jamais en lien. Vouvoiement. Espaces insécables
+   avant : ; ! ? » et après «. */
+export default {
+  ui: {
+    fig: 'Fig. 6',
+    title: 'Fermeture invisible',
+    svgLabel: "Un dessin isométrique pour coudre une fermeture invisible dans une couture : la couture laissée ouverte ; la fermeture ouverte et sa spirale repassée à plat sur l'envers avec un fer à peine chaud ; la fermeture endroit dessous sur l'endroit d'une pièce, la spirale sur la ligne de couture, piquée au pied pour fermeture invisible de haut en bas jusqu'à ce que le pied bute contre le curseur ; l'autre côté pareil, la spirale dans l'autre rainure, les bords du haut alignés ; la fermeture fermée ; la couture en dessous piquée au pied fermeture éclair ; les extrémités du ruban cousues aux valeurs de couture seulement. De l'extérieur, on ne voit que la ligne de couture et le curseur.",
+    prev: 'Étape précédente',
+    dot: (i, title) => (i ? `Étape ${i} : ${title}` : title),
+    start: 'Étapes →',
+    next: 'Suivant →',
+    overview: "Vue d'ensemble",
+    stepOf: (k, n) => `Étape ${k} sur ${n}`,
+    machine: (stitch) => `Machine : ${stitch.toLowerCase()}`,
+    inThisStep: 'Pour cette étape',
+    takeApart: 'Voir à travers le tissu',
+    putTogether: 'Revenir au tissu',
+    replay: '↻ Revoir',
+    parts: 'Pièces',
+    allSteps: 'Instructions étape par étape',
+    endView: 'VUE EN COUPE',
+  },
+  stitches: { straight: 'Point droit' },
+  labels: {
+    seamOpen: 'laisser la couture ouverte',
+    zipperFirst: "d'abord la fermeture",
+    openZip: 'ouvrir la fermeture',
+    fromBack: "spirale à plat sur l'envers",
+    coolIron: 'fer à peine chaud',
+    faceDown: 'fermeture endroit dessous',
+    coilOnSeam: 'spirale sur la ligne de couture',
+    oneGroove: 'spirale dans une rainure',
+    topDown: 'de haut en bas',
+    toPull: 'le pied bute contre le curseur',
+    otherPiece: "l'autre pièce, endroit dessus",
+    freeHalf: 'moitié libre endroit dessous',
+    topsLevel: 'bords du haut alignés',
+    notTwisted: 'sans la vriller',
+    otherGroove: "spirale dans l'autre rainure",
+    close: 'fermer la fermeture',
+    rightSides: 'endroit contre endroit',
+    aboveSide: 'un peu au-dessus, à côté',
+    zipperFoot: 'pied fermeture éclair',
+    tapeEnds: 'aux valeurs de couture seulement',
+    rightUp: 'endroit dessus',
+    onlyPull: 'juste la couture et le curseur',
+  },
+  steps: [
+    {
+      title: 'Fermeture invisible',
+      text: "De l'extérieur, la fermeture ne se voit pas : on ne voit que la ligne de couture et le curseur. Touchez pour voir à travers le tissu.",
+    },
+    {
+      title: 'Laissez la couture ouverte',
+      text: "Laissez la couture ouverte : la fermeture invisible se coud d'abord, la couture en dessous ensuite.",
+      details: [
+        "Ne cousez pas encore la couture : la fermeture se pose d'abord sur les bords ouverts.",
+        'La couture sous la fermeture se coud une fois la fermeture posée.',
+      ],
+    },
+    {
+      title: 'Repassez la spirale à plat',
+      text: "Ouvrez la fermeture. Sur l'envers, repassez la spirale à plat avec un fer à peine chaud.",
+      details: [
+        "Prenez une fermeture invisible un peu plus longue que l'ouverture.",
+        'Ouvrez complètement la fermeture.',
+        "Retournez-la sur l'envers et repassez la spirale à plat avec un fer à peine chaud : un fer chaud fait fondre la spirale.",
+      ],
+    },
+    {
+      title: 'La fermeture endroit dessous',
+      text: "Posez la fermeture ouverte endroit dessous sur l'endroit d'une pièce, la spirale exactement sur la ligne de couture, et épinglez.",
+      details: [
+        "Posez une moitié de la fermeture ouverte endroit dessous sur l'endroit d'une pièce.",
+        'La spirale exactement sur la ligne de couture, le ruban sur la valeur de couture.',
+        'Épinglez le ruban.',
+      ],
+    },
+    {
+      title: 'Le premier côté',
+      text: "Installez le pied pour fermeture invisible, la spirale dans une de ses rainures. Piquez de haut en bas jusqu'à ce que le pied bute contre le curseur, et faites un point d'arrêt.",
+      details: [
+        'Installez le pied pour fermeture invisible : la spirale passe dans une des deux rainures sous le pied.',
+        "Piquez de haut en bas, près de la spirale, jusqu'à ce que le pied bute contre le curseur.",
+        "Faites un point d'arrêt à cet endroit.",
+        'Gardez la spirale dans la rainure : si la piqûre attrape la spirale, la fermeture ne se fermera pas.',
+      ],
+    },
+    {
+      title: "L'autre côté",
+      text: "Posez l'autre pièce endroit dessus et rabattez la première pièce dessus, endroit contre endroit, sa valeur de couture et la moitié cousue de la fermeture repliées. La moitié libre de la fermeture repose endroit dessous sur l'autre pièce, la spirale sur la ligne de couture.",
+      details: [
+        "Posez l'autre pièce endroit dessus.",
+        'Rabattez la première pièce dessus, endroit contre endroit, sa valeur de couture et la moitié cousue de la fermeture repliées.',
+        "Posez la moitié libre de la fermeture endroit dessous sur l'endroit de l'autre pièce, la spirale exactement sur la ligne de couture.",
+        'Alignez les bords du haut et les éventuelles coutures transversales, et posez la fermeture sans la vriller. Épinglez.',
+      ],
+    },
+    {
+      title: "Piquez l'autre côté",
+      text: "La spirale dans l'autre rainure du pied pour fermeture invisible, piquez de haut en bas jusqu'à ce que le pied bute contre le curseur, et faites un point d'arrêt.",
+      details: [
+        "Placez la spirale dans l'autre rainure du pied.",
+        "Piquez de haut en bas, près de la spirale, jusqu'à ce que le pied bute contre le curseur.",
+        "Faites un point d'arrêt. La spirale reste hors de la piqûre.",
+      ],
+    },
+    {
+      title: 'Fermez la fermeture',
+      text: 'Fermez la fermeture : le curseur va tout en haut.',
+      details: [
+        'Fermez complètement la fermeture.',
+        "Elle glisse bien quand la spirale n'est pas prise dans la piqûre.",
+      ],
+    },
+    {
+      title: 'La couture en dessous',
+      text: 'Mettez les pièces endroit contre endroit et passez au pied fermeture éclair. Cousez la couture sous la fermeture, en commençant un peu au-dessus et à côté de la fin de la piqûre de la fermeture.',
+      details: [
+        'Mettez les pièces endroit contre endroit, les bords alignés.',
+        'Passez au pied fermeture éclair classique.',
+        'Commencez un peu au-dessus et à côté de la fin de la piqûre de la fermeture, et cousez le reste de la couture.',
+      ],
+    },
+    {
+      title: 'Les extrémités du ruban',
+      text: 'Dépliez les valeurs de couture et cousez les extrémités du ruban aux valeurs de couture seulement, pas aux pièces.',
+      details: [
+        'Dépliez les valeurs de couture.',
+        'Cousez chaque extrémité du ruban à sa propre valeur de couture seulement, pas à la pièce.',
+      ],
+    },
+    {
+      title: 'Endroit dessus',
+      text: "Dépliez les pièces et retournez-les endroit dessus. De l'extérieur, on ne voit que la ligne de couture et le curseur.",
+      details: [
+        'Dépliez les pièces et retournez-les endroit dessus.',
+        "De l'extérieur, on ne voit que la ligne de couture et le curseur.",
+      ],
+    },
+  ],
+  legend: [
+    { title: 'Tissu', text: 'deux pièces jointes sur la ligne de couture · aucune piqûre visible' },
+    { title: 'Ligne de couture', text: "la spirale s'y cache · sous la fermeture, une couture simple" },
+    { title: 'Fermeture', text: 'sous le tissu · le ruban cousu aux valeurs de couture seulement' },
+    { title: 'Curseur', text: 'la seule partie visible de la fermeture' },
+  ],
+};

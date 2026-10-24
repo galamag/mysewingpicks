@@ -81,6 +81,11 @@ export default {
         line: 'Un lado de la costura se dobla sobre la cremallera y la tapa, con un solo pespunte al lado.',
         choose: 'Cuando coses una cremallera en la costura lateral de una falda, un vestido o un pantalón y no quieres que se vea: la solapa tapa la cremallera, útil cuando su color no combina con la tela, y se ve un solo pespunte.',
       },
+      invisible: {
+        title: 'Cremallera invisible',
+        line: 'Por fuera solo se ven la línea de costura y el tirador: la cremallera se cose con un prensatelas especial para cremalleras invisibles.',
+        choose: 'Cuando coses un vestido, una falda o una funda de almohada y no quieres que se vea la cremallera, solo el tirador: va bien con el satén y la ropa de fiesta. También sirve el prensatelas para cremalleras normal, pero peor. No para telas gruesas ni para costuras que soportan mucha tensión.',
+      },
     },
   },
 };

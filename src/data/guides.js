@@ -216,6 +216,24 @@ export const guides = [
         line: 'One side of the seam folds over the zipper and hides it, with one line of stitching beside it.',
         choose: 'When you sew a zipper into the side seam of a skirt, a dress or trousers and want it out of sight: the overlap hides the zipper, which helps when its color does not match the fabric, and only one line of stitching shows.',
       },
+      {
+        // The invisible zipper in a seam (dresses, skirts, pillowcases) - a public technique (spec 3 row 6 and «Лапка»,
+        // 5.3 «Раздел 6»), the nine sources' order: the seam left open; the zipper opened, its coil pressed flat from the
+        // back with a barely warm iron; face down on the right side of one piece, the coil on the seam line; with the
+        // invisible zipper foot, the coil in one groove, from top to bottom until the pull stops the foot (the sources all
+        // agree on the direction, so it is said), backstitched; the other side with the other groove, top edges and cross
+        // seams level, not twisted; the zipper closed; the seam below with the zipper foot, from a little above and to the
+        // side of the end of the zipper stitching; the tape ends to the seam allowances only. NO numbers (how much longer
+        // the zipper is, where the seam below starts, the iron's heat: in words). The invisible zipper foot is named, never
+        // linked (not in the catalog); the zipper foot (Windman set) for the seam below. A piece of the seam, not a garment
+        // (spec 4). No project yet: usedIn []. "When to choose it" names the items people search for (spec 3, 5.1).
+        id: 'invisible',
+        figure: 'zipper-invisible',
+        usedIn: [],
+        title: 'Invisible zipper',
+        line: 'From the outside only the seam line and the pull show: the zipper is sewn in with a special invisible zipper foot.',
+        choose: 'When you sew a dress, a skirt or a pillowcase and want the zipper out of sight, only its pull: it suits satin and dressy clothes. A regular zipper foot also works, but not as well. Not for thick fabrics or a seam under heavy strain.',
+      },
     ],
   },
 ];
