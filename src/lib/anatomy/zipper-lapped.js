@@ -4,12 +4,14 @@
   перекрытием»). A public technique, no maker's project: what the sources agree on, in our own drawing. A PIECE OF THE
   SEAM, not a garment (spec 4): two pieces of fabric right sides together; the seam sewn up to the mark at the zipper's
   bottom stop, with a backstitch; the opening above it basted with the longest stitch; the seam pressed open. Then the
-  two sides of the opening do different jobs: the UNDERLAP side's seam allowance is folded a little narrower than the
-  seam allowance, so its fold sits just past the seam line, right beside the teeth of the zipper (face up under it), and
-  is stitched along that fold through the allowance and the zipper tape — the OVERLAP side folded back out of the way,
-  so it is not caught. The overlap comes back over the zipper: folded on the seam line, it covers the teeth and that
-  stitching. From the right side, with the zipper foot, one line of stitching across the bottom below the stop and along
-  the overlap side, wide enough to clear the teeth and the pull; the basting unpicked. One stitching line shows outside.
+  two sides of the opening do different jobs. The OVERLAP side is folded back out of the way. On the UNDERLAP side the
+  seam allowance is folded out, flat past the seam line; the zipper goes face down on it, its teeth by the seam line, and
+  is stitched to the allowance close to the teeth (the first stitching, through the tape and the allowance only). The
+  zipper is turned face up: the allowance folds under it and a small fold forms right by the teeth, a little narrower
+  than the seam allowance; it is stitched along that fold (the second stitching, through the allowance and the tape
+  only). The overlap comes back over the zipper: folded on the seam line, it covers the teeth and both those stitchings.
+  From the right side, with the zipper foot, one line of stitching across the bottom below the stop and along the
+  overlap side, wide enough to clear the teeth and the pull; the basting unpicked. One stitching line shows outside.
 
   NO numbers (spec 3, 3.1): the fold "a little narrower than the seam allowance" and the stitching "wide enough to clear
   the teeth and the pull" are said in words (the sources' 3 mm is not given). `SPEC` is empty; `DRAWING` holds the
@@ -23,10 +25,13 @@
         allowances on the −y side;
     W — wrong side up, the seam pressed open (step 4): the bodies at z = 0 (A on +y, B on −y), the allowances folded
         back on them at z = T;
-    R — right side up (steps 5–10 and step 0): W turned over about the seam line (y = 0, z = T), so A lies on −y and B
-        on +y; the overlap (A, body and allowance) lifted over the underlap, which reaches under it past the seam line.
+    R — right side up (steps 5–12 and step 0): W turned over about the seam line (y = 0, z = T), so A lies on −y and B
+        on +y; the overlap (A, body and allowance) lifted over the underlap. Over the opening, the underlap's allowance
+        (`allowance-b`) is a flap of its own: pressed under B, folded out past the seam line, then turned under with the
+        zipper about the fold line just past the seam line (y = −LAP); below the opening it stays pressed open
+        (`allowance-b-below`).
   Step 0 is the finished seam, right side up: the overlap's folded edge on the seam line, one line of stitching on it.
-  Tap: the fabric goes see-through, so the zipper under it and the hidden stitching on the underlap show. Shared parts
+  Tap: the fabric goes see-through, so the zipper under it and the hidden stitchings on the underlap show. Shared parts
   (camera, inset, machine, renderer) live in kit.js. SVG ids carry the figure's prefix ('zipper-lapped-…'), so it never
   collides with the other figures of the same page.
 */
@@ -47,16 +52,18 @@ const T = 0.1; // fabric thickness in the drawing
 const ZW = 2.2; // the zipper's width: two tapes and the teeth
 const C = ZW / 2;
 const TW = 0.55; // the teeth band
-const LAP = 0.35; // the underlap's fold, this far past the seam line (its allowance folded a little narrower)
-const ZC = LAP + 0.03 + TW / 2; // the zipper's middle (the teeth), across: right beside the underlap's fold
+const LAP = 0.35; // the fold that forms by the teeth, this far past the seam line (the folded part a little narrower)
+const ZC = LAP + 0.03 + TW / 2; // the zipper's middle (the teeth), across, once turned face up: right beside the fold
 const ZX = [0.15, OL + 0.9]; // the zipper, along the seam: its top just below the top edge, its tape past the bottom stop
 const SS = 0.3; // a stop, along the zipper
 const STOP_TOP = [0.45, 0.45 + SS];
 const STOP_BOT = [OL - SS, OL]; // the bottom stop, on the mark
 const TEETH = [STOP_TOP[1], STOP_BOT[0]];
-const EPS = 0.12; // the underlap's stitching, this far inside its fold
+const W1 = 0.62; // the first stitching on the folded-out allowance, close to the teeth (before the zipper is turned)
+const W1T = 2 * LAP - W1; // … where it lies once the zipper is turned face up (inside, under the fold)
+const EPS = 0.12; // the second stitching, this far inside the fold
 const UY = LAP - EPS; // … across, past the seam line
-const XU = OL - 0.15; // the underlap's stitching runs the zipper's length, as far as the bottom stop
+const XU = OL - 0.15; // the underlap's stitchings run the zipper's length, as far as the bottom stop
 const DS = 1.35; // the overlap's stitching, this far from the seam line: wide enough to clear the teeth and the pull
 const XB = OL + 0.35; // the stitching across the bottom: below the bottom stop, never over it
 const XT = 0.25; // the stitching ends by the top edge
@@ -65,16 +72,19 @@ const PULL_AT = STOP_TOP[1] + 0.45; // the pull (its origin): closed, by the top
 /** The pull, round its own origin (on the teeth): a body, and its tab along the teeth. */
 const PULL_PTS = [[-0.5, -0.3], [-0.5, 0.3], [0.9, 0.42], [0.9, 0.2], [2, 0.18], [2, -0.18], [0.9, -0.2], [0.9, -0.42]];
 const PULL_W = 0.42; // the pull's half width, across
+const FZ = 1.5 * T; // the fold lines' height (between a layer and the one under it) in frame R
 
 /** The overlap's stitching, in its own (x, distance from the seam line): across the bottom, pivot, along the side. */
 const TOP = [[XB, 0], [XB, DS], [XT, DS]];
-/** The underlap's stitching, along its fold, in the underlap's own (x, v): v < 0 is past the seam line. */
+/** The second stitching, along the fold, in the underlap's own (x, v): v < 0 is past the seam line. */
 const UNDER = [[XU, -UY], [XT, -UY]];
+/** The first stitching, on the folded-out allowance in its own (x, v = distance past the seam line). */
+const FIRST = [[XU, W1], [XT, W1]];
 
 /** The drawing's relations, for the tests (tests/guides/sew-a-zipper.test.js). */
 export const DRAWING = {
   length: L, opening: OL, piece: PW, allowance: SA, lap: LAP, zipper: ZC, tape: C, teeth: TEETH, teethBand: TW,
-  stops: [STOP_TOP, STOP_BOT], pullHalf: PULL_W, stitch: DS, across: XB, under: UY, top: TOP,
+  stops: [STOP_TOP, STOP_BOT], pullHalf: PULL_W, stitch: DS, across: XB, first: W1, firstTurned: W1T, under: UY, top: TOP,
 };
 
 const X = [1, 0, 0];
@@ -99,20 +109,19 @@ const toR = ([x, y, z]) => [x, -y, 2 * T - z];
 /* ---------- The fabric: two pieces, each a body and its seam allowance (one fold at the seam line) ---------- */
 
 /*
-  The underlap's outlines in its own (u along the seam, v from the seam line into the piece): over the opening its fold
-  moves `f` 0…1 past the seam line (v = −LAP f), so the allowance folded under is a little narrower than the allowance;
-  below the opening it stays on the seam line (the seam is sewn there).
+  The underlap's outline in its own (u along the seam, v from the seam line into the piece): once the zipper is turned
+  face up (`f` 1), over the opening its top layer reaches a little past the seam line (v = −LAP), to the fold by the
+  teeth; below the opening it stays on the seam line (the seam is sewn there).
 */
 const bodyB = (f) => (f > 1e-6 ? [[0, -LAP * f], [OL, -LAP * f], [OL, 0], [L, 0], [L, PW], [0, PW]] : band(0, L, 0, PW));
-const allowB = (f) => (f > 1e-6 ? [[0, -LAP * f], [OL, -LAP * f], [OL, 0], [L, 0], [L, SA], [OL, SA], [OL, SA - 2 * LAP * f], [0, SA - 2 * LAP * f]] : band(0, L, 0, SA));
 
 /*
   The four fabric pieces in the stack (frame S), with what is sewn on them:
     mark    the mark across the seam line at the bottom stop (air-erasable, on the wrong side)
     seam    the seam below the mark (in the fold: seen only from the wrong side)
     baste   the basting over the opening: 0 none … 1 all of it (unpicking: less and less)
-    refold  the underlap's fold over the opening: 0 on the seam line … 1 just past it (allowance a little narrower)
-    under   the underlap's stitching along its fold (seen on the right side, under the overlap at the end)
+    refold  the zipper turned face up: the underlap's top layer reaches to the fold by the teeth
+    under   the second stitching, along the fold (seen on the right side, under the overlap at the end)
     top     the overlap's stitching across the bottom and along its side (sewn or not)
 */
 function stack({ mark = false, seam = false, baste = 0, refold = 0, under = false, top = false } = {}) {
@@ -126,7 +135,7 @@ function stack({ mark = false, seam = false, baste = 0, refold = 0, under = fals
   const piece = (id, pts, O, V, up, ls) => ({ id, pts, O, U: X, V, out: [0, 0, up ? 1 : -1], fill: PRINT, inner: BACK, lines: ls });
   return {
     Bb: piece('piece-b', bodyB(refold), [0, 0, 0], [0, 1, 0], true, lines(1)),
-    Ba: piece('allowance-b', allowB(refold), [0, 0, 0], [0, -1, 0], true, lines(1).filter((l) => l.side !== 'out')),
+    Ba: piece('allowance-b', band(0, L, 0, SA), [0, 0, 0], [0, -1, 0], true, lines(1).filter((l) => l.side !== 'out')),
     Ab: piece('piece-a', band(0, L, 0, PW), [0, 0, T], [0, 1, 0], false, lines(0)),
     Aa: piece('allowance-a', band(0, L, 0, SA), [0, 0, T], [0, -1, 0], false, lines(0).filter((l) => l.side !== 'out')),
   };
@@ -157,14 +166,14 @@ function fabric(o = {}, a = 0, b = 0, c = 0) {
   return { bb, ab, ba, aa, order };
 }
 
-/* ---------- The zipper (frame W: its middle `c` across, toward side A; face down on the wrong side) ---------- */
+/* ---------- The zipper (built where it ends, frame W: its middle `c` across, toward side A) ---------- */
 
 /*
-  The zipper flat at height z, face up (`up`) or face down, its teeth on y = c; `pull` — the pull's x; `under` / `top` —
-  the two stitchings through the tapes (the underlap's along tape b; the overlap's across both and along tape a).
-  → { tapes, teeth, stops, pull }.
+  The zipper flat at height z, face up (`up`) or face down, its teeth on y = c; `pull` — the pull's x; `first` / `under`
+  / `top` — the stitchings through the tapes (the two of the underlap on tape b; the overlap's across both tapes and
+  along tape a). → { tapes, teeth, stops, pull }.
 */
-function zipper({ z, c = ZC, up = true, pull = PULL_AT, under = false, top = false, o = 1 }) {
+function zipper({ z, c = ZC, up = true, pull = PULL_AT, first = false, under = false, top = false, o = 1 }) {
   const piece = (id, pts, fill, extra = {}) => table(id, pts, z, fill, fill, up, { opacity: o, ...extra });
   const zp = z + (up ? 0.04 : -0.04);
   const st = (pts, tag) => ({ pts, kind: 'stitch', ...tag });
@@ -172,7 +181,11 @@ function zipper({ z, c = ZC, up = true, pull = PULL_AT, under = false, top = fal
     tapes: [
       piece('zip-tape-a', band(ZX[0], ZX[1], c, c + C), TAPE, { lines: top ? [st([[XB, c], [XB, DS], [XT, DS]], { topstitch: true })] : [] }),
       piece('zip-tape-b', band(ZX[0], ZX[1], c - C, c), TAPE, {
-        lines: [...(under ? [st([[XU, UY], [XT, UY]], { under: true })] : []), ...(top ? [st([[XB, 0], [XB, c]], { topstitch: true })] : [])],
+        lines: [
+          ...(first ? [st([[XU, W1T], [XT, W1T]], { first: true })] : []),
+          ...(under ? [st([[XU, UY], [XT, UY]], { under: true })] : []),
+          ...(top ? [st([[XB, 0], [XB, c]], { topstitch: true })] : []),
+        ],
       }),
     ],
     teeth: piece('zip-teeth', band(TEETH[0], TEETH[1], c - TW / 2, c + TW / 2), TEETH_FILL),
@@ -183,29 +196,51 @@ function zipper({ z, c = ZC, up = true, pull = PULL_AT, under = false, top = fal
     pull: piece('zip-pull', PULL_PTS, PULL, { O: [pull, c, zp] }),
   };
 }
-/** Face up: the tapes, the teeth on them, the stops, the pull on top. */
+/** Face up: the tapes, the teeth on them, the stops, the pull on top. Face down: the pull and the stops under the tapes. */
 const zipUp = (z) => [...z.tapes, z.teeth, ...z.stops, z.pull];
+const zipDown = (z) => [z.pull, ...z.stops, ...z.tapes, z.teeth];
 
 /* ---------- The work, turned right side up (R) ---------- */
 
 /*
   The pressed-open seam (frame W) turned over by `r` 0…1 (1 = frame R, right side up); the overlap (A) lifted over the
-  underlap as it turns; `flip` 0…1 — the overlap folded back about the seam line, over the underlap, out of the way;
-  `ghost` — the fabric's opacity (see-through, so the zipper under it shows); `zipO` / `zipIn` — the zipper fading in
-  and sliding in under the underlap's fold (0 = far out on the overlap's side). Options: as stack().
+  underlap as it turns. In frame R:
+    flip    0…1 — the overlap folded back about the seam line, over the underlap, out of the way
+    out     0…1 — the underlap's allowance over the opening folded out about the seam line, flat past it
+    turn    0…1 — the zipper turned face up: the zipper and the allowance past the fold swing under, about the fold line
+            just past the seam line (y = −LAP); before it the zipper lies face down on the folded-out allowance
+    zipO    the zipper's opacity (0: not there yet) · zipDrop — how high above the allowance it still is
+    ghost   the fabric's opacity (see-through, so the zipper under it shows)
+    first   the first stitching (the zipper tape to the folded-out allowance, close to the teeth)
+  Options: as stack() (seam, baste, under, top).
 */
-function work({ r = 1, flip = 0, ghost = 1, zipO = 0, zipIn = 1, ...o } = {}) {
-  const f = fabric(o, 1, 1, 1);
+function work({ r = 1, flip = 0, out = 0, turn: tu = 0, ghost = 1, zipO = 0, zipDrop = 0, first = false, ...o } = {}) {
+  const f = fabric({ ...o, refold: tu > 1e-6 ? 1 : 0 }, 1, 1, 1);
   const turnR = (p) => rx(p, 0, T, Math.PI * r);
+  const fab = (ps) => fade(ps, ghost);
+  if (r < 0.5) return seen(fab([turnR(f.bb), turnR(f.ab), turnR(f.ba), turnR(f.aa)])); // still wrong side up
   const up = 2 * T * r; // the overlap over the underlap
   const hinge = (p) => rx(lift(turnR(p), up), 0, 3.5 * T, -Math.PI * flip);
-  const bb = turnR(f.bb), ba = turnR(f.ba), ab = hinge(f.ab), aa = hinge(f.aa);
-  const fab = (ps) => fade(ps, ghost);
-  if (r < 0.5) return seen(fab([bb, ab, ba, aa])); // still wrong side up: the allowances on top
-  const z = zipper({ z: 2 * T, c: ZC + (1 - zipIn) * 3.2, up: false, under: o.under, top: o.top, o: zipO });
-  const zip = zipO > 0.01 ? zipUp(z).map(turnR) : []; // face up once turned: tapes, teeth, stops, the pull on top
+  const bb = turnR(f.bb), ab = hinge(f.ab), aa = hinge(f.aa);
+  const ba = turnR(f.ba);
+  // below the opening the underlap's allowance stays pressed open; over it, it is a flap of its own
+  const below = { ...ba, id: 'allowance-b-below', pts: band(OL, L, 0, SA), lines: (ba.lines ?? []).filter((l) => !l.baste && l.kind !== 'mark') };
+  const flapLines = [
+    ...(ba.lines ?? []).filter((l) => l.baste),
+    ...(first ? [{ pts: FIRST, kind: 'stitch', side: 'out', first: true }] : []),
+  ];
+  let flap = { ...ba, id: 'allowance-b', pts: band(0, OL, tu > 1e-6 ? LAP : 0, SA), lines: flapLines };
+  flap = rx(flap, 0, FZ, -Math.PI * out); // folded out: swings round under the seam line, lands flat past it
+  flap = rx(flap, -LAP, FZ, Math.PI * tu); // turned under with the zipper, about the fold line
+  // the zipper: built where it ends (face up under the fold), then turned back to face down on the folded-out allowance
+  const zf = zipper({ z: 2 * T, c: ZC, up: false, first, under: o.under, top: o.top, o: zipO });
+  const place = (p) => lift(rx(turnR(p), -LAP, FZ, -Math.PI * (1 - tu)), zipDrop);
+  const zz = { tapes: zf.tapes.map(place), teeth: place(zf.teeth), stops: zf.stops.map(place), pull: place(zf.pull) };
+  const zip = zipO > 0.01 ? zz : null;
   const lap = flip > 0.5 ? [ab, aa] : [aa, ab]; // folded back: its allowance on top
-  return seen([...zip, ...fab([ba, bb, ...lap])]);
+  if (out < 0.5) return seen([...fab([flap, below, bb, ...lap]), ...(zip ? zipDown(zip) : [])]);
+  if (tu < 0.5) return seen([...fab([below, bb, ...lap, flap]), ...(zip ? zipDown(zip) : [])]);
+  return seen([...(zip ? zipUp(zip) : []), ...fab([flap, below, bb, ...lap])]);
 }
 
 /* ---------- The END VIEW: the seam in section (across it, through the opening), layers drawn apart ---------- */
@@ -307,6 +342,8 @@ function stepPress(t) {
 /** A point in frame R on top of the underlap (B) or of the overlap (A): given in frame W's (x, y). */
 const onB = ([x, y]) => toR([x, y, -0.01]);
 const onA = ([x, y]) => toR([x, y, -2 * T - 0.01]);
+/** A point on the folded-out allowance (before the turn), at `w` past the seam line; above it by dz. */
+const onFlap = (x, w, dz = 0) => [x, -w, 2 * T + 0.01 + dz];
 
 /* Step 5: turned right side up; the overlap side folded back over the underlap, out of the way (the basting holds it). */
 function stepFoldBack(t) {
@@ -321,30 +358,62 @@ function stepFoldBack(t) {
   };
 }
 
-/* Step 6: the underlap's allowance folded a little narrower, its fold just past the seam line; the zipper face up under
-   it, the fold right beside the teeth. */
-function stepUnderlap(t) {
-  const refold = span(t, 0.06, 0.34);
-  const zin = span(t, 0.44, 0.74);
-  const pieces = work({ flip: 1, refold, zipO: span(t, 0.4, 0.5), zipIn: zin, seam: true, baste: 1 });
+/* Step 6: the underlap's allowance folded out, flat past the seam line; the zipper face down on it, its teeth by the
+   seam line. */
+function stepFoldOut(t) {
+  const out = span(t, 0.06, 0.36);
+  const zin = span(t, 0.44, 0.72);
+  const pieces = work({ flip: 1, out, zipO: span(t, 0.4, 0.5), zipDrop: (1 - zin) * 2.5, seam: true, baste: 1 });
   return {
     pieces,
     over: [
-      { type: 'line', pts: [onB([0.05, LAP]), onB([OL, LAP])], kind: 'hot', o: span(t, 0.08, 0.14) * (1 - span(t, 0.36, 0.42)) },
-      { type: 'label', p: onB([OL * 0.5, LAP]), label: 'narrower', o: span(t, 0.1, 0.16) * (1 - span(t, 0.38, 0.42)), dx: -4, dy: -10, hot: true },
-      { type: 'label', p: onB([OL * 0.5, ZC + 1.5]), label: 'faceUp', o: span(t, 0.46, 0.52) * (1 - span(t, 0.72, 0.76)), dx: -2, dy: -8, hot: true },
-      { type: 'label', p: onB([OL * 0.5, LAP]), label: 'besideTeeth', o: span(t, 0.78, 0.84), dx: -4, dy: -10, hot: true },
+      { type: 'label', p: onFlap(OL * 0.5, SA * 0.6), label: 'foldOut', o: span(t, 0.1, 0.16) * (1 - span(t, 0.38, 0.42)), dx: 2, dy: -9, hot: true },
+      { type: 'label', p: onFlap(OL * 0.5, SA * 0.6, T), label: 'faceDown', o: span(t, 0.46, 0.52) * (1 - span(t, 0.7, 0.74)), dx: 2, dy: -9, hot: true },
+      { type: 'label', p: onFlap(OL * 0.5, 0, T), label: 'teethBySeam', o: span(t, 0.76, 0.82), dx: -2, dy: 10, hot: true },
     ],
     inset: section(pieces),
   };
 }
 
-/* Step 7: with the zipper foot, along the underlap's fold, through the allowance and the zipper tape only. */
+/* Step 7: the first stitching — the zipper tape to the folded-out allowance, close to the teeth, the tape and the
+   allowance only (the zipper foot). */
+function stepFirst(t) {
+  const sew = span(t, 0.18, 0.84);
+  const done = t > 0.84;
+  const z = 3 * T + 0.01;
+  return {
+    pieces: work({ flip: 1, out: 1, zipO: 1, seam: true, baste: 1, first: done }),
+    over: [
+      { type: 'line', pts: [[XU, -W1, z], [XT, -W1, z]], t: sew, kind: 'hot', o: span(t, 0.14, 0.18) * (1 - span(t, 0.86, 0.92)) },
+      { type: 'label', p: onFlap(OL * 0.5, W1, T), label: 'nearTeeth', o: span(t, 0.06, 0.12) * (1 - span(t, 0.5, 0.54)), dx: 2, dy: -9, hot: true },
+      { type: 'label', p: onFlap(OL * 0.5, W1, T), label: 'allowanceOnly', o: span(t, 0.56, 0.62), dx: 2, dy: -9, hot: true },
+    ],
+  };
+}
+
+/* Step 8: the zipper turned face up — the allowance folds under it, and a small fold forms right by the teeth, a little
+   narrower than the allowance; pressed. */
+function stepTurn(t) {
+  const tu = span(t, 0.08, 0.5);
+  const pieces = work({ flip: 1, out: 1, turn: tu, zipO: 1, seam: true, baste: 1, first: true });
+  return {
+    pieces,
+    over: [
+      { type: 'line', pts: [onB([0.05, LAP]), onB([OL, LAP])], kind: 'hot', o: span(t, 0.54, 0.6) * (1 - span(t, 0.9, 0.96)) },
+      { type: 'label', p: onB([OL * 0.5, ZC + 1.2]), label: 'faceUp', o: span(t, 0.06, 0.12) * (1 - span(t, 0.48, 0.52)), dx: -2, dy: -8, hot: true },
+      { type: 'label', p: onB([OL * 0.5, LAP]), label: 'besideTeeth', o: span(t, 0.56, 0.62) * (1 - span(t, 0.76, 0.8)), dx: -4, dy: -10, hot: true },
+      { type: 'label', p: onB([OL * 0.5, LAP]), label: 'narrower', o: span(t, 0.82, 0.88), dx: -4, dy: -10, hot: true },
+    ],
+    inset: section(pieces),
+  };
+}
+
+/* Step 9: the second stitching — close to the fold, through the allowance and the zipper tape only (the zipper foot). */
 function stepUnder(t) {
   const sew = span(t, 0.18, 0.84);
   const done = t > 0.84;
   return {
-    pieces: work({ flip: 1, refold: 1, zipO: 1, seam: true, baste: 1, under: done }),
+    pieces: work({ flip: 1, out: 1, turn: 1, zipO: 1, seam: true, baste: 1, first: true, under: done }),
     over: [
       { type: 'line', pts: [onB([XU, UY]), onB([XT, UY])], t: sew, kind: 'hot', o: span(t, 0.14, 0.18) * (1 - span(t, 0.86, 0.92)) },
       { type: 'label', p: onB([OL * 0.5, LAP]), label: 'alongFold', o: span(t, 0.06, 0.12) * (1 - span(t, 0.5, 0.54)), dx: -4, dy: -10, hot: true },
@@ -353,10 +422,10 @@ function stepUnder(t) {
   };
 }
 
-/* Step 8: the overlap back over the zipper, folded on the seam line: it covers the teeth and the stitching just sewn. */
+/* Step 10: the overlap back over the zipper, folded on the seam line: it covers the teeth and both those stitchings. */
 function stepOverlap(t) {
   const flip = 1 - span(t, 0.08, 0.5);
-  const pieces = work({ flip, refold: 1, zipO: 1, seam: true, baste: 1, under: true });
+  const pieces = work({ flip, out: 1, turn: 1, zipO: 1, seam: true, baste: 1, first: true, under: true });
   return {
     pieces,
     over: [
@@ -367,13 +436,13 @@ function stepOverlap(t) {
   };
 }
 
-/* Step 9: with the zipper foot, across the bottom below the stop and along the overlap side, clear of the teeth and the
+/* Step 11: with the zipper foot, across the bottom below the stop and along the overlap side, clear of the teeth and the
    pull; pivot at the corner with the needle down. */
 function stepTopstitch(t) {
   const sew = span(t, 0.2, 0.84);
   const done = t > 0.84;
   return {
-    pieces: work({ refold: 1, zipO: 1, seam: true, baste: 1, under: true, top: done }),
+    pieces: work({ out: 1, turn: 1, zipO: 1, seam: true, baste: 1, first: true, under: true, top: done }),
     over: [
       { type: 'line', pts: TOP.map(onA), t: sew, kind: 'hot', o: span(t, 0.16, 0.2) * (1 - span(t, 0.86, 0.92)) },
       { type: 'label', p: onA([XB, 0]), label: 'belowStop', o: span(t, 0.2, 0.26) * (1 - span(t, 0.4, 0.44)), dx: 6, dy: 10, hot: true },
@@ -383,11 +452,11 @@ function stepTopstitch(t) {
   };
 }
 
-/* Step 10: the basting unpicked; pressed. One line of stitching shows on the right side. */
+/* Step 12: the basting unpicked; pressed. One line of stitching shows on the right side. */
 function stepUnpick(t) {
   const out = span(t, 0.22, 0.6);
   return {
-    pieces: work({ refold: 1, zipO: 1, seam: true, baste: 1 - out, under: true, top: true }),
+    pieces: work({ out: 1, turn: 1, zipO: 1, seam: true, baste: 1 - out, first: true, under: true, top: true }),
     over: [
       { type: 'label', p: onA([OL * 0.45, 0]), label: 'unpick', o: span(t, 0.16, 0.22) * (1 - span(t, 0.6, 0.64)), dx: 2, dy: -10, hot: true },
       { type: 'label', p: onA([OL * 0.45, DS]), label: 'oneLine', o: span(t, 0.7, 0.76), dx: 4, dy: 10, hot: true },
@@ -397,9 +466,9 @@ function stepUnpick(t) {
 
 /* ---------- Step 0: the finished seam, right side up — opaque (e = 0, the first frame) or see-through (e = 1) ---------- */
 
-/** The finished lapped zipper; e = 0 as it looks, 1 the fabric see-through (the zipper and the hidden stitching). */
+/** The finished lapped zipper; e = 0 as it looks, 1 the fabric see-through (the zipper and the hidden stitchings). */
 export function anatomy(e = 0) {
-  return { pieces: work({ ghost: 1 - 0.6 * span(e, 0.1, 0.9), refold: 1, zipO: 1, seam: true, under: true, top: true }), over: [] };
+  return { pieces: work({ ghost: 1 - 0.6 * span(e, 0.1, 0.9), out: 1, turn: 1, zipO: 1, seam: true, first: true, under: true, top: true }), over: [] };
 }
 
 /** Numbered pins for the legend, on the finished seam (shown at rest): fabric, stitching, seam, zipper. */
@@ -431,7 +500,9 @@ export const STEPS = [
   { scene: stepBaste, duration: 5, stitch: 'basting', sew: [[0.2, 0.8, 'seam']], uses: ['janome-1522rd'] },
   { scene: stepPress, duration: 8, uses: ['rowenta-travel-iron'] },
   { scene: stepFoldBack, duration: 6.5, uses: [] },
-  { scene: stepUnderlap, duration: 7.5, uses: ['rowenta-travel-iron', 'beaditive-magnetic-pin-holder'] },
+  { scene: stepFoldOut, duration: 7, uses: ['beaditive-magnetic-pin-holder'] },
+  { scene: stepFirst, duration: 6.5, stitch: 'straight', sew: [[0.18, 0.84, 'zipper']], uses: FOOT },
+  { scene: stepTurn, duration: 7, uses: ['rowenta-travel-iron'] },
   { scene: stepUnder, duration: 6.5, stitch: 'straight', sew: [[0.18, 0.84, 'zipper']], uses: FOOT },
   { scene: stepOverlap, duration: 6, uses: ['beaditive-magnetic-pin-holder'] },
   { scene: stepTopstitch, duration: 7.5, stitch: 'straight', sew: [[0.2, 0.84, 'zipper']], uses: FOOT },

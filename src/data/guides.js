@@ -202,9 +202,10 @@ export const guides = [
       {
         // The lapped zipper in a seam (the side seam of skirts, dresses, trousers) - a public technique (spec 3 row 5,
         // 5.3 «Раздел 5»): the seam sewn up to the mark with a backstitch, the opening basted with the longest stitch,
-        // pressed open; the underlap's allowance folded a little narrower than the seam allowance, its fold beside the
-        // teeth, stitched along the fold through the allowance and the tape only (the overlap folded back); the overlap
-        // back over the zipper, covering that stitching; with the zipper foot across the bottom and along the overlap
+        // pressed open; the overlap folded back; the underlap's allowance folded out, the zipper face down on it, teeth by
+        // the seam line, stitched close to the teeth; the zipper turned face up, so a fold a little narrower than the
+        // allowance forms by the teeth, stitched along it through the allowance and the tape only; the overlap back over
+        // the zipper, covering both those stitchings; with the zipper foot across the bottom and along the overlap
         // side, wide enough to clear the teeth and the pull (which way and from where: not said - the sources differ);
         // the basting unpicked. NO numbers (spec 3.1: the sources' 3 mm is not given). A piece of the seam, not a garment
         // (spec 4). No project yet: usedIn []. "When to choose it" names the items people search for (spec 3, 5.1).
