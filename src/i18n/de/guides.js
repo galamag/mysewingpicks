@@ -70,6 +70,11 @@ export default {
         choose: 'Wenn du einen Shopper oder eine große Tasche mit Futter nähst und sie sich weit öffnen soll, mit dem Reißverschluss unterhalb der Kante. Die Blende passt in fast jede Tasche mit Futter; bei sehr dickem Stoff werden die eingefassten Enden klobig.',
         rest: 'Die Enden des Reißverschlusses fasst du mit Stoffstücken ein, wie bei „Reißverschluss-Enden einfassen“: ein wie Schrägband gefalteter Streifen über jedem Ende, direkt hinter dem Stopper abgesteppt.',
       },
+      centered: {
+        title: 'Reißverschluss mittig einnähen',
+        line: 'Die beiden Stoffkanten der Naht treffen sich über den Zähnen des Reißverschlusses, an jeder Seite eine Steppnaht.',
+        choose: 'Wenn du den einfachsten Weg suchst, einen Reißverschluss in eine Naht einzunähen: in einen Kissenbezug oder eine Kissenhülle, in einen Rock, in die hintere Mittelnaht eines Kleids. Der Reißverschluss ist an beiden Seiten ein wenig zu sehen.',
+      },
     },
   },
 };

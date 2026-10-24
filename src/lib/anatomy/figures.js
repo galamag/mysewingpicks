@@ -29,6 +29,8 @@ import * as zipperTabs from './zipper-tabs.js';
 import { tabsText } from './zipper-tabs.text.js';
 import * as zipperRecessed from './zipper-recessed.js';
 import { recessedText } from './zipper-recessed.text.js';
+import * as zipperCentered from './zipper-centered.js';
+import { centeredText } from './zipper-centered.text.js';
 
 const FIGURES = {
   'tote-bag': { model: tote, text: toteText },
@@ -43,6 +45,7 @@ const FIGURES = {
   'zipper-lined': { model: zipperLined, text: linedText }, // the guide "How to sew a zipper", section #lined
   'zipper-tabs': { model: zipperTabs, text: tabsText }, // the guide "How to sew a zipper", section #tabs
   'zipper-recessed': { model: zipperRecessed, text: recessedText }, // the guide "How to sew a zipper", section #recessed
+  'zipper-centered': { model: zipperCentered, text: centeredText }, // the guide "How to sew a zipper", section #centered
 };
 
 /** slug → { model, text(lang) } */

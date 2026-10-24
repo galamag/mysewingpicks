@@ -70,6 +70,11 @@ export default {
         choose: "Quando cuci una borsa shopper o una borsa grande foderata e vuoi che si apra bene, con la cerniera sotto il bordo. Si cuce in quasi ogni borsa foderata; su una stoffa molto spessa le estremità rifinite diventano ingombranti.",
         rest: "Per chiudere le estremità della cerniera cuci due linguette di stoffa, come in «Estremità rifinite (linguette)»: una striscia piegata come uno sbieco su ogni estremità, subito dopo il fermo.",
       },
+      centered: {
+        title: 'Cerniera centrata',
+        line: 'Si cuce la cerniera in una cucitura: i due bordi piegati si incontrano sopra i denti, con una cucitura su ogni lato.',
+        choose: 'Quando vuoi il modo più semplice per cucire una cerniera in una cucitura: in una federa o in un cuscino, in una gonna, nella cucitura del centro dietro di un abito. La zip si vede appena da entrambi i lati.',
+      },
     },
   },
 };

@@ -71,6 +71,11 @@ export default {
         choose: "Quand vous cousez un sac cabas ou un grand sac doublé et que vous voulez qu'il s'ouvre en grand, la fermeture sous le bord. Elle se pose dans presque tout sac doublé ; sur un tissu très épais, les extrémités finies deviennent épaisses.",
         rest: "Les extrémités de la fermeture se finissent avec des languettes de tissu, comme dans « Extrémités finies (languettes) » : une bande pliée comme un biais sur chaque extrémité, piquée juste après l'arrêt.",
       },
+      centered: {
+        title: 'Fermeture éclair centrée',
+        line: 'Les deux bords pliés de la couture se rejoignent sur les dents de la fermeture éclair, avec une piqûre de chaque côté.',
+        choose: "Quand vous voulez la façon la plus simple de coudre une fermeture éclair dans une couture : une housse de coussin ou une taie d'oreiller, une jupe, la couture milieu dos d'une robe. La fermeture se voit un peu des deux côtés.",
+      },
     },
   },
 };

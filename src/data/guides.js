@@ -139,7 +139,7 @@ export const guides = [
     teaser: 'Sewing a zipper into a makeup bag, a bag, a pillow, a skirt or a dress — every step animated.',
     needsIntro: 'Sewing clips and the sewing machine — the tools I personally recommend for these steps.',
     // "What you'll need" - only what the sections' steps use, in the order they are used.
-    needs: ['soraco-sewing-clips', 'janome-1522rd', 'mandala-crafts-zippers', 'tailor-scissors', 'rowenta-travel-iron', 'windman-presser-feet-set', 'mebuzip-zipper-by-the-yard'],
+    needs: ['soraco-sewing-clips', 'janome-1522rd', 'mandala-crafts-zippers', 'tailor-scissors', 'rowenta-travel-iron', 'windman-presser-feet-set', 'mebuzip-zipper-by-the-yard', 'sewline-air-erasable-pen', 'beaditive-magnetic-pin-holder'],
     sections: [
       {
         // The makeup bag: 7 Zipper: the first side · 8 Zipper: the second side - the maker's 20 cm zipper in the middle of the
@@ -183,6 +183,21 @@ export const guides = [
         line: 'The zipper is sewn between strips of fabric into a panel, and the panel goes inside the top of the bag, below the edge.',
         choose: 'When you sew a tote or a big bag with a lining and want it to open wide, with the zipper below the edge. It goes into almost any lined bag; on very thick fabric the closed ends can be bulky.',
         rest: 'The ends of the zipper are closed with fabric tabs, as in the zipper with end tabs: a strip folded like bias tape over each end, stitched just past the stop.',
+      },
+      {
+        // The centered zipper in a seam (pillow covers, skirts, the center back seam) - a public technique (spec 3 row 4,
+        // 5.3 «Раздел 4»): the seam sewn up to the mark at the bottom stop with a backstitch, the opening basted with the
+        // longest stitch, pressed open; the zipper face down on the allowances, teeth on the seam line; from the right side
+        // with the zipper foot across the bottom and along both sides in the same direction (which one: not said - the
+        // sources differ); the basting unpicked. NO numbers (spec 3.1: the sources' 6 mm is not given). The figure is a
+        // piece of the seam, not a garment (spec 4). No project yet: usedIn []. "When to choose it" names the items people
+        // search for (spec 3, 5.1).
+        id: 'centered',
+        figure: 'zipper-centered',
+        usedIn: [],
+        title: 'Centered zipper',
+        line: 'The two folded edges of the seam meet over the zipper teeth, with a line of stitching on each side.',
+        choose: 'When you want the simplest way to put a zipper into a seam: a pillow cover or a pillowcase, a skirt, the center back seam of a dress. The zipper shows just a little on both sides.',
       },
     ],
   },

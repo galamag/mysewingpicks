@@ -71,6 +71,11 @@ export default {
         choose: 'Cuando coses un bolso tote o un bolso grande con forro y quieres que se abra bien, con la cremallera por debajo del borde. Va en casi cualquier bolso con forro; en una tela muy gruesa, los extremos rematados abultan.',
         rest: 'Los extremos de la cremallera se rematan con lengüetas de tela, como en «Extremos rematados»: una tira doblada como un bies sobre cada extremo, cosida justo después del tope.',
       },
+      centered: {
+        title: 'Cremallera centrada',
+        line: 'Los dos bordes doblados de la costura se juntan sobre los dientes de la cremallera, con un pespunte a cada lado.',
+        choose: 'Cuando quieres la forma más sencilla de coser una cremallera en una costura: en una funda de almohada o de cojín, en una falda, en la costura central de la espalda de un vestido. La cremallera se ve un poco por los dos lados.',
+      },
     },
   },
 };
