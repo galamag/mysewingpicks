@@ -1,0 +1,110 @@
+/* Lined zipper pouch (guide "How to sew a zipper", section `lined`) — English texts. Every language has the
+   same shape (zipper-lined.text.js checks it). `steps` are index-aligned with STEPS in zipper-lined.js:
+   step 0 = the finished zipper (title + text), steps 1–6 also have `details`.
+   `labels` — the chips in the drawing, by the keys zipper-lined.js uses.
+   Function values (ui.dot, ui.stepOf, ui.machine) keep their parameters in every language:
+   (i, title), (k, n), (stitch).
+   Numbers: the maker's only — the makeup bag's 20, 23 and 0.5 cm (Vault «Гайды — Молния (спецификация)», 3);
+   never the finished size. No topstitching along the zipper; no presser foot named (spec 3.2). */
+export default {
+  ui: {
+    fig: 'Fig. 1',
+    title: 'Lined zipper pouch',
+    svgLabel: 'An isometric drawing of how the zipper of a lined makeup bag is sewn in: the outer, the 20 cm zipper face down and the lining face down, sewn with one 0.5 cm seam; the lining opened out, outer and lining folded in half, the other side of the zipper sewn the same way, and the zipper opened.',
+    prev: 'Previous step',
+    dot: (i, title) => (i ? `Step ${i}: ${title}` : title),
+    start: 'Steps →',
+    next: 'Next →',
+    overview: 'Overview',
+    stepOf: (k, n) => `Step ${k} of ${n}`,
+    machine: (stitch) => `Machine: ${stitch.toLowerCase()}`,
+    inThisStep: 'In this step',
+    takeApart: 'Close the zipper',
+    putTogether: 'Open the zipper',
+    replay: '↻ Replay',
+    parts: 'Parts',
+    allSteps: 'Step-by-step instructions',
+    endView: 'END VIEW',
+  },
+  stitches: { straight: 'Straight stitch' },
+  labels: {
+    outerUp: 'outer, right side up',
+    zipperDown: 'zipper face down',
+    cm20: '20 cm',
+    cm23: '23 cm',
+    endsShort: 'ends short of the sides',
+    liningDown: 'lining face down',
+    edgesLevel: 'edges level',
+    seam05: '0.5 cm seam',
+    liningOut: 'open the lining out',
+    foldBoth: 'fold both in half',
+    otherEnds: 'the other ends meet the zipper',
+    otherSide: 'the other side',
+    openZipper: 'open the zipper',
+    readySides: 'ready for the side seams',
+  },
+  steps: [
+    {
+      title: 'Lined zipper pouch',
+      text: 'The makeup bag\'s zipper, sewn in: the outer on one side, the lining on the other, a seam on each side of the zipper — and the zipper open, ready for the side seams. Tap to close the zipper.',
+    },
+    {
+      title: 'Zipper on the outer',
+      text: 'Lay the outer right side up. Put the 20 cm (7⅞ in) zipper face down along its 23 cm (9 in) side, in the middle: its ends stop short of the side edges.',
+      details: [
+        'Lay the outer right side up.',
+        'Put the zipper face down along one 23 cm (9 in) side, its edge on the edge of the fabric.',
+        'Centre it: the 20 cm (7⅞ in) zipper is shorter than the side, so its ends stop short of the side edges and stay out of the side seams.',
+      ],
+    },
+    {
+      title: 'Lining on top',
+      text: 'Lay the lining on top, face down, its edge level with the outer\'s. The zipper is now between the two.',
+      details: [
+        'Lay the lining face down on top of the zipper.',
+        'Its edge is level with the edge of the outer: outer, zipper, lining — three layers.',
+        'Clip the layers together.',
+      ],
+    },
+    {
+      title: 'Sew the first side',
+      text: 'Sew through all the layers, 0.5 cm (³⁄₁₆ in) from the edge.',
+      details: [
+        'Sew through the outer, the zipper and the lining, 0.5 cm (³⁄₁₆ in) from the edge.',
+        'No topstitching along the zipper.',
+      ],
+    },
+    {
+      title: 'Open out and fold',
+      text: 'Open the lining out, away from the zipper. Fold the outer in half and the lining in half, so their other short sides meet the other side of the zipper.',
+      details: [
+        'Open the lining out, away from the zipper: the outer on one side, the lining on the other.',
+        'Fold the outer in half, right sides together, and the lining in half the same way.',
+        'Their other short sides now meet the other side of the zipper: outer, zipper face down, lining — as before.',
+      ],
+    },
+    {
+      title: 'Sew the second side',
+      text: 'Sew the other side of the zipper the same way, 0.5 cm (³⁄₁₆ in) from the edge. The outer and the lining are now one loop.',
+      details: [
+        'Clip the layers together and sew through them all, 0.5 cm (³⁄₁₆ in) from the edge.',
+        'The outer and the lining are now one loop, joined by the zipper on both sides.',
+      ],
+    },
+    {
+      title: 'Open the zipper',
+      text: 'Open the zipper before the side seams: the bag is turned right side out through it later.',
+      details: [
+        'Slide the pull to the other end: the zipper is open.',
+        'Leave it open: the side seams come next, and the bag is turned right side out through the zipper.',
+        'The side seams and turning out are on the makeup bag\'s page — the link is under this figure.',
+      ],
+    },
+  ],
+  legend: [
+    { title: 'Outer', text: 'cotton · its 23 cm (9 in) side goes to the zipper' },
+    { title: 'Zipper', text: '20 cm (7⅞ in) · in the middle of the 23 cm side, its ends short of the side edges' },
+    { title: 'Lining', text: 'the same size as the outer' },
+    { title: 'Seams', text: '0.5 cm (³⁄₁₆ in), one on each side of the zipper · no topstitching' },
+  ],
+};

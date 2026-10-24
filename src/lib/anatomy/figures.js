@@ -23,6 +23,8 @@ import * as bottomBoxed from './bottom-boxed.js';
 import { boxedText } from './bottom-boxed.text.js';
 import * as bottomPanel from './bottom-panel.js';
 import { panelText } from './bottom-panel.text.js';
+import * as zipperLined from './zipper-lined.js';
+import { linedText } from './zipper-lined.text.js';
 
 const FIGURES = {
   'tote-bag': { model: tote, text: toteText },
@@ -34,6 +36,7 @@ const FIGURES = {
   'bag-bottom-cut-out': { model: bottomCutout, text: cutoutText }, // the guide "Bag bottoms", section #cut-out
   'bag-bottom-boxed': { model: bottomBoxed, text: boxedText }, // the guide "Bag bottoms", section #boxed
   'bag-bottom-panel': { model: bottomPanel, text: panelText }, // the guide "Bag bottoms", section #panel
+  'zipper-lined': { model: zipperLined, text: linedText }, // the guide "How to sew a zipper", section #lined
 };
 
 /** slug → { model, text(lang) } */

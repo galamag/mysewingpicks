@@ -113,8 +113,9 @@ test('empty groups are not rendered', () => {
 
 // Numbers: only the maker's (spec 3.2), per guide; no finished size. line-a-bag (spec 6): the tote's and the
 // basket's 8, 15, 0.5, 1 and 6 cm; bag-bottom (its own spec, 3): the tote's 6, 12 and 0.5 cm (folded), the cosmetic
-// bag's 3.5, 2.5, 0.5, 23 and 31 cm and the basket's 60 and 20 cm (cut-out; per section: bag-bottom*.test.js).
-const MAKER = { 'line-a-bag': ['8', '15', '0.5', '1', '6'], 'bag-bottom': ['6', '12', '0.5', '3.5', '2.5', '23', '31', '60', '20'] };
+// bag's 3.5, 2.5, 0.5, 23 and 31 cm and the basket's 60 and 20 cm (cut-out; per section: bag-bottom*.test.js);
+// sew-a-zipper (its own spec, 3): the makeup bag's 20, 23 and 0.5 cm (lined; per section: sew-a-zipper.test.js).
+const MAKER = { 'line-a-bag': ['8', '15', '0.5', '1', '6'], 'bag-bottom': ['6', '12', '0.5', '3.5', '2.5', '23', '31', '60', '20'], 'sew-a-zipper': ['20', '23', '0.5'] };
 const texts = () => guides.flatMap((g) => LOCALES.flatMap((lang) => {
   const tr = guideText(g, lang);
   return [

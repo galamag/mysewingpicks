@@ -44,4 +44,21 @@ export default {
       },
     },
   },
+  'sew-a-zipper': {
+    title: 'Coudre une fermeture éclair',
+    blurb: "Coudre une fermeture éclair pas à pas\u00a0: dans une trousse doublée, un sac, une housse de coussin, une jupe ou une robe. Chaque méthode est animée, avec un conseil pour savoir quand la choisir.",
+    pageTitle: 'Coudre une fermeture éclair\u00a0: trousse, sac, coussin, jupe',
+    pageDescription: "Coudre une fermeture éclair dans une trousse, un sac, un coussin, une jupe ou une robe\u00a0: la fermeture éclair en sandwich entre l'extérieur et la doublure, et d'autres méthodes. Chaque étape animée.",
+    heading: 'Coudre une fermeture éclair\u00a0: trousse, sac, coussin, jupe et robe',
+    teaser: 'Coudre une fermeture éclair dans une trousse, un sac, un coussin, une jupe ou une robe — chaque étape animée.',
+    needsIntro: 'Des pinces à tissu et la machine à coudre — les outils que je recommande personnellement pour ces étapes.',
+    sections: {
+      lined: {
+        title: 'Fermeture éclair en sandwich (trousse doublée)',
+        line: "L'extérieur, la fermeture éclair et la doublure sont cousus d'une seule couture — puis l'autre côté de la fermeture éclair de la même façon.",
+        choose: "Pour une trousse de toilette, une trousse à crayons ou une petite pochette doublée\u00a0: la fermeture éclair se pose en même temps que la doublure, et son ruban et les marges de couture restent cachés à l'intérieur.",
+        note: "Beaucoup d'explications ajoutent une surpiqûre le long de la fermeture éclair, pour que le tissu ne se prenne pas dans les dents\u00a0; cette trousse n'en a pas.",
+      },
+    },
+  },
 };

@@ -43,4 +43,21 @@ export default {
       },
     },
   },
+  'sew-a-zipper': {
+    title: 'Reißverschluss einnähen',
+    blurb: 'Reißverschluss einnähen, Schritt für Schritt: in eine gefütterte Kosmetiktasche, eine Tasche, einen Kissenbezug, einen Rock oder ein Kleid. Jede Methode als Animation, mit einem Tipp, wann sie passt.',
+    pageTitle: 'Reißverschluss einnähen: Tasche, Kissen, Rock & Kleid',
+    pageDescription: 'Reißverschluss einnähen in Kosmetiktasche, Tasche, Kissen, Rock oder Kleid: der Reißverschluss zwischen Außenteil und Futter und weitere Methoden. Jeder Schritt animiert.',
+    heading: 'Reißverschluss einnähen: Kosmetiktasche, Tasche, Kissen, Rock und Kleid',
+    teaser: 'Einen Reißverschluss in Kosmetiktasche, Tasche, Kissen, Rock oder Kleid einnähen – jeder Schritt animiert.',
+    needsIntro: 'Stoffklammern und die Nähmaschine – die Werkzeuge, die ich persönlich für diese Schritte empfehle.',
+    sections: {
+      lined: {
+        title: 'Reißverschluss mit Futter',
+        line: 'Außenteil, Reißverschluss und Futter werden mit einer Naht zusammengenäht – dann die andere Seite des Reißverschlusses genauso.',
+        choose: 'Wenn du eine Kosmetiktasche, ein Mäppchen oder eine kleine Tasche mit Futter nähst: Der Reißverschluss kommt zusammen mit dem Futter hinein, sein Band und die Nahtzugaben liegen dann innen.',
+        note: 'In vielen Anleitungen wird am Reißverschluss noch abgesteppt, damit der Stoff nicht in die Zähnchen gerät; diese Kosmetiktasche hat keine Absteppung.',
+      },
+    },
+  },
 };

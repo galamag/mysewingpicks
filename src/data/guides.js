@@ -119,6 +119,41 @@ export const guides = [
       },
     ],
   },
+  {
+    // One page, one section per way of sewing a zipper in (Vault «Гайды — Молния (спецификация)»), in this order: lined
+    // (the maker's, the makeup bag), then tabs and recessed (bags), centered, lapped and invisible (clothes and home).
+    // Numbers: `lined` - only the makeup bag's 20, 23 and 0.5 cm; the other sections none at all (spec 3). Title, h1, page
+    // title and section names: spec 5.2 as approved. No video (spec 6). No presser foot named in `lined` until the maker
+    // says which one she used (spec 3.2). The guide-level texts (blurb, pageDescription, teaser, needsIntro) are written for
+    // the whole guide's promise, without numbers; they are rewritten once all six sections are in.
+    slug: 'sew-a-zipper',
+    group: 'construction',
+    icon: '👝',
+    title: 'How to sew a zipper',
+    blurb: 'How to sew a zipper in, step by step: into a lined makeup bag, a bag, a pillow cover, a skirt or a dress. Each way is animated, with advice on when to choose it.',
+    pageTitle: 'How to Sew a Zipper: Pouch, Bag, Pillow, Skirt & Dress',
+    pageDescription: 'How to sew a zipper into a makeup bag, a bag, a pillow cover, a skirt or a dress: the zipper between the outer and the lining, and more ways. Every step animated.',
+    heading: 'How to sew a zipper: pouch, bag, pillow, skirt and dress',
+    teaser: 'Sewing a zipper into a makeup bag, a bag, a pillow, a skirt or a dress — every step animated.',
+    needsIntro: 'Sewing clips and the sewing machine — the tools I personally recommend for these steps.',
+    // "What you'll need" - only what the sections' steps use, in the order they are used.
+    needs: ['soraco-sewing-clips', 'janome-1522rd'],
+    sections: [
+      {
+        // The makeup bag: 7 Zipper: the first side · 8 Zipper: the second side - the maker's 20 cm zipper in the middle of the
+        // 23 cm side, 0.5 cm seams, no topstitching. Its figure ends at the open zipper: the side seams and turning out are on
+        // the makeup bag's page ("Where it's used"). "When to choose it": the sources' advice (spec 3, 5.3), no numbers.
+        // The note: spec 3 - many instructions topstitch along the zipper, this bag has none (no numbers).
+        id: 'lined',
+        figure: 'zipper-lined',
+        usedIn: [{ project: 'cosmetic-bag', steps: [7, 8] }],
+        title: 'Lined zipper pouch',
+        line: 'The outer, the zipper and the lining are sewn with one seam — then the other side of the zipper the same way.',
+        choose: 'When you make a makeup bag, a pencil case or a small bag with a lining: the zipper goes in together with the lining, and its tape and the seam allowances end up hidden inside.',
+        note: 'Many instructions also topstitch along the zipper, so the fabric does not catch in the teeth; this makeup bag has no topstitching.',
+      },
+    ],
+  },
 ];
 
 /** Checks a guide list (run on `guides` at load; takes a list so tests can feed it a stub). */

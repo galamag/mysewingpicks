@@ -43,4 +43,21 @@ export default {
       },
     },
   },
+  'sew-a-zipper': {
+    title: 'Come cucire una cerniera',
+    blurb: 'Come cucire una cerniera passo passo: in una pochette foderata, in una borsa, in una federa, in una gonna o in un abito. Ogni metodo è animato, con un consiglio su quando sceglierlo.',
+    pageTitle: 'Come cucire una cerniera: pochette, borsa, cuscino, gonna',
+    pageDescription: 'Come cucire una cerniera in una pochette, una borsa, un cuscino, una gonna o un abito: la cerniera cucita tra esterno e fodera e altri metodi. Ogni passaggio animato.',
+    heading: 'Come cucire una cerniera: pochette, borsa, cuscino, gonna e abito',
+    teaser: 'Cucire una cerniera in una pochette, una borsa, un cuscino, una gonna o un abito: ogni passaggio animato.',
+    needsIntro: 'Le clip per cucito e la macchina da cucire: gli strumenti che consiglio personalmente per questi passaggi.',
+    sections: {
+      lined: {
+        title: 'Cerniera con fodera',
+        line: "Esterno, cerniera e fodera si cuciono con una sola cucitura, poi l'altro lato della cerniera nello stesso modo.",
+        choose: "Quando cuci una pochette, un astuccio o una piccola borsa foderata: la cerniera si monta insieme alla fodera, e il suo nastro e i margini di cucitura restano all'interno.",
+        note: "Molte istruzioni cuciono anche un'impuntura lungo la cerniera, perché il tessuto non finisca tra i denti; questa pochette non ce l'ha.",
+      },
+    },
+  },
 };

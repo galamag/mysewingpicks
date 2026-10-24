@@ -44,4 +44,21 @@ export default {
       },
     },
   },
+  'sew-a-zipper': {
+    title: 'Cómo coser una cremallera',
+    blurb: 'Cómo coser una cremallera paso a paso: en un neceser con forro, un bolso, una funda de cojín, una falda o un vestido. Cada forma está animada, con un consejo sobre cuándo elegirla.',
+    pageTitle: 'Cómo coser una cremallera: neceser, bolso, cojín, falda',
+    pageDescription: 'Cómo coser una cremallera en un neceser, un bolso, un cojín, una falda o un vestido: la cremallera entre el exterior y el forro, y otras formas. Cada paso animado.',
+    heading: 'Cómo coser una cremallera (cierre): neceser, bolso, cojín, falda y vestido',
+    teaser: 'Coser una cremallera en un neceser, un bolso, un cojín, una falda o un vestido: cada paso animado.',
+    needsIntro: 'Pinzas para coser y la máquina de coser: las herramientas que recomiendo personalmente para estos pasos.',
+    sections: {
+      lined: {
+        title: 'Cremallera con forro',
+        line: 'El exterior, la cremallera y el forro se cosen con una sola costura; luego, el otro lado de la cremallera igual.',
+        choose: 'Cuando coses un neceser, un estuche o un bolsito con forro: la cremallera se pone junto con el forro, y su cinta y los márgenes de costura quedan escondidos dentro.',
+        note: 'Muchas instrucciones también hacen un pespunte a lo largo de la cremallera, para que la tela no se enganche en los dientes; este neceser no lo lleva.',
+      },
+    },
+  },
 };
