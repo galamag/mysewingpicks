@@ -8,6 +8,8 @@
   usedIn, title, line, choose, note? } - texts English here, translated in src/i18n/<lang>/guides.js under
   [slug].sections[id] (SECTION_FIELDS + the optional SECTION_OPTIONAL in content.js). `choose` ("When to
   choose it") has no numbers; `note` (optional) is a plain paragraph by "Where it's used" and may have them.
+  `restIn` + `rest` (optional, together): the rest of the work is shown in another section of the same guide —
+  `restIn` is its id, `rest` the sentence under the figure, by a plain link #restIn (the zipper tabs → #lined).
   Texts here are English; other languages: src/i18n/<lang>/guides.js (same fields, GUIDE_FIELDS in
   src/i18n/content.js — a missing or extra one fails the build). Spec: Vault «Гайды — спецификация».
   Plain data, no imports: src/i18n/index.js builds PAGES from this list.
@@ -137,7 +139,7 @@ export const guides = [
     teaser: 'Sewing a zipper into a makeup bag, a bag, a pillow, a skirt or a dress — every step animated.',
     needsIntro: 'Sewing clips and the sewing machine — the tools I personally recommend for these steps.',
     // "What you'll need" - only what the sections' steps use, in the order they are used.
-    needs: ['soraco-sewing-clips', 'janome-1522rd'],
+    needs: ['soraco-sewing-clips', 'janome-1522rd', 'mandala-crafts-zippers', 'tailor-scissors', 'rowenta-travel-iron', 'windman-presser-feet-set'],
     sections: [
       {
         // The makeup bag: 7 Zipper: the first side · 8 Zipper: the second side - the maker's 20 cm zipper in the middle of the
@@ -151,6 +153,20 @@ export const guides = [
         line: 'The outer, the zipper and the lining are sewn with one seam — then the other side of the zipper the same way.',
         choose: 'When you make a makeup bag, a pencil case or a small bag with a lining: the zipper goes in together with the lining, and its tape and the seam allowances end up hidden inside.',
         note: 'Many instructions also topstitch along the zipper, so the fabric does not catch in the teeth; this makeup bag has no topstitching.',
+      },
+      {
+        // Fabric tabs on the zipper's ends - a public technique (spec 3 row 2, 5.3 «Раздел 2»): a strip a little wider than
+        // the zipper tape folded like bias tape, slipped over each end, stitched along its folded edges past the stop, never
+        // over it. NO numbers. The rest is section 1, not shown again: `rest` + a link to #lined under the figure (restIn).
+        // No project yet: usedIn []. The zipper foot (Windman set) in the stitching steps.
+        id: 'tabs',
+        figure: 'zipper-tabs',
+        usedIn: [],
+        restIn: 'lined',
+        title: 'Zipper with end tabs',
+        line: 'Small fabric tabs close both ends of the zipper before it is sewn in.',
+        choose: 'When you want neat, flat ends on a makeup bag or a pencil case: the tabs cover the zipper ends, so they stay out of the side seams and the corners lie flat.',
+        rest: 'Then the zipper is sewn in like the lined zipper pouch: the outer, the zipper and the lining with one seam, then the other side the same way. The side seams go just next to the tabs.',
       },
     ],
   },
@@ -171,6 +187,12 @@ export function validateGuides(list) {
         seen.add(s.id);
         if (typeof s.figure !== 'string' || !s.figure) throw new Error(`guides.js: "${g.slug}" section "${s.id}" needs a figure (a slug in figures.js)`);
         if (!Array.isArray(s.usedIn)) throw new Error(`guides.js: "${g.slug}" section "${s.id}" needs a usedIn list`);
+      }
+      // restIn: the rest of the work is shown in ANOTHER section of this guide (a link #id under the figure), said by `rest`
+      for (const s of g.sections) {
+        if (s.restIn === undefined && s.rest === undefined) continue;
+        if (s.restIn === s.id || !g.sections.some((x) => x.id === s.restIn)) throw new Error(`guides.js: "${g.slug}" section "${s.id}" has restIn "${s.restIn}" — not another section of this guide`);
+        if (typeof s.rest !== 'string' || !s.rest.trim()) throw new Error(`guides.js: "${g.slug}" section "${s.id}" has restIn but no rest sentence`);
       }
     } else if (!g.figure || !g.usedIn) {
       throw new Error(`guides.js: "${g.slug}" needs either figure + usedIn or sections`);

@@ -9,7 +9,8 @@
   (the same pairs the project figures link back from with "How it's done ->"; not affiliate links).
   A guide with `sections` (several ways to do one thing, one figure each) is laid out by them: h1 + blurb →
   contents (a link #id + line per section) → page-disclosure → a <section id> each (h2 = title, "When to
-  choose it", its figure, its "Where it's used" with the section's optional note under the links) → videos → "What you'll need" → back to the list. The
+  choose it", its figure, the optional sentence `rest` with a plain link to the section that shows the rest of the work
+  (`restIn`, same page), its "Where it's used" with the section's optional note under the links) → videos → "What you'll need" → back to the list. The
   "How it's done" links in the projects point at these #ids (src/lib/guidePage.js).
   A wrong product id, project or project step in guides.js fails the build.
   Spec: Vault «Гайды — спецификация», 5–6.
@@ -41,7 +42,7 @@ const needs = guide.needs.map((id) => {
 // usedIn: real projects and real steps of their figures (a project's figure has the project's slug).
 // A guide with sections has its figure and usedIn per section; a plain one is a single section with no id.
 const sectioned = guide.sections !== undefined;
-const sections = guideSections(guide).map((s) => {
+const sections = guideSections(guide).map((s, _, all) => {
   for (const u of s.usedIn) {
     projectBySlug(u.project);
     const last = figure(u.project).model.STEPS.length - 1;
@@ -54,7 +55,9 @@ const sections = guideSections(guide).map((s) => {
     url: pageUrl(`project/${u.project}`, lang),
     text: text.usedInSteps(projectText(projectBySlug(u.project), lang).title, u.steps),
   }));
-  return { ...s, usedIn };
+  // restIn: the rest of the work is in another section of this page — a plain link to its #id, with its number and title.
+  const restTo = s.restIn ? { id: s.restIn, n: all.findIndex((x) => x.id === s.restIn) + 1, title: all.find((x) => x.id === s.restIn).title } : null;
+  return { ...s, usedIn, restTo };
 });
 // The projects' own videos (id, cover, title), each from where the technique begins.
 const videos = (guide.video ?? []).map((v) => {
@@ -99,6 +102,9 @@ const videos = (guide.video ?? []).map((v) => {
             <p>{s.choose}</p>
           </div>
           <AnatomyFigure model={s.figure} lang={lang} />
+          {s.restTo && (
+            <p class="guide-rest">{s.rest} <a class="guide-rest__link" href={`#${s.restTo.id}`}><span class="section-chip__count">{s.restTo.n}</span>{s.restTo.title} ↑</a></p>
+          )}
           {(s.usedIn.length > 0 || s.note) && (
             <div class="guide-used">
               <div class="section-head">
@@ -185,6 +191,8 @@ const videos = (guide.video ?? []).map((v) => {
   .guide-section .guide-used { margin-top: 28px; }
   .guide-used__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
   .guide-used .section-head { margin-bottom: 24px; }
+  .guide-rest { max-width: 760px; margin: 22px auto 0; text-align: center; } /* the rest of the work: another section, by its #id */
+  .guide-rest__link { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; white-space: normal; }
   .guide-used__note { max-width: 760px; margin: 18px auto 0; text-align: center; color: var(--ink-soft); } /* a section's note, under its projects */
   .guide-video { max-width: 760px; }
   .guide-video__item + .guide-video__item { margin-top: 36px; }

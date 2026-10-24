@@ -88,9 +88,20 @@ test('coverGuides fails on a missing, extra or empty section translation', () =>
   assert.throws(() => coverGuides('xx', en, { one: { t: 'x' } }, GF), /sections/);
 });
 
-// The optional section text `note`: in a translation exactly when English has it, never empty.
-test('SECTION_OPTIONAL: note', () => {
-  assert.deepEqual(SECTION_OPTIONAL, ['note']);
+// The optional section texts: `note`, and `rest` (the sentence by the link to the section that shows the rest of the
+// work, `restIn`): in a translation exactly when English has it, never empty.
+test('SECTION_OPTIONAL: note, rest', () => {
+  assert.deepEqual(SECTION_OPTIONAL, ['note', 'rest']);
+});
+
+// `restIn`: the rest of the work is shown in another section of the same guide (its id) — with its sentence `rest`.
+test('validateGuides: restIn names another section of the same guide, and comes with its sentence', () => {
+  const rest = (id, to) => ({ ...sec(id, 'x', []), restIn: to, rest: `R ${id}` });
+  assert.doesNotThrow(() => validateGuides([multi('d', [sec('a', 'x', []), rest('b', 'a')])]));
+  assert.throws(() => validateGuides([multi('d', [sec('a', 'x', []), rest('b', 'c')])]), /restIn "c"/);
+  assert.throws(() => validateGuides([multi('d', [sec('a', 'x', []), rest('b', 'b')])]), /restIn "b"/);
+  assert.throws(() => validateGuides([multi('d', [sec('a', 'x', []), { ...sec('b', 'x', []), restIn: 'a' }])]), /rest/);
+  assert.throws(() => validateGuides([multi('d', [sec('a', 'x', []), { ...sec('b', 'x', []), rest: 'R' }])]), /restIn/);
 });
 
 test('coverGuides: a note in English needs one in every language, and only then', () => {

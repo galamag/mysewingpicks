@@ -59,6 +59,12 @@ export default {
         choose: "Pour une trousse de toilette, une trousse à crayons ou une petite pochette doublée\u00a0: la fermeture éclair se pose en même temps que la doublure, et son ruban et les marges de couture restent cachés à l'intérieur.",
         note: "Beaucoup d'explications ajoutent une surpiqûre le long de la fermeture éclair, pour que le tissu ne se prenne pas dans les dents\u00a0; cette trousse n'en a pas.",
       },
+      tabs: {
+        title: 'Extrémités finies (languettes)',
+        line: 'De petites languettes de tissu finissent les deux extrémités de la fermeture éclair avant de la coudre.',
+        choose: "Quand vous voulez des extrémités nettes et plates sur une trousse : les languettes couvrent les bouts de la fermeture éclair, qui restent hors des coutures de côté, et les coins sont bien plats.",
+        rest: "Ensuite, cousez la fermeture éclair comme pour la fermeture éclair en sandwich : l'extérieur, la fermeture et la doublure en une seule couture, puis l'autre côté de la même façon. Les coutures de côté passent juste à côté des languettes.",
+      },
     },
   },
 };

@@ -1,0 +1,105 @@
+/* Extremos rematados (guía «Cómo coser una cremallera», sección `tabs`) — textos en español neutro, tú. Misma forma
+   que el inglés (zipper-tabs.text.js lo comprueba). Lengüeta = la tira de tela en el extremo; tope = el tope de la
+   cremallera. «Cremallera» siempre: «cierre» solo una vez, en el h1 de la guía. Sin números ni unidades: «un poco
+   más ancha que la cinta de la cremallera». Prensatelas para cremalleras. */
+export default {
+  ui: {
+    fig: 'Fig. 2',
+    title: 'Extremos rematados',
+    svgLabel: 'Dibujo isométrico de cómo se rematan los extremos de una cremallera con lengüetas de tela: una tira un poco más ancha que la cinta de la cremallera doblada como un bies, dos bordes al centro y luego por la mitad; colocada sobre cada extremo de la cremallera y pespunteada a lo largo de los bordes doblados, justo después del tope, nunca encima.',
+    prev: 'Paso anterior',
+    dot: (i, title) => (i ? `Paso ${i}: ${title}` : title),
+    start: 'Pasos →',
+    next: 'Siguiente →',
+    overview: 'Vista general',
+    stepOf: (k, n) => `Paso ${k} de ${n}`,
+    machine: (stitch) => `Máquina: ${stitch.toLowerCase()}`,
+    inThisStep: 'En este paso',
+    takeApart: 'Levantar las lengüetas',
+    putTogether: 'Volver a colocarlas',
+    replay: '↻ Repetir',
+    parts: 'Piezas',
+    allSteps: 'Instrucciones paso a paso',
+    endView: 'CORTE',
+  },
+  stitches: { straight: 'Puntada recta' },
+  labels: {
+    strip: 'una tira de tela',
+    widerThanTape: 'un poco más ancha que la cinta',
+    edgesMiddle: 'bordes al centro',
+    press: 'planchar',
+    inHalf: 'doblar por la mitad',
+    slipOn: 'sobre el extremo',
+    pastStop: 'justo después del tope',
+    alongEdge: 'por los bordes doblados',
+    notOverStop: 'no sobre el tope',
+    otherEnd: 'el otro extremo, igual',
+    thenLined: 'luego como la primera forma',
+  },
+  steps: [
+    {
+      title: 'Extremos rematados',
+      text: 'Los dos extremos de la cremallera están rematados con pequeñas lengüetas de tela, pespunteadas justo después de los topes. Toca para levantar las lengüetas.',
+    },
+    {
+      title: 'Una tira de tela',
+      text: 'Corta una tira de tela un poco más ancha que la cinta de la cremallera, una para cada extremo.',
+      details: [
+        'Corta una tira pequeña de tela un poco más ancha que la cinta de la cremallera: la lengüeta cubre el extremo de la cremallera de borde a borde.',
+        'Necesitas dos: una para cada extremo de la cremallera.',
+        'Cada patrón da una medida distinta; lo importante es que la tira sea un poco más ancha que la cinta de la cremallera.',
+      ],
+    },
+    {
+      title: 'Bordes al centro',
+      text: 'Pon la tira con el revés hacia arriba, dobla dos bordes opuestos hacia el centro y plancha, como un bies.',
+      details: [
+        'Pon la tira con el revés hacia arriba.',
+        'Dobla dos bordes opuestos para que se encuentren en el centro, revés con revés.',
+        'Plancha los dobleces.',
+      ],
+    },
+    {
+      title: 'Doblar por la mitad',
+      text: 'Dobla la tira por la mitad, con los bordes doblados hacia dentro, y plancha. La lengüeta está lista: de un lado el doblez, del otro los bordes doblados.',
+      details: [
+        'Dobla la tira por la mitad, de modo que los bordes doblados queden dentro.',
+        'Plancha: ahora la lengüeta tiene de un lado el doblez y del otro los dos bordes doblados.',
+        'Haz la segunda lengüeta igual.',
+      ],
+    },
+    {
+      title: 'Sobre el extremo',
+      text: 'Coloca la lengüeta sobre el extremo de la cremallera: el extremo entra hasta el doblez, y los bordes doblados quedan justo después del tope.',
+      details: [
+        'Abre un poco la lengüeta y mete dentro el extremo de la cremallera, hasta el doblez.',
+        'Los bordes doblados quedan justo después del tope, no encima.',
+        'La lengüeta sobresale un poco a ambos lados de la cremallera.',
+      ],
+    },
+    {
+      title: 'Pespuntear la lengüeta',
+      text: 'Con el prensatelas para cremalleras, pespuntea a lo largo de los bordes doblados, a través de la lengüeta y la cinta. Nunca cosas sobre el tope ni sobre los dientes.',
+      details: [
+        'Pon el prensatelas para cremalleras: con él coses cerca de los bordes doblados.',
+        'Pespuntea a lo ancho de la lengüeta, cerca de los bordes doblados, a través de todas sus capas y la cinta.',
+        'La costura queda sobre la cinta, después del tope: nunca cosas sobre el tope ni sobre los dientes. Suelen ser de metal, y la aguja se puede romper.',
+      ],
+    },
+    {
+      title: 'El otro extremo',
+      text: 'Coloca la segunda lengüeta sobre el otro extremo y pespuntéala igual, con el prensatelas para cremalleras, después del tope. Luego la cremallera se cose como la cremallera con forro.',
+      details: [
+        'Coloca la segunda lengüeta sobre el otro extremo de la cremallera, con los bordes doblados justo después del tope.',
+        'Con el prensatelas para cremalleras, pespuntea a lo largo de los bordes doblados, no sobre el tope.',
+        'El resto se cose como en la primera forma, la cremallera con forro: el enlace está debajo de este dibujo.',
+      ],
+    },
+  ],
+  legend: [
+    { title: 'Lengüeta', text: 'tira de tela doblada como un bies · un poco más ancha que la cinta' },
+    { title: 'Pespunte', text: 'a lo largo de los bordes doblados, después del tope' },
+    { title: 'Tope', text: 'nunca se cose encima' },
+    { title: 'Cremallera', text: 'sus extremos dentro de las lengüetas' },
+  ],
+};

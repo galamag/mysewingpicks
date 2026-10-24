@@ -58,6 +58,12 @@ export default {
         choose: 'Wenn du eine Kosmetiktasche, ein Mäppchen oder eine kleine Tasche mit Futter nähst: Der Reißverschluss kommt zusammen mit dem Futter hinein, sein Band und die Nahtzugaben liegen dann innen.',
         note: 'In vielen Anleitungen wird am Reißverschluss noch abgesteppt, damit der Stoff nicht in die Zähnchen gerät; diese Kosmetiktasche hat keine Absteppung.',
       },
+      tabs: {
+        title: 'Reißverschluss-Enden einfassen',
+        line: 'Kleine Stoffstücke fassen beide Enden des Reißverschlusses ein, bevor du ihn einnähst.',
+        choose: 'Wenn du saubere, flache Enden an einer Kosmetiktasche oder einem Mäppchen möchtest: Die Abschlussstücke decken die Enden des Reißverschlusses ab, so geraten sie nicht in die Seitennähte, und die Ecken liegen flach.',
+        rest: 'Danach nähst du den Reißverschluss ein wie den Reißverschluss mit Futter: Außenteil, Reißverschluss und Futter mit einer Naht, dann die andere Seite genauso. Die Seitennähte verlaufen direkt neben den Abschlussstücken.',
+      },
     },
   },
 };

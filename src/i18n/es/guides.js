@@ -59,6 +59,12 @@ export default {
         choose: 'Cuando coses un neceser, un estuche o un bolsito con forro: la cremallera se pone junto con el forro, y su cinta y los márgenes de costura quedan escondidos dentro.',
         note: 'Muchas instrucciones también hacen un pespunte a lo largo de la cremallera, para que la tela no se enganche en los dientes; este neceser no lo lleva.',
       },
+      tabs: {
+        title: 'Extremos rematados',
+        line: 'Unas lengüetas de tela rematan los dos extremos de la cremallera antes de coserla.',
+        choose: 'Cuando quieres extremos limpios y planos en un neceser o un estuche: las lengüetas cubren los extremos de la cremallera, que quedan fuera de las costuras laterales, y las esquinas quedan planas.',
+        rest: 'Después, la cremallera se cose como la cremallera con forro: exterior, cremallera y forro con una sola costura, y luego el otro lado igual. Las costuras laterales pasan justo al lado de las lengüetas.',
+      },
     },
   },
 };

@@ -58,6 +58,12 @@ export default {
         choose: "Quando cuci una pochette, un astuccio o una piccola borsa foderata: la cerniera si monta insieme alla fodera, e il suo nastro e i margini di cucitura restano all'interno.",
         note: "Molte istruzioni cuciono anche un'impuntura lungo la cerniera, perché il tessuto non finisca tra i denti; questa pochette non ce l'ha.",
       },
+      tabs: {
+        title: 'Estremità rifinite (linguette)',
+        line: 'Piccole linguette di stoffa rifiniscono le due estremità prima di cucire la cerniera.',
+        choose: 'Quando vuoi estremità pulite e piatte su una pochette o un astuccio: le linguette coprono le estremità della zip, che restano fuori dalle cuciture laterali, e gli angoli stanno piatti.',
+        rest: "Poi cuci la cerniera come nella cerniera con fodera: esterno, zip e fodera con una sola cucitura, poi l'altro lato allo stesso modo. Le cuciture laterali passano subito accanto alle linguette.",
+      },
     },
   },
 };

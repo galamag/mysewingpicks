@@ -16,4 +16,5 @@ export const MODELS = {
   'bag-bottom-boxed': { model: () => import('./bottom-boxed.js'), texts: import.meta.glob('./bottom-boxed.??.js') },
   'bag-bottom-panel': { model: () => import('./bottom-panel.js'), texts: import.meta.glob('./bottom-panel.??.js') },
   'zipper-lined': { model: () => import('./zipper-lined.js'), texts: import.meta.glob('./zipper-lined.??.js') },
+  'zipper-tabs': { model: () => import('./zipper-tabs.js'), texts: import.meta.glob('./zipper-tabs.??.js') },
 };

@@ -36,8 +36,9 @@ export const GUIDE_FIELDS = ['title', 'blurb', 'pageTitle', 'pageDescription', '
 /** Translatable texts of a guide section (src/data/guides.js `sections`); translations: [slug].sections[id]. */
 export const SECTION_FIELDS = ['title', 'line', 'choose'];
 /** Optional texts of a guide section: when English has one, every language has it, and the other way round.
-    note — a plain paragraph by the section's "Where it's used" (numbers allowed; `choose` has none). */
-export const SECTION_OPTIONAL = ['note'];
+    note — a plain paragraph by the section's "Where it's used" (numbers allowed; `choose` has none);
+    rest — the sentence under the figure, by the link to the section that shows the rest of the work (`restIn`). */
+export const SECTION_OPTIONAL = ['note', 'rest'];
 
 /** Translation sets by language: { products, groups, projects, guides }. */
 const SETS = {
