@@ -1216,6 +1216,24 @@ test('centered: both sides sewn the same way — two stitching lines beside the 
   }
 });
 
+test('centered: the side stitching has no starting point and no order of travel (texts and chips, every language)', () => {
+  // where a side starts (the seam line at the bottom, the top edge) and "first across, then up the side" pin a direction
+  // the sources do not agree on (spec 5.3); each side is "one side and across the bottom", pivoting at the corner
+  const ORIGIN = {
+    en: /\bstart(?:ing)?\b|\bbegin|(?<!distance )from the seam line|\bfirst (?:across|along|stitch)|\bthen (?:up|down|along|across)\b/i,
+    ru: /начн\p{L}*|начина\p{L}*|(?<!расстоянии )от (?:линии )?шва|сначала поперёк|сначала вдоль|затем вдоль|потом вдоль/iu,
+    de: /\bfang\p{L}*|\bbeginn\p{L}*|von der Nahtlinie|zuerst (?:quer|entlang)|dann (?:an|entlang|quer)/iu,
+    fr: /commencez|recommencez|commen[cç]\p{L}*|depuis la ligne|d'abord en travers|puis le long/iu,
+    it: /comincia|ricomincia|inizia|partendo dalla|prima di traverso|poi lungo/iu,
+    es: /empieza|comienza|empezando|desde la línea|primero de lado|luego a lo largo/iu,
+  };
+  for (const lang of LOCALES) {
+    for (const [where, s] of cenStrings(lang)) assert.doesNotMatch(s, ORIGIN[lang], `${lang} ${where}: a starting point or an order of travel for the stitching`);
+  }
+  assert.match('Start on the seam line and stitch across', ORIGIN.en); // the check itself catches the old wording
+  assert.match('Снова начните на линии шва', ORIGIN.ru);
+});
+
 test('centered: the basting comes out — none in the first frame, in the steps from the basting on, unpicked in the last step', () => {
   const D = centered.DRAWING;
   // step 0 (and tapped): no basting

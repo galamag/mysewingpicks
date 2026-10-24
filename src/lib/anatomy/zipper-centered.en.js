@@ -11,7 +11,7 @@ export default {
   ui: {
     fig: 'Fig. 4',
     title: 'Centered zipper',
-    svgLabel: 'An isometric drawing of how a centered zipper is sewn into a seam: the seam sewn up to the mark at the bottom stop with a backstitch, the opening basted with the longest stitch and the seam pressed open; the zipper face down on the seam allowances, its teeth on the seam line; stitched from the right side with the zipper foot across the bottom and along both sides, in the same direction; then the basting unpicked, so the two folded edges meet over the teeth.',
+    svgLabel: 'An isometric drawing of how a centered zipper is sewn into a seam: the seam sewn up to the mark at the bottom stop with a backstitch, the opening basted with the longest stitch and the seam pressed open; the zipper face down on the seam allowances, its teeth on the seam line; stitched from the right side with the zipper foot along both sides and across the bottom, in the same direction; then the basting unpicked, so the two folded edges meet over the teeth.',
     prev: 'Previous step',
     dot: (i, title) => (i ? `Step ${i}: ${title}` : title),
     start: 'Steps →',
@@ -100,12 +100,12 @@ export default {
     },
     {
       title: 'One side',
-      text: 'Turn the work right side up. With the zipper foot, stitch across the bottom, below the stop, pivot with the needle down and stitch along one side, through all the layers.',
+      text: 'Turn the work right side up. With the zipper foot, stitch one side of the zipper and across the bottom, below the stop, pivoting at the corner with the needle down, through all the layers.',
       details: [
         'Turn the work right side up: the zipper is underneath, its teeth under the seam line.',
         'Put on the zipper foot: it lets the needle stitch close to the zipper.',
-        'Start on the seam line and stitch across the bottom, below the stop: never over the stop.',
-        'At the corner, stop with the needle down in the fabric, lift the foot, turn the work and stitch along the side, the same distance from the seam line all the way.',
+        'Stitch along one side, the same distance from the seam line all the way, and across the bottom, below the stop: never over the stop.',
+        'At the corner, stop with the needle down in the fabric, lift the foot, turn the work and go on.',
       ],
     },
     {
@@ -119,10 +119,10 @@ export default {
     },
     {
       title: 'The other side',
-      text: 'Stitch the other side the same way with the zipper foot: across the bottom from the seam line, pivot, along the side, in the same direction as the first side.',
+      text: 'Stitch the other side and the rest of the bottom the same way with the zipper foot, pivoting at the corner with the needle down, in the same direction as the first side.',
       details: [
-        'Start again on the seam line and stitch the other half of the bottom, below the stop.',
-        'Pivot with the needle down and stitch along the other side, the same distance from the seam line.',
+        'Stitch along the other side, the same distance from the seam line, and the other half of the bottom, below the stop.',
+        'Pivot at the corner with the needle down.',
         'Sew both sides in the same direction.',
       ],
     },

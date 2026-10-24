@@ -6,7 +6,7 @@ export default {
   ui: {
     fig: 'Fig. 4',
     title: 'Cerniera centrata',
-    svgLabel: "Un disegno isometrico di come cucire una cerniera centrata in una cucitura: la cucitura cucita fino al segno del fermo in basso, con la fermatura, l'apertura imbastita con il punto più lungo e la cucitura aperta con il ferro; la cerniera a faccia in giù sui margini, i denti sulla linea di cucitura; cucita sul dritto con il piedino per cerniere di traverso in basso e lungo i due lati, nella stessa direzione; poi l'imbastitura scucita, così i due bordi piegati si incontrano sopra i denti.",
+    svgLabel: "Un disegno isometrico di come cucire una cerniera centrata in una cucitura: la cucitura cucita fino al segno del fermo in basso, con la fermatura, l'apertura imbastita con il punto più lungo e la cucitura aperta con il ferro; la cerniera a faccia in giù sui margini, i denti sulla linea di cucitura; cucita sul dritto con il piedino per cerniere lungo i due lati e di traverso in basso, nella stessa direzione; poi l'imbastitura scucita, così i due bordi piegati si incontrano sopra i denti.",
     prev: 'Passo precedente',
     dot: (i, title) => (i ? `Passo ${i}: ${title}` : title),
     start: 'Passo passo →',
@@ -95,12 +95,12 @@ export default {
     },
     {
       title: 'Un lato',
-      text: 'Gira il lavoro con il dritto sopra. Con il piedino per cerniere cuci di traverso in basso, sotto il fermo, gira con l\'ago abbassato e cuci lungo un lato, attraverso tutti gli strati.',
+      text: "Gira il lavoro con il dritto sopra. Con il piedino per cerniere cuci un lato e di traverso in basso, sotto il fermo, girando all'angolo con l'ago abbassato, attraverso tutti gli strati.",
       details: [
         'Gira il lavoro con il dritto sopra: la zip è sotto, i suoi denti sotto la linea di cucitura.',
         "Monta il piedino per cerniere: con lui l'ago cuce vicino alla zip.",
-        'Comincia sulla linea di cucitura e cuci di traverso in basso, sotto il fermo: mai sopra il fermo.',
-        "All'angolo fermati con l'ago abbassato nella stoffa, alza il piedino, gira il lavoro e cuci lungo il lato, sempre alla stessa distanza dalla cucitura.",
+        'Cuci lungo un lato, sempre alla stessa distanza dalla cucitura, e di traverso in basso, sotto il fermo: mai sopra il fermo.',
+        "All'angolo fermati con l'ago abbassato nella stoffa, alza il piedino, gira il lavoro e continua.",
       ],
     },
     {
@@ -114,10 +114,10 @@ export default {
     },
     {
       title: "L'altro lato",
-      text: "Cuci l'altro lato allo stesso modo con il piedino per cerniere: di traverso in basso partendo dalla linea di cucitura, gira, lungo il lato, nella stessa direzione del primo lato.",
+      text: "Cuci l'altro lato e l'altra metà di traverso in basso allo stesso modo con il piedino per cerniere, girando all'angolo con l'ago abbassato, nella stessa direzione del primo lato.",
       details: [
-        "Ricomincia sulla linea di cucitura e cuci l'altra metà di traverso, sotto il fermo.",
-        "Gira con l'ago abbassato e cuci lungo l'altro lato, alla stessa distanza dalla cucitura.",
+        "Cuci lungo l'altro lato, alla stessa distanza dalla cucitura, e l'altra metà di traverso, sotto il fermo.",
+        "All'angolo gira con l'ago abbassato.",
         'Cuci i due lati nella stessa direzione.',
       ],
     },

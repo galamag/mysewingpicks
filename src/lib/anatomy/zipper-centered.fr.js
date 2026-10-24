@@ -6,7 +6,7 @@ export default {
   ui: {
     fig: 'Fig. 4',
     title: 'Fermeture éclair centrée',
-    svgLabel: "Un dessin isométrique pour coudre une fermeture éclair centrée dans une couture : la couture cousue jusqu'au repère de l'arrêt du bas, avec un point d'arrêt, l'ouverture bâtie au point le plus long et la couture ouverte au fer ; la fermeture endroit dessous sur les valeurs de couture, les dents sur la ligne de couture ; piquée sur l'endroit au pied fermeture éclair en travers en bas et le long des deux côtés, dans le même sens ; puis le bâti décousu, et les deux bords pliés se rejoignent sur les dents.",
+    svgLabel: "Un dessin isométrique pour coudre une fermeture éclair centrée dans une couture : la couture cousue jusqu'au repère de l'arrêt du bas, avec un point d'arrêt, l'ouverture bâtie au point le plus long et la couture ouverte au fer ; la fermeture endroit dessous sur les valeurs de couture, les dents sur la ligne de couture ; piquée sur l'endroit au pied fermeture éclair le long des deux côtés et en travers en bas, dans le même sens ; puis le bâti décousu, et les deux bords pliés se rejoignent sur les dents.",
     prev: 'Étape précédente',
     dot: (i, title) => (i ? `Étape ${i} : ${title}` : title),
     start: 'Étapes →',
@@ -95,12 +95,12 @@ export default {
     },
     {
       title: 'Un côté',
-      text: "Retournez l'ouvrage, endroit dessus. Au pied fermeture éclair, piquez en travers en bas, sous l'arrêt, pivotez aiguille piquée et piquez le long d'un côté, à travers toutes les épaisseurs.",
+      text: "Retournez l'ouvrage, endroit dessus. Au pied fermeture éclair, piquez un côté et en travers en bas, sous l'arrêt, en pivotant au coin aiguille piquée, à travers toutes les épaisseurs.",
       details: [
         "Retournez l'ouvrage, endroit dessus : la fermeture est dessous, ses dents sous la ligne de couture.",
         "Montez le pied fermeture éclair : avec lui, l'aiguille pique près de la fermeture.",
-        "Commencez sur la ligne de couture et piquez en travers en bas, sous l'arrêt : jamais sur l'arrêt.",
-        "Au coin, arrêtez-vous aiguille piquée, relevez le pied, tournez l'ouvrage et piquez le long du côté, toujours à la même distance de la couture.",
+        "Piquez le long d'un côté, toujours à la même distance de la couture, et en travers en bas, sous l'arrêt : jamais sur l'arrêt.",
+        "Au coin, arrêtez-vous aiguille piquée, relevez le pied, tournez l'ouvrage et continuez.",
       ],
     },
     {
@@ -114,10 +114,10 @@ export default {
     },
     {
       title: "L'autre côté",
-      text: "Piquez l'autre côté de la même façon au pied fermeture éclair : en travers en bas depuis la ligne de couture, pivotez, le long du côté — dans le même sens que le premier côté.",
+      text: "Piquez l'autre côté et le reste du bas de la même façon au pied fermeture éclair, en pivotant au coin aiguille piquée, dans le même sens que le premier côté.",
       details: [
-        "Recommencez sur la ligne de couture et piquez l'autre moitié en travers, sous l'arrêt.",
-        "Pivotez aiguille piquée et piquez le long de l'autre côté, à la même distance de la couture.",
+        "Piquez le long de l'autre côté, à la même distance de la couture, et l'autre moitié en travers, sous l'arrêt.",
+        'Au coin, pivotez aiguille piquée.',
         'Cousez les deux côtés dans le même sens.',
       ],
     },

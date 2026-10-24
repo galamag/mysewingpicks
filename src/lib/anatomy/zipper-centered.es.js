@@ -6,7 +6,7 @@ export default {
   ui: {
     fig: 'Fig. 4',
     title: 'Cremallera centrada',
-    svgLabel: 'Un dibujo isométrico de cómo coser una cremallera centrada en una costura: la costura cosida hasta la marca del tope inferior, con remate, la abertura hilvanada con la puntada más larga y la costura abierta con la plancha; la cremallera boca abajo sobre los márgenes, los dientes sobre la línea de costura; pespunteada por el derecho con el prensatelas para cremalleras de lado a lado abajo y a lo largo de los dos lados, en la misma dirección; luego el hilván descosido, y los dos bordes doblados se juntan sobre los dientes.',
+    svgLabel: 'Un dibujo isométrico de cómo coser una cremallera centrada en una costura: la costura cosida hasta la marca del tope inferior, con remate, la abertura hilvanada con la puntada más larga y la costura abierta con la plancha; la cremallera boca abajo sobre los márgenes, los dientes sobre la línea de costura; pespunteada por el derecho con el prensatelas para cremalleras a lo largo de los dos lados y de lado a lado abajo, en la misma dirección; luego el hilván descosido, y los dos bordes doblados se juntan sobre los dientes.',
     prev: 'Paso anterior',
     dot: (i, title) => (i ? `Paso ${i}: ${title}` : title),
     start: 'Pasos →',
@@ -95,12 +95,12 @@ export default {
     },
     {
       title: 'Un lado',
-      text: 'Da la vuelta a la pieza, con el derecho hacia arriba. Con el prensatelas para cremalleras, pespuntea de lado a lado abajo, bajo el tope, gira con la aguja abajo y pespuntea a lo largo de un lado, a través de todas las capas.',
+      text: 'Da la vuelta a la pieza, con el derecho hacia arriba. Con el prensatelas para cremalleras, pespuntea un lado y de lado a lado abajo, bajo el tope, girando en la esquina con la aguja abajo, a través de todas las capas.',
       details: [
         'Da la vuelta a la pieza, con el derecho hacia arriba: la cremallera queda debajo, sus dientes bajo la línea de costura.',
         'Pon el prensatelas para cremalleras: con él la aguja cose cerca de la cremallera.',
-        'Empieza en la línea de costura y pespuntea de lado a lado, bajo el tope: nunca sobre el tope.',
-        'En la esquina, para con la aguja abajo en la tela, levanta el prensatelas, gira la pieza y pespuntea a lo largo del lado, siempre a la misma distancia de la costura.',
+        'Pespuntea a lo largo de un lado, siempre a la misma distancia de la costura, y de lado a lado abajo, bajo el tope: nunca sobre el tope.',
+        'En la esquina, para con la aguja abajo en la tela, levanta el prensatelas, gira la pieza y sigue.',
       ],
     },
     {
@@ -114,10 +114,10 @@ export default {
     },
     {
       title: 'El otro lado',
-      text: 'Pespuntea el otro lado igual con el prensatelas para cremalleras: de lado a lado abajo empezando en la línea de costura, gira, a lo largo del lado, en la misma dirección que el primer lado.',
+      text: 'Pespuntea el otro lado y la otra mitad de abajo igual con el prensatelas para cremalleras, girando en la esquina con la aguja abajo, en la misma dirección que el primer lado.',
       details: [
-        'Empieza otra vez en la línea de costura y pespuntea la otra mitad de lado a lado, bajo el tope.',
-        'Gira con la aguja abajo y pespuntea a lo largo del otro lado, a la misma distancia de la costura.',
+        'Pespuntea a lo largo del otro lado, a la misma distancia de la costura, y la otra mitad de lado a lado, bajo el tope.',
+        'En la esquina, gira con la aguja abajo.',
         'Cose los dos lados en la misma dirección.',
       ],
     },

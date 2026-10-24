@@ -6,7 +6,7 @@ export default {
   ui: {
     fig: 'Abb. 4',
     title: 'Reißverschluss mittig einnähen',
-    svgLabel: 'Eine isometrische Zeichnung, wie man einen Reißverschluss mittig in eine Naht einnäht: die Naht bis zur Markierung am unteren Stopper genäht und verriegelt, der Schlitz mit dem längsten Stich geheftet und die Naht auseinandergebügelt; der Reißverschluss mit der rechten Seite nach unten auf den Nahtzugaben, die Zähne auf der Nahtlinie; von rechts mit dem Reißverschlussfuß quer unten und an beiden Seiten abgesteppt, in dieselbe Richtung; dann die Heftnaht aufgetrennt, sodass sich die beiden Stoffkanten über den Zähnen treffen.',
+    svgLabel: 'Eine isometrische Zeichnung, wie man einen Reißverschluss mittig in eine Naht einnäht: die Naht bis zur Markierung am unteren Stopper genäht und verriegelt, der Schlitz mit dem längsten Stich geheftet und die Naht auseinandergebügelt; der Reißverschluss mit der rechten Seite nach unten auf den Nahtzugaben, die Zähne auf der Nahtlinie; von rechts mit dem Reißverschlussfuß an beiden Seiten und quer unten abgesteppt, in dieselbe Richtung; dann die Heftnaht aufgetrennt, sodass sich die beiden Stoffkanten über den Zähnen treffen.',
     prev: 'Vorheriger Schritt',
     dot: (i, title) => (i ? `Schritt ${i}: ${title}` : title),
     start: 'Schritte →',
@@ -95,12 +95,12 @@ export default {
     },
     {
       title: 'Eine Seite',
-      text: 'Dreh die Arbeit auf die rechte Seite. Steppe mit dem Reißverschlussfuß quer unter dem Stopper, dreh mit gesenkter Nadel und steppe an einer Seite entlang, durch alle Lagen.',
+      text: 'Dreh die Arbeit auf die rechte Seite. Steppe mit dem Reißverschlussfuß durch alle Lagen eine Seite und quer unter dem Stopper ab; an der Ecke drehst du mit gesenkter Nadel.',
       details: [
         'Dreh die Arbeit mit der rechten Seite nach oben: Der Reißverschluss liegt darunter, seine Zähne unter der Nahtlinie.',
         'Setz den Reißverschlussfuß ein: Mit ihm näht die Nadel dicht am Reißverschluss.',
-        'Fang auf der Nahtlinie an und steppe quer unter dem Stopper: nie über den Stopper.',
-        'An der Ecke halte mit gesenkter Nadel an, stell den Nähfuß hoch, dreh die Arbeit und steppe an der Seite entlang, die ganze Zeit im gleichen Abstand zur Naht.',
+        'Steppe an einer Seite entlang, die ganze Zeit im gleichen Abstand zur Naht, und quer unter dem Stopper: nie über den Stopper.',
+        'An der Ecke halte mit gesenkter Nadel an, stell den Nähfuß hoch, dreh die Arbeit und näh weiter.',
       ],
     },
     {
@@ -114,10 +114,10 @@ export default {
     },
     {
       title: 'Die andere Seite',
-      text: 'Steppe die andere Seite genauso mit dem Reißverschlussfuß: quer unten von der Nahtlinie aus, drehen, an der Seite entlang – in dieselbe Richtung wie die erste Seite.',
+      text: 'Steppe die andere Seite und den Rest unten genauso mit dem Reißverschlussfuß ab, an der Ecke mit gesenkter Nadel drehen, in dieselbe Richtung wie die erste Seite.',
       details: [
-        'Fang wieder auf der Nahtlinie an und steppe die andere Hälfte quer unter dem Stopper.',
-        'Dreh mit gesenkter Nadel und steppe an der anderen Seite entlang, im gleichen Abstand zur Naht.',
+        'Steppe an der anderen Seite entlang, im gleichen Abstand zur Naht, und die andere Hälfte quer unter dem Stopper.',
+        'Dreh an der Ecke mit gesenkter Nadel.',
         'Näh beide Seiten in dieselbe Richtung.',
       ],
     },
