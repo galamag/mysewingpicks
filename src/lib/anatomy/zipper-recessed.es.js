@@ -56,7 +56,6 @@ export default {
         'Corta cuatro tiras de tela tan largas como el borde del bolso: dos para cada lado de la cremallera.',
         'El ancho de las tiras cambia según el patrón: cuanto más anchas, más abajo queda la cremallera en el bolso.',
         'Muchos patrones planchan entretela termoadhesiva sobre las tiras, para que la tira de la cremallera mantenga su forma.',
-        'Corta la cremallera un poco más larga que las tiras; una cremallera por metro se corta del largo que necesites.',
       ],
     },
     {

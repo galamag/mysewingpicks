@@ -48,10 +48,10 @@ export default {
     title: 'Cómo coser una cremallera',
     blurb: 'Seis formas de coser una cremallera: con forro, con extremos rematados y en el borde del bolso para neceseres y bolsos; centrada, con solapa e invisible en la costura de una funda de cojín, una falda o un vestido. Cada forma está animada, con un consejo sobre cuándo elegirla. El prensatelas para cremalleras sirve para los extremos rematados, la cremallera en el borde del bolso, la centrada y la de solapa; la cremallera invisible lleva el prensatelas para cremalleras invisibles.',
     pageTitle: 'Cómo coser una cremallera: neceser, bolso, cojín, falda',
-    pageDescription: 'Cómo coser una cremallera en un neceser, un bolso, un cojín, una falda o un vestido: seis formas, cada paso animado. Prensatelas para cremalleras, o uno especial para la invisible.',
+    pageDescription: 'Cómo coser una cremallera en un neceser, un bolso, un cojín, una falda o un vestido: seis formas, cada paso animado. Casi siempre el prensatelas para cremalleras, y uno especial para la invisible.',
     heading: 'Cómo coser una cremallera (cierre): neceser, bolso, cojín, falda y vestido',
     teaser: 'Seis formas de coser una cremallera en un neceser, un bolso, un cojín, una falda o un vestido: cada paso animado.',
-    needsIntro: 'Cremalleras (también por metro), pinzas para coser, alfileres, un marcador borrable al aire, tijeras de sastre, una plancha, la máquina de coser y un juego de prensatelas con el de cremalleras: las herramientas que recomiendo personalmente para estos pasos. Para la cremallera invisible necesitarás además una cremallera invisible y su prensatelas.',
+    needsIntro: 'Cremalleras, pinzas para coser, alfileres, un marcador borrable al aire, tijeras de sastre, una plancha, la máquina de coser y un juego de prensatelas con el de cremalleras: las herramientas que recomiendo personalmente para estos pasos. Para la cremallera invisible necesitarás además una cremallera invisible y su prensatelas.',
     sections: {
       lined: {
         title: 'Cremallera con forro',

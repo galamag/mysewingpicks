@@ -72,7 +72,7 @@ export default {
       guides: {
         eyebrow: 'Techniques de couture',
         heading: 'Apprenez une technique à la fois',
-        intro: "Vous bloquez sur une étape d'un projet ? Chaque tuto montre comment faire, en animation et avec les vraies mesures de mes projets.",
+        intro: "Vous bloquez sur une étape d'un projet ? Chaque tuto montre comment faire, en animation et avec les mesures de mes projets quand il y en a.",
         more: 'Toutes les techniques →',
       },
       channel: {
@@ -120,10 +120,10 @@ export default {
     },
     guides: {
       title: 'Les bases de la couture pour débutants, pas à pas',
-      description: 'Les bases de la couture pour débutants : chaque technique animée pas à pas, avec les vraies mesures de nos projets. Premier tuto : doubler un sac en tissu.',
+      description: 'Techniques de couture pas à pas : doubler un sac, fond de sac et fermeture éclair, chaque étape animée, avec les mesures de nos projets quand il y en a.',
       eyebrow: 'Techniques de couture',
       heading: 'Les bases de la couture, pas à pas',
-      intro: "Une technique à la fois, chaque étape animée, avec les vraies mesures de mes projets. Vous bloquez sur une étape d'un projet ? Le tuto vous montre comment faire.",
+      intro: "Une technique à la fois, chaque étape animée, avec les mesures de mes projets quand la technique en vient. Vous bloquez sur une étape d'un projet ? Le tuto vous montre comment faire.",
       more: 'Voir étape par étape →',
       groups: {
         machine: { title: 'La machine à coudre', intro: 'Enfiler le fil, la canette, les points et les pieds presseurs : préparer la machine pour coudre.' },

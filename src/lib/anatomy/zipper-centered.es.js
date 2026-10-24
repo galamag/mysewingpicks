@@ -95,11 +95,11 @@ export default {
     },
     {
       title: 'Un lado',
-      text: 'Da la vuelta a la pieza, con el derecho hacia arriba. Con el prensatelas para cremalleras, pespuntea un lado y de lado a lado abajo, bajo el tope, girando en la esquina con la aguja abajo, a través de todas las capas.',
+      text: 'Da la vuelta a la pieza, con el derecho hacia arriba. Con el prensatelas para cremalleras, pespuntea un lado y la mitad de lado a lado abajo, bajo el tope, girando en la esquina con la aguja abajo, a través de todas las capas.',
       details: [
         'Da la vuelta a la pieza, con el derecho hacia arriba: la cremallera queda debajo, sus dientes bajo la línea de costura.',
         'Pon el prensatelas para cremalleras: con él la aguja cose cerca de la cremallera.',
-        'Pespuntea a lo largo de un lado, siempre a la misma distancia de la costura, y de lado a lado abajo, bajo el tope: nunca sobre el tope.',
+        'Pespuntea a lo largo de un lado, siempre a la misma distancia de la costura, y la mitad de lado a lado, bajo el tope: nunca sobre el tope.',
         'En la esquina, para con la aguja abajo en la tela, levanta el prensatelas, gira la pieza y sigue.',
       ],
     },

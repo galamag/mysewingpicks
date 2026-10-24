@@ -50,7 +50,7 @@ export default {
     pageDescription: 'Reißverschluss einnähen in Tasche, Kissen, Rock oder Kleid: sechs Arten, jeder Schritt animiert. Meist mit Reißverschlussfuß, nahtverdeckt mit eigenem Fuß.',
     heading: 'Reißverschluss einnähen: Kosmetiktasche, Tasche, Kissen, Rock und Kleid',
     teaser: 'Sechs Arten, einen Reißverschluss in Kosmetiktasche, Tasche, Kissen, Rock oder Kleid einzunähen – jeder Schritt animiert.',
-    needsIntro: 'Reißverschlüsse (auch als Meterware), Stoffklammern, Stecknadeln, ein selbstlöschender Markierstift, Schneiderschere, Bügeleisen, Nähmaschine und ein Nähfuß-Set mit Reißverschlussfuß – die Werkzeuge, die ich persönlich für diese Schritte empfehle. Für den nahtverdeckten Reißverschluss brauchst du außerdem einen nahtverdeckten Reißverschluss und den passenden Nähfuß.',
+    needsIntro: 'Reißverschlüsse, Stoffklammern, Stecknadeln, ein selbstlöschender Markierstift, Schneiderschere, Bügeleisen, Nähmaschine und ein Nähfuß-Set mit Reißverschlussfuß – die Werkzeuge, die ich persönlich für diese Schritte empfehle. Für den nahtverdeckten Reißverschluss brauchst du außerdem einen nahtverdeckten Reißverschluss und den passenden Nähfuß.',
     sections: {
       lined: {
         title: 'Reißverschluss mit Futter',

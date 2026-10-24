@@ -95,11 +95,11 @@ export default {
     },
     {
       title: 'Un côté',
-      text: "Retournez l'ouvrage, endroit dessus. Au pied fermeture éclair, piquez un côté et en travers en bas, sous l'arrêt, en pivotant au coin aiguille piquée, à travers toutes les épaisseurs.",
+      text: "Retournez l'ouvrage, endroit dessus. Au pied fermeture éclair, piquez un côté et la moitié du bas en travers, sous l'arrêt, en pivotant au coin aiguille piquée, à travers toutes les épaisseurs.",
       details: [
         "Retournez l'ouvrage, endroit dessus : la fermeture est dessous, ses dents sous la ligne de couture.",
         "Montez le pied fermeture éclair : avec lui, l'aiguille pique près de la fermeture.",
-        "Piquez le long d'un côté, toujours à la même distance de la couture, et en travers en bas, sous l'arrêt : jamais sur l'arrêt.",
+        "Piquez le long d'un côté, toujours à la même distance de la couture, et la moitié en travers, sous l'arrêt : jamais sur l'arrêt.",
         "Au coin, arrêtez-vous aiguille piquée, relevez le pied, tournez l'ouvrage et continuez.",
       ],
     },

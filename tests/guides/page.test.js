@@ -185,7 +185,7 @@ test('sew-a-zipper: page-disclosure before the first figure and the first Amazon
     assert.equal(links.filter((m) => !m[1]).length, 0, `${lang}: Amazon links without a mark outside the cards`);
     assert.equal((outside.match(/href="https:\/\/www\.amazon\./g) ?? []).length, links.length, `${lang}: an Amazon link of another shape outside the cards`);
     for (const m of links) assert.equal(decode(m[2]), mark, `${lang}: the mark`);
-    assert.equal(cards.length, 9, `${lang}: a card for each of the 9 products`);
+    assert.equal(cards.length, 8, `${lang}: a card for each of the 8 products`);
     for (const c of cards) assert.equal(decode(c.match(/<p class="card__disclosure"[^>]*>([^<]*)<\/p>/)?.[1]), mark, `${lang}: a card without the mark`);
     for (const m of html.matchAll(/<a [^>]*href="https:\/\/www\.amazon\.[^"]*"[^>]*>/g)) {
       assert.match(m[0], /rel="nofollow sponsored noopener"/, `${lang}: rel`);

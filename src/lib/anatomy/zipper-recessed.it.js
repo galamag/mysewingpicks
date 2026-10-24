@@ -57,7 +57,6 @@ export default {
         'Taglia quattro fasce di stoffa lunghe quanto il bordo della borsa: due per ogni lato della cerniera.',
         'La larghezza delle fasce cambia da un cartamodello all\'altro: più sono larghe, più la cerniera sta in basso nella borsa.',
         'Molti cartamodelli stirano una teletta termoadesiva sulle fasce, così la fascia della cerniera tiene la forma.',
-        "Taglia la cerniera un po' più lunga delle fasce; una cerniera a metraggio si taglia della lunghezza che serve.",
       ],
     },
     {

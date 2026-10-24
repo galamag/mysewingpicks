@@ -100,11 +100,11 @@ export default {
     },
     {
       title: 'One side',
-      text: 'Turn the work right side up. With the zipper foot, stitch one side of the zipper and across the bottom, below the stop, pivoting at the corner with the needle down, through all the layers.',
+      text: 'Turn the work right side up. With the zipper foot, stitch one side of the zipper and half of the bottom, below the stop, pivoting at the corner with the needle down, through all the layers.',
       details: [
         'Turn the work right side up: the zipper is underneath, its teeth under the seam line.',
         'Put on the zipper foot: it lets the needle stitch close to the zipper.',
-        'Stitch along one side, the same distance from the seam line all the way, and across the bottom, below the stop: never over the stop.',
+        'Stitch along one side, the same distance from the seam line all the way, and half of the bottom, below the stop: never over the stop.',
         'At the corner, stop with the needle down in the fabric, lift the foot, turn the work and go on.',
       ],
     },

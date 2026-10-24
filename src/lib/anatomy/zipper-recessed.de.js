@@ -56,7 +56,6 @@ export default {
         'Schneide vier Stoffstreifen zu, so lang wie die Oberkante der Tasche: zwei für jede Seite des Reißverschlusses.',
         'Die Breite der Streifen ist in jedem Schnittmuster anders: Je breiter sie sind, desto tiefer sitzt der Reißverschluss in der Tasche.',
         'Viele Schnittmuster bügeln Einlage auf die Streifen, damit die Blende ihre Form behält.',
-        'Schneide den Reißverschluss etwas länger als die Streifen zu; einen Endlosreißverschluss kannst du auf jede Länge kürzen.',
       ],
     },
     {

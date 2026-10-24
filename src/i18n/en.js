@@ -70,7 +70,7 @@ export default {
       guides: {
         eyebrow: 'Sewing guides',
         heading: 'Learn it one technique at a time',
-        intro: "Stuck on a step of a project? Each guide shows how it's done, animated, with the real numbers from my projects.",
+        intro: "Stuck on a step of a project? Each guide shows how it's done, animated, with the sizes from my projects where they apply.",
         more: 'All sewing guides →',
       },
       channel: {
@@ -121,10 +121,10 @@ export default {
     // GUIDE_GROUPS in src/data/guides.js (a group with no guide is not shown).
     guides: {
       title: 'Sewing Basics for Beginners: Step-by-Step Guides',
-      description: 'Sewing basics for beginners, step by step: every technique animated, with the real numbers from our projects. First guide: how to line a bag.',
+      description: 'Sewing guides and techniques, step by step: lining a bag, bag bottoms and zippers, every step animated, with the sizes from our projects where they apply.',
       eyebrow: 'Learn the basics',
       heading: 'Sewing basics for beginners, step by step',
-      intro: "One technique at a time, every step animated and with the real numbers from my projects. Stuck on a step of a project? Its guide shows you how it's done.",
+      intro: "One technique at a time, every step animated, with the sizes from my projects where a technique comes from one. Stuck on a step of a project? Its guide shows you how it's done.",
       more: 'See it step by step →',
       groups: {
         machine: { title: 'The sewing machine', intro: 'Threading, the bobbin, stitches and presser feet — getting the machine ready to sew.' },

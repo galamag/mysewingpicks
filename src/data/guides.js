@@ -138,9 +138,9 @@ export const guides = [
     pageDescription: 'How to sew a zipper into a pouch, bag, pillow, skirt or dress: six ways, every step animated. A zipper foot for most, a special foot for the invisible zipper.',
     heading: 'How to sew a zipper: pouch, bag, pillow, skirt and dress',
     teaser: 'Six ways to sew a zipper into a pouch, a bag, a pillow, a skirt or a dress — every step animated.',
-    needsIntro: 'Zippers (also by the yard), sewing clips, pins, an air-erasable pen, fabric scissors, an iron, the sewing machine and a set of presser feet with a zipper foot — the tools I personally recommend for these steps. For the invisible zipper you will also need an invisible zipper and an invisible zipper foot.',
+    needsIntro: 'Zippers, sewing clips, pins, an air-erasable pen, fabric scissors, an iron, the sewing machine and a set of presser feet with a zipper foot — the tools I personally recommend for these steps. For the invisible zipper you will also need an invisible zipper and an invisible zipper foot.',
     // "What you'll need" - only what the sections' steps use, in the order they are used.
-    needs: ['soraco-sewing-clips', 'janome-1522rd', 'mandala-crafts-zippers', 'tailor-scissors', 'rowenta-travel-iron', 'windman-presser-feet-set', 'mebuzip-zipper-by-the-yard', 'sewline-air-erasable-pen', 'beaditive-magnetic-pin-holder'],
+    needs: ['soraco-sewing-clips', 'janome-1522rd', 'mandala-crafts-zippers', 'tailor-scissors', 'rowenta-travel-iron', 'windman-presser-feet-set', 'sewline-air-erasable-pen', 'beaditive-magnetic-pin-holder'],
     sections: [
       {
         // The makeup bag: 7 Zipper: the first side · 8 Zipper: the second side - the maker's 20 cm zipper in the middle of the
@@ -174,8 +174,7 @@ export const guides = [
         // four strips as long as the top edge, each zipper tape between two of them right sides inward, turned out and
         // topstitched close to the teeth; the ends closed with tabs (`rest` + a link to #tabs: restIn); the panel sewn to the
         // LINING, middles matched; then the outer and the lining joined as usual. NO numbers: widths and lengths in words.
-        // No project yet: usedIn []. The zipper foot (Windman set) where it sews next to the zipper; the zipper by the yard
-        // (MebuZip) as a general recommendation.
+        // No project yet: usedIn []. The zipper foot (Windman set) where it sews next to the zipper.
         id: 'recessed',
         figure: 'zipper-recessed',
         usedIn: [],
@@ -259,6 +258,8 @@ export function validateGuides(list) {
       for (const s of g.sections) {
         if (s.restIn === undefined && s.rest === undefined) continue;
         if (s.restIn === s.id || !g.sections.some((x) => x.id === s.restIn)) throw new Error(`guides.js: "${g.slug}" section "${s.id}" has restIn "${s.restIn}" — not another section of this guide`);
+        // the link under the figure points up the page ("↑"): to a section that comes EARLIER
+        if (g.sections.findIndex((x) => x.id === s.restIn) >= g.sections.findIndex((x) => x.id === s.id)) throw new Error(`guides.js: "${g.slug}" section "${s.id}" has restIn "${s.restIn}" — not an earlier section of this guide`);
         if (typeof s.rest !== 'string' || !s.rest.trim()) throw new Error(`guides.js: "${g.slug}" section "${s.id}" has restIn but no rest sentence`);
       }
     } else if (!g.figure || !g.usedIn) {

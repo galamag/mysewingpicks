@@ -103,7 +103,7 @@ const videos = (guide.video ?? []).map((v) => {
           </div>
           <AnatomyFigure model={s.figure} lang={lang} />
           {s.restTo && (
-            <p class="guide-rest">{s.rest} <a class="guide-rest__link" href={`#${s.restTo.id}`}><span class="section-chip__count">{s.restTo.n}</span>{s.restTo.title} ↑</a></p>
+            <p class="guide-rest">{s.rest} <a class="guide-rest__link" href={`#${s.restTo.id}`}><span class="section-chip__count">{s.restTo.n}</span>{s.restTo.title} <span aria-hidden="true">↑</span></a></p>
           )}
           {(s.usedIn.length > 0 || s.note) && (
             <div class="guide-used">

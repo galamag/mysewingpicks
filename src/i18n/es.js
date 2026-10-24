@@ -71,7 +71,7 @@ export default {
       guides: {
         eyebrow: 'Técnicas de costura',
         heading: 'Aprende una técnica a la vez',
-        intro: '¿Un paso de un proyecto no te queda claro? Cada tutorial te muestra cómo se hace, animado y con las medidas reales de mis proyectos.',
+        intro: '¿Un paso de un proyecto no te queda claro? Cada tutorial te muestra cómo se hace, animado y con las medidas de mis proyectos donde las hay.',
         more: 'Todas las técnicas →',
       },
       channel: {
@@ -119,10 +119,10 @@ export default {
     },
     guides: {
       title: 'Costura básica para principiantes, paso a paso',
-      description: 'Costura básica para principiantes: cada técnica animada paso a paso, con las medidas reales de nuestros proyectos. Primer tutorial: cómo forrar una bolsa de tela.',
+      description: 'Técnicas de costura paso a paso: forrar una bolsa de tela, la base de la bolsa y cremalleras, cada paso animado, con las medidas de nuestros proyectos donde las hay.',
       eyebrow: 'Técnicas de costura',
       heading: 'Costura básica para principiantes, paso a paso',
-      intro: 'Una técnica a la vez, cada paso animado y con las medidas reales de mis proyectos. ¿Un paso de un proyecto no te queda claro? Aquí ves cómo se hace.',
+      intro: 'Una técnica a la vez, cada paso animado, con las medidas de mis proyectos cuando la técnica viene de uno. ¿Un paso de un proyecto no te queda claro? Aquí ves cómo se hace.',
       more: 'Míralo paso a paso →',
       groups: {
         machine: { title: 'La máquina de coser', intro: 'Enhebrar el hilo, la canilla, las puntadas y los prensatelas: preparar la máquina para coser.' },

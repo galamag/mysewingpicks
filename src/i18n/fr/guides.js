@@ -48,10 +48,10 @@ export default {
     title: 'Coudre une fermeture éclair',
     blurb: "Six façons de coudre une fermeture éclair\u00a0: en sandwich, aux extrémités finies et encastrée sur un sac cabas pour les trousses et les sacs\u00a0; centrée, sous patte et invisible pour la couture d'une housse de coussin, d'une jupe ou d'une robe. Chaque méthode est animée, avec un conseil pour la choisir. Le pied fermeture éclair sert pour les extrémités finies, l'encastrée, la centrée et la fermeture sous patte\u00a0; la fermeture invisible demande un pied pour fermeture invisible.",
     pageTitle: 'Coudre une fermeture éclair\u00a0: trousse, sac, coussin, jupe',
-    pageDescription: "Coudre une fermeture éclair dans une trousse, un sac, un coussin, une jupe ou une robe\u00a0: six méthodes, chaque étape animée. Pied fermeture éclair, ou pied spécial pour l'invisible.",
+    pageDescription: "Coudre une fermeture éclair dans une trousse, un sac, un coussin, une jupe ou une robe\u00a0: six méthodes, chaque étape animée. Le plus souvent le pied fermeture éclair, un pied spécial pour l'invisible.",
     heading: 'Coudre une fermeture éclair\u00a0: trousse, sac, coussin, jupe et robe',
     teaser: 'Six façons de coudre une fermeture éclair dans une trousse, un sac, un coussin, une jupe ou une robe — chaque étape animée.',
-    needsIntro: "Des fermetures éclair (aussi au mètre), des pinces à tissu, des épingles, un stylo effaçable à l'air, des ciseaux de couturière, un fer à repasser, la machine à coudre et un lot de pieds avec un pied fermeture éclair — les outils que je recommande personnellement pour ces étapes. Pour la fermeture invisible, il vous faudra aussi une fermeture invisible et un pied pour fermeture invisible.",
+    needsIntro: "Des fermetures éclair, des pinces à tissu, des épingles, un stylo effaçable à l'air, des ciseaux de couturière, un fer à repasser, la machine à coudre et un lot de pieds avec un pied fermeture éclair — les outils que je recommande personnellement pour ces étapes. Pour la fermeture invisible, il vous faudra aussi une fermeture invisible et un pied pour fermeture invisible.",
     sections: {
       lined: {
         title: 'Fermeture éclair en sandwich (trousse doublée)',

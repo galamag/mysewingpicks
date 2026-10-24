@@ -69,7 +69,7 @@ export default {
       guides: {
         eyebrow: 'Nähgrundlagen',
         heading: 'Lerne eine Technik nach der anderen',
-        intro: 'Du kommst bei einem Schritt in einem Projekt nicht weiter? Jede Anleitung zeigt, wie es gemacht wird – animiert und mit den echten Maßen aus meinen Projekten.',
+        intro: 'Du kommst bei einem Schritt in einem Projekt nicht weiter? Jede Anleitung zeigt, wie es gemacht wird – animiert und mit den Maßen aus meinen Projekten, wo es sie gibt.',
         more: 'Alle Grundlagen ansehen →',
       },
       channel: {
@@ -117,10 +117,10 @@ export default {
     },
     guides: {
       title: 'Nähen lernen für Anfänger: Grundlagen Schritt für Schritt',
-      description: 'Nähen lernen für Anfänger: jede Grundtechnik Schritt für Schritt animiert, mit den echten Maßen aus unseren Projekten. Zuerst: Futter in eine Tasche einnähen.',
+      description: 'Nähgrundlagen Schritt für Schritt: Futter einnähen, Taschenboden und Reißverschluss, jeder Schritt animiert, mit den Maßen aus unseren Projekten, wo es sie gibt.',
       eyebrow: 'Nähgrundlagen',
       heading: 'Nähen lernen für Anfänger: Grundlagen Schritt für Schritt',
-      intro: 'Eine Technik nach der anderen, jeder Schritt animiert und mit den echten Maßen aus meinen Projekten. Du kommst bei einem Schritt in einem Projekt nicht weiter? Hier siehst du, wie es gemacht wird.',
+      intro: 'Eine Technik nach der anderen, jeder Schritt animiert, mit den Maßen aus meinen Projekten, wo die Technik aus einem Projekt stammt. Du kommst bei einem Schritt in einem Projekt nicht weiter? Hier siehst du, wie es gemacht wird.',
       more: 'Schritt für Schritt ansehen →',
       groups: {
         machine: { title: 'Die Nähmaschine', intro: 'Einfädeln, Spule, Stiche und Nähfüße – so machst du die Maschine bereit zum Nähen.' },

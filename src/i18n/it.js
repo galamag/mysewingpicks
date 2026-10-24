@@ -70,7 +70,7 @@ export default {
       guides: {
         eyebrow: 'Tecniche di cucito',
         heading: 'Impara una tecnica alla volta',
-        intro: 'Un passo di un progetto non ti è chiaro? Ogni tutorial mostra come si fa, in animazione e con le misure vere dei miei progetti.',
+        intro: 'Un passo di un progetto non ti è chiaro? Ogni tutorial mostra come si fa, in animazione e con le misure dei miei progetti dove ci sono.',
         more: 'Tutte le tecniche →',
       },
       channel: {
@@ -118,10 +118,10 @@ export default {
     },
     guides: {
       title: 'Cucito per principianti: le basi del cucito passo passo',
-      description: 'Le basi del cucito per principianti: ogni tecnica animata passo passo, con le misure vere dei nostri progetti. Primo tutorial: come foderare una borsa.',
+      description: 'Tecniche di cucito passo passo: foderare una borsa, fondo della borsa e cerniere, ogni passo animato, con le misure dei nostri progetti dove ci sono.',
       eyebrow: 'Tecniche di cucito',
       heading: 'Cucito per principianti: le basi passo passo',
-      intro: 'Una tecnica alla volta, ogni passo animato e con le misure vere dei miei progetti. Un passo di un progetto non ti è chiaro? Qui vedi come si fa.',
+      intro: 'Una tecnica alla volta, ogni passo animato, con le misure dei miei progetti quando la tecnica viene da uno di essi. Un passo di un progetto non ti è chiaro? Qui vedi come si fa.',
       more: 'Guarda passo passo →',
       groups: {
         machine: { title: 'La macchina da cucire', intro: 'Infilare il filo, la spolina, i punti e i piedini: preparare la macchina per cucire.' },

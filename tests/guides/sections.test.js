@@ -104,6 +104,14 @@ test('validateGuides: restIn names another section of the same guide, and comes 
   assert.throws(() => validateGuides([multi('d', [sec('a', 'x', []), { ...sec('b', 'x', []), rest: 'R' }])]), /restIn/);
 });
 
+// The link under the figure has an up arrow, so `restIn` must name a section that comes EARLIER on the page.
+test('validateGuides: restIn names an earlier section, not a later one', () => {
+  const rest = (id, to) => ({ ...sec(id, 'x', []), restIn: to, rest: `R ${id}` });
+  assert.doesNotThrow(() => validateGuides([multi('d', [sec('a', 'x', []), sec('b', 'x', []), rest('c', 'a')])]));
+  assert.throws(() => validateGuides([multi('d', [rest('a', 'b'), sec('b', 'x', [])])]), /not an earlier section/);
+  assert.throws(() => validateGuides([multi('d', [sec('a', 'x', []), rest('b', 'c'), sec('c', 'x', [])])]), /not an earlier section/);
+});
+
 test('coverGuides: a note in English needs one in every language, and only then', () => {
   const withNote = [multi('one', [{ ...sec('a', 'x', []), note: 'N a' }, sec('b', 'y', [])], { t: 'x' })];
   const full = { one: { t: 'x', sections: { a: { title: 'a', line: 'a', choose: 'a', note: 'n' }, b: { title: 'b', line: 'b', choose: 'b' } } } };

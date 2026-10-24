@@ -961,7 +961,7 @@ test('recessed: the zipper foot where it sews next to the zipper (Windman set); 
     assert.match(stepWords(L, ends), STOP_WORD[lang], `${lang} step ${ends}: the stop`);
     assert.match(stepWords(L, ends), NOT_WORD[lang], `${lang} step ${ends}: "not over the stop"`);
   }
-  assert.ok(guideBySlug(SLUG).needs.includes('mebuzip-zipper-by-the-yard'), 'the zipper by the yard is not in "What you\'ll need"');
+  assert.ok(!guideBySlug(SLUG).needs.includes('mebuzip-zipper-by-the-yard'), 'the zipper by the yard is in "What you\'ll need"');
 });
 
 test('recessed: no first person, no maker — a general recommendation', () => {
@@ -1050,7 +1050,7 @@ test('recessed: uses are catalog products', () => {
   const FOOT = ['windman-presser-feet-set', 'janome-1522rd'];
   assert.deepEqual(recessed.STEPS.map((s) => s.uses ?? []), [
     [],
-    ['mebuzip-zipper-by-the-yard', 'tailor-scissors'],
+    ['tailor-scissors'],
     ['soraco-sewing-clips'],
     FOOT,
     ['rowenta-travel-iron'],
@@ -2735,6 +2735,17 @@ test('guide texts: the zipper foot for tabs, recessed, centered and lapped; the 
   }
 });
 
+// The lined pouch needs no zipper foot, so the description's foot line is hedged ("for most"), never stated for all six ways.
+test('guide texts: the description hedges the zipper foot ("for most"), and still names the special foot for the invisible zipper', () => {
+  const HEDGE = { en: /for most/, ru: /Для большинства/u, de: /Meist/, fr: /le plus souvent/i, it: /Per lo più/, es: /Casi siempre/ };
+  for (const lang of LOCALES) {
+    const { pageDescription } = guideText(guideBySlug(SLUG), lang);
+    assert.match(pageDescription, ZIP_FOOT[lang], `${lang}: pageDescription does not name the zipper foot`);
+    assert.match(pageDescription, HEDGE[lang], `${lang}: the zipper foot in pageDescription is not hedged`);
+    assert.ok(pageDescription.length <= 200, `${lang}: pageDescription is ${pageDescription.length} characters`);
+  }
+});
+
 test('guide texts: no promise of sewing by hand, without a zipper foot, for beginners; never "I use"; "I personally recommend" in the needs line', () => {
   for (const lang of LOCALES) {
     for (const [where, s] of leadStrings(lang)) {
@@ -2750,7 +2761,6 @@ test('guide texts: the needs line names exactly the products "What you\'ll need"
     'soraco-sewing-clips': { en: /sewing clips/, ru: /зажим\p{L}* для шитья/u, de: /Stoffklammern/, fr: /pinces à tissu/, it: /clip per cucito/, es: /pinzas para coser/ },
     'janome-1522rd': { en: /sewing machine/, ru: /швейная машина/, de: /Nähmaschine/, fr: /machine à coudre/, it: /macchina da cucire/, es: /máquina de coser/ },
     'mandala-crafts-zippers': { en: /\bZippers/, ru: /Молнии/, de: /Reißverschlüsse/, fr: /fermetures éclair/i, it: /Cerniere/, es: /Cremalleras/ },
-    'mebuzip-zipper-by-the-yard': { en: /by the yard/, ru: /рулонн/, de: /Meterware/, fr: /au mètre/, it: /a metraggio/, es: /por metro/ },
     'tailor-scissors': { en: /scissors/, ru: /ножницы/, de: /[Ss]chere/, fr: /ciseaux/, it: /forbici/, es: /tijeras/ },
     'rowenta-travel-iron': { en: /\biron\b/, ru: /утюг/, de: /Bügeleisen/, fr: /fer à repasser/, it: /ferro da stiro/, es: /plancha/ },
     'windman-presser-feet-set': { en: /presser feet/, ru: /набор лапок/, de: /Nähfuß-Set/, fr: /lot de pieds/, it: /set di piedini/, es: /juego de prensatelas/ },

@@ -61,7 +61,6 @@ export default {
         'Cut four strips of fabric as long as the top edge of the bag: two for each side of the zipper.',
         'Patterns give different widths for the strips: the wider they are, the lower the zipper sits in the bag.',
         'Many patterns iron interfacing onto the strips, so the panel keeps its shape.',
-        'Cut the zipper a little longer than the strips; a zipper by the yard can be cut to any length.',
       ],
     },
     {

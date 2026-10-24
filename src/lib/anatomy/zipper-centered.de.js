@@ -95,11 +95,11 @@ export default {
     },
     {
       title: 'Eine Seite',
-      text: 'Dreh die Arbeit auf die rechte Seite. Steppe mit dem Reißverschlussfuß durch alle Lagen eine Seite und quer unter dem Stopper ab; an der Ecke drehst du mit gesenkter Nadel.',
+      text: 'Dreh die Arbeit auf die rechte Seite. Steppe mit dem Reißverschlussfuß durch alle Lagen eine Seite und die Hälfte quer unter dem Stopper ab; an der Ecke drehst du mit gesenkter Nadel.',
       details: [
         'Dreh die Arbeit mit der rechten Seite nach oben: Der Reißverschluss liegt darunter, seine Zähne unter der Nahtlinie.',
         'Setz den Reißverschlussfuß ein: Mit ihm näht die Nadel dicht am Reißverschluss.',
-        'Steppe an einer Seite entlang, die ganze Zeit im gleichen Abstand zur Naht, und quer unter dem Stopper: nie über den Stopper.',
+        'Steppe an einer Seite entlang, die ganze Zeit im gleichen Abstand zur Naht, und die Hälfte quer unter dem Stopper: nie über den Stopper.',
         'An der Ecke halte mit gesenkter Nadel an, stell den Nähfuß hoch, dreh die Arbeit und näh weiter.',
       ],
     },

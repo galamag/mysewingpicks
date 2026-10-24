@@ -57,7 +57,6 @@ export default {
         'Coupez quatre bandes de tissu aussi longues que le haut du sac : deux pour chaque côté de la fermeture.',
         'La largeur des bandes change selon les patrons : plus elles sont larges, plus la fermeture est basse dans le sac.',
         "Beaucoup de patrons thermocollent de l'entoilage sur les bandes, pour que la bande de fermeture garde sa forme.",
-        'Coupez la fermeture un peu plus longue que les bandes ; une fermeture éclair au mètre se coupe à la longueur voulue.',
       ],
     },
     {

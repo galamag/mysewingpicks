@@ -458,13 +458,12 @@ function pins(e) {
   that. `scene` draws the step over t = 0…1, `duration` is its animation in seconds, `stitch` — the machine stitch (a key
   of `stitches` in the texts), `sew` — when and on which fabric the seam is sewn ('panel': next to the zipper, with the
   zipper foot; 'lining': the panel to the lining). `uses` — catalog products handy in that step (ids from
-  src/data/products.js, shown as labelled affiliate links under the caption): the zipper by the yard (a general
-  recommendation, not the maker's), scissors, clips, the iron, the zipper foot (Windman set) and the machine.
+  src/data/products.js, shown as labelled affiliate links under the caption): scissors, clips, the iron, the zipper foot (Windman set) and the machine.
 */
 const FOOT = ['windman-presser-feet-set', 'janome-1522rd'];
 export const STEPS = [
   {}, // 0: the finished bag (texts: zipper-recessed.<lang>.js)
-  { scene: stepCut, duration: 5.5, uses: ['mebuzip-zipper-by-the-yard', 'tailor-scissors'] },
+  { scene: stepCut, duration: 5.5, uses: ['tailor-scissors'] },
   { scene: stepSandwich, duration: 6, uses: ['soraco-sewing-clips'] },
   { scene: stepSewA, duration: 5.5, stitch: 'straight', sew: [[0.2, 0.82, 'panel']], uses: FOOT },
   { scene: stepTurn, duration: 6.5, pad: 0.14, uses: ['rowenta-travel-iron'] },

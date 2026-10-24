@@ -95,11 +95,11 @@ export default {
     },
     {
       title: 'Un lato',
-      text: "Gira il lavoro con il dritto sopra. Con il piedino per cerniere cuci un lato e di traverso in basso, sotto il fermo, girando all'angolo con l'ago abbassato, attraverso tutti gli strati.",
+      text: "Gira il lavoro con il dritto sopra. Con il piedino per cerniere cuci un lato e metà di traverso in basso, sotto il fermo, girando all'angolo con l'ago abbassato, attraverso tutti gli strati.",
       details: [
         'Gira il lavoro con il dritto sopra: la zip è sotto, i suoi denti sotto la linea di cucitura.',
         "Monta il piedino per cerniere: con lui l'ago cuce vicino alla zip.",
-        'Cuci lungo un lato, sempre alla stessa distanza dalla cucitura, e di traverso in basso, sotto il fermo: mai sopra il fermo.',
+        'Cuci lungo un lato, sempre alla stessa distanza dalla cucitura, e metà di traverso, sotto il fermo: mai sopra il fermo.',
         "All'angolo fermati con l'ago abbassato nella stoffa, alza il piedino, gira il lavoro e continua.",
       ],
     },
