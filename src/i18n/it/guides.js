@@ -64,6 +64,12 @@ export default {
         choose: 'Quando vuoi estremità pulite e piatte su una pochette o un astuccio: le linguette coprono le estremità della zip, che restano fuori dalle cuciture laterali, e gli angoli stanno piatti.',
         rest: "Poi cuci la cerniera come nella cerniera con fodera: esterno, zip e fodera con una sola cucitura, poi l'altro lato allo stesso modo. Le cuciture laterali passano subito accanto alle linguette.",
       },
+      recessed: {
+        title: 'Cerniera incassata nella borsa',
+        line: 'La cerniera si cuce tra fasce di stoffa e la fascia della cerniera si cuce dentro la borsa, in cima, sotto il bordo.',
+        choose: "Quando cuci una borsa shopper o una borsa grande foderata e vuoi che si apra bene, con la cerniera sotto il bordo. Si cuce in quasi ogni borsa foderata; su una stoffa molto spessa le estremità rifinite diventano ingombranti.",
+        rest: "Per chiudere le estremità della cerniera cuci due linguette di stoffa, come in «Estremità rifinite (linguette)»: una striscia piegata come uno sbieco su ogni estremità, subito dopo il fermo.",
+      },
     },
   },
 };

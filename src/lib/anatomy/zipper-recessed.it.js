@@ -1,0 +1,141 @@
+/* Cerniera incassata nella borsa (tutorial «Come cucire una cerniera», sezione `recessed`) — testi italiani. Stessa forma
+   dei testi inglesi (zipper-recessed.text.js lo controlla). Si dà del tu; «fascia» = una striscia di stoffa della fascia
+   della cerniera; «linguetta» = l'estremità rifinita; «fermo» = il fermo di metallo; «zip» solo nelle etichette del
+   disegno. Mai «centrale» (cerniera = anche la cerniera della porta): «al centro», «i centri». Nessun numero, nessuna
+   unità: larghezza delle fasce e lunghezza della cerniera a parole. La fascia va sulla FODERA, non sull'esterno.
+   Piedino: il piedino per cerniere (set Windman). */
+export default {
+  ui: {
+    fig: 'Fig. 3',
+    title: 'Cerniera incassata',
+    svgLabel: "Disegno isometrico di come si cuce una cerniera incassata in cima a una borsa foderata: quattro fasce lunghe quanto il bordo della borsa, ogni nastro della cerniera cucito tra due di esse, dritto contro dritto, rivoltate e impunturate vicino ai denti; le estremità rifinite con linguette di stoffa; la fascia cucita alla fodera, facendo combaciare i centri. Nella borsa la cerniera sta sotto il bordo e la borsa si apre bene.",
+    prev: 'Passo precedente',
+    dot: (i, title) => (i ? `Passo ${i}: ${title}` : title),
+    start: 'Passo passo →',
+    next: 'Avanti →',
+    overview: 'Panoramica',
+    stepOf: (k, n) => `Passo ${k} di ${n}`,
+    machine: (stitch) => `Macchina: ${stitch.toLowerCase()}`,
+    inThisStep: 'In questo passo',
+    takeApart: 'Apri la zip',
+    putTogether: 'Chiudi la zip',
+    replay: '↻ Ripeti',
+    parts: 'Parti',
+    allSteps: 'Istruzioni passo passo',
+    endView: 'SEZIONE',
+  },
+  stitches: { straight: 'Punto dritto' },
+  labels: {
+    fourStrips: 'quattro fasce',
+    topLength: 'lunga quanto il bordo',
+    zipperLonger: "zip un po' più lunga",
+    stripUp: 'fascia dritto sopra',
+    zipperDown: 'zip dritto sotto',
+    stripDown: 'seconda fascia dritto sotto',
+    alongEdge: 'lungo il bordo',
+    turnOut: 'rivolta',
+    pressAway: 'stira lontano dai denti',
+    nearTeeth: 'vicino ai denti',
+    otherSide: "l'altro lato, uguale",
+    endsTabs: 'estremità: come il secondo modo',
+    notOverStop: 'non sopra il fermo',
+    toLining: 'alla fodera',
+    middles: 'i centri combaciano',
+    asUsual: 'poi esterno e fodera, come sempre',
+    belowEdge: 'sotto il bordo',
+    opensWide: 'si apre bene',
+  },
+  steps: [
+    {
+      title: 'Cerniera incassata nella borsa',
+      text: 'La cerniera sta in una fascia sotto il bordo della borsa, e la fascia è cucita alla fodera. Tocca per aprire la zip: la borsa si apre bene.',
+    },
+    {
+      title: 'Quattro fasce e una cerniera',
+      text: "Taglia quattro fasce lunghe quanto il bordo della borsa, due per ogni lato della cerniera, e una cerniera un po' più lunga delle fasce.",
+      details: [
+        'Taglia quattro fasce di stoffa lunghe quanto il bordo della borsa: due per ogni lato della cerniera.',
+        'La larghezza delle fasce cambia da un cartamodello all\'altro: più sono larghe, più la cerniera sta in basso nella borsa.',
+        'Molti cartamodelli stirano una teletta termoadesiva sulle fasce, così la fascia della cerniera tiene la forma.',
+        "Taglia la cerniera un po' più lunga delle fasce; una cerniera a metraggio si taglia della lunghezza che serve.",
+      ],
+    },
+    {
+      title: 'Tra due fasce',
+      text: 'Metti una fascia con il dritto sopra, la zip con il dritto sotto sopra di essa, bordo contro bordo, e la seconda fascia con il dritto sotto in cima: dritto contro dritto.',
+      details: [
+        'Metti una fascia con il dritto sopra.',
+        'Appoggia sopra la zip con il dritto sotto, il bordo del nastro sul bordo lungo della fascia.',
+        'Metti in cima la seconda fascia con il dritto sotto, bordi pari: il nastro della zip ora sta tra due fasce, dritto contro dritto. Fissa gli strati con le clip.',
+      ],
+    },
+    {
+      title: 'Cuci lungo il bordo',
+      text: 'Con il piedino per cerniere, cuci lungo il bordo attraverso i tre strati: la fascia, il nastro della zip e la seconda fascia.',
+      details: [
+        'Monta il piedino per cerniere: ti permette di cucire vicino ai denti.',
+        'Cuci lungo il bordo lungo, attraverso le due fasce e il nastro della zip.',
+        'La cucitura resta sul nastro, accanto ai denti, non sopra.',
+      ],
+    },
+    {
+      title: 'Rivolta e stira',
+      text: 'Ribalta le fasce lontano dalla zip, rovescio contro rovescio, e stirale lontano dai denti.',
+      details: [
+        'Ribalta le fasce lontano dalla zip: ora la zip sta accanto a loro, con il dritto sopra.',
+        'Le due fasce stanno rovescio contro rovescio, con la cucitura chiusa tra loro.',
+        'Stira le fasce lontano dai denti, così la stoffa non finisce nella zip.',
+      ],
+    },
+    {
+      title: 'Impuntura vicino ai denti',
+      text: 'Con il piedino per cerniere, impuntura la fascia vicino ai denti, attraverso le due fasce.',
+      details: [
+        'Con il piedino per cerniere, impuntura il bordo della fascia dalla parte della zip, vicino ai denti.',
+        'L\'impuntura tiene piatte le due fasce e tiene la stoffa lontana dai denti.',
+      ],
+    },
+    {
+      title: "L'altro lato",
+      text: "Cuci l'altro nastro della zip tra le altre due fasce allo stesso modo, con il piedino per cerniere: cuci, rivolta, stira, impuntura.",
+      details: [
+        "Metti le altre due fasce dritto contro dritto attorno all'altro nastro e cuci lungo il bordo con il piedino per cerniere.",
+        'Rivoltale, stirale lontano dai denti e impuntura vicino ai denti.',
+        'La fascia della zip è pronta: la zip al centro, due fasce per lato.',
+      ],
+    },
+    {
+      title: 'Rifinisci le estremità',
+      text: 'Rifinisci le due estremità della zip con linguette di stoffa, come nel secondo modo, «Estremità rifinite (linguette)»: cucite subito dopo ogni fermo, mai sopra.',
+      details: [
+        'Prepara due linguette di stoffa e infilale sulle estremità della zip, come nel secondo modo, «Estremità rifinite (linguette)».',
+        "Con il piedino per cerniere, cuci ogni linguetta subito dopo il fermo, non sopra il fermo: spesso è di metallo, e l'ago può rompersi.",
+      ],
+    },
+    {
+      title: 'Alla fodera',
+      text: "Cuci la fascia della zip alla fodera, non all'esterno: ogni bordo lungo della fascia al bordo superiore di un pezzo di fodera, dritto contro dritto, facendo combaciare i centri.",
+      details: [
+        'Segna i centri dei bordi lunghi della fascia e dei bordi superiori dei pezzi di fodera.',
+        'Appoggia un bordo lungo della fascia sul bordo superiore di un pezzo di fodera, dritto contro dritto, i centri che combaciano, e fissa con le clip.',
+        "Cuci lungo il bordo. Cuci l'altro bordo lungo all'altro pezzo di fodera allo stesso modo.",
+        "La fascia va sulla fodera, non sull'esterno: così finisce dentro la borsa, sotto il bordo.",
+      ],
+    },
+    {
+      title: 'La borsa',
+      text: "Poi esterno e fodera si uniscono lungo il bordo superiore come sempre in una borsa foderata. La zip sta sotto il bordo e la borsa si apre bene.",
+      details: [
+        'Unisci esterno e fodera lungo il bordo superiore come sempre in una borsa foderata; la fascia della zip va insieme alla fodera.',
+        'La zip sta sotto il bordo superiore della borsa.',
+        'Aperta, la fascia ricade contro i lati e la borsa si apre bene.',
+      ],
+    },
+  ],
+  legend: [
+    { title: 'Fascia', text: 'quattro fasce lunghe quanto il bordo della borsa · la zip al centro' },
+    { title: 'Cerniera', text: "un po' più lunga delle fasce · estremità rifinite con linguette" },
+    { title: 'Fodera', text: 'la fascia è cucita qui' },
+    { title: 'Esterno', text: 'unito alla fodera come sempre' },
+  ],
+};

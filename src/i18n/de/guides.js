@@ -64,6 +64,12 @@ export default {
         choose: 'Wenn du saubere, flache Enden an einer Kosmetiktasche oder einem Mäppchen möchtest: Die Abschlussstücke decken die Enden des Reißverschlusses ab, so geraten sie nicht in die Seitennähte, und die Ecken liegen flach.',
         rest: 'Danach nähst du den Reißverschluss ein wie den Reißverschluss mit Futter: Außenteil, Reißverschluss und Futter mit einer Naht, dann die andere Seite genauso. Die Seitennähte verlaufen direkt neben den Abschlussstücken.',
       },
+      recessed: {
+        title: 'Reißverschluss mit Blende',
+        line: 'Der Reißverschluss wird zwischen Stoffstreifen zu einer Blende genäht, und die Blende kommt innen oben in die Tasche, unterhalb der Kante.',
+        choose: 'Wenn du einen Shopper oder eine große Tasche mit Futter nähst und sie sich weit öffnen soll, mit dem Reißverschluss unterhalb der Kante. Die Blende passt in fast jede Tasche mit Futter; bei sehr dickem Stoff werden die eingefassten Enden klobig.',
+        rest: 'Die Enden des Reißverschlusses fasst du mit Stoffstücken ein, wie bei „Reißverschluss-Enden einfassen“: ein wie Schrägband gefalteter Streifen über jedem Ende, direkt hinter dem Stopper abgesteppt.',
+      },
     },
   },
 };

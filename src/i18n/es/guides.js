@@ -65,6 +65,12 @@ export default {
         choose: 'Cuando quieres extremos limpios y planos en un neceser o un estuche: las lengüetas cubren los extremos de la cremallera, que quedan fuera de las costuras laterales, y las esquinas quedan planas.',
         rest: 'Después, la cremallera se cose como la cremallera con forro: exterior, cremallera y forro con una sola costura, y luego el otro lado igual. Las costuras laterales pasan justo al lado de las lengüetas.',
       },
+      recessed: {
+        title: 'Cremallera en el borde del bolso',
+        line: 'La cremallera se cose entre tiras de tela y forma una tira de cremallera que va por dentro, arriba del bolso, por debajo del borde.',
+        choose: 'Cuando coses un bolso tote o un bolso grande con forro y quieres que se abra bien, con la cremallera por debajo del borde. Va en casi cualquier bolso con forro; en una tela muy gruesa, los extremos rematados abultan.',
+        rest: 'Los extremos de la cremallera se rematan con lengüetas de tela, como en «Extremos rematados»: una tira doblada como un bies sobre cada extremo, cosida justo después del tope.',
+      },
     },
   },
 };

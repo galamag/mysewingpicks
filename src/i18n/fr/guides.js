@@ -65,6 +65,12 @@ export default {
         choose: "Quand vous voulez des extrémités nettes et plates sur une trousse : les languettes couvrent les bouts de la fermeture éclair, qui restent hors des coutures de côté, et les coins sont bien plats.",
         rest: "Ensuite, cousez la fermeture éclair comme pour la fermeture éclair en sandwich : l'extérieur, la fermeture et la doublure en une seule couture, puis l'autre côté de la même façon. Les coutures de côté passent juste à côté des languettes.",
       },
+      recessed: {
+        title: 'Fermeture éclair encastrée sur un sac cabas',
+        line: "La fermeture éclair est cousue entre des bandes de tissu, et cette bande de fermeture se pose à l'intérieur, en haut du sac, sous le bord.",
+        choose: "Quand vous cousez un sac cabas ou un grand sac doublé et que vous voulez qu'il s'ouvre en grand, la fermeture sous le bord. Elle se pose dans presque tout sac doublé ; sur un tissu très épais, les extrémités finies deviennent épaisses.",
+        rest: "Les extrémités de la fermeture se finissent avec des languettes de tissu, comme dans « Extrémités finies (languettes) » : une bande pliée comme un biais sur chaque extrémité, piquée juste après l'arrêt.",
+      },
     },
   },
 };

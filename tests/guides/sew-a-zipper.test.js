@@ -728,3 +728,405 @@ test('tabs: the model loads no other model', () => {
   const src = readFileSync(new URL('../../src/lib/anatomy/zipper-tabs.js', import.meta.url), 'utf8');
   for (const m of src.matchAll(/from\s+'\.\/([^']+)'/g)) assert.ok(['iso.js', 'kit.js'].includes(m[1]), `imports ${m[1]}`);
 });
+
+/* ===================================================================================================================
+   Section 3, `recessed` — the zipper set in a panel at the top of a lined bag, below the edge: a public technique, no
+   maker's project (spec 3 row 3, 5.3 «Раздел 3 — вставка по верху сумки»). The sources agree: four strips (two for each
+   side of the zipper) as long as the top edge of the bag, often with interfacing; each zipper tape between two strips,
+   right sides inward, stitched; turned out, pressed away from the teeth, topstitched close to the teeth; the other side
+   the same way; the ends closed (tabs — section 2, a link to #tabs); the panel sewn to the LINING, middles matched; then
+   the outer and the lining are joined as usual. The bag opens wide, the zipper sits below the edge. Strip width,
+   allowances, how much longer the zipper is — in words. NO numbers and NO units, in any language.
+   Figure src/lib/anatomy/zipper-recessed.js (key zipper-recessed), texts zipper-recessed.<lang>.js, checks
+   zipper-recessed.text.js.
+   =================================================================================================================== */
+import * as recessed from '../../src/lib/anatomy/zipper-recessed.js';
+import { RECESSED_TEXT, recessedText } from '../../src/lib/anatomy/zipper-recessed.text.js';
+
+const REC = 'zipper-recessed';
+const REC_LANGS = Object.keys(RECESSED_TEXT);
+/** The section's own texts in a language: [where, text]. */
+const recSection = (lang) => guideStrings(lang, 'recessed').filter(([where]) => where.startsWith('sections.recessed.'));
+/** Every text of the section: the figure's (its number `ui.fig` aside) and the section's. */
+const recStrings = (lang) => [...strings(recessedText(lang)).filter(([where]) => where !== 'ui.fig'), ...recSection(lang)];
+/** A step's written words: its caption and its details. */
+const stepWords = (L, k) => [L.steps[k].text, ...(L.steps[k].details ?? [])].join(' ');
+/** The world box of a piece: [[x0, x1], [y0, y1], [z0, z1]]. */
+const box3 = (p) => [0, 1, 2].map((i) => { const w = p.pts.map(([u, v]) => at(p, u, v)[i]); return [Math.min(...w), Math.max(...w)]; });
+/** The step that sews the panel to the lining (its machine works on the lining). */
+const liningStep = () => {
+  const ks = recessed.STEPS.map((s, k) => ((s.sew ?? []).some(([, , f]) => f === 'lining') ? k : -1)).filter((k) => k > 0);
+  assert.equal(ks.length, 1, `one step sews the panel to the lining: ${ks}`);
+  return ks[0];
+};
+/** The step that closes the zipper's ends (its chip "ends: as in the second way"). */
+const endsStep = () => recessed.STEPS.findIndex((st, k) => k > 0 && st.scene(0).over.some((o) => o.label === 'endsTabs'));
+
+test('recessed: every site language has the figure texts', () => {
+  assert.deepEqual([...REC_LANGS].sort(), [...LOCALES].sort());
+});
+
+test('recessed: no units — no digit, no fraction, no unit (figure, chips, legend, section texts; every language)', () => {
+  for (const lang of REC_LANGS) {
+    for (const [where, s] of recStrings(lang)) {
+      assert.doesNotMatch(s, /\d/, `${lang} ${where}: a digit`);
+      assert.doesNotMatch(s, /[¼½¾⅓⅔⅛⅜⅝⅞″%]|⁄/, `${lang} ${where}: a fraction or a unit sign`);
+      assert.doesNotMatch(s, UNIT, `${lang} ${where}: a unit`);
+    }
+    assert.match(recessedText(lang).ui.fig, /^\S+\.? 3$/u, `${lang}: ui.fig`);
+  }
+  assert.deepEqual(recessed.SPEC, {}, 'the model has no maker\'s numbers');
+});
+
+test('recessed: the panel goes on the lining — each strip of the panel is sewn to a lining piece, middles matched, never to the outer (model scene)', () => {
+  const k = liningStep();
+  assert.equal(k, recessed.STEPS.length - 2, 'the panel goes on the lining last, before the bag is put together');
+  // no outer fabric anywhere while the panel is made and sewn on (steps 1 … k): only strips, zipper, tabs, lining
+  for (let s = 1; s <= k; s++) {
+    for (let i = 0; i <= 20; i++) {
+      for (const p of recessed.STEPS[s].scene(i / 20).pieces) assert.doesNotMatch(p.id, /outer|bag-/, `step ${s} t=${i / 20}: ${p.id}`);
+    }
+  }
+  const end = recessed.STEPS[k].scene(1).pieces;
+  const linings = end.filter((p) => /^lining-/.test(p.id));
+  assert.equal(linings.length, 2, 'two lining pieces: the front and the back');
+  const strips = end.filter((p) => /^strip-/.test(p.id));
+  const D = recessed.DRAWING;
+  for (const lin of linings) {
+    assert.match(lin.fill, /lining/, `${lin.id}: not the lining fabric`);
+    const [lx, ly] = box3(lin);
+    // a strip shares an edge with this lining piece: along the zipper, the whole strip's length
+    const join = strips.map((s) => [s, box3(s)]).find(([, [, sy]]) => Math.abs(sy[0] - ly[1]) < 1e-6 || Math.abs(sy[1] - ly[0]) < 1e-6);
+    assert.ok(join, `${lin.id}: no panel strip edge on it`);
+    const [, [sx, sy]] = join;
+    const y = Math.abs(sy[0] - ly[1]) < 1e-6 ? ly[1] : ly[0];
+    assert.ok(Math.abs(sx[1] - sx[0] - D.strip) < 1e-6, `${lin.id}: the strip is not the strip's length`);
+    assert.ok(lx[0] <= sx[0] + 1e-6 && sx[1] <= lx[1] + 1e-6, `${lin.id}: the strip runs past the lining`);
+    assert.ok(Math.abs((lx[0] + lx[1]) / 2 - (sx[0] + sx[1]) / 2) < 1e-6, `${lin.id}: middles not matched`);
+    // the seam: a stitch line on the join, the length of the strip
+    const seams = (lin.lines ?? []).filter((l) => l.kind === 'stitch').map((l) => l.pts.map(([u, v]) => at(lin, u, v)));
+    const seam = seams.find((w) => w.every((q) => Math.abs(q[1] - y) < 0.3));
+    assert.ok(seam, `${lin.id}: no seam along the panel's edge`);
+    assert.ok(Math.abs(seam[seam.length - 1][0] - seam[0][0]) > 0.9 * D.strip, `${lin.id}: the seam does not run the strip's length`);
+  }
+  // the seams being sewn (overlays) lie on these joins
+  const joins = linings.flatMap((l) => box3(l)[1]);
+  for (let i = 0; i <= 40; i++) {
+    for (const o of recessed.STEPS[k].scene(i / 40).over.filter((x) => x.type === 'line' && x.kind === 'hot' && (x.o ?? 1) > 0.01)) {
+      const along = Math.abs(o.pts[o.pts.length - 1][0] - o.pts[0][0]) > 1;
+      if (along) assert.ok(o.pts.every((q) => joins.some((y) => Math.abs(q[1] - y) < 0.3)), `t=${i / 40}: a seam off the lining's edge`);
+    }
+  }
+  // the step says it in every language: to the lining, not to the outer; the middles matched
+  const LINING = { en: /lining/, ru: /подкладк/u, de: /Futter/, fr: /doublure/, it: /fodera/, es: /forro/ };
+  const OUTER = { en: /\bouter\b/, ru: /(?<!\p{L})верх(?:у|а|ом)?(?!\p{L})/u, de: /Außenteil/, fr: /extérieur/, it: /esterno/, es: /exterior/ };
+  const MIDDLE = { en: /middle/, ru: /середин/u, de: /Mitte/, fr: /milieu/, it: /centri/, es: /centros/ };
+  for (const lang of LOCALES) {
+    const L = recessedText(lang);
+    const w = stepWords(L, k);
+    assert.match(L.labels.toLining, LINING[lang], `${lang}: chip toLining`);
+    assert.match(w, LINING[lang], `${lang} step ${k}: the lining`);
+    assert.match(w, OUTER[lang], `${lang} step ${k}: "not the outer"`);
+    assert.match(w, NOT_WORD[lang], `${lang} step ${k}: "not the outer"`);
+    assert.match(w, MIDDLE[lang], `${lang} step ${k}: the middles`);
+    assert.match(L.labels.middles, MIDDLE[lang], `${lang}: chip middles`);
+  }
+});
+
+test('recessed: strips as long as the top edge, the zipper a little longer; in the bag the zipper sits below the edge and opens wide', () => {
+  const D = recessed.DRAWING;
+  // step 1: the strips' length is the dimension, in words
+  const dim = recessed.STEPS[1].scene(1).over.find((o) => o.label === 'topLength');
+  assert.ok(dim, 'no dimension "as long as the top edge" in step 1');
+  assert.ok(Math.abs(Math.hypot(...dim.a.map((v, i) => v - dim.b[i])) - D.strip) < 1e-6, 'the dimension is not the strip\'s length');
+  assert.ok(D.zipper > D.strip && D.zipper < D.strip * 1.3, `the zipper (${D.zipper}) is not a little longer than the strips (${D.strip})`);
+  // the finished bag: its top edge is as long as the strips; the panel runs along it
+  const byId = (e) => Object.fromEntries(recessed.anatomy(e).pieces.map((p) => [p.id, p]));
+  const rest = byId(0);
+  const [fx, , fz] = box3(rest['bag-front']);
+  assert.ok(Math.abs(fx[1] - fx[0] - D.strip) < 1e-6, 'the bag\'s top edge is not the strips\' length');
+  const H = fz[1];
+  for (const side of ['back', 'front']) {
+    const [sx, , sz] = box3(rest[`panel-${side}-strip`]);
+    assert.ok(Math.abs(sx[0] - fx[0]) < 1e-6 && Math.abs(sx[1] - fx[1]) < 1e-6, `${side}: the panel does not run the top edge`);
+    assert.ok(Math.abs(sz[1] - H) < 1e-6, `${side}: the panel does not start at the top edge`);
+  }
+  // closed: the zipper's two halves meet, below the edge
+  const teeth = (e, side) => box3(byId(e)[`panel-${side}-teeth`]);
+  const [, yb0, zb0] = teeth(0, 'back'), [, yf0] = teeth(0, 'front');
+  assert.ok(Math.abs(yb0[1] - yf0[0]) < 0.05, 'closed, the zipper halves do not meet');
+  assert.ok(zb0[1] < H - 0.5, 'the zipper is not below the edge');
+  // opened (tap): the halves part all the way to the walls — the bag opens wide
+  const [, yb1] = teeth(1, 'back'), [, yf1] = teeth(1, 'front');
+  const [, fy] = box3(rest['bag-front']), [, by] = box3(rest['bag-back']);
+  assert.ok(yf1[0] - yb1[1] > 0.85 * (fy[0] - by[0]), 'opened, the bag does not open wide');
+  // the words: step 1 and its chips say the lengths in words
+  const TOP = { en: /as long as the top edge/, ru: /длиной с верхний край/u, de: /so lang wie die Oberkante/, fr: /aussi longues? que le haut/, it: /lung(?:a|he) quanto il bordo/, es: /tan largas? como el borde/ };
+  const LONGER = { en: /a little longer/, ru: /чуть длиннее/u, de: /etwas länger/, fr: /un peu plus longue/, it: /un po' più lunga/, es: /un poco más larga/ };
+  for (const lang of LOCALES) {
+    const L = recessedText(lang);
+    assert.match(L.labels.topLength, TOP[lang], `${lang}: chip topLength`);
+    assert.match(L.labels.zipperLonger, LONGER[lang], `${lang}: chip zipperLonger`);
+    assert.match(stepWords(L, 1), TOP[lang], `${lang} step 1: the strips' length`);
+    assert.match(stepWords(L, 1), LONGER[lang], `${lang} step 1: the zipper's length`);
+  }
+});
+
+test('recessed: each zipper tape between two strips, right sides inward; turned out, topstitched close to the teeth on both sides', () => {
+  // step 2 ends with the sandwich: a strip right side up, the zipper face down on it, a strip face down on top
+  const s2 = recessed.STEPS[2].scene(1).pieces;
+  const a1 = s2.find((p) => p.id === 'strip-a1'), a2 = s2.find((p) => p.id === 'strip-a2');
+  const tape = s2.filter((p) => /^zip-tape-/.test(p.id));
+  assert.ok(a1 && a2 && tape.length === 2, 'step 2: no strips or no zipper');
+  assert.ok(a1.out[2] > 0.99 && a2.out[2] < -0.99, 'step 2: the strips are not right sides inward');
+  for (const t of tape) assert.ok(t.out[2] < -0.99, 'step 2: the zipper is not face down');
+  const z = (p) => box3(p)[2][0];
+  assert.ok(z(a1) < z(tape[0]) && z(tape[0]) < z(a2), 'step 2: the zipper is not between the strips');
+  // step 6 ends with the finished panel: the zipper face up, a topstitch on each top strip along the zipper, close to it
+  const D = recessed.DRAWING;
+  const s6 = recessed.STEPS[6].scene(1).pieces;
+  const tapes6 = s6.filter((p) => /^zip-tape-/.test(p.id));
+  for (const t of tapes6) assert.ok(t.out[2] > 0.99, 'step 6: the zipper is not face up');
+  const zy = tapes6.flatMap((p) => box3(p)[1]);
+  const [zy0, zy1] = [Math.min(...zy), Math.max(...zy)];
+  for (const id of ['strip-a1', 'strip-c1']) {
+    const p = s6.find((x) => x.id === id);
+    assert.ok(p && p.out[2] > 0.99, `${id}: not right side up`);
+    const st = (p.lines ?? []).filter((l) => l.kind === 'stitch').map((l) => l.pts.map(([u, v]) => at(p, u, v)));
+    assert.equal(st.length, 1, `${id}: its topstitching`);
+    const y = st[0][0][1];
+    assert.ok(st[0].every((q) => Math.abs(q[1] - y) < 1e-6) && Math.abs(st[0][1][0] - st[0][0][0]) > 0.9 * D.strip, `${id}: the topstitch does not run along the zipper`);
+    const gap = Math.min(Math.abs(y - zy0), Math.abs(y - zy1));
+    assert.ok(gap < D.width / 4, `${id}: the topstitch is not close to the zipper (${gap})`);
+  }
+});
+
+// The second way's name in each language (the ends are closed as there).
+const TABS_WORDS = { en: /end tabs/i, ru: /закрытые концы молнии/iu, de: /Reißverschluss-Enden einfassen/, fr: /languettes/, it: /linguette/, es: /extremos rematados/i };
+
+test('recessed: the ends are closed as in section 2 — a sentence and a link to #tabs on the same page', () => {
+  const s = guideBySlug(SLUG).sections.find((x) => x.id === 'recessed');
+  assert.equal(s.restIn, 'tabs', 'the section does not point to #tabs');
+  const tabsAt = guideBySlug(SLUG).sections.findIndex((x) => x.id === 'tabs');
+  const ends = endsStep();
+  assert.ok(ends > 0, 'no step closes the ends');
+  for (const lang of LOCALES) {
+    const tr = guideText(guideBySlug(SLUG), lang).sections.find((x) => x.id === 'recessed');
+    assert.ok(typeof tr.rest === 'string' && tr.rest.trim(), `${lang}: no "rest" sentence`);
+    assert.match(tr.rest, TABS_WORDS[lang], `${lang}: the sentence does not name the second way`);
+    const L = recessedText(lang);
+    assert.match(stepWords(L, ends), TABS_WORDS[lang], `${lang} step ${ends}: the ends step does not name the second way`);
+    for (const [where, x] of recStrings(lang)) assert.doesNotMatch(x, /under th\w+ figure|под рисунком|unter der Abbildung|sous (?:la|cette) figure|sotto (?:la|questa) figura|debajo de (?:la|esta) figura|bajo (?:la|esta) figura/iu, `${lang} ${where}: text tied to the page layout`);
+    // the built page (dist): inside <section id="recessed">, a plain link to #tabs with its title
+    const file = new URL(`../../dist/${lang === 'en' ? '' : `${lang}/`}guides/sew-a-zipper.html`, import.meta.url);
+    assert.ok(existsSync(file), `${lang}: run npm run build first`);
+    const html = readFileSync(file, 'utf8');
+    const from = html.search(/<section[^>]*id="recessed"/);
+    assert.ok(from >= 0, `${lang}: no <section id="recessed">`);
+    const next = html.indexOf('<section class="section', from + 1);
+    const sec = html.slice(from, next < 0 ? undefined : next);
+    const link = sec.match(/<a\b[^>]*href="#tabs"[^>]*>([\s\S]*?)<\/a>/);
+    assert.ok(link, `${lang}: no link to #tabs in the recessed section`);
+    assert.doesNotMatch(link[0], /amazon|sponsored|target=/i, `${lang}: the link to #tabs is not a plain link`);
+    const title = guideText(guideBySlug(SLUG), lang).sections[tabsAt].title;
+    const esc = (x) => x.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    assert.ok(link[1].includes(esc(title)), `${lang}: the link does not say "${title}"`);
+  }
+});
+
+test('recessed: the zipper foot where it sews next to the zipper (Windman set); the panel to the lining with the machine', () => {
+  const panelSewing = (s) => (s.sew ?? []).some(([, , f]) => f === 'panel');
+  recessed.STEPS.forEach((s, k) => {
+    const foot = (s.uses ?? []).includes('windman-presser-feet-set');
+    assert.equal(foot, panelSewing(s), `step ${k}: the presser feet set ${foot ? 'where it does not sew next to the zipper' : 'missing where it sews next to the zipper'}`);
+    if (s.stitch) assert.ok((s.uses ?? []).includes('janome-1522rd'), `step ${k}: sews without the machine`);
+    assert.equal(Boolean(s.stitch), Boolean(s.sew), `step ${k}: stitch and sew go together`);
+  });
+  assert.ok(recessed.STEPS.filter(panelSewing).length >= 3, 'the zipper foot steps: the seam, the topstitching, the other side');
+  const ends = endsStep();
+  for (const lang of LOCALES) {
+    const L = recessedText(lang);
+    recessed.STEPS.forEach((s, k) => {
+      if (panelSewing(s)) assert.match(stepWords(L, k), ZIPPER_FOOT[lang], `${lang} step ${k}: no zipper foot`);
+    });
+    // the ends are stitched past the stops, never over them (as in section 2)
+    assert.match(stepWords(L, ends), STOP_WORD[lang], `${lang} step ${ends}: the stop`);
+    assert.match(stepWords(L, ends), NOT_WORD[lang], `${lang} step ${ends}: "not over the stop"`);
+  }
+  assert.ok(guideBySlug(SLUG).needs.includes('mebuzip-zipper-by-the-yard'), 'the zipper by the yard is not in "What you\'ll need"');
+});
+
+test('recessed: no first person, no maker — a general recommendation', () => {
+  const W = (words) => new RegExp(`(?<!\\p{L})(?:${words})(?!\\p{L})`, 'u');
+  const MINE = {
+    en: W('I|my|me|mom|maker'), ru: W('я|мой|моя|моё|мои|мам\\p{L}*'), de: W('ich|mein\\p{L}*|Mama'),
+    fr: W("je|j'|mon|ma|mes|maman"), it: W('io|mio|mia|miei|mie|mamma'), es: W('yo|mi|mis|mamá'),
+  };
+  for (const lang of LOCALES) for (const [where, s] of recStrings(lang)) assert.doesNotMatch(s, MINE[lang], `${lang} ${where}: a first-person or maker claim`);
+});
+
+const REC_NAME = { en: 'Recessed zipper at the top of a bag', ru: 'Молния на планке в сумку', de: 'Reißverschluss mit Blende', fr: 'Fermeture éclair encastrée sur un sac cabas', it: 'Cerniera incassata nella borsa', es: 'Cremallera en el borde del bolso' };
+const FIG3 = { en: 'Fig. 3', ru: 'Рис. 3', de: 'Abb. 3', fr: 'Fig. 3', it: 'Fig. 3', es: 'Fig. 3' };
+
+test('recessed: the section name is the approved one (spec 5.2); the figure is Fig. 3, its title the start of the name, short', () => {
+  for (const lang of LOCALES) {
+    const g = guideText(guideBySlug(SLUG), lang);
+    assert.equal(g.sections[2].title, REC_NAME[lang], lang);
+    const title = recessedText(lang).ui.title;
+    assert.ok(REC_NAME[lang].startsWith(title) && title.length <= 28, `${lang}: ui.title "${title}"`);
+    assert.equal(recessedText(lang).ui.fig, FIG3[lang], `${lang}: ui.fig`);
+  }
+});
+
+test('recessed: third, after tabs; no project yet, so no "Where it\'s used" and no note', () => {
+  const g = guideBySlug(SLUG);
+  assert.deepEqual(g.sections.slice(0, 3).map((s) => [s.id, s.figure]), [['lined', KEY], ['tabs', TABS], ['recessed', REC]]);
+  const s = g.sections[2];
+  assert.deepEqual(s.usedIn, []);
+  for (const lang of LOCALES) {
+    const tr = guideText(g, lang).sections[2];
+    assert.equal(tr.note, undefined, `${lang}: a note`);
+    for (const f of SECTION_FIELDS) assert.ok(tr[f].trim(), `${lang}: ${f}`);
+    if (lang !== 'en') for (const f of ['line', 'choose', 'rest']) assert.notEqual(tr[f], s[f], `${lang}: ${f} not translated`);
+  }
+  for (const p of projects) {
+    const n = figure(p.slug).model.STEPS.length;
+    for (let k = 0; k < n; k++) assert.ok(!guidesForStep(p.slug, k).some((x) => x.section.id === 'recessed'), `${p.slug} step ${k} links to #recessed`);
+  }
+});
+
+test('recessed: no search traps (spec 5.1) — figure and section texts', () => {
+  for (const lang of LOCALES) {
+    for (const [where, s] of recStrings(lang)) {
+      if (lang === 'en') assert.doesNotMatch(s, /sandwich/i, `en ${where}: "sandwich"`);
+      if (lang === 'ru') {
+        assert.doesNotMatch(s, /замо?к/iu, `ru ${where}: «замок»`);
+        assert.doesNotMatch(s, /ушк/iu, `ru ${where}: «ушки»`);
+        assert.doesNotMatch(s, /молни\p{L}* с планкой/iu, `ru ${where}: «молния с планкой» (a jacket's flap)`);
+      }
+      if (lang === 'de') assert.doesNotMatch(s, /(?<!naht)verdeckt/iu, `de ${where}: «verdeckt»`);
+      if (lang === 'it') assert.doesNotMatch(s, /centrale|nascost/iu, `it ${where}: «centrale» / «nascosta»`);
+      if (lang === 'es') assert.doesNotMatch(s, /cierre/iu, `es ${where}: «cierre» (once, in the h1, only)`);
+    }
+    // it: in the section's own texts, every sentence with «cerniera» also says sewing or the item
+    if (lang === 'it') {
+      for (const [where, s] of recSection(lang)) {
+        for (const x of sentences(s).filter((y) => /cerniera/i.test(y))) {
+          assert.match(x, /cuci|pochette|borsa|cuscin|federa|gonna|abito|vestito|astuccio/i, `it ${where}: «${x}» — «cerniera» with no sewing word`);
+        }
+      }
+    }
+  }
+});
+
+test('recessed: language rules — French punctuation, straight apostrophe', () => {
+  for (const lang of ['ru', 'de', 'fr', 'it', 'es']) {
+    for (const [where, s] of recStrings(lang)) {
+      if (lang === 'fr') assert.doesNotMatch(s, /(?:^|[^\xa0])[:;!?»]/, `fr ${where}: no no-break space before : ; ! ? »`);
+      if (lang === 'fr') assert.doesNotMatch(s, /«(?!\xa0)/, `fr ${where}: no no-break space after «`);
+      assert.ok(!s.includes(String.fromCharCode(0x2019)), `${lang} ${where}: typographic apostrophe — the site uses '`);
+    }
+  }
+});
+
+test('recessed: steps — the finished bag, then cut, sandwich, sew, turn out, topstitch, the other side, the ends, the lining, the bag', () => {
+  assert.equal(recessed.STEPS.length, 10);
+  recessed.STEPS.slice(1).forEach((s, i) => assert.equal(typeof s.scene, 'function', `step ${i + 1} has no scene`));
+  for (const lang of REC_LANGS) assert.equal(recessedText(lang).steps.length, 10, lang);
+  assert.deepEqual(recessed.STEPS.map((s) => s.stitch ?? null), [null, null, null, 'straight', null, 'straight', 'straight', 'straight', 'straight', null]);
+});
+
+test('recessed: uses are catalog products', () => {
+  const ids = new Set(products.map((p) => p.id));
+  recessed.STEPS.forEach((s, k) => (s.uses ?? []).forEach((id) => assert.ok(ids.has(id), `step ${k}: unknown product "${id}"`)));
+  const FOOT = ['windman-presser-feet-set', 'janome-1522rd'];
+  assert.deepEqual(recessed.STEPS.map((s) => s.uses ?? []), [
+    [],
+    ['mebuzip-zipper-by-the-yard', 'tailor-scissors'],
+    ['soraco-sewing-clips'],
+    FOOT,
+    ['rowenta-travel-iron'],
+    FOOT,
+    FOOT,
+    FOOT,
+    ['soraco-sewing-clips', 'janome-1522rd'],
+    [],
+  ]);
+});
+
+test('recessed: figure is registered (build and browser)', () => {
+  const f = figure(REC);
+  assert.equal(f.model.STEPS, recessed.STEPS);
+  assert.equal(f.text('it'), recessedText('it'));
+  const src = readFileSync(new URL('../../src/lib/anatomy/models.js', import.meta.url), 'utf8');
+  assert.match(src, /'zipper-recessed':\s*\{\s*model:\s*\(\)\s*=>\s*import\('\.\/zipper-recessed\.js'\),\s*texts:\s*import\.meta\.glob\('\.\/zipper-recessed\.\?\?\.js'\)\s*\}/);
+});
+
+test('recessed: every step renders in every language, its ids carry the figure prefix', () => {
+  for (const lang of REC_LANGS) {
+    const L = recessedText(lang);
+    for (let k = 0; k < recessed.STEPS.length; k++) {
+      for (let i = 0; i <= 10; i++) {
+        const r = recessed.renderStep(k, i / 10, L);
+        assert.ok(r.viewBox.every(Number.isFinite), `${lang} step ${k} t=${i / 10}: viewBox`);
+        assert.ok(!r.body.includes('NaN') && !r.body.includes('undefined'), `${lang} step ${k} t=${i / 10}: body`);
+        for (const m of r.body.matchAll(/url\(#([^)]+)\)/g)) assert.ok(m[1].startsWith(`${REC}-`), `${lang} step ${k}: #${m[1]}`);
+      }
+    }
+  }
+  for (const m of recessed.DEFS.matchAll(/id="([^"]+)"/g)) assert.ok(m[1].startsWith(`${REC}-`), `DEFS: #${m[1]}`);
+});
+
+test('recessed: chips stay inside the figure and keep a 1% gap between them (every step, t = 0…1, every language)', () => {
+  for (const lang of REC_LANGS) {
+    const L = recessedText(lang);
+    for (let k = 1; k < recessed.STEPS.length; k++) {
+      for (let i = 0; i <= 20; i++) {
+        const { body, viewBox } = recessed.renderStep(k, i / 20, L);
+        const [vx, vy, vw, vh] = viewBox;
+        const where = `${lang} step ${k} t=${i / 20}`;
+        for (const c of chipRects(body)) {
+          assert.ok(c.x0 >= vx - 1e-6 && c.x1 <= vx + vw + 1e-6, `${where}: a chip runs out sideways`);
+          assert.ok(c.y0 >= vy - 1e-6 && c.y1 <= vy + vh + 1e-6, `${where}: a chip runs out at the top or bottom`);
+        }
+        for (const [a, b] of touchingChips(body, viewBox)) assert.fail(`${where}: chips ${a} and ${b} touch`);
+      }
+    }
+  }
+});
+
+test('recessed: lines are drawn before the chips', () => {
+  for (let k = 1; k < recessed.STEPS.length; k++) {
+    for (const t of [0, 0.25, 0.5, 0.75, 1]) {
+      const kinds = recessed.STEPS[k].scene(t).over.map((o) => o.type);
+      const lastLine = kinds.lastIndexOf('line');
+      const firstChip = kinds.findIndex((x) => x === 'label' || x === 'dim');
+      assert.ok(lastLine < firstChip || firstChip < 0, `step ${k} t=${t}: a line comes after a chip`);
+    }
+  }
+});
+
+test('recessed: every chip key of the drawing has its text', () => {
+  for (const lang of REC_LANGS) assert.deepEqual(Object.keys(recessedText(lang).labels).sort(), [...recessed.LABEL_KEYS].sort(), lang);
+});
+
+test('recessed: the first frame (the HTML, no JS) is the finished bag, zipper closed below the edge, and the pins; tapped, it opens', () => {
+  const ids = (e) => recessed.anatomy(e).pieces.map((p) => p.id);
+  for (const id of ['bag-front', 'bag-back', 'panel-back-strip', 'panel-front-strip', 'panel-back-teeth', 'panel-front-teeth', 'zip-pull']) assert.ok(ids(0).includes(id), `no ${id} at rest`);
+  for (const lang of REC_LANGS) {
+    const L = recessedText(lang);
+    assert.equal(pinCount(recessed.renderStep(0, 0, L).body), L.legend.length, `${lang}: pins in the first frame`);
+    assert.equal(pinCount(recessed.renderStep(0, 1, L).body), 0, `${lang}: pins once opened`);
+  }
+  for (let i = 0; i <= 40; i++) {
+    for (const p of recessed.anatomy(i / 40).pieces) assert.ok((p.opacity ?? 1) > 0.01, `e=${i / 40}: ${p.id}`);
+    for (let k = 1; k < recessed.STEPS.length; k++) {
+      for (const p of recessed.STEPS[k].scene(i / 40).pieces) assert.ok((p.opacity ?? 1) > 0.01, `step ${k} t=${i / 40}: ${p.id}`);
+    }
+  }
+});
+
+test('recessed: the model loads no other model', () => {
+  const src = readFileSync(new URL('../../src/lib/anatomy/zipper-recessed.js', import.meta.url), 'utf8');
+  for (const m of src.matchAll(/from\s+'\.\/([^']+)'/g)) assert.ok(['iso.js', 'kit.js'].includes(m[1]), `imports ${m[1]}`);
+});

@@ -9,7 +9,7 @@
   [slug].sections[id] (SECTION_FIELDS + the optional SECTION_OPTIONAL in content.js). `choose` ("When to
   choose it") has no numbers; `note` (optional) is a plain paragraph by "Where it's used" and may have them.
   `restIn` + `rest` (optional, together): the rest of the work is shown in another section of the same guide —
-  `restIn` is its id, `rest` the sentence under the figure, by a plain link #restIn (the zipper tabs → #lined).
+  `restIn` is its id, `rest` the sentence under the figure, by a plain link #restIn (the zipper tabs → #lined, the recessed zipper → #tabs).
   Texts here are English; other languages: src/i18n/<lang>/guides.js (same fields, GUIDE_FIELDS in
   src/i18n/content.js — a missing or extra one fails the build). Spec: Vault «Гайды — спецификация».
   Plain data, no imports: src/i18n/index.js builds PAGES from this list.
@@ -139,7 +139,7 @@ export const guides = [
     teaser: 'Sewing a zipper into a makeup bag, a bag, a pillow, a skirt or a dress — every step animated.',
     needsIntro: 'Sewing clips and the sewing machine — the tools I personally recommend for these steps.',
     // "What you'll need" - only what the sections' steps use, in the order they are used.
-    needs: ['soraco-sewing-clips', 'janome-1522rd', 'mandala-crafts-zippers', 'tailor-scissors', 'rowenta-travel-iron', 'windman-presser-feet-set'],
+    needs: ['soraco-sewing-clips', 'janome-1522rd', 'mandala-crafts-zippers', 'tailor-scissors', 'rowenta-travel-iron', 'windman-presser-feet-set', 'mebuzip-zipper-by-the-yard'],
     sections: [
       {
         // The makeup bag: 7 Zipper: the first side · 8 Zipper: the second side - the maker's 20 cm zipper in the middle of the
@@ -167,6 +167,22 @@ export const guides = [
         line: 'Small fabric tabs close both ends of the zipper before it is sewn in.',
         choose: 'When you want neat, flat ends on a makeup bag or a pencil case: the tabs cover the zipper ends, so they stay out of the side seams and the corners lie flat.',
         rest: 'Then the zipper is sewn in like the lined zipper pouch: the outer, the zipper and the lining with one seam, then the other side the same way. The side seams go just next to the tabs.',
+      },
+      {
+        // The zipper in a panel at the top of a lined bag, below the edge - a public technique (spec 3 row 3, 5.3 «Раздел 3»):
+        // four strips as long as the top edge, each zipper tape between two of them right sides inward, turned out and
+        // topstitched close to the teeth; the ends closed with tabs (`rest` + a link to #tabs: restIn); the panel sewn to the
+        // LINING, middles matched; then the outer and the lining joined as usual. NO numbers: widths and lengths in words.
+        // No project yet: usedIn []. The zipper foot (Windman set) where it sews next to the zipper; the zipper by the yard
+        // (MebuZip) as a general recommendation.
+        id: 'recessed',
+        figure: 'zipper-recessed',
+        usedIn: [],
+        restIn: 'tabs',
+        title: 'Recessed zipper at the top of a bag',
+        line: 'The zipper is sewn between strips of fabric into a panel, and the panel goes inside the top of the bag, below the edge.',
+        choose: 'When you sew a tote or a big bag with a lining and want it to open wide, with the zipper below the edge. It goes into almost any lined bag; on very thick fabric the closed ends can be bulky.',
+        rest: 'The ends of the zipper are closed with fabric tabs, as in the zipper with end tabs: a strip folded like bias tape over each end, stitched just past the stop.',
       },
     ],
   },
